@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BARQ Online Store - cosmetics, electronics, plumbing materials and tools.">
+  <title>BARQ Online Store</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="logo" href="#"><span>BARQ</span><small>ONLINE STORE</small></a>
+      <nav class="desktop-nav">
+        <a href="#home">Home</a>
+        <a href="#categories">Categories</a>
+        <a href="#products">Products</a>
+        <a href="#about">About</a>
+      </nav>
+      <button class="cart-btn" id="cartButton" aria-label="Open shopping cart">
+        🛒 Cart <b id="cartCount">0</b>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">WELCOME TO BARQ</p>
+          <h1>Everything you need.<br><span>All in one store.</span></h1>
+          <p class="hero-text">Shop quality cosmetics, electronics, plumbing materials and professional tools — all in one convenient online store.</p>
+          <a class="primary-btn" href="#products">Shop Products →</a>
+        </div>
+        <div class="hero-card">
+          <div class="hero-icon">⚡</div>
+          <h3>BARQ Deals</h3>
+          <p>Quality products at competitive prices.</p>
+          <div class="mini-products">
+            <span>🔧</span><span>💻</span><span>💄</span><span>🚿</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="categories">
+      <div class="container">
+        <div class="section-head">
+          <div><p class="eyebrow">BROWSE</p><h2>Shop by Category</h2></div>
+        </div>
+        <div class="category-grid">
+          <button class="category-card active" data-category="All"><span>✨</span><strong>All Products</strong><small>View everything</small></button>
+          <button class="category-card" data-category="Cosmetics"><span>💄</span><strong>Cosmetics</strong><small>Beauty & care</small></button>
+          <button class="category-card" data-category="Electronics"><span>💻</span><strong>Electronics</strong><small>Tech essentials</small></button>
+          <button class="category-card" data-category="Plumbing"><span>🚿</span><strong>Plumbing</strong><small>Quality materials</small></button>
+          <button class="category-card" data-category="Tools"><span>🔧</span><strong>Tools</strong><small>Work with confidence</small></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section products-section" id="products">
+      <div class="container">
+        <div class="products-top">
+          <div><p class="eyebrow">OUR STORE</p><h2>Featured Products</h2></div>
+          <div class="search-wrap"><span>⌕</span><input id="searchInput" type="search" placeholder="Search products..."></div>
+        </div>
+        <div class="product-grid" id="productGrid"></div>
+        <p class="empty" id="emptyState" hidden>No products found. Try another search.</p>
+      </div>
+    </section>
+
+    <section class="trust section" id="about">
+      <div class="container trust-grid">
+        <div><span>✓</span><strong>Quality Products</strong><p>Carefully selected essentials.</p></div>
+        <div><span>⚡</span><strong>Fast Service</strong><p>Simple and convenient shopping.</p></div>
+        <div><span>🔒</span><strong>Secure Checkout</strong><p>Your order details stay protected.</p></div>
+        <div><span>📞</span><strong>Customer Support</strong><p>We're here to help.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer">
+      <div><a class="logo" href="#"><span>BARQ</span><small>ONLINE STORE</small></a><p>Your everyday shopping destination.</p></div>
+      <div><strong>Quick Links</strong><a href="#products">Products</a><a href="#categories">Categories</a><a href="#about">About</a></div>
+      <div><strong>Contact</strong><p>Email: info@barq-store.com</p><p>Phone: +966 00 000 0000</p></div>
+    </div>
+    <div class="copyright">© 2026 BARQ Online Store. All rights reserved.</div>
+  </footer>
+
+  <aside class="cart-panel" id="cartPanel" aria-hidden="true">
+    <div class="cart-head"><h2>Your Cart</h2><button id="closeCart">×</button></div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-bottom">
+      <div class="total"><span>Total</span><strong id="cartTotal">$0.00</strong></div>
+      <button class="primary-btn checkout" id="checkoutButton">Proceed to Checkout</button>
+    </div>
+  </aside>
+  <div class="overlay" id="overlay"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
