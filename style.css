@@ -269,3 +269,19 @@ width:100%;
 }
 
 }
+
+
+.cart-box{
+
+display:none;
+position:fixed;
+right:20px;
+top:80px;
+background:white;
+padding:25px;
+width:300px;
+z-index:9999;
+box-shadow:0 0 20px #999;
+
+}
+
