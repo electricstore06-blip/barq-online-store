@@ -43,3 +43,9 @@ function closeCart(){
     document.getElementById("cartBox").style.display = "none";
 
 }
+function openCart(){
+
+    document.getElementById("cartBox").style.display = "block";
+
+}
+
