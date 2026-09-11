@@ -542,15 +542,22 @@ border-radius:5px;
     gap:25px;
     flex-wrap:wrap;
 }
+.product-container{
+    display:grid;
+    grid-template-columns:repeat(3, 270px);
+    gap:25px;
+}
 
 .product{
-    width:270px;
+    width:270px !important;
+    height:380px;
     overflow:hidden;
 }
 
 .product img{
     width:270px !important;
     height:220px !important;
+    max-width:270px !important;
+    max-height:220px !important;
     object-fit:cover !important;
-    display:block;
 }
