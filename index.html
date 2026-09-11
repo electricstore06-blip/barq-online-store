@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <title>BARQ Online Store</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
+
 <div class="top-bar">
-🚚 Free shipping | ❤️ Authentic products | 🔒 Secure payment
+🚚 Free Shipping | ❤️ Authentic Products | 🔒 Secure Payment
 </div>
+
+
 
 <header>
 
@@ -18,65 +25,147 @@
 <span>ONLINE STORE</span>
 </div>
 
-<nav>
 
+<nav>
 <a href="#">Home</a>
-<a href="#">Shop</a>
-<a href="#">Categories</a>
-<a href="#">Deals</a>
-<a href="#">Contact</a>
+<a href="#products">Shop</a>
+<a href="#brands">Brands</a>
+<a href="#deals">Deals</a>
 
 <a href="#" onclick="openCart()">
-🛒 Cart 
+🛒 Cart
 <span id="cartCount">0</span>
 </a>
 
 </nav>
 
-
-
 </header>
+
+
+
+
+
 <section class="hero">
 
-<div class="hero-content">
 
-<h1>⚡ BARQ ONLINE STORE</h1>
+<div class="hero-text">
 
-<h2>Premium Products & Best Deals</h2>
+<h1>
+Everything you need.<br>
+<span>All in one store.</span>
+</h1>
+
+
+<h2>
+Premium Cosmetics & Best Deals
+</h2>
+
 
 <p>
-Authentic products | Fast shipping | Secure payment
+Authentic beauty products | Fast shipping | Secure payment
 </p>
 
-<button onclick="document.querySelector('.products').scrollIntoView()">
-Shop Now
+
+<button onclick="document.querySelector('#products').scrollIntoView()">
+Shop Products
 </button>
+
 
 </div>
 
+
+<div class="hero-box">
+
+<h3>
+BARQ BEAUTY
+</h3>
+
+<p>
+Top cosmetics brands at the best prices
+</p>
+
+<div class="icons">
+💄 💋 🧴 ✨
+</div>
+
+</div>
+
+
 </section>
 
-<section class="products">
 
-<h2>Our Products</h2>
+
+
+
+
+
+<section class="brands" id="brands">
+
+
+<h2>Popular Brands</h2>
+
+
+<div class="brand-list">
+
+<div>L'Oréal</div>
+
+<div>Maybelline</div>
+
+<div>NYX</div>
+
+<div>CeraVe</div>
+
+<div>The Ordinary</div>
+
+<div>MAC</div>
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<section class="products" id="products">
+
+
+<h2>
+Our Products
+</h2>
+
 
 
 <div class="product-container">
+
 
 
 <div class="product">
 
 <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348">
 
-<h3>Lipstick</h3>
+<h3>
+L'Oréal Lipstick
+</h3>
 
-<p>20 ريال</p>
+<p>
+45 ريال
+</p>
 
-<button onclick="addToCart('Lipstick',20)">
-Add to Cart
+
+<button onclick="addToCart('L Oréal Lipstick',45)">
+Add To Cart
 </button>
 
+
 </div>
+
+
 
 
 
@@ -84,15 +173,25 @@ Add to Cart
 
 <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796">
 
-<h3>Beauty Kit</h3>
+<h3>
+Maybelline Mascara
+</h3>
 
-<p>35 ريال</p>
+<p>
+35 ريال
+</p>
 
-<button onclick="addToCart('Beauty Kit',35)">
-Add to Cart
+
+<button onclick="addToCart('Maybelline Mascara',35)">
+Add To Cart
 </button>
 
+
 </div>
+
+
+
+
 
 
 
@@ -100,26 +199,152 @@ Add to Cart
 
 <img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883">
 
-<h3>Skin Care</h3>
+<h3>
+CeraVe Skin Care
+</h3>
 
-<p>25 ريال</p>
 
-<button onclick="addToCart('Skin Care',25)">
-Add to Cart
+<p>
+75 ريال
+</p>
+
+
+<button onclick="addToCart('CeraVe Skin Care',75)">
+Add To Cart
 </button>
 
+
 </div>
 
 
+
+
+
+
+
+<div class="product">
+
+<img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b">
+
+
+<h3>
+The Ordinary Serum
+</h3>
+
+
+<p>
+60 ريال
+</p>
+
+
+<button onclick="addToCart('The Ordinary Serum',60)">
+Add To Cart
+</button>
+
+
 </div>
+
+
+
+
+
+
+
+<div class="product">
+
+<img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9">
+
+
+<h3>
+Beauty Kit
+</h3>
+
+
+<p>
+120 ريال
+</p>
+
+
+<button onclick="addToCart('Beauty Kit',120)">
+Add To Cart
+</button>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="product">
+
+<img src="https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc">
+
+
+<h3>
+Luxury Perfume
+</h3>
+
+
+<p>
+150 ريال
+</p>
+
+
+<button onclick="addToCart('Luxury Perfume',150)">
+Add To Cart
+</button>
+
+
+</div>
+
+
+
+
+
+</div>
+
 
 </section>
 
 
 
+
+
+
+
+
+
+<section class="offer" id="deals">
+
+
+<h2>
+Special Offers
+</h2>
+
+<p>
+Up to 30% discount on selected cosmetics
+</p>
+
+
+</section>
+
+
+
+
+
+
+
+
 <div id="cartBox" class="cart-box">
 
-<h2>Your Cart</h2>
+
+<h2>
+Your Cart
+</h2>
+
 
 <div id="cartItems"></div>
 
@@ -128,6 +353,7 @@ Add to Cart
 Total:
 <span id="cartTotal">0</span> ريال
 </h3>
+
 
 
 <button onclick="checkout()">
@@ -140,36 +366,28 @@ Close
 </button>
 
 
-
-
-
-
-
-
 </div>
 
-</section>
 
 
-<div id="cartBox" class="cart-box">
 
-<h2>Your Cart</h2>
 
-<div id="cartItems"></div>
 
-<h3>
-Total: <span id="cartTotal">0</span> ريال
-</h3>
 
-<button onclick="checkout()">Checkout</button>
+<footer>
 
-<button onclick="closeCart()">Close</button>
+<p>
+© 2026 BARQ Online Store
+</p>
 
-</div>
+</footer>
+
+
 
 
 
 <script src="script.js"></script>
+
 
 </body>
 </html>
