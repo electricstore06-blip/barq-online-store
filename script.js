@@ -3,23 +3,47 @@ let cart = [];
 
 function addToCart(name, price){
 
-let existing = cart.find(item => item.name === name);
+    let existing = cart.find(item => item.name === name);
 
-if(existing){
+    if(existing){
 
-existing.quantity++;
+        existing.quantity++;
 
-}else{
+    }else{
 
-cart.push({
-name:name,
-price:price,
-quantity:1
-});
+        cart.push({
+            name:name,
+            price:price,
+            quantity:1,
+            image:getProductImage(name)
+        });
+
+    }
+
+    updateCart();
 
 }
 
-updateCart();
+
+
+function getProductImage(name){
+
+    if(name==="Lipstick"){
+        return "https://images.unsplash.com/photo-1586495777744-4413f21062fa";
+    }
+
+
+    if(name==="Beauty Kit"){
+        return "https://images.unsplash.com/photo-1596462502278-27bfdc403348";
+    }
+
+
+    if(name==="Skin Care"){
+        return "https://images.unsplash.com/photo-1556228578-8c89e6adf883";
+    }
+
+
+    return "";
 
 }
 
@@ -27,62 +51,72 @@ updateCart();
 
 function updateCart(){
 
-let items = document.getElementById("cartItems");
-let totalBox = document.getElementById("cartTotal");
-let countBox = document.getElementById("cartCount");
+    let cartItems = document.getElementById("cartItems");
+
+    let total = 0;
+
+    cartItems.innerHTML = "";
 
 
-items.innerHTML="";
+    cart.forEach((item,index)=>{
 
-let total = 0;
-let count = 0;
-
-
-cart.forEach(function(item,index){
+        total += item.price * item.quantity;
 
 
-total += item.price * item.quantity;
+        cartItems.innerHTML += `
 
-count += item.quantity;
+        <div class="cart-product">
 
-
-let product = document.createElement("div");
-
-
-product.innerHTML = `
-<div class="cart-product">
-
-<div>
-<strong>${item.name}</strong>
-<br>
-<span>$${item.price} x ${item.quantity}</span>
-</div>
-
-<div>
-<button onclick="changeQuantity(${index},-1)">−</button>
-
-<span>${item.quantity}</span>
-
-<button onclick="changeQuantity(${index},1)">+</button>
-</div>
-
-<button onclick="removeItem(${index})">
-❌
-</button>
-
-</div>
-`;
-
-items.appendChild(product);
+            <div>
+                <strong>${item.name}</strong>
+                <br>
+                $${item.price} x ${item.quantity}
+            </div>
 
 
-});
+            <div>
+
+                <button onclick="decreaseQty(${index})">−</button>
+
+                <button onclick="increaseQty(${index})">+</button>
+
+                <button onclick="removeItem(${index})">✕</button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
 
 
-totalBox.innerHTML = total.toFixed(2);
+    document.getElementById("cartTotal").innerHTML =
+    "Total: $" + total.toFixed(2);
 
-countBox.innerHTML = count;
+}
 
+
+
+function increaseQty(index){
+
+    cart[index].quantity++;
+
+    updateCart();
+
+}
+
+
+
+function decreaseQty(index){
+
+    if(cart[index].quantity > 1){
+
+        cart[index].quantity--;
+
+    }
+
+    updateCart();
 
 }
 
@@ -90,9 +124,9 @@ countBox.innerHTML = count;
 
 function removeItem(index){
 
-cart.splice(index,1);
+    cart.splice(index,1);
 
-updateCart();
+    updateCart();
 
 }
 
@@ -100,7 +134,7 @@ updateCart();
 
 function openCart(){
 
-document.getElementById("cartBox").style.display="block";
+    document.querySelector(".cart-box").style.display="block";
 
 }
 
@@ -108,33 +142,6 @@ document.getElementById("cartBox").style.display="block";
 
 function closeCart(){
 
-document.getElementById("cartBox").style.display="none";
-
-}
-
-
-
-function checkout(){
-
-if(cart.length===0){
-
-alert("Your cart is empty");
-
-}else{
-
-alert("Thank you for shopping with BARQ!");
-
-}
-
-}
-function changeQuantity(index,value){
-
-cart[index].quantity += value;
-
-if(cart[index].quantity <=0){
-cart.splice(index,1);
-}
-
-updateCart();
+    document.querySelector(".cart-box").style.display="none";
 
 }
