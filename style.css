@@ -355,3 +355,27 @@ box-shadow:0 0 20px #999;
 .cart-box > button:hover{
     opacity:0.85;
 }
+.cart-product{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#fff0f5;
+padding:15px;
+margin-bottom:12px;
+border-radius:12px;
+}
+
+.cart-product button{
+background:#d81b60;
+color:white;
+border:none;
+border-radius:8px;
+padding:8px 12px;
+cursor:pointer;
+font-size:16px;
+}
+
+.cart-product span{
+margin:0 10px;
+font-weight:bold;
+}
