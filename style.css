@@ -565,4 +565,23 @@ html, body{
     max-width:1200px;
     margin:auto;
     overflow:hidden;
+}.hero{
+    height:220px !important;
+    min-height:220px !important;
+    padding:30px 50px !important;
+    margin:20px auto !important;
+    max-width:1200px;
+    overflow:hidden;
+}
+
+.hero h1{
+    font-size:38px !important;
+}
+
+.hero h2{
+    font-size:24px !important;
+}
+
+.hero p{
+    font-size:16px !important;
 }
