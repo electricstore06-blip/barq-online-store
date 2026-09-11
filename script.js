@@ -236,3 +236,45 @@ window.logoutUser = async function() {
   await logout();
   alert("Logged out");
 };
+import { register, login, logout } from "./auth.js";
+
+window.showLogin = function(){
+    document.getElementById("loginBox").style.display = "block";
+}
+
+window.closeLogin = function(){
+    document.getElementById("loginBox").style.display = "none";
+}
+
+
+window.registerUser = async function(){
+
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+
+    try{
+        await register(email,password);
+        alert("Account created successfully");
+    }
+    catch(error){
+        alert(error.message);
+    }
+
+}
+
+
+window.loginUser = async function(){
+
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+
+    try{
+        await login(email,password);
+        alert("Login successful");
+        closeLogin();
+    }
+    catch(error){
+        alert(error.message);
+    }
+
+}
