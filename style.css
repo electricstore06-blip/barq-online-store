@@ -815,3 +815,22 @@ header{
     width:auto !important;
     white-space:nowrap;
 }
+/* FINAL SPACING FIX */
+
+header{
+    padding-top:15px !important;
+    padding-bottom:15px !important;
+}
+
+.hero{
+    margin-top:0 !important;
+    margin-bottom:0 !important;
+}
+
+.products{
+    padding-top:20px !important;
+}
+
+.products h2{
+    margin-top:0 !important;
+}
