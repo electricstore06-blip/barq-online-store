@@ -521,3 +521,15 @@ border-radius:5px;
     cursor:pointer;
 
 }
+.product{
+    width:270px;
+    height:auto;
+    overflow:hidden;
+}
+
+.product img{
+    display:block;
+    width:100%;
+    height:220px;
+    object-fit:cover;
+}
