@@ -738,3 +738,39 @@ header{
     margin-top:0 !important;
     margin-bottom:25px !important;
 }
+.hero{
+    height:160px !important;
+    min-height:160px !important;
+    padding:20px 8% !important;
+    margin:0 !important;
+    display:flex;
+    align-items:center;
+    overflow:hidden;
+}
+
+.hero-content{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+}
+
+.hero h1{
+    font-size:32px !important;
+    width:30%;
+}
+
+.hero h2{
+    font-size:22px !important;
+    width:30%;
+}
+
+.hero p{
+    font-size:14px !important;
+    width:25%;
+}
+
+.hero button{
+    padding:10px 20px !important;
+    font-size:14px !important;
+}
