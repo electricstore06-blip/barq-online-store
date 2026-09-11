@@ -561,3 +561,11 @@ border-radius:5px;
     max-height:220px !important;
     object-fit:cover !important;
 }
+html, body{
+    font-size:16px;
+    zoom:1;
+}
+
+*{
+    box-sizing:border-box;
+}
