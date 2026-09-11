@@ -1,99 +1,154 @@
 let cart = [];
 
 
-function addToCart(name, price){
+function addToCart(name,price){
 
-    let existing = cart.find(item => item.name === name);
-
-
-    if(existing){
-
-        existing.quantity++;
-
-    } else {
-
-        cart.push({
-            name: name,
-            price: price,
-            quantity: 1
-        });
-
-    }
+let item = cart.find(
+product => product.name === name
+);
 
 
-    updateCart();
+if(item){
+
+item.quantity++;
 
 }
+
+else{
+
+cart.push({
+
+name:name,
+price:price,
+quantity:1
+
+});
+
+}
+
+
+updateCart();
+
+}
+
 
 
 
 function updateCart(){
 
-    let cartBox = document.getElementById("cartItems");
-    let totalBox = document.getElementById("cartTotal");
+
+let box=document.getElementById("cartItems");
+
+let total=document.getElementById("cartTotal");
 
 
-    cartBox.innerHTML = "";
-
-    let total = 0;
+box.innerHTML="";
 
 
-    cart.forEach(function(item,index){
-
-        total += item.price * item.quantity;
+let sum=0;
 
 
-        cartBox.innerHTML +=
-        "<div class='cart-product'>" +
 
-        "<div>" +
-        "<strong>" + item.name + "</strong><br>" +
-        item.price + " ريال x " + item.quantity +
-        "</div>" +
-
-        "<div>" +
-
-        "<button onclick='changeQuantity("+index+",-1)'>−</button>" +
-
-        "<button onclick='changeQuantity("+index+",1)'>+</button>" +
-
-        "<button onclick='removeItem("+index+")'>✕</button>" +
-
-        "</div>" +
-
-        "</div>";
-
-    });
+cart.forEach((item,index)=>{
 
 
-    totalBox.innerHTML = "Total: " + total.toFixed(2) + " ريال";
+sum += item.price * item.quantity;
+
+
+
+box.innerHTML += `
+
+
+<div class="cart-product">
+
+
+<b>${item.name}</b>
+
+<br>
+
+${item.price} ريال x ${item.quantity}
+
+
+
+<button onclick="changeQuantity(${index},-1)">
+-
+</button>
+
+
+
+<button onclick="changeQuantity(${index},1)">
++
+</button>
+
+
+
+<button onclick="removeItem(${index})">
+X
+</button>
+
+
+
+</div>
+
+
+`;
+
+
+
+});
+
+
+
+total.innerHTML=sum.toFixed(2);
+
+
 
 }
+
 
 
 
 function changeQuantity(index,value){
 
-    cart[index].quantity += value;
+
+cart[index].quantity += value;
 
 
-    if(cart[index].quantity <= 0){
+if(cart[index].quantity <=0){
 
-        cart.splice(index,1);
+cart.splice(index,1);
 
-    }
+}
 
 
-    updateCart();
+updateCart();
+
 
 }
 
 
 
+
 function removeItem(index){
 
-    cart.splice(index,1);
+cart.splice(index,1);
 
-    updateCart();
+updateCart();
+
+}
+
+
+
+function closeCart(){
+
+document.getElementById("cartBox").style.display="none";
+
+}
+
+
+
+function checkout(){
+
+alert("Thank you for your order!");
 
 }
