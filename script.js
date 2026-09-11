@@ -50,18 +50,27 @@ let product = document.createElement("div");
 
 
 product.innerHTML = `
+<div class="cart-product">
 
-<p>
-${item.name}<br>
+<div>
+<strong>${item.name}</strong>
+<br>
+<span>$${item.price} x ${item.quantity}</span>
+</div>
 
-$${item.price} x ${item.quantity}
+<div>
+<button onclick="changeQuantity(${index},-1)">−</button>
+
+<span>${item.quantity}</span>
+
+<button onclick="changeQuantity(${index},1)">+</button>
+</div>
 
 <button onclick="removeItem(${index})">
 ❌
 </button>
 
-</p>
-
+</div>
 `;
 
 items.appendChild(product);
@@ -116,5 +125,16 @@ alert("Your cart is empty");
 alert("Thank you for shopping with BARQ!");
 
 }
+
+}
+function changeQuantity(index,value){
+
+cart[index].quantity += value;
+
+if(cart[index].quantity <=0){
+cart.splice(index,1);
+}
+
+updateCart();
 
 }
