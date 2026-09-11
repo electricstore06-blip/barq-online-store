@@ -1,139 +1,117 @@
 let cart = [];
 
 
-function addToCart(name,price){
+function addToCart(name, price){
 
-let item = cart.find(
-product => product.name === name
-);
+    let item = cart.find(product => product.name === name);
 
 
-if(item){
+    if(item){
 
-item.quantity++;
+        item.quantity++;
 
-}
+    } else {
 
-else{
+        cart.push({
+            name:name,
+            price:price,
+            quantity:1
+        });
 
-cart.push({
-
-name:name,
-price:price,
-quantity:1
-
-});
-
-}
+    }
 
 
-updateCart();
+    updateCart();
 
 }
-
 
 
 
 function updateCart(){
 
-
-let box=document.getElementById("cartItems");
-
-let total=document.getElementById("cartTotal");
-
-
-box.innerHTML="";
+    let box = document.getElementById("cartItems");
+    let total = document.getElementById("cartTotal");
+    let count = document.getElementById("cartCount");
 
 
-let sum=0;
+    box.innerHTML = "";
+
+    let sum = 0;
+    let amount = 0;
 
 
-
-cart.forEach((item,index)=>{
-
-
-sum += item.price * item.quantity;
+    cart.forEach((item,index)=>{
 
 
-
-box.innerHTML += `
-
-
-<div class="cart-product">
+        sum += item.price * item.quantity;
+        amount += item.quantity;
 
 
-<b>${item.name}</b>
+        box.innerHTML += `
 
-<br>
+        <div>
 
-${item.price} ريال x ${item.quantity}
+        <b>${item.name}</b><br>
+
+        ${item.price} ريال × ${item.quantity}
+
+        <button onclick="changeQuantity(${index},1)">+</button>
+
+        <button onclick="changeQuantity(${index},-1)">-</button>
+
+        <button onclick="removeItem(${index})">X</button>
+
+        </div>
+
+        <hr>
+
+        `;
 
 
-
-<button onclick="changeQuantity(${index},-1)">
--
-</button>
-
-
-
-<button onclick="changeQuantity(${index},1)">
-+
-</button>
+    });
 
 
 
-<button onclick="removeItem(${index})">
-X
-</button>
+    total.innerHTML = sum + " ريال";
 
-
-
-</div>
-
-
-`;
-
-
-
-});
-
-
-
-total.innerHTML=sum.toFixed(2);
-
+    count.innerHTML = amount;
 
 
 }
-
 
 
 
 function changeQuantity(index,value){
 
-
-cart[index].quantity += value;
-
-
-if(cart[index].quantity <=0){
-
-cart.splice(index,1);
-
-}
+    cart[index].quantity += value;
 
 
-updateCart();
+    if(cart[index].quantity <=0){
 
+        cart.splice(index,1);
+
+    }
+
+
+    updateCart();
 
 }
-
 
 
 
 function removeItem(index){
 
-cart.splice(index,1);
+    cart.splice(index,1);
 
-updateCart();
+    updateCart();
+
+}
+
+
+
+function openCart(){
+
+    document.getElementById("cartBox").style.display="block";
 
 }
 
@@ -141,7 +119,7 @@ updateCart();
 
 function closeCart(){
 
-document.getElementById("cartBox").style.display="none";
+    document.getElementById("cartBox").style.display="none";
 
 }
 
@@ -149,6 +127,6 @@ document.getElementById("cartBox").style.display="none";
 
 function checkout(){
 
-alert("Thank you for your order!");
+    alert("Thank you for your order!");
 
 }
