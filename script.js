@@ -130,3 +130,9 @@ function checkout(){
     alert("Thank you for your order!");
 
 }
+window.addToCart = addToCart;
+window.openCart = openCart;
+window.closeCart = closeCart;
+window.checkout = checkout;
+window.changeQuantity = changeQuantity;
+window.removeItem = removeItem;
