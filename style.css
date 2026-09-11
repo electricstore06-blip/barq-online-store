@@ -65,59 +65,46 @@ color:#111;
 
 
 .hero{
-  .hero{
-    margin:40px 70px;
-    padding:60px;
-    border-radius:30px;
-    background:linear-gradient(135deg,#f8dce5,#ffeef3);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    text-align:center;
-}
-
-.hero{
     margin:40px auto;
     max-width:1200px;
-    padding:60px;
-    background:#f8dce8;
+    padding:70px;
+    background:linear-gradient(135deg,#111827,#1f2937);
     border-radius:30px;
     display:flex;
     align-items:center;
-    justify-content:space-between;
-    gap:40px;
+    justify-content:center;
+    text-align:center;
+    color:white;
 }
 
 
 .hero h1{
     font-size:60px;
     margin:0;
-    color:#111827;
-    line-height:1.1;
+    color:white;
 }
 
 
 .hero h2{
     font-size:32px;
     margin:20px 0;
-    color:#111827;
+    color:white;
 }
 
 
 .hero p{
     font-size:20px;
-    color:#111827;
+    color:white;
 }
 
 
 .hero button{
     background:#e91e63;
     color:white;
-    border:none;
     padding:18px 45px;
-    border-radius:15px;
+    border:none;
+    border-radius:30px;
     font-size:18px;
-    cursor:pointer;
 }
 margin:20px 5%;
 border-radius:30px;
