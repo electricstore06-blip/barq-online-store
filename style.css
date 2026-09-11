@@ -692,4 +692,39 @@ header{
     height:120px !important;
     min-height:120px !important;
     padding:15px 30px !important;
+}/* FINAL BARQ HERO FIX */
+
+header{
+    padding-bottom:10px !important;
+}
+
+.hero{
+    height:100px !important;
+    min-height:100px !important;
+    margin:0 auto !important;
+    padding:10px 40px !important;
+    display:flex !important;
+    align-items:center !important;
+    gap:20px !important;
+    overflow:hidden !important;
+}
+
+.hero h1{
+    font-size:28px !important;
+    width:30% !important;
+}
+
+.hero h2{
+    font-size:20px !important;
+    width:30% !important;
+}
+
+.hero p{
+    font-size:13px !important;
+    width:25% !important;
+}
+
+.hero button{
+    padding:8px 18px !important;
+    font-size:14px !important;
 }
