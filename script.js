@@ -108,3 +108,17 @@ function closeCart(){
     document.getElementById("cartBox").style.display="none";
 
 }
+function checkout(){
+
+    if(cart.length === 0){
+
+        alert("Your cart is empty");
+
+    } else {
+
+        alert("Thank you for shopping with BARQ!");
+
+    }
+
+}
+
