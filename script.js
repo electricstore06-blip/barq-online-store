@@ -212,3 +212,27 @@ function checkout(){
 
 
 }
+import { register, login, logout } from "./auth.js";
+
+window.registerUser = async function(email, password) {
+  try {
+    await register(email, password);
+    alert("Account created successfully!");
+  } catch(error) {
+    alert(error.message);
+  }
+};
+
+window.loginUser = async function(email, password) {
+  try {
+    await login(email, password);
+    alert("Login successful!");
+  } catch(error) {
+    alert(error.message);
+  }
+};
+
+window.logoutUser = async function() {
+  await logout();
+  alert("Logged out");
+};
