@@ -76,9 +76,9 @@ function updateCart(){
         <div class="cart-product">
 
             <div>
-                <strong>${item.name}</strong>
+                <strong>{item.name}</strong>
                 <br>
-               ${item.price} ﷼ x ${item.quantity}
+            {item.price} ﷼ x ${item.quantity}
             </div>
 
 
