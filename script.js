@@ -1,3 +1,4 @@
+import { register, login, logout } from "./auth.js";
 let cart = [];
 
 
