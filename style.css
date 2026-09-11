@@ -533,3 +533,24 @@ border-radius:5px;
     height:220px;
     object-fit:cover;
 }
+.products{
+    overflow:hidden;
+}
+
+.product-container{
+    display:flex;
+    gap:25px;
+    flex-wrap:wrap;
+}
+
+.product{
+    width:270px;
+    overflow:hidden;
+}
+
+.product img{
+    width:270px !important;
+    height:220px !important;
+    object-fit:cover !important;
+    display:block;
+}
