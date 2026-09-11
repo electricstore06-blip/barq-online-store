@@ -249,3 +249,38 @@ header{
 }
 
 }
+/* CATEGORIES */
+
+.categories{
+    max-width:1200px;
+    margin:40px auto;
+}
+
+
+.categories h2{
+    font-size:35px;
+    margin-bottom:25px;
+}
+
+
+.category-container{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+
+.category{
+    background:#fff0f5;
+    width:200px;
+    padding:25px;
+    text-align:center;
+    border-radius:20px;
+    font-size:35px;
+}
+
+
+.category h3{
+    font-size:18px;
+    margin-top:10px;
+}
