@@ -284,3 +284,128 @@ header{
     font-size:18px;
     margin-top:10px;
 }
+/* ===== NEW HOMEPAGE SECTIONS ===== */
+
+.hero{
+    background:#fff1f6;
+    border-radius:25px;
+    padding:45px;
+    margin:40px auto;
+    max-width:1200px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.hero-content h1{
+    font-size:55px;
+    line-height:1.1;
+    color:#071a3d;
+}
+
+.hero-content h1 span{
+    color:#e91e63;
+}
+
+.hero-content h2{
+    font-size:28px;
+    color:#071a3d;
+}
+
+.hero-content p{
+    font-size:18px;
+}
+
+
+.hero button{
+    background:#e91e63;
+    color:white;
+    border:none;
+    padding:15px 35px;
+    border-radius:12px;
+    cursor:pointer;
+}
+
+
+.hero-box{
+    background:white;
+    padding:35px;
+    border-radius:25px;
+    text-align:center;
+    box-shadow:0 10px 25px #ddd;
+}
+
+
+.icons{
+    font-size:35px;
+    margin-top:20px;
+}
+
+
+
+/* CATEGORY */
+
+.categories{
+    max-width:1200px;
+    margin:40px auto;
+}
+
+
+.category-list{
+    display:flex;
+    gap:20px;
+}
+
+
+.category-list div{
+    background:#fff1f6;
+    padding:20px 35px;
+    border-radius:15px;
+    text-align:center;
+    font-weight:bold;
+}
+
+
+
+/* BRANDS */
+
+.brands{
+    max-width:1200px;
+    margin:40px auto;
+}
+
+
+.brand-list{
+    display:flex;
+    gap:20px;
+}
+
+
+.brand-list div{
+    background:#fff1f6;
+    padding:20px 35px;
+    border-radius:15px;
+    font-weight:bold;
+}
+
+
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.hero{
+    flex-direction:column;
+}
+
+.hero-content h1{
+    font-size:40px;
+}
+
+
+.category-list,
+.brand-list{
+    flex-wrap:wrap;
+}
+
+}
