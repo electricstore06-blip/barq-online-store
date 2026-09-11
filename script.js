@@ -122,3 +122,10 @@ function checkout(){
 
 }
 
+function updateCartCount(){
+
+    let count = cart.length;
+
+    document.getElementById("cartCount").innerHTML = count;
+
+}
