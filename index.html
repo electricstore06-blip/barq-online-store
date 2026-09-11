@@ -38,46 +38,21 @@
 </header>
 
 
-<section class="hero">
-
-<div class="hero-text">
-
-<p class="small">BEAUTY & COSMETICS</p>
-
-<h1>
-Look Good,<br>
-<span>Feel Confident</span>
-</h1>
-
-<p>
-Premium cosmetics, skincare and beauty essentials for your everyday glow.
-</p>
-
-<button>
-Shop Cosmetics →
-</button>
-
-</div>
-
-
-<div class="hero-image">
-
-<img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348">
-
-</div>
-
-</section>
 <section class="products">
 
 <h2>Our Products</h2>
 
-<div class="product-grid">
+
+<div class="product-container">
 
 
 <div class="product">
 
-<img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9">
+<img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348">
 
+<h3>Lipstick</h3>
+
+<p>20 ريال</p>
 
 <button onclick="addToCart('Lipstick',20)">
 Add to Cart
@@ -86,9 +61,10 @@ Add to Cart
 </div>
 
 
+
 <div class="product">
 
-<img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348">
+<img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796">
 
 <h3>Beauty Kit</h3>
 
@@ -96,12 +72,15 @@ Add to Cart
 
 <button onclick="addToCart('Beauty Kit',35)">
 Add to Cart
+</button>
+
+</div>
 
 
 
 <div class="product">
 
-<img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796">
+<img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883">
 
 <h3>Skin Care</h3>
 
@@ -110,6 +89,44 @@ Add to Cart
 <button onclick="addToCart('Skin Care',25)">
 Add to Cart
 </button>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<div id="cartBox" class="cart-box">
+
+<h2>Your Cart</h2>
+
+<div id="cartItems"></div>
+
+
+<h3>
+Total:
+<span id="cartTotal">0</span> ريال
+</h3>
+
+
+<button onclick="checkout()">
+Checkout
+</button>
+
+
+<button onclick="closeCart()">
+Close
+</button>
+
+
+</div>
+
+
+
+<script src="script.js"></script>
 
 </div>
 
