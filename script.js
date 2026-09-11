@@ -78,20 +78,20 @@ function updateCart(){
             <div>
                 <strong>{item.name}</strong>
                 <br>
-            {item.price} ﷼ x ${item.quantity}
+            {item.price} ﷼ x {item.quantity}
             </div>
 
 
             <div>
 
-            <button onclick="changeQuantity(${index},-1)">−</button>
+            <button onclick="changeQuantity({index},-1)">−</button>
 
-            <span>${item.quantity}</span>
+            <span>{item.quantity}</span>
 
             <button onclick="changeQuantity(${index},1)">+</button>
 
 
-            <button onclick="removeItem(${index})">
+            <button onclick="removeItem({index})">
             ✕
             </button>
 
