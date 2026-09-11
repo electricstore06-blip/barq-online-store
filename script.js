@@ -77,7 +77,7 @@ function updateCart(){
 
 }
 
-
+document.getElementById("cartCount").innerHTML = cart.reduce((sum,item)=>sum + item.quantity,0);
 
 
 
