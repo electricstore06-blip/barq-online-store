@@ -279,3 +279,10 @@ window.loginUser = async function(){
     }
 
 }
+window.showLogin = function(){
+    document.getElementById("loginBox").style.display = "block";
+}
+
+window.closeLogin = function(){
+    document.getElementById("loginBox").style.display = "none";
+}
