@@ -75,12 +75,16 @@ function updateCart(){
     totalBox.innerHTML = total.toFixed(2);
 
 
-}
 items.appendChild(product);
 
 });
 
 totalBox.innerHTML = total.toFixed(2);
+
+document.getElementById("cartCount").innerHTML =
+cart.reduce((sum,item)=>sum + item.quantity,0);
+
+}
 
 document.getElementById("cartCount").innerHTML = cart.reduce((sum,item)=>sum + item.quantity,0);
 
