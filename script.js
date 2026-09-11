@@ -76,9 +76,15 @@ function updateCart(){
 
 
 }
-document.getElementById("cartCount").innerHTML = cart.length;
+items.appendChild(product);
+
+});
+
+totalBox.innerHTML = total.toFixed(2);
 
 document.getElementById("cartCount").innerHTML = cart.reduce((sum,item)=>sum + item.quantity,0);
+
+}
 
 
 
