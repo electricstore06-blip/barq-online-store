@@ -270,14 +270,19 @@ window.loginUser = async function(){
     let password = document.getElementById("password").value;
 
     try{
+
         await login(email,password);
         alert("Login successful");
         closeLogin();
+
     }
     catch(error){
-        alert(error.message);
-    }
 
+        alert(error.message);
+
+            
+      
+   
 }
 window.showLogin = function(){
     document.getElementById("loginBox").style.display = "block";
