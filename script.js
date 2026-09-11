@@ -1,21 +1,25 @@
 let cart = [];
 
 
+
 function addToCart(name, price){
 
-    let item = cart.find(product => product.name === name);
+
+    let existing = cart.find(item => item.name === name);
 
 
-    if(item){
+    if(existing){
 
-        item.quantity++;
+        existing.quantity++;
 
-    } else {
+    }else{
 
         cart.push({
+
             name:name,
             price:price,
             quantity:1
+
         });
 
     }
@@ -27,63 +31,95 @@ function addToCart(name, price){
 
 
 
+
+
+
 function updateCart(){
 
-    let box = document.getElementById("cartItems");
-    let total = document.getElementById("cartTotal");
-    let count = document.getElementById("cartCount");
+
+    let cartItems = document.getElementById("cartItems");
+
+    let cartTotal = document.getElementById("cartTotal");
+
+    let cartCount = document.getElementById("cartCount");
 
 
-    box.innerHTML = "";
-
-    let sum = 0;
-    let amount = 0;
+    cartItems.innerHTML = "";
 
 
-    cart.forEach((item,index)=>{
+    let total = 0;
+
+    let count = 0;
 
 
-        sum += item.price * item.quantity;
-        amount += item.quantity;
+
+    cart.forEach(function(item,index){
 
 
-        box.innerHTML += `
+        total += item.price * item.quantity;
 
-        <div>
+        count += item.quantity;
 
-        <b>${item.name}</b><br>
 
-        ${item.price} ريال × ${item.quantity}
 
-        <button onclick="changeQuantity(${index},1)">+</button>
+        cartItems.innerHTML += `
 
-        <button onclick="changeQuantity(${index},-1)">-</button>
+        <div class="cart-product">
 
-        <button onclick="removeItem(${index})">X</button>
+
+        <strong>${item.name}</strong>
+
+        <br>
+
+        ${item.price} ريال x ${item.quantity}
+
+
+        <br>
+
+
+        <button onclick="changeQuantity(${index},-1)">
+        -
+        </button>
+
+
+        <button onclick="changeQuantity(${index},1)">
+        +
+        </button>
+
+
+        <button onclick="removeItem(${index})">
+        ✕
+        </button>
+
 
         </div>
 
-        <hr>
-
         `;
+
 
 
     });
 
 
 
-    total.innerHTML = sum + " ريال";
+    cartTotal.innerHTML = total.toFixed(2);
 
-    count.innerHTML = amount;
+    cartCount.innerHTML = count;
 
 
 }
 
 
 
+
+
+
+
 function changeQuantity(index,value){
 
+
     cart[index].quantity += value;
+
 
 
     if(cart[index].quantity <=0){
@@ -95,44 +131,84 @@ function changeQuantity(index,value){
 
     updateCart();
 
+
 }
+
+
+
+
 
 
 
 function removeItem(index){
 
+
     cart.splice(index,1);
+
 
     updateCart();
 
+
 }
+
+
+
+
 
 
 
 function openCart(){
 
+
     document.getElementById("cartBox").style.display="block";
 
+
 }
+
+
+
+
 
 
 
 function closeCart(){
 
+
     document.getElementById("cartBox").style.display="none";
 
+
 }
+
+
+
+
+
 
 
 
 function checkout(){
 
-    alert("Thank you for your order!");
+
+    if(cart.length === 0){
+
+        alert("Your cart is empty");
+
+        return;
+
+    }
+
+
+
+    alert("Thank you for shopping with BARQ ❤️");
+
+
+    cart=[];
+
+
+    updateCart();
+
+
+    closeCart();
+
 
 }
-window.addToCart = addToCart;
-window.openCart = openCart;
-window.closeCart = closeCart;
-window.checkout = checkout;
-window.changeQuantity = changeQuantity;
-window.removeItem = removeItem;
