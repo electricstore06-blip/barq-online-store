@@ -9,7 +9,7 @@ function addToCart(name, price){
 
         existing.quantity++;
 
-    }else{
+    } else {
 
         cart.push({
             name:name,
@@ -49,21 +49,29 @@ function getProductImage(name){
 
 
 
+
 function updateCart(){
 
-    let cartItems = document.getElementById("cartItems");
+    let cartBox = document.getElementById("cartItems");
+
+    let totalBox = document.getElementById("cartTotal");
+
+    if(!cartBox) return;
+
+
+    cartBox.innerHTML="";
+
 
     let total = 0;
-
-    cartItems.innerHTML = "";
 
 
     cart.forEach((item,index)=>{
 
+
         total += item.price * item.quantity;
 
 
-        cartItems.innerHTML += `
+        cartBox.innerHTML += `
 
         <div class="cart-product">
 
@@ -76,11 +84,17 @@ function updateCart(){
 
             <div>
 
-                <button onclick="decreaseQty(${index})">−</button>
+            <button onclick="changeQuantity(${index},-1)">−</button>
 
-                <button onclick="increaseQty(${index})">+</button>
+            <span>${item.quantity}</span>
 
-                <button onclick="removeItem(${index})">✕</button>
+            <button onclick="changeQuantity(${index},1)">+</button>
+
+
+            <button onclick="removeItem(${index})">
+            ✕
+            </button>
+
 
             </div>
 
@@ -88,37 +102,33 @@ function updateCart(){
 
         `;
 
+
     });
 
 
-    document.getElementById("cartTotal").innerHTML =
-    "Total: $" + total.toFixed(2);
+    totalBox.innerHTML = "Total: $" + total.toFixed(2);
 
 }
 
 
 
-function increaseQty(index){
 
-    cart[index].quantity++;
+function changeQuantity(index,value){
 
-    updateCart();
-
-}
+    cart[index].quantity += value;
 
 
+    if(cart[index].quantity <=0){
 
-function decreaseQty(index){
-
-    if(cart[index].quantity > 1){
-
-        cart[index].quantity--;
+        cart.splice(index,1);
 
     }
 
+
     updateCart();
 
 }
+
 
 
 
