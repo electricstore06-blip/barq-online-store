@@ -522,3 +522,36 @@ header{
 }
 
 }
+.product{
+position:relative;
+}
+
+.product .badge{
+position:absolute;
+top:15px;
+left:15px;
+background:#e91e63;
+color:white;
+padding:5px 12px;
+border-radius:20px;
+font-size:12px;
+}
+
+.product .sale{
+background:#111;
+}
+
+.brand{
+color:#777;
+font-size:14px;
+}
+
+.rating{
+margin:10px 0;
+}
+
+.price{
+font-size:20px;
+font-weight:bold;
+color:#e91e63;
+}
