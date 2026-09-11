@@ -78,7 +78,7 @@ function updateCart(){
             <div>
                 <strong>${item.name}</strong>
                 <br>
-                $${item.price} x ${item.quantity}
+               ${item.price} ﷼ x ${item.quantity}
             </div>
 
 
@@ -106,7 +106,7 @@ function updateCart(){
     });
 
 
-    totalBox.innerHTML = "Total: $" + total.toFixed(2);
+    totalBox.innerHTML = total.toFixed(2) + " ﷼";
 
 }
 
