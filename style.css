@@ -61,17 +61,7 @@ text-decoration:none;
 color:#111;
 
 
-.hero{
-    margin:40px auto;
-    max-width:1200px;
-    padding:60px 70px;
-    background:#111827;
-    border-radius:30px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:30px;
-}
+<img class="product-image" src="https://images.unsplash.com/photo-1596462502278-27bfdc403348">
 
 
 .hero h1{
@@ -568,4 +558,16 @@ html, body{
 
 *{
     box-sizing:border-box;
+}
+.product-image{
+    width:250px !important;
+    height:220px !important;
+    object-fit:cover;
+    display:block;
+    border-radius:12px;
+}
+    .products{
+    max-width:1200px;
+    margin:auto;
+    overflow:hidden;
 }
