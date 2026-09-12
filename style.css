@@ -1457,4 +1457,82 @@ nav a:hover{
     grid-template-columns:repeat(2,1fr) !important;
 
 }
+/* ===========================
+CATEGORY SECTION FORCE UPDATE
+DO NOT AFFECT PRODUCTS
+=========================== */
+
+
+.categories .category-container{
+
+    display:grid !important;
+
+    grid-template-columns:repeat(5, 1fr) !important;
+
+    gap:20px !important;
+
+}
+
+
+.categories .category{
+
+    background:#fff0f5 !important;
+
+    height:150px !important;
+
+    border-radius:25px !important;
+
+    display:flex !important;
+
+    flex-direction:column !important;
+
+    justify-content:center !important;
+
+    align-items:center !important;
+
+    font-size:35px !important;
+
+    cursor:pointer;
+
+    transition:0.3s ease;
+
+}
+
+
+.categories .category h3{
+
+    margin-top:15px !important;
+
+    font-size:18px !important;
+
+}
+
+
+.categories .category:hover{
+
+    background:#e91e63 !important;
+
+    color:white !important;
+
+    transform:translateY(-8px);
+
+}
+
+
+.categories .category:hover h3{
+
+    color:white !important;
+
+}
+
+
+
+@media(max-width:900px){
+
+.categories .category-container{
+
+    grid-template-columns:repeat(2,1fr) !important;
+
+}
+
 
