@@ -1,14 +1,17 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-import { 
+import {
     getAuth,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+
 import { firebaseConfig } from "./firebase-config.js";
 
+
+// Initialize Firebase
 
 const app = initializeApp(firebaseConfig);
 
@@ -16,9 +19,11 @@ const auth = getAuth(app);
 
 
 
-export function register(email,password){
+// REGISTER
 
-    return createUserWithEmailAndPassword(
+export async function register(email,password){
+
+    return await createUserWithEmailAndPassword(
         auth,
         email,
         password
@@ -28,9 +33,11 @@ export function register(email,password){
 
 
 
-export function login(email,password){
+// LOGIN
 
-    return signInWithEmailAndPassword(
+export async function login(email,password){
+
+    return await signInWithEmailAndPassword(
         auth,
         email,
         password
@@ -40,8 +47,10 @@ export function login(email,password){
 
 
 
-export function logout(){
+// LOGOUT
 
-    return signOut(auth);
+export async function logout(){
+
+    return await signOut(auth);
 
 }
