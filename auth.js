@@ -32,6 +32,7 @@ document.getElementById("loginBox").style.display="block";
 };
 
 
+
 // CLOSE LOGIN
 
 window.closeLogin=function(){
@@ -103,6 +104,7 @@ alert(error.message);
 
 
 
+
 // LOGOUT
 
 window.logoutUser=function(){
@@ -127,40 +129,38 @@ location.reload();
 
 onAuthStateChanged(auth,(user)=>{
 
+
 const loginButton = document.getElementById("loginButton");
 
+
 if(!loginButton){
-    return;
+
+return;
+
 }
+
 
 
 if(user){
 
+
 loginButton.innerHTML="👤 "+user.email+" | Logout";
+
 
 loginButton.onclick = logoutUser;
 
 
+
 }else{
+
 
 loginButton.innerHTML="🔒 Login";
 
+
 loginButton.onclick = showLogin;
 
-}
-
-
-});
-
-if(admin){
-
-admin.style.display="none";
 
 }
-
-
-
-
 
 
 });
