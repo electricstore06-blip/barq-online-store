@@ -971,3 +971,54 @@ header{
     transform:scale(1.05);
 
 }    
+/* ==========================
+   PRODUCT BADGE
+   KEEP SAME SIZE
+========================== */
+
+
+.product{
+    position:relative;
+}
+
+
+
+/* SALE BADGE */
+
+.product::before{
+
+    content:"SALE";
+
+    position:absolute;
+
+    top:15px;
+
+    left:15px;
+
+    background:#e91e63;
+
+    color:white;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    z-index:2;
+
+}
+
+
+
+/* BADGE HOVER */
+
+.product:hover::before{
+
+    transform:scale(1.1);
+
+    transition:0.3s ease;
+
+}
