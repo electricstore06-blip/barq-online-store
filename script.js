@@ -105,7 +105,9 @@ ${product.brand || "BARQ"}
 
 
 <div class="stars">
-⭐⭐⭐⭐⭐
+
+⭐⭐⭐⭐⭐ <span>(4.8)</span>
+
 </div>
 
 
@@ -114,9 +116,29 @@ ${product.price || 0} ريال
 </p>
 
 
-<button class="add-btn">
-Add To Cart
+<div class="product-actions">
+
+<button class="view-btn">
+
+View Details
+
 </button>
+
+
+<button class="add-btn">
+
+Add To Cart
+
+</button>
+
+
+<button class="heart-btn">
+
+❤️
+
+</button>
+
+</div>
 
 `;
 
