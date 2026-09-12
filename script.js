@@ -133,4 +133,3 @@ window.closeCart=closeCart;
 
 window.checkout=checkout;
 
-window.removeCart=removeCart;
