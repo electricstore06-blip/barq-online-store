@@ -485,47 +485,54 @@ footer{
     color:white;
 
 }
+/* FORCE FIREBASE PRODUCTS DISPLAY */
+
+.products{
+
+    display:block !important;
+
+}
+
+
+.product-container{
+
+    display:grid !important;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:30px;
+
+}
 
 
 
+.product{
 
+    display:block !important;
 
-/* MOBILE */
+}
+
 
 
 @media(max-width:900px){
 
-
-header{
-
-    flex-direction:column;
-
-}
-
-
-
-.hero{
-
-    flex-direction:column;
-
-}
-
-
-
-.hero-text h1{
-
-    font-size:38px;
-
-}
-
-
-
-#products,
 .product-container{
 
     grid-template-columns:1fr;
 
 }
 
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
