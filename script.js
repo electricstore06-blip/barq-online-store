@@ -68,20 +68,77 @@ loadProducts();
 
 
 
-// DISPLAY PRODUCTS
+// DISPLAY PRODUCTS FROM FIREBASE
 
 function displayProducts(products){
 
 
-let container=document.getElementById("products");
-
+let container = document.querySelector(".product-container");
 
 
 if(!container){
 
-console.log("Products container missing");
+console.log("Product container missing");
 
 return;
+
+}
+
+
+
+products.forEach(product=>{
+
+
+container.innerHTML += `
+
+
+<div class="product">
+
+
+<img src="${product.image}">
+
+
+
+<h3>
+
+${product.name}
+
+</h3>
+
+
+
+<p class="brand">
+
+${product.brand}
+
+</p>
+
+
+
+<p class="price">
+
+${product.price} ريال
+
+</p>
+
+
+
+<button onclick="addToCart('${product.name}',${product.price})">
+
+Add To Cart
+
+</button>
+
+
+
+</div>
+
+
+`;
+
+
+});
+
 
 }
 
