@@ -11,7 +11,35 @@ import { collection, getDocs } from
 
 async function loadProducts(){
 
+try {
+
 const querySnapshot = await getDocs(collection(db,"products"));
+
+let products = [];
+
+querySnapshot.forEach((doc)=>{
+
+products.push({
+
+id:doc.id,
+
+...doc.data()
+
+});
+
+});
+
+
+displayProducts(products);
+
+
+}
+
+catch(error){
+
+console.log("Firebase Error:",error);
+
+}
 
 let products = [];
 
