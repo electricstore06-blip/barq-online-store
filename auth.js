@@ -127,39 +127,30 @@ location.reload();
 
 onAuthStateChanged(auth,(user)=>{
 
+const loginButton = document.getElementById("loginButton");
 
-let button=document.getElementById("loginButton");
-
-let admin=document.getElementById("adminLink");
-
+if(!loginButton){
+    return;
+}
 
 
 if(user){
 
+loginButton.innerHTML="👤 "+user.email+" | Logout";
 
-button.innerHTML="👤 "+user.email+" | Logout";
-
-button.onclick=logoutUser;
-
+loginButton.onclick = logoutUser;
 
 
-if(admin){
+}else{
 
-admin.style.display="inline";
+loginButton.innerHTML="🔒 Login";
 
-}
-
-
+loginButton.onclick = showLogin;
 
 }
 
-else{
 
-
-button.innerHTML="🔒 Login";
-
-button.onclick=showLogin;
-
+});
 
 if(admin){
 
