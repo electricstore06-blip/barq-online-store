@@ -1275,3 +1275,102 @@ nav a:hover{
     margin-top:20px;
 
 }
+/* ==========================
+   CATEGORY SECTION UPGRADE
+   KEEP PRODUCT SIZE SAME
+========================== */
+
+
+.categories{
+
+    width:90%;
+    max-width:1200px;
+    margin:70px auto;
+
+}
+
+
+
+.categories h2{
+
+    font-size:35px;
+    margin-bottom:30px;
+
+}
+
+
+
+.category-container{
+
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:20px;
+
+}
+
+
+
+.category{
+
+    background:#fff0f5;
+
+    padding:35px 15px;
+
+    border-radius:25px;
+
+    text-align:center;
+
+    font-size:35px;
+
+    transition:.3s ease;
+
+    cursor:pointer;
+
+}
+
+
+
+.category h3{
+
+    margin-top:15px;
+
+    font-size:18px;
+
+    color:#111827;
+
+}
+
+
+
+.category:hover{
+
+    background:#e91e63;
+
+    color:white;
+
+    transform:translateY(-10px);
+
+    box-shadow:0 15px 30px rgba(233,30,99,.25);
+
+}
+
+
+
+.category:hover h3{
+
+    color:white;
+
+}
+
+
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+    .category-container{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
