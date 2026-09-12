@@ -1605,4 +1605,6 @@ grid-template-columns:repeat(2,1fr) !important;
 
 }
 
-
+.category{
+    background:red !important;
+}
