@@ -62,7 +62,6 @@ console.log("Firebase Error:",error);
 
 function displayProducts(products){
 
-
 let container=document.querySelector(".product-container");
 
 
@@ -75,9 +74,7 @@ return;
 }
 
 
-// IMPORTANT FIX
 container.innerHTML="";
-
 
 
 products.forEach(product=>{
@@ -89,71 +86,48 @@ let card=document.createElement("div");
 card.className="product";
 
 
-
 card.innerHTML=`
 
 <img 
 src="${product.image || 'barq-new.png'}"
-alt="${product.name || 'Product'}"
+alt="${product.name || 'BARQ Product'}"
 >
 
 
-
 <h3>
-
 ${product.name || "BARQ Product"}
-
 </h3>
 
 
-
 <p class="brand">
-
 ${product.brand || "BARQ"}
-
 </p>
-
 
 
 <div class="stars">
-
 ⭐⭐⭐⭐⭐
-
 </div>
 
 
-
 <p class="price">
-
 ${product.price || 0} ريال
-
 </p>
 
 
-
 <button class="add-btn">
-
 Add To Cart
-
 </button>
-
 
 `;
 
 
 
-
-
-let button=card.querySelector(".add-btn");
-
-
-
-button.onclick=function(){
+card.querySelector(".add-btn").onclick=function(){
 
 
 addToCart(
 
-product.name || "Product",
+product.name || "BARQ Product",
 
 product.price || 0
 
@@ -172,8 +146,6 @@ container.appendChild(card);
 
 
 }
-
-
 
 
 
