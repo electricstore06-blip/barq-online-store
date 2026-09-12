@@ -562,7 +562,45 @@ footer{
 
 }
 
+/* PRODUCT ACTION LAYOUT FIX */
 
+.product-actions{
+
+    display:grid;
+    grid-template-columns:1fr 50px;
+    gap:10px;
+    margin-top:15px;
+
+}
+
+
+.product-actions button{
+
+    width:auto;
+    margin-top:0;
+
+}
+
+
+.view-btn{
+
+    grid-column:1;
+
+}
+
+
+.heart-btn{
+
+    grid-column:2;
+
+}
+
+
+.add-btn{
+
+    grid-column:1 / 3;
+
+}
 
 
 
