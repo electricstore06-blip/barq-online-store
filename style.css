@@ -268,18 +268,21 @@ nav button{
 #products,
 .product-container{
 
+ .product-container{
+
     display:grid;
+    grid-template-columns:repeat(3, minmax(250px,1fr));
+    gap:30px;
 
-    grid-template-columns:repeat(3,1fr);
-
-    gap:25px;
-
-    width:100%;
+    align-items:start;
 
 }
 
+.product{
 
+    min-height:430px;
 
+}
 
 .product{
 
