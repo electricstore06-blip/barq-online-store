@@ -632,4 +632,115 @@ header{
 }
 
 
+
+/* ==========================
+   PRODUCT CARD PREMIUM UPGRADE
+========================== */
+
+
+.product{
+
+    transition:0.3s ease;
+    overflow:hidden;
+
+}
+
+
+.product:hover{
+
+    transform:translateY(-8px);
+    box-shadow:0 15px 35px rgba(0,0,0,0.15);
+
+}
+
+
+
+.product img{
+
+    transition:0.4s ease;
+
+}
+
+
+
+.product:hover img{
+
+    transform:scale(1.05);
+
+}
+
+
+
+/* PRODUCT TITLE */
+
+.product h3{
+
+    color:#111827;
+    font-weight:700;
+
+}
+
+
+
+/* PRICE STYLE */
+
+.price{
+
+    margin:10px 0;
+
+}
+
+
+
+/* BUTTON HOVER */
+
+.product-actions button{
+
+    transition:0.3s ease;
+
+}
+
+
+
+.view-btn:hover{
+
+    background:#000;
+
+}
+
+
+
+.add-btn:hover{
+
+    background:#c2185b;
+
+}
+
+
+
+.heart-btn:hover{
+
+    background:#ffd6e5;
+
+    transform:scale(1.1);
+
+}
+
+
+
+/* PRODUCT IMAGE ROUND */
+
+.product img{
+
+    border-radius:20px;
+
+}
+
+
+/* CARD SPACING */
+
+.product-actions{
+
+    margin-top:20px;
+
 }
