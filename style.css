@@ -885,4 +885,46 @@ header{
     width:100% !important;
 
 }
+/* FINAL PRODUCT GRID FIX - KEEP CARD SIZE */
+
+.products{
+    width:90%;
+    max-width:1200px;
+    margin:50px auto;
+}
+
+
+.product-container{
+    display:grid !important;
+    grid-template-columns:repeat(3, 380px) !important;
+    justify-content:start;
+    gap:30px;
+}
+
+
+.product{
+    width:380px !important;
+    max-width:380px;
+}
+
+
+.product img{
+    width:100% !important;
+    height:250px !important;
+    object-fit:cover;
+    border-radius:15px;
+}
+
+
+/* MOBILE ONLY */
+@media(max-width:900px){
+
+.product-container{
+    grid-template-columns:1fr !important;
+}
+
+.product{
+    width:100% !important;
+}
+
 
