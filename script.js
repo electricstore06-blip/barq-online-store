@@ -1,223 +1,136 @@
 let cart = [];
 
 
-// ================= CART =================
+
+// ADD TO CART
+
+function addToCart(name, price){
+
+    cart.push({
+        name:name,
+        price:price
+    });
 
 
-window.addToCart = function(name, price){
-
-    let item = cart.find(product => product.name === name);
-
-
-    if(item){
-
-        item.quantity++;
-
-    }else{
-
-        cart.push({
-
-            name:name,
-            price:price,
-            quantity:1
-
-        });
-
-    }
+    document.getElementById("cartCount").innerHTML = cart.length;
 
 
     updateCart();
 
-};
+}
 
 
+
+
+// OPEN CART
+
+function openCart(){
+
+    document.getElementById("cartBox").style.display="block";
+
+    updateCart();
+
+}
+
+
+
+
+// CLOSE CART
+
+function closeCart(){
+
+    document.getElementById("cartBox").style.display="none";
+
+}
+
+
+
+
+
+// UPDATE CART
 
 function updateCart(){
 
+let items = document.getElementById("cartItems");
 
-    let cartItems = document.getElementById("cartItems");
-
-    let cartTotal = document.getElementById("cartTotal");
-
-    let cartCount = document.getElementById("cartCount");
+let total = document.getElementById("cartTotal");
 
 
-    if(!cartItems) return;
+items.innerHTML="";
 
 
-    cartItems.innerHTML = "";
+let sum = 0;
 
 
-    let total = 0;
-
-    let count = 0;
+cart.forEach(function(product,index){
 
 
+items.innerHTML += `
 
-    cart.forEach((item,index)=>{
+<p>
+${product.name}
+<br>
+${product.price} ريال
 
+<button onclick="removeCart(${index})">
+X
+</button>
 
-        total += item.price * item.quantity;
+</p>
 
-        count += item.quantity;
+<hr>
 
-
-
-        cartItems.innerHTML += `
-
-        <div>
-
-        <strong>${item.name}</strong>
-
-        <br>
-
-        ${item.price} ريال x ${item.quantity}
-
-        <br>
-
-        <button onclick="changeQuantity(${index},-1)">
-        -
-        </button>
+`;
 
 
-        <button onclick="changeQuantity(${index},1)">
-        +
-        </button>
+sum += product.price;
 
 
-        <button onclick="removeItem(${index})">
-        X
-        </button>
+});
 
 
-        </div>
-
-        <hr>
-
-        `;
-
-
-    });
-
-
-
-    if(cartTotal)
-
-    cartTotal.innerHTML = total;
-
-
-    if(cartCount)
-
-    cartCount.innerHTML = count;
+total.innerHTML=sum;
 
 
 }
 
 
 
-window.changeQuantity = function(index,value){
 
+// REMOVE ITEM
 
-    cart[index].quantity += value;
+function removeCart(index){
 
+cart.splice(index,1);
 
+document.getElementById("cartCount").innerHTML=cart.length;
 
-    if(cart[index].quantity <= 0){
+updateCart();
 
-        cart.splice(index,1);
+}
 
-    }
 
 
-    updateCart();
 
-};
+// CHECKOUT
 
+function checkout(){
 
+alert("Thank you for shopping with BARQ!");
 
+}
 
-window.removeItem = function(index){
 
-    cart.splice(index,1);
 
-    updateCart();
 
-};
+// MAKE FUNCTIONS AVAILABLE
 
+window.addToCart=addToCart;
 
+window.openCart=openCart;
 
+window.closeCart=closeCart;
 
+window.checkout=checkout;
 
-window.openCart = function(){
-
-    document.getElementById("cartBox").style.display="block";
-
-};
-
-
-
-
-
-window.closeCart = function(){
-
-    document.getElementById("cartBox").style.display="none";
-
-};
-
-
-
-
-
-window.checkout = function(){
-
-
-    if(cart.length === 0){
-
-        alert("Your cart is empty");
-
-        return;
-
-    }
-
-
-    alert("Thank you for shopping with BARQ ❤️");
-
-
-    cart=[];
-
-
-    updateCart();
-
-
-    closeCart();
-
-
-};
-
-
-
-
-
-// ================= LOGIN WINDOW =================
-
-
-
-window.showLogin = function(){
-
-
-    document.getElementById("loginBox").style.display="block";
-
-
-};
-
-
-
-
-
-window.closeLogin = function(){
-
-
-    document.getElementById("loginBox").style.display="none";
-
-
-};
+window.removeCart=removeCart;
