@@ -222,3 +222,16 @@ window.logoutUser = async function(){
     alert("Logged out");
 
 };
+window.openLogin=function(){
+
+document.getElementById("loginBox").style.display="block";
+
+};
+
+
+
+window.closeLogin=function(){
+
+document.getElementById("loginBox").style.display="none";
+
+};
