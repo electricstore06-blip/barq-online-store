@@ -10,18 +10,15 @@ import {
 import { firebaseConfig } from "./firebase-config.js";
 
 
-// Initialize Firebase
-
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 
 
-// REGISTER
 
-export async function register(email,password){
+export function register(email,password){
 
-    return await createUserWithEmailAndPassword(
+    return createUserWithEmailAndPassword(
         auth,
         email,
         password
@@ -30,11 +27,10 @@ export async function register(email,password){
 }
 
 
-// LOGIN
 
-export async function login(email,password){
+export function login(email,password){
 
-    return await signInWithEmailAndPassword(
+    return signInWithEmailAndPassword(
         auth,
         email,
         password
@@ -43,10 +39,9 @@ export async function login(email,password){
 }
 
 
-// LOGOUT
 
-export async function logout(){
+export function logout(){
 
-    return await signOut(auth);
+    return signOut(auth);
 
 }
