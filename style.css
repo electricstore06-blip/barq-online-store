@@ -1608,3 +1608,82 @@ grid-template-columns:repeat(2,1fr) !important;
 .category{
     background:red !important;
 }
+/* ===============================
+   CATEGORY PREMIUM DESIGN FIX
+   =============================== */
+
+
+.categories .category-container{
+
+display:grid !important;
+
+grid-template-columns:repeat(5,1fr) !important;
+
+gap:20px !important;
+
+}
+
+
+
+.categories .category{
+
+background:white !important;
+
+border-radius:20px !important;
+
+height:160px !important;
+
+display:flex !important;
+
+flex-direction:column !important;
+
+align-items:center !important;
+
+justify-content:center !important;
+
+box-shadow:0 8px 25px rgba(0,0,0,0.08) !important;
+
+font-size:45px !important;
+
+transition:.3s !important;
+
+}
+
+
+
+.categories .category h3{
+
+font-size:18px !important;
+
+margin-top:15px !important;
+
+color:#111827 !important;
+
+}
+
+
+
+.categories .category:hover{
+
+transform:translateY(-10px) !important;
+
+background:#fff0f5 !important;
+
+color:#e91e63 !important;
+
+}
+
+
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.categories .category-container{
+
+grid-template-columns:1fr 1fr !important;
+
+}
+
+
+}
