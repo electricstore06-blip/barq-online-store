@@ -1,8 +1,9 @@
 export const firebaseConfig = {
-  apiKey: "YOUR_REAL_API_KEY",
+  apiKey: "AIzaSyCV3N68e7GXNgNALXTiWjsY0QVFhqisTIc",
   authDomain: "barq-online-store.firebaseapp.com",
   projectId: "barq-online-store",
-  storageBucket: "barq-online-store.appspot.com",
-  messagingSenderId: "YOUR_REAL_SENDER_ID",
-  appId: "YOUR_REAL_APP_ID"
+  storageBucket: "barq-online-store.firebasestorage.app",
+  messagingSenderId: "44237208872",
+  appId: "1:44237208872:web:525a5bcf8c7b9d5978e41d",
+  measurementId: "G-KS2BC3EXDD"
 };
