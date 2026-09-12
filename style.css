@@ -1535,4 +1535,74 @@ DO NOT AFFECT PRODUCTS
 
 }
 
+/* CATEGORY FINAL DESIGN FIX */
+
+.categories .category-container{
+
+display:grid !important;
+
+grid-template-columns:repeat(5, 1fr) !important;
+
+gap:25px !important;
+
+}
+
+
+
+.categories .category{
+
+height:160px !important;
+
+background:#fff0f5 !important;
+
+border-radius:25px !important;
+
+display:flex !important;
+
+flex-direction:column !important;
+
+align-items:center !important;
+
+justify-content:center !important;
+
+font-size:30px !important;
+
+box-shadow:0 5px 15px rgba(0,0,0,0.08);
+
+transition:0.3s;
+
+}
+
+
+
+.categories .category h3{
+
+font-size:18px !important;
+
+margin-top:12px !important;
+
+}
+
+
+
+.categories .category:hover{
+
+transform:translateY(-8px);
+
+background:#e91e63 !important;
+
+color:white;
+
+}
+
+
+
+@media(max-width:900px){
+
+.categories .category-container{
+
+grid-template-columns:repeat(2,1fr) !important;
+
+}
+
 
