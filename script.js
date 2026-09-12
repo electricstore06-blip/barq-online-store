@@ -1,3 +1,28 @@
+// Firebase Firestore products
+import { db } from "./firebase-config.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+async function loadProducts(){
+
+const querySnapshot = await getDocs(collection(db,"products"));
+
+let products=[];
+
+querySnapshot.forEach((doc)=>{
+
+products.push({
+id: doc.id,
+...doc.data()
+});
+
+});
+
+console.log(products);
+
+}
+
+loadProducts();
 let cart = [];
 
 
