@@ -1,5 +1,6 @@
-export const firebaseConfig = {
-  apiKey: "AIzaSyCV3N68e7GXNgNALXTiWjsY0QVFhqisTIc",
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCV3N68e7GXNgNALXTiWjsYOQVFhqisTIc",
   authDomain: "barq-online-store.firebaseapp.com",
   projectId: "barq-online-store",
   storageBucket: "barq-online-store.firebasestorage.app",
