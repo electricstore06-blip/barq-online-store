@@ -159,3 +159,39 @@ window.closeCart=closeCart;
 
 window.checkout=checkout;
 
+function displayProducts(products){
+
+let container = document.getElementById("products");
+
+if(!container){
+console.log("Products container not found");
+return;
+}
+
+container.innerHTML="";
+
+products.forEach(product=>{
+
+container.innerHTML += `
+
+<div class="product-card">
+
+<img src="${product.image}" width="200">
+
+<h3>${product.name}</h3>
+
+<p>${product.brand}</p>
+
+<p>${product.price} SAR</p>
+
+<button onclick='addToCart(${JSON.stringify(product)})'>
+Add To Cart
+</button>
+
+</div>
+
+`;
+
+});
+
+}
