@@ -112,52 +112,49 @@ alert("Logged out");
 
 };
 
-
 // CHECK USER STATUS
 
 onAuthStateChanged(auth,(user)=>{
 
+let loginButton = document.getElementById("loginButton");
 
-let loginButton=document.getElementById("loginButton");
-let adminLink=document.getElementById("adminLink");
+let adminLink = document.getElementById("adminLink");
+
+
+if(!loginButton){
+    return;
+}
 
 
 if(user){
 
+    loginButton.innerHTML = "👤 " + user.email + " | Logout";
 
-loginButton.innerHTML="👤 "+user.email+" | Logout";
-
-loginButton.onclick=logoutUser;
+    loginButton.onclick = logoutUser;
 
 
-// SHOW ADMIN ONLY FOR OWNER
-
-if(user.email==="admin@barqstore.com"){
-
-adminLink.style.display="inline";
-
-}
+    if(adminLink){
+        adminLink.style.display="block";
+    }
 
 
 }else{
 
 
-loginButton.innerHTML="🔒 Login";
+    loginButton.innerHTML = "🔒 Login";
 
-loginButton.onclick=showLogin;
+    loginButton.onclick = showLogin;
 
 
-if(adminLink){
-
-adminLink.style.display="none";
-
-}
-
+    if(adminLink){
+        adminLink.style.display="none";
+    }
 
 }
 
 
 });
+
 
 
 
