@@ -602,7 +602,43 @@ footer{
 
 }
 
+/* FINAL PRODUCT BUTTON FIX */
 
+.product-actions{
+    display:grid !important;
+    grid-template-columns:1fr 55px !important;
+    gap:10px !important;
+    margin-top:15px !important;
+}
+
+
+.product-actions button{
+
+    width:auto !important;
+    margin-top:0 !important;
+
+}
+
+
+.product-actions .view-btn{
+
+    grid-column:1 !important;
+
+}
+
+
+.product-actions .heart-btn{
+
+    grid-column:2 !important;
+
+}
+
+
+.product-actions .add-btn{
+
+    grid-column:1 / 3 !important;
+
+}
 
 
 
