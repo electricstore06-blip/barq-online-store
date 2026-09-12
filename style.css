@@ -256,33 +256,24 @@ nav button{
 
 
 
-
-
 /* ==========================
-   PRODUCTS FIXED
+   PRODUCTS
 ========================== */
 
 
-/* THIS MATCHES YOUR JS ID */
-
-#products,
 .product-container{
 
- .product-container{
-
     display:grid;
+
     grid-template-columns:repeat(3, minmax(250px,1fr));
+
     gap:30px;
 
     align-items:start;
 
 }
 
-.product{
 
-    min-height:430px;
-
-}
 
 .product{
 
@@ -298,8 +289,9 @@ nav button{
 
     min-width:0;
 
-}
+    position:relative;
 
+}
 
 
 
@@ -314,7 +306,6 @@ nav button{
     border-radius:15px;
 
 }
-
 
 
 
@@ -358,7 +349,6 @@ nav button{
 
 
 
-
 .product button{
 
     width:100%;
@@ -383,7 +373,6 @@ nav button{
 
 
 
-
 .product button:hover{
 
     background:#c2185b;
@@ -392,16 +381,12 @@ nav button{
 
 
 
-
-
-/* BADGE */
-
-
 .badge{
 
     position:absolute;
 
     top:15px;
+
     left:15px;
 
     background:#e91e63;
@@ -413,6 +398,8 @@ nav button{
     border-radius:20px;
 
 }
+
+
 
 
 
