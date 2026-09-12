@@ -1,19 +1,11 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-
 const firebaseConfig = {
-  apiKey: "AIzaSyCV3N8G7XGNAuXI7iwjYXXVqhsiTc",
+  apiKey: "AIzaSyCV3N6e7XgNALXLTjw5QYQvhi5IIC",
   authDomain: "barq-online-store.firebaseapp.com",
   projectId: "barq-online-store",
   storageBucket: "barq-online-store.firebasestorage.app",
-  messagingSenderId: "4423708827",
-  appId: "1:4423708827:web:525a5bc8c7b9d5978e41d",
+  messagingSenderId: "44237208872",
+  appId: "1:44237208872:web:525ab5cf8c7b9d5978e41d",
   measurementId: "G-KS2BC3EXDD"
 };
 
-
-const app = initializeApp(firebaseConfig);
-
-export const auth = getAuth(app);
+export { firebaseConfig };
