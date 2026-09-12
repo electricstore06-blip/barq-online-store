@@ -1,7 +1,3 @@
-import { initializeApp } from 
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-
 import {
 getAuth,
 createUserWithEmailAndPassword,
@@ -9,30 +5,34 @@ signInWithEmailAndPassword,
 signOut,
 onAuthStateChanged
 }
-from 
+from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
 import { firebaseConfig } from "./firebase-config.js";
 
 
+import { initializeApp }
+from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-// FIREBASE START
+
 
 const app = initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
+
+const auth=getAuth(app);
 
 
 
 
-// OPEN LOGIN
+// SHOW LOGIN
 
 window.showLogin=function(){
 
 document.getElementById("loginBox").style.display="block";
 
-};
+}
 
 
 
@@ -43,7 +43,7 @@ window.closeLogin=function(){
 
 document.getElementById("loginBox").style.display="none";
 
-};
+}
 
 
 
@@ -51,22 +51,13 @@ document.getElementById("loginBox").style.display="none";
 
 // REGISTER
 
+
 window.registerUser=function(){
 
 
 let email=document.getElementById("email").value;
 
 let password=document.getElementById("password").value;
-
-
-
-if(email==="" || password===""){
-
-alert("Please enter email and password");
-
-return;
-
-}
 
 
 
@@ -101,28 +92,16 @@ alert(error.message);
 
 
 
+
 // LOGIN
 
-window.loginUser=function(){
 
+window.loginUser=function(){
 
 
 let email=document.getElementById("email").value;
 
 let password=document.getElementById("password").value;
-
-
-
-if(email==="" || password===""){
-
-
-alert("Please enter email and password");
-
-
-return;
-
-
-}
 
 
 
@@ -157,20 +136,16 @@ alert(error.message);
 
 
 
-
 // LOGOUT
 
-window.logoutUser=function(){
 
+window.logoutUser=function(){
 
 
 signOut(auth)
 
 
 .then(()=>{
-
-
-alert("Logged out");
 
 
 location.reload();
@@ -187,27 +162,16 @@ location.reload();
 
 
 
+// USER STATUS
 
-// CHECK USER STATUS
 
 onAuthStateChanged(auth,(user)=>{
 
 
-
-const loginButton =
-document.getElementById("loginButton");
-
-const adminLink =
-document.getElementById("adminLink");
+let loginButton=document.getElementById("loginButton");
 
 
-
-
-if(!loginButton){
-
-return;
-
-}
+if(!loginButton)return;
 
 
 
@@ -215,31 +179,16 @@ return;
 if(user){
 
 
-
-loginButton.innerHTML =
-"👤 "+user.email+" | Logout";
+loginButton.innerHTML="👤 "+user.email+" | Logout";
 
 
-loginButton.onclick =
-logoutUser;
+loginButton.onclick=logoutUser;
 
-
-
-
-// SHOW ADMIN FOR ADMIN EMAIL
-
-if(adminLink){
-
-
-adminLink.style.display="block";
 
 
 }
 
-
-
-}else{
-
+else{
 
 
 loginButton.innerHTML="🔒 Login";
@@ -247,15 +196,6 @@ loginButton.innerHTML="🔒 Login";
 
 loginButton.onclick=showLogin;
 
-
-
-if(adminLink){
-
-
-adminLink.style.display="none";
-
-
-}
 
 
 }
