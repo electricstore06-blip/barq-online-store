@@ -1,23 +1,38 @@
-// Firebase Firestore products
-
 import { db } from "./firebase-config.js";
 
-import { collection, getDocs } from 
+import {
+collection,
+getDocs
+}
+from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
 
-// LOAD PRODUCTS FROM FIREBASE
+// CART
+
+let cart = [];
+
+
+
+
+// LOAD PRODUCTS
 
 async function loadProducts(){
 
-try {
+try{
 
-const querySnapshot = await getDocs(collection(db,"products"));
 
-let products = [];
+const querySnapshot = await getDocs(
+collection(db,"products")
+);
+
+
+let products=[];
+
 
 querySnapshot.forEach((doc)=>{
+
 
 products.push({
 
@@ -27,32 +42,6 @@ id:doc.id,
 
 });
 
-});
-
-
-displayProducts(products);
-
-
-}
-
-catch(error){
-
-console.log("Firebase Error:",error);
-
-}
-
-let products = [];
-
-
-querySnapshot.forEach((doc)=>{
-
-products.push({
-
-id: doc.id,
-
-...doc.data()
-
-});
 
 });
 
@@ -63,33 +52,36 @@ console.log(products);
 displayProducts(products);
 
 
+
+}
+
+catch(error){
+
+console.log("Firebase Error:",error);
+
 }
 
 
-loadProducts();
-
-
-
-let cart = [];
+}
 
 
 
 
 // DISPLAY PRODUCTS
 
+
 function displayProducts(products){
 
 
-let container = document.getElementById("products");
+let container=document.getElementById("products");
 
 
 if(!container){
 
-console.log("Products container not found");
-
 return;
 
 }
+
 
 
 container.innerHTML="";
@@ -102,10 +94,10 @@ products.forEach(product=>{
 container.innerHTML += `
 
 
-<div class="product-card">
+<div class="product">
 
 
-<img src="${product.image}" width="200">
+<img src="${product.image}">
 
 
 <h3>${product.name}</h3>
@@ -114,16 +106,14 @@ container.innerHTML += `
 <p>${product.brand}</p>
 
 
-<p>${product.price} SAR</p>
+<p class="price">${product.price} ريال</p>
 
 
-
-<button onclick="addToCart('${product.name}', ${product.price})">
+<button onclick="addToCart('${product.name}',${product.price})">
 
 Add To Cart
 
 </button>
-
 
 
 </div>
@@ -140,9 +130,12 @@ Add To Cart
 
 
 
-// ADD TO CART
 
-function addToCart(name, price){
+
+// ADD CART
+
+
+function addToCart(name,price){
 
 
 cart.push({
@@ -154,7 +147,7 @@ price:price
 });
 
 
-document.getElementById("cartCount").innerHTML = cart.length;
+document.getElementById("cartCount").innerHTML=cart.length;
 
 
 updateCart();
@@ -195,27 +188,35 @@ document.getElementById("cartBox").style.display="none";
 
 
 
+
+
 // UPDATE CART
+
 
 function updateCart(){
 
 
-let items = document.getElementById("cartItems");
+let items=document.getElementById("cartItems");
 
-let total = document.getElementById("cartTotal");
+let total=document.getElementById("cartTotal");
 
 
-if(!items || !total) return;
+if(!items || !total){
+
+return;
+
+}
+
 
 
 items.innerHTML="";
 
 
-let sum = 0;
+let sum=0;
 
 
 
-cart.forEach(function(product,index){
+cart.forEach((item,index)=>{
 
 
 items.innerHTML += `
@@ -223,11 +224,11 @@ items.innerHTML += `
 
 <p>
 
-${product.name}
+${item.name}
 
 <br>
 
-${product.price} ريال
+${item.price} ريال
 
 
 <button onclick="removeCart(${index})">
@@ -239,22 +240,19 @@ X
 
 </p>
 
-
 <hr>
 
 
 `;
 
 
-sum += product.price;
+sum += item.price;
 
 
 });
 
 
-
 total.innerHTML=sum;
-
 
 
 }
@@ -262,7 +260,10 @@ total.innerHTML=sum;
 
 
 
-// REMOVE ITEM
+
+
+// REMOVE
+
 
 function removeCart(index){
 
@@ -270,7 +271,7 @@ function removeCart(index){
 cart.splice(index,1);
 
 
-document.getElementById("cartCount").innerHTML = cart.length;
+document.getElementById("cartCount").innerHTML=cart.length;
 
 
 updateCart();
@@ -281,13 +282,15 @@ updateCart();
 
 
 
+
+
 // CHECKOUT
+
 
 function checkout(){
 
 
 alert("Thank you for shopping with BARQ!");
-
 
 }
 
@@ -295,14 +298,19 @@ alert("Thank you for shopping with BARQ!");
 
 
 
-// MAKE FUNCTIONS AVAILABLE
+// GLOBAL FUNCTIONS
 
-window.addToCart = addToCart;
 
-window.openCart = openCart;
+window.addToCart=addToCart;
 
-window.closeCart = closeCart;
+window.openCart=openCart;
 
-window.checkout = checkout;
+window.closeCart=closeCart;
 
-window.removeCart = removeCart;
+window.removeCart=removeCart;
+
+window.checkout=checkout;
+
+
+
+loadProducts();
