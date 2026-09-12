@@ -1,33 +1,27 @@
-// Firebase imports
-
 import { initializeApp } from 
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
 
 import {
 getAuth,
 createUserWithEmailAndPassword,
 signInWithEmailAndPassword,
-signOut
+signOut,
+onAuthStateChanged
 }
 from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-
 import { firebaseConfig } from "./firebase-config.js";
 
 
-
-// Initialize Firebase
+// START FIREBASE
 
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 
 
-
-
-// OPEN LOGIN BOX
+// SHOW LOGIN
 
 window.showLogin = function(){
 
@@ -36,9 +30,7 @@ document.getElementById("loginBox").style.display="block";
 };
 
 
-
-
-// CLOSE LOGIN BOX
+// CLOSE LOGIN
 
 window.closeLogin = function(){
 
@@ -48,110 +40,60 @@ document.getElementById("loginBox").style.display="none";
 
 
 
-
-
 // REGISTER
 
-window.registerUser = function(){
+window.registerUser=function(){
 
-
-const email = document.getElementById("email").value;
-
-const password = document.getElementById("password").value;
-
-
-
-if(email==="" || password===""){
-
-alert("Please enter email and password");
-
-return;
-
-}
-
+const email=document.getElementById("email").value;
+const password=document.getElementById("password").value;
 
 
 createUserWithEmailAndPassword(auth,email,password)
 
-
 .then(()=>{
-
 
 alert("Account created successfully");
 
-
 closeLogin();
-
 
 })
 
-
-.catch((error)=>{
-
+.catch(error=>{
 
 alert(error.message);
 
-
 });
 
-
 };
-
-
 
 
 
 
 // LOGIN
 
-window.loginUser = function(){
+window.loginUser=function(){
 
-
-const email = document.getElementById("email").value;
-
-const password = document.getElementById("password").value;
-
-
-
-if(email==="" || password===""){
-
-alert("Please enter email and password");
-
-return;
-
-}
-
+const email=document.getElementById("email").value;
+const password=document.getElementById("password").value;
 
 
 signInWithEmailAndPassword(auth,email,password)
 
-
 .then(()=>{
-
 
 alert("Login successful");
 
-
 closeLogin();
-
-
 
 })
 
-
-.catch((error)=>{
-
+.catch(error=>{
 
 alert(error.message);
 
-
 });
 
-
 };
-
-
-
 
 
 
@@ -160,27 +102,45 @@ alert(error.message);
 
 window.logoutUser=function(){
 
-
-
 signOut(auth)
-
 
 .then(()=>{
 
-
 alert("Logged out");
-
-
-})
-
-
-.catch((error)=>{
-
-
-alert(error.message);
-
 
 });
 
-
 };
+
+
+
+
+
+// CHECK USER STATUS
+
+onAuthStateChanged(auth,(user)=>{
+
+
+let loginButton=document.getElementById("loginButton");
+
+
+if(user){
+
+loginButton.innerHTML="👤 "+user.email+" | Logout";
+
+loginButton.onclick=logoutUser;
+
+
+}else{
+
+
+loginButton.innerHTML="🔒 Login";
+
+loginButton.onclick=showLogin;
+
+
+}
+
+
+
+});
