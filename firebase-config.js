@@ -1,18 +1,13 @@
 // BARQ Online Store Firebase Configuration
 
-
 import { initializeApp } from 
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
 
 import { getFirestore } from 
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-
-// Firebase Config
-
-export const firebaseConfig = {
+const firebaseConfig = {
 
 apiKey: "AIzaSyCV3N68e7GXNgNALXTiWjsYOQVFhqisTIc",
 
@@ -31,13 +26,10 @@ measurementId: "G-KS2BC3EXDD"
 };
 
 
-
-// Initialize Firebase
-
 const app = initializeApp(firebaseConfig);
 
 
+const db = getFirestore(app);
 
-// Firestore
 
-export const db = getFirestore(app);
+export { db, firebaseConfig };
