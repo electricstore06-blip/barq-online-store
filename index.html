@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <title>BARQ Online Store</title>
@@ -9,6 +10,7 @@
 <link rel="stylesheet" href="style.css">
 
 </head>
+
 
 <body>
 
@@ -21,24 +23,44 @@
 
 <header>
 
+
 <div class="logo">
+
 ⚡ BARQ
+
 <span>ONLINE STORE</span>
+
 </div>
 
 
+
 <nav>
+
 <a href="#">Home</a>
+
 <a href="#products">Shop</a>
+
 <a href="#brands">Brands</a>
+
 <a href="#deals">Deals</a>
 
+
 <a href="#" onclick="openCart()">
-🛒 Cart
+
+🛒 Cart 
+
 <span id="cartCount">0</span>
+
 </a>
-<button onclick="showLogin()">👤 Login</button
+
+
+<button onclick="showLogin()">
+👤 Login
+</button>
+
+
 </nav>
+
 
 </header>
 
@@ -51,10 +73,15 @@
 
 <div class="hero-text">
 
+
 <h1>
+
 Everything you need.<br>
+
 <span>All in one store.</span>
+
 </h1>
+
 
 
 <h2>
@@ -68,11 +95,16 @@ Authentic beauty products | Fast shipping | Secure payment
 
 
 <button onclick="document.querySelector('#products').scrollIntoView()">
+
 Shop Products
+
 </button>
 
 
 </div>
+
+
+
 
 
 <div class="hero-box">
@@ -81,13 +113,18 @@ Shop Products
 BARQ BEAUTY
 </h3>
 
+
 <p>
 Top cosmetics brands at the best prices
 </p>
 
+
 <div class="icons">
+
 💄 💋 🧴 ✨
+
 </div>
+
 
 </div>
 
@@ -101,45 +138,65 @@ Top cosmetics brands at the best prices
 
 <section class="categories">
 
-<h2>Shop By Category</h2>
+
+<h2>
+Shop By Category
+</h2>
+
 
 <div class="category-container">
+
 
 <div class="category">
 💄
 <h3>Makeup</h3>
 </div>
 
+
 <div class="category">
 🧴
 <h3>Skincare</h3>
 </div>
+
 
 <div class="category">
 💋
 <h3>Lip Care</h3>
 </div>
 
+
 <div class="category">
 ✨
 <h3>Beauty Tools</h3>
 </div>
+
 
 <div class="category">
 🌸
 <h3>Fragrance</h3>
 </div>
 
+
 </div>
 
+
 </section>
+
+
+
+
+
+
 <section class="brands" id="brands">
 
 
-<h2>Popular Brands</h2>
+<h2>
+Popular Brands
+</h2>
 
 
 <div class="brand-list">
+
 
 <div>L'Oréal</div>
 
@@ -153,12 +210,11 @@ Top cosmetics brands at the best prices
 
 <div>MAC</div>
 
+
 </div>
 
 
 </section>
-
-
 
 
 
@@ -176,162 +232,255 @@ Our Products
 
 
 <div class="product-container">
-<div class="product-container">
+
 
 
 <div class="product">
 
-<span class="badge">NEW</span>
+<span class="badge">
+NEW
+</span>
+
 
 <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348">
 
-<h3>L'Oréal Lipstick</h3>
 
-<p class="brand">L'Oréal Paris</p>
+<h3>
+L'Oréal Lipstick
+</h3>
 
-<div class="rating">
+
+<p class="brand">
+L'Oréal Paris
+</p>
+
+
+<div>
 ⭐⭐⭐⭐⭐
 </div>
 
-<p class="price">45 ريال</p>
+
+<p class="price">
+45 ريال
+</p>
+
 
 <button onclick="addToCart('L’Oréal Lipstick',45)">
 Add To Cart
 </button>
 
+
 </div>
+
+
+
 
 
 
 <div class="product">
 
-<span class="badge sale">SALE</span>
+
+<span class="badge sale">
+SALE
+</span>
+
 
 <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796">
 
-<h3>Maybelline Mascara</h3>
 
-<p class="brand">Maybelline</p>
+<h3>
+Maybelline Mascara
+</h3>
 
-<div class="rating">
+
+<p class="brand">
+Maybelline
+</p>
+
+
+<div>
 ⭐⭐⭐⭐⭐
 </div>
 
-<p class="price">35 ريال</p>
+
+<p class="price">
+35 ريال
+</p>
+
 
 <button onclick="addToCart('Maybelline Mascara',35)">
 Add To Cart
 </button>
 
+
 </div>
+
+
+
+
 
 
 
 <div class="product">
 
-<span class="badge">NEW</span>
 
 <img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883">
 
-<h3>CeraVe Skin Care</h3>
 
-<p class="brand">CeraVe</p>
+<h3>
+CeraVe Skin Care
+</h3>
 
-<div class="rating">
+
+<p class="brand">
+CeraVe
+</p>
+
+
+<div>
 ⭐⭐⭐⭐⭐
 </div>
 
-<p class="price">75 ريال</p>
+
+<p class="price">
+75 ريال
+</p>
+
 
 <button onclick="addToCart('CeraVe Skin Care',75)">
 Add To Cart
 </button>
 
+
 </div>
+
+
+
+
 
 
 
 <div class="product">
 
+
 <img src="https://images.unsplash.com/photo-1612817288484-6f916006741a">
 
-<h3>The Ordinary Serum</h3>
 
-<p class="brand">The Ordinary</p>
+<h3>
+The Ordinary Serum
+</h3>
 
-<div class="rating">
+
+<p class="brand">
+The Ordinary
+</p>
+
+
+<div>
 ⭐⭐⭐⭐
 </div>
 
-<p class="price">60 ريال</p>
+
+<p class="price">
+60 ريال
+</p>
+
 
 <button onclick="addToCart('The Ordinary Serum',60)">
 Add To Cart
 </button>
 
+
 </div>
+
+
+
 
 
 
 <div class="product">
 
+
 <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9">
 
-<h3>Beauty Kit</h3>
 
-<p class="brand">Premium Collection</p>
+<h3>
+Beauty Kit
+</h3>
 
-<div class="rating">
+
+<p class="brand">
+Premium Collection
+</p>
+
+
+<div>
 ⭐⭐⭐⭐⭐
 </div>
 
-<p class="price">120 ريال</p>
+
+<p class="price">
+120 ريال
+</p>
+
 
 <button onclick="addToCart('Beauty Kit',120)">
 Add To Cart
 </button>
 
+
 </div>
+
+
+
+
 
 
 
 <div class="product">
 
-<span class="badge sale">SALE</span>
+
+<span class="badge sale">
+SALE
+</span>
+
 
 <img src="https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc">
 
-<h3>Luxury Perfume</h3>
 
-<p class="brand">BARQ Collection</p>
+<h3>
+Luxury Perfume
+</h3>
 
-<div class="rating">
+
+<p class="brand">
+BARQ Collection
+</p>
+
+
+<div>
 ⭐⭐⭐⭐⭐
 </div>
 
-<p class="price">150 ريال</p>
+
+<p class="price">
+150 ريال
+</p>
+
 
 <button onclick="addToCart('Luxury Perfume',150)">
 Add To Cart
 </button>
 
-</div>
-
 
 </div>
 
 
 
+</div>
 
 
-
-
-
-
-
-
-
-
+</section>
 
 
 
@@ -344,6 +493,7 @@ Add To Cart
 <h2>
 Special Offers
 </h2>
+
 
 <p>
 Up to 30% discount on selected cosmetics
@@ -371,10 +521,16 @@ Your Cart
 
 
 <h3>
-Total:
-<span id="cartTotal">0</span> ريال
-</h3>
 
+Total:
+
+<span id="cartTotal">
+0
+</span>
+
+ريال
+
+</h3>
 
 
 <button onclick="checkout()">
@@ -389,23 +545,45 @@ Close
 
 </div>
 
-</div>
+
+
+
+
+
 
 <div id="loginBox" class="login-box">
 
-<h2>BARQ Account</h2>
+
+<h2>
+BARQ Account
+</h2>
+
 
 <input id="email" type="email" placeholder="Email">
 
+
 <input id="password" type="password" placeholder="Password">
 
-<button onclick="registerUser()">Register</button>
 
-<button onclick="loginUser()">Login</button>
+<button onclick="registerUser()">
+Register
+</button>
 
-<button onclick="closeLogin()">Close</button>
+
+<button onclick="loginUser()">
+Login
+</button>
+
+
+<button onclick="closeLogin()">
+Close
+</button>
+
 
 </div>
+
+
+
 
 
 
@@ -421,11 +599,10 @@ Close
 
 
 
-
 <script type="module" src="script.js"></script>
-
-<script type="module" src="auth.js"></script>  
 
 
 </body>
+
+
 </html>
