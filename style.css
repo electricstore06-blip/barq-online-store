@@ -15,13 +15,11 @@ body{
 /* TOP BAR */
 
 .top-bar{
-
     background:#111827;
     color:white;
     padding:12px;
     text-align:center;
     font-size:14px;
-
 }
 
 
@@ -56,6 +54,7 @@ header{
 }
 
 
+
 nav{
 
     display:flex;
@@ -74,6 +73,7 @@ nav a{
 }
 
 
+
 nav button{
 
     background:#e91e63;
@@ -90,6 +90,7 @@ nav button{
 
 /* HERO */
 
+
 .hero{
 
     max-width:1200px;
@@ -104,6 +105,7 @@ nav button{
     gap:40px;
 
 }
+
 
 
 .hero-text h1{
@@ -122,6 +124,7 @@ nav button{
 }
 
 
+
 .hero-text h2{
 
     margin:20px 0;
@@ -130,12 +133,14 @@ nav button{
 }
 
 
+
 .hero-text p{
 
     font-size:18px;
     margin-bottom:25px;
 
 }
+
 
 
 .hero button{
@@ -151,6 +156,7 @@ nav button{
 
 
 
+
 .hero-box{
 
     background:white;
@@ -160,6 +166,7 @@ nav button{
     box-shadow:0 10px 30px #ddd;
 
 }
+
 
 
 .icons{
@@ -172,7 +179,8 @@ nav button{
 
 
 
-/* CATEGORIES */
+/* SECTIONS */
+
 
 .categories,
 .brands,
@@ -183,6 +191,7 @@ nav button{
     margin:50px auto;
 
 }
+
 
 
 .categories h2,
@@ -197,6 +206,9 @@ nav button{
 
 
 
+/* CATEGORY */
+
+
 .category-container{
 
     display:flex;
@@ -206,6 +218,7 @@ nav button{
 }
 
 
+
 .category{
 
     background:#fff0f5;
@@ -213,17 +226,9 @@ nav button{
     border-radius:20px;
     text-align:center;
     flex:1;
-    font-size:30px;
 
 }
 
-
-
-.category h3{
-
-    font-size:18px;
-
-}
 
 
 
@@ -239,6 +244,7 @@ nav button{
 }
 
 
+
 .brand-list div{
 
     background:#fff0f5;
@@ -251,38 +257,61 @@ nav button{
 
 
 
-/* PRODUCTS */
+
+/* ==========================
+   PRODUCTS FIXED
+========================== */
 
 
+/* THIS MATCHES YOUR JS ID */
+
+#products,
 .product-container{
 
     display:grid;
+
     grid-template-columns:repeat(3,1fr);
+
     gap:25px;
 
+    width:100%;
+
 }
+
+
 
 
 .product{
 
-    position:relative;
     background:white;
+
     padding:20px;
+
     border-radius:20px;
+
     box-shadow:0 5px 20px #ddd;
 
+    width:100%;
+
+    min-width:0;
+
 }
+
 
 
 
 .product img{
 
     width:100%;
+
     height:250px;
+
     object-fit:cover;
+
     border-radius:15px;
 
 }
+
 
 
 
@@ -290,62 +319,98 @@ nav button{
 
     margin-top:15px;
 
+    font-size:20px;
+
 }
+
 
 
 .brand{
 
     color:#777;
+
     font-size:14px;
 
 }
 
 
+
+.stars{
+
+    margin:8px 0;
+
+}
+
+
+
 .price{
 
     color:#e91e63;
+
     font-size:20px;
+
     font-weight:bold;
 
 }
 
 
+
+
 .product button{
 
     width:100%;
-    margin-top:10px;
+
+    margin-top:15px;
+
     padding:15px;
+
     border:none;
+
     background:#e91e63;
+
     color:white;
+
     border-radius:12px;
+
     cursor:pointer;
+
+    font-size:16px;
 
 }
 
+
+
+
+.product button:hover{
+
+    background:#c2185b;
+
+}
+
+
+
+
+
+/* BADGE */
 
 
 .badge{
 
     position:absolute;
+
     top:15px;
     left:15px;
 
     background:#e91e63;
+
     color:white;
 
     padding:5px 12px;
+
     border-radius:20px;
-    font-size:12px;
 
 }
 
-
-.sale{
-
-    background:#111827;
-
-}
 
 
 
@@ -360,9 +425,11 @@ nav button{
     position:fixed;
 
     right:0;
+
     top:0;
 
     width:360px;
+
     height:100vh;
 
     background:white;
@@ -377,25 +444,33 @@ nav button{
 
 
 
+
 .cart-box button{
 
     width:100%;
+
     padding:12px;
+
     margin-top:10px;
 
     border:none;
+
     border-radius:10px;
 
     background:#e91e63;
+
     color:white;
 
 }
 
 
 
+
+
 #cartCount{
 
     background:#e91e63;
+
     color:white;
 
     padding:3px 8px;
@@ -405,82 +480,6 @@ nav button{
 }
 
 
-
-
-/* LOGIN */
-
-
-.login-box{
-
-    display:none;
-
-    position:fixed;
-
-    top:50%;
-    left:50%;
-
-    transform:translate(-50%,-50%);
-
-    background:white;
-
-    width:350px;
-
-    padding:30px;
-
-    border-radius:20px;
-
-    box-shadow:0 10px 30px #999;
-
-    z-index:10000;
-
-}
-
-
-
-.login-box h2{
-
-    text-align:center;
-    margin-bottom:20px;
-
-}
-
-
-
-.login-box input{
-
-    width:100%;
-
-    padding:12px;
-
-    margin:10px 0;
-
-    border:1px solid #ddd;
-
-    border-radius:10px;
-
-}
-
-
-
-.login-box button{
-
-    width:100%;
-
-    padding:12px;
-
-    margin-top:10px;
-
-    border:none;
-
-    border-radius:10px;
-
-    background:#e91e63;
-
-    color:white;
-
-    cursor:pointer;
-
-}
 
 
 
@@ -501,6 +500,8 @@ footer{
 
 
 
+
+
 /* MOBILE */
 
 
@@ -510,7 +511,6 @@ footer{
 header{
 
     flex-direction:column;
-    gap:20px;
 
 }
 
@@ -532,12 +532,12 @@ header{
 
 
 
+#products,
 .product-container{
 
     grid-template-columns:1fr;
 
 }
-
 
 
 }
