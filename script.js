@@ -9,7 +9,10 @@ from
 
 
 
+// CART
+
 let cart=[];
+
 
 
 // LOAD PRODUCTS
@@ -48,9 +51,8 @@ console.log(products);
 displayProducts(products);
 
 
-}
 
-catch(error){
+}catch(error){
 
 console.log("Firebase Error:",error);
 
@@ -68,21 +70,25 @@ loadProducts();
 
 // DISPLAY PRODUCTS
 
-
 function displayProducts(products){
 
 
 let container=document.getElementById("products");
 
 
+
 if(!container){
+
+console.log("Products container missing");
 
 return;
 
 }
 
 
+
 container.innerHTML="";
+
 
 
 products.forEach(product=>{
@@ -104,8 +110,11 @@ container.innerHTML += `
 
 
 <p class="price">
+
 ${product.price} ريال
+
 </p>
+
 
 
 <button onclick="addToCart('${product.name}',${product.price})">
@@ -130,7 +139,8 @@ Add To Cart
 
 
 
-// CART
+
+// ADD CART
 
 
 function addToCart(name,price){
@@ -138,14 +148,16 @@ function addToCart(name,price){
 
 cart.push({
 
-name,
-price
+name:name,
+
+price:Number(price)
 
 });
 
 
-document.getElementById("cartCount").innerHTML=
-cart.length;
+
+document.getElementById("cartCount").innerHTML=cart.length;
+
 
 
 updateCart();
@@ -154,16 +166,26 @@ updateCart();
 }
 
 
+
+
+
+// OPEN CART
 
 
 function openCart(){
 
 document.getElementById("cartBox").style.display="block";
 
+
 updateCart();
+
 
 }
 
+
+
+
+// CLOSE CART
 
 
 function closeCart(){
@@ -175,6 +197,11 @@ document.getElementById("cartBox").style.display="none";
 
 
 
+
+
+// UPDATE CART
+
+
 function updateCart(){
 
 
@@ -183,7 +210,13 @@ let items=document.getElementById("cartItems");
 let total=document.getElementById("cartTotal");
 
 
-if(!items)return;
+
+if(!items || !total){
+
+return;
+
+}
+
 
 
 items.innerHTML="";
@@ -192,10 +225,12 @@ items.innerHTML="";
 let sum=0;
 
 
+
 cart.forEach((item,index)=>{
 
 
-items.innerHTML+=`
+items.innerHTML += `
+
 
 <p>
 
@@ -205,13 +240,16 @@ ${item.name}
 
 ${item.price} ريال
 
+
 <button onclick="removeCart(${index})">
 
 X
 
 </button>
 
+
 </p>
+
 
 <hr>
 
@@ -219,18 +257,27 @@ X
 `;
 
 
-sum+=item.price;
+
+sum += item.price;
 
 
 });
 
 
+
 total.innerHTML=sum;
+
 
 
 }
 
 
+
+
+
+
+
+// REMOVE
 
 
 function removeCart(index){
@@ -239,8 +286,8 @@ function removeCart(index){
 cart.splice(index,1);
 
 
-document.getElementById("cartCount").innerHTML=
-cart.length;
+
+document.getElementById("cartCount").innerHTML=cart.length;
 
 
 updateCart();
@@ -249,6 +296,10 @@ updateCart();
 }
 
 
+
+
+
+// CHECKOUT
 
 
 function checkout(){
@@ -263,6 +314,10 @@ alert(
 
 
 
+
+
+
+// MAKE GLOBAL
 
 
 window.addToCart=addToCart;
