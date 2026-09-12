@@ -4,7 +4,7 @@ import {
 collection,
 getDocs
 }
-from
+from 
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
@@ -17,75 +17,34 @@ let cart=[];
 
 async function loadProducts(){
 
-const productContainer=document.querySelector(".product-container");
-
-
-if(!productContainer){
-
-console.log("Product container missing");
-
-return;
-
-}
-
-
-
 try{
 
 
-const snapshot = await getDocs(
-collection(db,"products")
-);
+const snapshot = await getDocs(collection(db,"products"));
 
+
+let products=[];
 
 
 snapshot.forEach((doc)=>{
 
+products.push({
 
-let product=doc.data();
+id:doc.id,
 
+...doc.data()
 
-
-productContainer.innerHTML += `
-
-
-<div class="product">
-
-
-<img src="${product.image}">
-
-
-<h3>
-${product.name}
-</h3>
-
-
-<p class="brand">
-${product.brand}
-</p>
-
-
-<p class="price">
-${product.price} ريال
-</p>
-
-
-
-<button onclick="addToCart('${product.name}',${product.price})">
-
-Add To Cart
-
-</button>
-
-
-</div>
-
-
-`;
-
+});
 
 
 });
+
+
+console.log(products);
+
+
+displayProducts(products);
+
 
 
 }
@@ -101,9 +60,91 @@ console.log(error);
 
 
 
-loadProducts();
+
+// DISPLAY PRODUCTS
 
 
+function displayProducts(products){
+
+
+let container=document.getElementById("products");
+
+
+
+if(!container){
+
+return;
+
+}
+
+
+
+products.forEach(product=>{
+
+
+let card=document.createElement("div");
+
+
+card.className="product";
+
+
+
+card.innerHTML=`
+
+<img src="${product.image}">
+
+
+<h3>${product.name}</h3>
+
+
+<p class="brand">
+
+${product.brand}
+
+</p>
+
+
+<p class="price">
+
+${product.price} ريال
+
+</p>
+
+
+<button>
+
+Add To Cart
+
+</button>
+
+
+`;
+
+
+
+card.querySelector("button")
+.onclick=function(){
+
+
+addToCart(
+product.name,
+product.price
+);
+
+
+};
+
+
+
+container.appendChild(card);
+
+
+
+});
+
+
+
+}
 
 
 
@@ -118,9 +159,10 @@ cart.push({
 
 name:name,
 
-price:price
+price:Number(price)
 
 });
+
 
 
 document.getElementById("cartCount").innerHTML=cart.length;
@@ -135,28 +177,38 @@ updateCart();
 
 function openCart(){
 
+
 document.getElementById("cartBox").style.display="block";
+
 
 updateCart();
 
+
 }
+
 
 
 
 function closeCart(){
 
+
 document.getElementById("cartBox").style.display="none";
 
+
 }
+
+
 
 
 
 function updateCart(){
 
 
+
 let items=document.getElementById("cartItems");
 
 let total=document.getElementById("cartTotal");
+
 
 
 items.innerHTML="";
@@ -169,8 +221,7 @@ let sum=0;
 cart.forEach((item,index)=>{
 
 
-items.innerHTML += `
-
+items.innerHTML+=`
 
 <p>
 
@@ -201,10 +252,13 @@ X
 sum += item.price;
 
 
+
 });
 
 
+
 total.innerHTML=sum;
+
 
 
 }
@@ -228,9 +282,12 @@ updateCart();
 
 
 
+
 function checkout(){
 
-alert("Thank you for shopping with BARQ!");
+
+alert("Thank you for shopping with BARQ");
+
 
 }
 
@@ -246,3 +303,7 @@ window.closeCart=closeCart;
 window.removeCart=removeCart;
 
 window.checkout=checkout;
+
+
+
+loadProducts();
