@@ -1022,3 +1022,60 @@ header{
     transition:0.3s ease;
 
 }
+/* PRODUCT HOVER EFFECT */
+
+.product{
+    transition:0.3s ease;
+}
+
+
+.product:hover{
+
+    transform:translateY(-8px);
+    box-shadow:0 15px 35px rgba(0,0,0,0.15);
+
+}
+
+
+.product img{
+
+    transition:0.3s ease;
+
+}
+
+
+.product:hover img{
+
+    transform:scale(1.03);
+
+}
+
+
+/* BUTTON HOVER */
+
+.product-actions button{
+
+    transition:0.3s ease;
+
+}
+
+
+.view-btn:hover{
+
+    background:#e91e63;
+
+}
+
+
+.add-btn:hover{
+
+    background:#c2185b;
+
+}
+
+
+.heart-btn:hover{
+
+    transform:scale(1.15);
+
+}
