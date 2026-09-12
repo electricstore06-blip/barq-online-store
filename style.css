@@ -1374,3 +1374,87 @@ nav a:hover{
 
     }
 
+/* CATEGORY FINAL FIX */
+
+.categories{
+    width:90%;
+    max-width:1200px;
+    margin:70px auto;
+}
+
+
+.category-container{
+
+    display:grid !important;
+
+    grid-template-columns:repeat(5, 1fr) !important;
+
+    gap:20px !important;
+
+}
+
+
+.category{
+
+    background:#fff0f5;
+
+    height:160px;
+
+    border-radius:25px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:35px;
+
+    transition:.3s ease;
+
+}
+
+
+
+.category h3{
+
+    margin-top:15px;
+
+    font-size:18px;
+
+}
+
+
+
+.category:hover{
+
+    background:#e91e63;
+
+    color:white;
+
+    transform:translateY(-8px);
+
+}
+
+
+
+.category:hover h3{
+
+    color:white;
+
+}
+
+
+
+/* keep mobile safe */
+
+@media(max-width:900px){
+
+.category-container{
+
+    grid-template-columns:repeat(2,1fr) !important;
+
+}
+
