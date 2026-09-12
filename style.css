@@ -193,16 +193,17 @@ nav button{
 }
 
 
+.categories,
+.brands,
+.products,
+.offer{
 
-.categories h2,
-.brands h2,
-.products h2,
-.offer h2{
-
-    font-size:35px;
-    margin-bottom:30px;
+    width:90%;
+    max-width:1200px;
+    margin:50px auto;
 
 }
+
 
 
 
