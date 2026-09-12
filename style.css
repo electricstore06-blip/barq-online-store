@@ -835,3 +835,54 @@ header{
     margin-top:10px;
 
 }
+/* =========================
+   PRODUCT SIZE CONTROL
+   KEEP CARD SMALL
+========================= */
+
+
+.product-container{
+
+    display:grid !important;
+
+    grid-template-columns:repeat(3, 380px) !important;
+
+    justify-content:start;
+
+    gap:30px;
+
+}
+
+
+
+.product{
+
+    width:380px !important;
+
+}
+
+
+
+.product img{
+
+    height:220px !important;
+
+}
+
+
+
+@media(max-width:900px){
+
+.product-container{
+
+    grid-template-columns:1fr !important;
+
+}
+
+
+.product{
+
+    width:100% !important;
+
+}
+
