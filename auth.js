@@ -8,22 +8,24 @@ signInWithEmailAndPassword,
 signOut,
 onAuthStateChanged
 }
-from
+from 
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 
 import { firebaseConfig } from "./firebase-config.js";
 
 
-// START FIREBASE
+// Firebase start
 
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 
 
-// SHOW LOGIN
 
-window.showLogin = function(){
+// OPEN LOGIN
+
+window.showLogin=function(){
 
 document.getElementById("loginBox").style.display="block";
 
@@ -32,7 +34,7 @@ document.getElementById("loginBox").style.display="block";
 
 // CLOSE LOGIN
 
-window.closeLogin = function(){
+window.closeLogin=function(){
 
 document.getElementById("loginBox").style.display="none";
 
@@ -44,8 +46,9 @@ document.getElementById("loginBox").style.display="none";
 
 window.registerUser=function(){
 
-const email=document.getElementById("email").value;
-const password=document.getElementById("password").value;
+let email=document.getElementById("email").value;
+
+let password=document.getElementById("password").value;
 
 
 createUserWithEmailAndPassword(auth,email,password)
@@ -64,8 +67,8 @@ alert(error.message);
 
 });
 
-};
 
+};
 
 
 
@@ -73,8 +76,9 @@ alert(error.message);
 
 window.loginUser=function(){
 
-const email=document.getElementById("email").value;
-const password=document.getElementById("password").value;
+let email=document.getElementById("email").value;
+
+let password=document.getElementById("password").value;
 
 
 signInWithEmailAndPassword(auth,email,password)
@@ -93,6 +97,7 @@ alert(error.message);
 
 });
 
+
 };
 
 
@@ -108,53 +113,63 @@ signOut(auth)
 
 alert("Logged out");
 
+location.reload();
+
 });
 
 };
 
-// CHECK USER STATUS
+
+
+
+
+// CHECK LOGIN STATUS
 
 onAuthStateChanged(auth,(user)=>{
 
-let loginButton = document.getElementById("loginButton");
 
-let adminLink = document.getElementById("adminLink");
+let button=document.getElementById("loginButton");
 
+let admin=document.getElementById("adminLink");
 
-if(!loginButton){
-    return;
-}
 
 
 if(user){
 
-    loginButton.innerHTML = "👤 " + user.email + " | Logout";
 
-    loginButton.onclick = logoutUser;
+button.innerHTML="👤 "+user.email+" | Logout";
 
-
-    if(adminLink){
-        adminLink.style.display="block";
-    }
+button.onclick=logoutUser;
 
 
-}else{
 
+if(admin){
 
-    loginButton.innerHTML = "🔒 Login";
-
-    loginButton.onclick = showLogin;
-
-
-    if(adminLink){
-        adminLink.style.display="none";
-    }
+admin.style.display="inline";
 
 }
 
 
+
+}
+
+else{
+
+
+button.innerHTML="🔒 Login";
+
+button.onclick=showLogin;
+
+
+if(admin){
+
+admin.style.display="none";
+
+}
+
+
+}
+
+
+
 });
-
-
-
-
