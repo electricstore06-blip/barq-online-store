@@ -1685,5 +1685,88 @@ grid-template-columns:1fr 1fr !important;
 
 }
 
+/* =========================
+   BARQ CATEGORY PREMIUM FIX
+========================= */
+
+.category{
+    height:160px;
+    border-radius:25px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    background:#fff1f6 !important;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    transition:0.3s ease;
+    cursor:pointer;
+}
+
+
+.category:hover{
+
+    transform:translateY(-10px) scale(1.03);
+    background:#e91e63 !important;
+    color:white;
 
 }
+
+
+.category:hover h3{
+
+    color:white;
+
+}
+
+
+.category{
+
+    font-size:40px;
+
+}
+
+
+.category h3{
+
+    font-size:20px;
+    margin:0;
+    color:#111827;
+
+}
+
+
+
+/* desktop */
+
+.category-container{
+
+    display:grid !important;
+    grid-template-columns:repeat(3,1fr) !important;
+    gap:25px;
+}
+
+
+
+/* mobile */
+
+@media(max-width:900px){
+
+.category-container{
+
+grid-template-columns:repeat(2,1fr) !important;
+
+}
+
+}
+
+
+@media(max-width:600px){
+
+.category-container{
+
+grid-template-columns:1fr !important;
+
+}
+
+
