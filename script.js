@@ -20,6 +20,7 @@ id: doc.id,
 
 console.log(products);
 
+displayProducts(products);
 }
 
 loadProducts();
