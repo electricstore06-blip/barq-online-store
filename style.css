@@ -744,3 +744,94 @@ header{
     margin-top:20px;
 
 }
+/* =========================
+   PRODUCT CARD PREMIUM UPGRADE
+   SIZE NOT CHANGED
+========================= */
+
+
+/* product hover */
+
+.product{
+    transition:0.3s ease;
+}
+
+
+.product:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 35px #ddd;
+}
+
+
+
+/* image area */
+
+.product{
+    overflow:hidden;
+}
+
+
+
+/* heart button */
+
+.heart-btn{
+
+    border:none;
+    cursor:pointer;
+    transition:.3s;
+
+}
+
+
+.heart-btn:hover{
+
+    background:#e91e63 !important;
+    color:white;
+
+}
+
+
+
+/* add cart button */
+
+.add-btn{
+
+    font-weight:bold;
+
+}
+
+
+.add-btn:hover{
+
+    background:#c2185b !important;
+
+}
+
+
+
+/* rating */
+
+.stars{
+
+    color:#ffb400;
+    font-size:18px;
+
+}
+
+
+.stars span{
+
+    color:#555;
+    font-size:14px;
+
+}
+
+
+
+/* price */
+
+.price{
+
+    margin-top:10px;
+
+}
