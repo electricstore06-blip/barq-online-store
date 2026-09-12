@@ -640,7 +640,30 @@ footer{
 
 }
 
+/* PRODUCT BUTTON FINAL FIX */
 
+.product-actions{
+
+    display:flex !important;
+    flex-direction:column !important;
+    gap:15px !important;
+
+}
+
+
+.product-actions button{
+
+    width:100% !important;
+    margin-top:0 !important;
+
+}
+
+
+.product-actions .heart-btn{
+
+    height:50px !important;
+
+}
 
 
 
