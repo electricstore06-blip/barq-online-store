@@ -63,7 +63,7 @@ console.log("Firebase Error:",error);
 function displayProducts(products){
 
 
-let container=document.getElementById("products");
+let container=document.querySelector(".product-container");
 
 
 if(!container){
