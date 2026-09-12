@@ -113,22 +113,30 @@ alert("Logged out");
 };
 
 
-
-
-
 // CHECK USER STATUS
 
 onAuthStateChanged(auth,(user)=>{
 
 
 let loginButton=document.getElementById("loginButton");
+let adminLink=document.getElementById("adminLink");
 
 
 if(user){
 
+
 loginButton.innerHTML="👤 "+user.email+" | Logout";
 
 loginButton.onclick=logoutUser;
+
+
+// SHOW ADMIN ONLY FOR OWNER
+
+if(user.email==="admin@barqstore.com"){
+
+adminLink.style.display="inline";
+
+}
 
 
 }else{
@@ -139,8 +147,17 @@ loginButton.innerHTML="🔒 Login";
 loginButton.onclick=showLogin;
 
 
+if(adminLink){
+
+adminLink.style.display="none";
+
 }
 
 
+}
+
 
 });
+
+
+
