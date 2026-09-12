@@ -99,31 +99,23 @@
 
 }
 
-
-
-/* MOBILE */
+/* FINAL RESPONSIVE FIX */
 
 @media(max-width:900px){
 
-.product-container{
+    .product-container{
+        grid-template-columns:1fr !important;
+    }
 
-    grid-template-columns:1fr;
+    .hero{
+        flex-direction:column;
+    }
 
-}
-
-
-.hero{
-
-    flex-direction:column;
-
-}
+    header{
+        flex-direction:column;
+        gap:20px;
+    }
 
 
-header{
 
-    flex-direction:column;
-    gap:20px;
 
-}
-
-}
