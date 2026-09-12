@@ -4,79 +4,23 @@ import {
 collection,
 getDocs
 }
-from 
+from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-
-// CART
 
 let cart=[];
 
 
 
-// LOAD PRODUCTS
+// LOAD FIREBASE PRODUCTS
 
 async function loadProducts(){
 
-try{
+const productContainer=document.querySelector(".product-container");
 
 
-const snapshot = await getDocs(
-collection(db,"products")
-);
-
-
-let products=[];
-
-
-snapshot.forEach((doc)=>{
-
-
-products.push({
-
-id:doc.id,
-
-...doc.data()
-
-});
-
-
-});
-
-
-console.log(products);
-
-
-displayProducts(products);
-
-
-
-}catch(error){
-
-console.log("Firebase Error:",error);
-
-}
-
-
-
-
-
-
-loadProducts();
-
-
-
-
-// DISPLAY PRODUCTS FROM FIREBASE
-
-function displayProducts(products){
-
-
-let container = document.querySelector(".product-container");
-
-
-if(!container){
+if(!productContainer){
 
 console.log("Product container missing");
 
@@ -86,90 +30,43 @@ return;
 
 
 
-products.forEach(product=>{
+try{
 
 
-container.innerHTML += `
+const snapshot = await getDocs(
+collection(db,"products")
+);
+
+
+
+snapshot.forEach((doc)=>{
+
+
+let product=doc.data();
+
+
+
+productContainer.innerHTML += `
 
 
 <div class="product">
 
 
 <img src="${product.image}">
-
 
 
 <h3>
-
 ${product.name}
-
 </h3>
 
 
-
 <p class="brand">
-
 ${product.brand}
-
 </p>
 
 
-
 <p class="price">
-
 ${product.price} ريال
-
-</p>
-
-
-
-<button onclick="addToCart('${product.name}',${product.price})">
-
-Add To Cart
-
-</button>
-
-
-
-</div>
-
-
-`;
-
-
-});
-
-
-}
-
-
-
-container.innerHTML="";
-
-
-
-products.forEach(product=>{
-
-
-container.innerHTML += `
-
-
-<div class="product">
-
-
-<img src="${product.image}">
-
-
-<h3>${product.name}</h3>
-
-
-<p>${product.brand}</p>
-
-
-<p class="price">
-
-${product.price} ريال
-
 </p>
 
 
@@ -187,17 +84,31 @@ Add To Cart
 `;
 
 
+
 });
+
+
+}
+
+catch(error){
+
+console.log(error);
+
+}
 
 
 }
 
 
 
+loadProducts();
 
 
 
-// ADD CART
+
+
+
+// CART
 
 
 function addToCart(name,price){
@@ -207,14 +118,12 @@ cart.push({
 
 name:name,
 
-price:Number(price)
+price:price
 
 });
 
 
-
 document.getElementById("cartCount").innerHTML=cart.length;
-
 
 
 updateCart();
@@ -222,27 +131,16 @@ updateCart();
 
 }
 
-
-
-
-
-// OPEN CART
 
 
 function openCart(){
 
 document.getElementById("cartBox").style.display="block";
 
-
 updateCart();
-
 
 }
 
-
-
-
-// CLOSE CART
 
 
 function closeCart(){
@@ -253,27 +151,12 @@ document.getElementById("cartBox").style.display="none";
 
 
 
-
-
-
-// UPDATE CART
-
-
 function updateCart(){
 
 
 let items=document.getElementById("cartItems");
 
 let total=document.getElementById("cartTotal");
-
-
-
-if(!items || !total){
-
-return;
-
-}
-
 
 
 items.innerHTML="";
@@ -321,9 +204,7 @@ sum += item.price;
 });
 
 
-
 total.innerHTML=sum;
-
 
 
 }
@@ -331,17 +212,10 @@ total.innerHTML=sum;
 
 
 
-
-
-
-// REMOVE
-
-
 function removeCart(index){
 
 
 cart.splice(index,1);
-
 
 
 document.getElementById("cartCount").innerHTML=cart.length;
@@ -354,27 +228,13 @@ updateCart();
 
 
 
-
-
-// CHECKOUT
-
-
 function checkout(){
 
-
-alert(
-"Thank you for shopping with BARQ!"
-);
-
+alert("Thank you for shopping with BARQ!");
 
 }
 
 
-
-
-
-
-// MAKE GLOBAL
 
 
 window.addToCart=addToCart;
@@ -383,6 +243,6 @@ window.openCart=openCart;
 
 window.closeCart=closeCart;
 
-window.checkout=checkout;
-
 window.removeCart=removeCart;
+
+window.checkout=checkout;
