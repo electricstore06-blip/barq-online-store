@@ -1,31 +1,223 @@
-let cart=[];
+let cart = [];
 
 
-function addToCart(name,price){
-
-cart.push({
-name:name,
-price:price
-});
+// ================= CART =================
 
 
-document.getElementById("cartCount").innerHTML = cart.length;
+window.addToCart = function(name, price){
+
+    let item = cart.find(product => product.name === name);
+
+
+    if(item){
+
+        item.quantity++;
+
+    }else{
+
+        cart.push({
+
+            name:name,
+            price:price,
+            quantity:1
+
+        });
+
+    }
+
+
+    updateCart();
+
+};
+
+
+
+function updateCart(){
+
+
+    let cartItems = document.getElementById("cartItems");
+
+    let cartTotal = document.getElementById("cartTotal");
+
+    let cartCount = document.getElementById("cartCount");
+
+
+    if(!cartItems) return;
+
+
+    cartItems.innerHTML = "";
+
+
+    let total = 0;
+
+    let count = 0;
+
+
+
+    cart.forEach((item,index)=>{
+
+
+        total += item.price * item.quantity;
+
+        count += item.quantity;
+
+
+
+        cartItems.innerHTML += `
+
+        <div>
+
+        <strong>${item.name}</strong>
+
+        <br>
+
+        ${item.price} ريال x ${item.quantity}
+
+        <br>
+
+        <button onclick="changeQuantity(${index},-1)">
+        -
+        </button>
+
+
+        <button onclick="changeQuantity(${index},1)">
+        +
+        </button>
+
+
+        <button onclick="removeItem(${index})">
+        X
+        </button>
+
+
+        </div>
+
+        <hr>
+
+        `;
+
+
+    });
+
+
+
+    if(cartTotal)
+
+    cartTotal.innerHTML = total;
+
+
+    if(cartCount)
+
+    cartCount.innerHTML = count;
 
 
 }
 
 
 
-function openCart(){
-
-document.getElementById("cartBox").style.display="block";
-
-}
+window.changeQuantity = function(index,value){
 
 
+    cart[index].quantity += value;
 
-function closeCart(){
 
-document.getElementById("cartBox").style.display="none";
 
-}
+    if(cart[index].quantity <= 0){
+
+        cart.splice(index,1);
+
+    }
+
+
+    updateCart();
+
+};
+
+
+
+
+window.removeItem = function(index){
+
+    cart.splice(index,1);
+
+    updateCart();
+
+};
+
+
+
+
+
+window.openCart = function(){
+
+    document.getElementById("cartBox").style.display="block";
+
+};
+
+
+
+
+
+window.closeCart = function(){
+
+    document.getElementById("cartBox").style.display="none";
+
+};
+
+
+
+
+
+window.checkout = function(){
+
+
+    if(cart.length === 0){
+
+        alert("Your cart is empty");
+
+        return;
+
+    }
+
+
+    alert("Thank you for shopping with BARQ ❤️");
+
+
+    cart=[];
+
+
+    updateCart();
+
+
+    closeCart();
+
+
+};
+
+
+
+
+
+// ================= LOGIN WINDOW =================
+
+
+
+window.showLogin = function(){
+
+
+    document.getElementById("loginBox").style.display="block";
+
+
+};
+
+
+
+
+
+window.closeLogin = function(){
+
+
+    document.getElementById("loginBox").style.display="none";
+
+
+};
