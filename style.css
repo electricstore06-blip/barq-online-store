@@ -1,82 +1,51 @@
-/* ==========================
-   PRODUCT CARD FINAL DESIGN
-========================== */
-
+/* PRODUCT CARD FINAL FIX */
 
 .product-container{
-
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
+    display:grid !important;
+    grid-template-columns:repeat(3, minmax(250px,1fr));
     gap:30px;
-
 }
 
 
 .product{
-
     background:white;
     padding:20px;
     border-radius:20px;
-    box-shadow:0 5px 20px rgba(0,0,0,0.12);
-
-    transition:0.3s;
-
-}
-
-
-.product:hover{
-
-    transform:translateY(-5px);
-
+    box-shadow:0 5px 20px #ddd;
+    width:100%;
 }
 
 
 .product img{
-
     width:100%;
     height:250px;
-
     object-fit:cover;
-
     border-radius:15px;
-
 }
 
 
-
 .product h3{
-
     margin-top:15px;
-    font-size:22px;
-
+    font-size:20px;
 }
 
 
 .brand{
-
     color:#777;
-    margin-top:5px;
-
+    font-size:14px;
 }
 
 
 .stars{
-
-    color:#ffb000;
-    margin:10px 0;
-
+    margin:8px 0;
 }
-
 
 
 .price{
-
     color:#e91e63;
-    font-size:22px;
+    font-size:20px;
     font-weight:bold;
-
 }
-
 
 
 /* BUTTON AREA */
@@ -84,90 +53,51 @@
 .product-actions{
 
     display:grid;
-
     grid-template-columns:1fr 55px;
-
     gap:10px;
-
-    margin-top:20px;
+    margin-top:15px;
 
 }
 
 
-
-/* ALL BUTTONS */
-
 .product-actions button{
 
     border:none;
-
     padding:15px;
-
     border-radius:12px;
-
     cursor:pointer;
-
     font-size:16px;
 
 }
 
 
 
-/* VIEW BUTTON */
-
 .view-btn{
 
     background:#111827;
-
     color:white;
 
 }
 
 
-
-/* HEART BUTTON */
 
 .heart-btn{
 
     background:#fff0f5;
-
     color:#e91e63;
-
-    font-size:22px !important;
+    font-size:22px;
 
 }
 
 
-
-/* ADD CART BUTTON */
 
 .add-btn{
 
     grid-column:1 / 3;
-
     background:#e91e63;
-
     color:white;
 
 }
-
-
-
-/* HOVER */
-
-.view-btn:hover{
-
-    background:#000;
-
-}
-
-
-.add-btn:hover{
-
-    background:#c2185b;
-
-}
-
 
 
 
@@ -175,13 +105,11 @@
 
 @media(max-width:900px){
 
-
 .product-container{
 
     grid-template-columns:1fr;
 
 }
-
 
 
 .hero{
@@ -191,15 +119,11 @@
 }
 
 
-
 header{
 
     flex-direction:column;
-
     gap:20px;
 
 }
-
-
 
 }
