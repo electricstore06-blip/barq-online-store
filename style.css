@@ -1,240 +1,57 @@
-/* ===============================
-   BARQ ONLINE STORE STYLE
-================================ */
+/* ==========================
+   PRODUCT SEARCH BAR
+========================== */
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
-
-
-body{
-
-    background:#ffffff;
-    color:#111827;
-
-}
-
-
-/* ===============================
- TOP BAR
-================================ */
-
-
-.top-bar{
-
-    background:#111827;
-    color:white;
-    text-align:center;
-    padding:12px;
-    font-size:14px;
-
-}
-
-
-
-/* ===============================
- HEADER
-================================ */
-
-
-header{
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:25px 8%;
-
-}
-
-
-.logo{
-
-    font-size:32px;
-    font-weight:800;
-
-}
-
-
-.logo span{
-
-    display:block;
-    font-size:11px;
-    letter-spacing:5px;
-
-}
-
-
-
-nav{
-
-    display:flex;
-    align-items:center;
-    gap:20px;
-
-}
-
-
-
-nav a{
-
-    text-decoration:none;
-    color:#111827;
-    font-weight:bold;
-
-}
-
-
-
-nav button{
-
-    background:#e91e63;
-    color:white;
-    border:0;
-    padding:10px 20px;
-    border-radius:20px;
-    cursor:pointer;
-
-}
-
-
-
-/* ===============================
- HERO
-================================ */
-
-
-.hero{
+.product-search{
 
     width:85%;
-    margin:40px auto;
-
-    min-height:420px;
-
-    background:#fff0f5;
-
-    border-radius:30px;
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    padding:60px;
-
-}
-
-
-
-.hero-text h1{
-
-    font-size:48px;
-
-}
-
-
-
-.hero-text h1 span{
-
-    color:#e91e63;
-
-}
-
-
-
-.hero-text h2{
-
-    margin:20px 0;
-
-}
-
-
-
-.hero-text button{
-
-    margin-top:15px;
-
-    background:#e91e63;
-    color:white;
-
-    border:none;
-
-    padding:15px 35px;
-
-    border-radius:12px;
-
-    cursor:pointer;
-
-}
-
-
-
-
-.hero-box{
-
-    background:white;
-
-    padding:35px;
-
-    border-radius:25px;
-
-    text-align:center;
-
-}
-
-
-
-/* ===============================
- TRUST FEATURES
-================================ */
-
-
-.checkout-trust{
+    margin:0 auto 35px;
 
     display:flex;
     justify-content:center;
-    gap:30px;
-
-    margin:40px auto;
-
-    flex-wrap:wrap;
 
 }
 
 
-.checkout-trust span{
+.product-search input{
 
-    font-weight:bold;
+    width:420px;
+
+    padding:14px 20px;
+
+    border-radius:30px;
+
+    border:1px solid #ddd;
+
+    font-size:16px;
+
+    outline:none;
+
+    background:white;
+
+}
+
+
+.product-search input:focus{
+
+    border-color:#e91e63;
+
+    box-shadow:0 0 10px #ffd0df;
 
 }
 
 
 
-/* ===============================
- SECTIONS
-================================ */
+/* ==========================
+   PRODUCTS SECTION
+========================== */
 
 
-.categories,
-.brands,
-.products,
-.offer{
-
-    width:85%;
-    margin:70px auto;
-
-}
-
-
-
-.categories h2,
-.brands h2,
 .products h2{
 
     text-align:center;
 
-    font-size:36px;
+    font-size:38px;
 
     margin-bottom:35px;
 
@@ -242,125 +59,16 @@ nav button{
 
 
 
-/* ===============================
- CATEGORY
-================================ */
-
-
-.category-container{
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:20px;
-
-    flex-wrap:wrap;
-
-}
-
-
-
-.category{
-
-    width:150px;
-
-    height:130px;
-
-    background:#fff0f5;
-
-    border-radius:20px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    justify-content:center;
-
-    align-items:center;
-
-    font-size:35px;
-
-    font-weight:bold;
-
-}
-
-
-
-.category h3{
-
-    font-size:18px;
-
-    margin-top:10px;
-
-}
-
-
-
-/* ===============================
- BRANDS
-================================ */
-
-
-.brand-list{
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:20px;
-
-    flex-wrap:wrap;
-
-}
-
-
-
-.brand-list div{
-
-    background:#fff0f5;
-
-    padding:20px 35px;
-
-    border-radius:15px;
-
-    font-weight:bold;
-
-}
-
-
-
-/* ===============================
- SEARCH
-================================ */
-
-
-#search{
-
-    width:250px;
-
-    padding:10px;
-
-    border:1px solid #ddd;
-
-    border-radius:10px;
-
-    margin-bottom:30px;
-
-}
-
-
-
-/* ===============================
- PRODUCTS
-================================ */
-
-
 .product-container{
+
+    width:85%;
+
+    margin:auto;
 
     display:grid;
 
-    grid-template-columns:repeat(auto-fit,250px);
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,250px));
 
     justify-content:center;
 
@@ -370,73 +78,92 @@ nav button{
 
 
 
+/* PRODUCT CARD */
+
+
 .product{
 
     width:250px;
 
+    min-height:390px;
+
     background:white;
 
-    border-radius:20px;
+    border-radius:25px;
 
-    padding:15px;
+    padding:20px;
 
-    box-shadow:0 5px 20px rgba(0,0,0,.12);
+    box-shadow:
+    0 8px 25px rgba(0,0,0,0.08);
+
+    transition:.3s;
 
 }
 
 
 
-/* PRODUCT IMAGE FIX */
+.product:hover{
+
+    transform:translateY(-8px);
+
+}
 
 
-.product img,
+
+/* ==========================
+   PRODUCT IMAGE FIX
+========================== */
+
+
 .product-img{
 
-    width:120px !important;
+    width:150px !important;
 
-    height:120px !important;
+    height:150px !important;
 
     object-fit:contain !important;
 
     display:block;
 
-    margin:0 auto 15px;
+    margin:0 auto 20px;
+
+    border-radius:15px;
 
 }
 
+
+
+/* PRODUCT TEXT */
 
 
 .product h3{
 
     font-size:18px;
 
-}
+    margin-bottom:8px;
 
+}
 
 
 .brand{
 
     color:#777;
 
-    margin:8px 0;
-
 }
-
 
 
 .stars{
 
-    margin:10px 0;
+    margin:12px 0;
 
 }
-
 
 
 .price{
 
     color:#e91e63;
 
-    font-size:18px;
+    font-size:20px;
 
     font-weight:bold;
 
@@ -444,240 +171,49 @@ nav button{
 
 
 
-/* ===============================
- BUTTONS
-================================ */
-
-
-.product-actions{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:8px;
-
-    margin-top:15px;
-
-}
-
+/* BUTTONS */
 
 
 .product-actions button{
 
-    padding:10px;
+    height:40px;
 
-    border:0;
-
-    border-radius:10px;
+    border-radius:20px;
 
     background:#e91e63;
 
     color:white;
+
+    border:none;
 
     cursor:pointer;
 
 }
 
 
+.product-actions button:hover{
 
-.heart-btn{
-
-    background:#fff0f5 !important;
-
-    color:#e91e63 !important;
+    background:#c2185b;
 
 }
 
 
 
-/* ===============================
- CART
-================================ */
+/* MOBILE */
 
+@media(max-width:700px){
 
-.cart-box{
+.product-search input{
 
-    display:none;
-
-    position:fixed;
-
-    right:0;
-
-    top:0;
-
-    width:350px;
-
-    height:100vh;
-
-    background:white;
-
-    padding:25px;
-
-    z-index:999;
-
-    box-shadow:-5px 0 20px #ccc;
+    width:90%;
 
 }
-
-
-
-.cart-box button{
-
-    width:100%;
-
-    padding:12px;
-
-    margin-top:10px;
-
-    background:#e91e63;
-
-    color:white;
-
-    border:0;
-
-    border-radius:10px;
-
-}
-
-
-
-/* ===============================
- LOGIN
-================================ */
-
-
-.login-box{
-
-    display:none;
-
-    position:fixed;
-
-    top:50%;
-
-    left:50%;
-
-    transform:translate(-50%,-50%);
-
-    background:white;
-
-    padding:30px;
-
-    border-radius:20px;
-
-    z-index:999;
-
-    box-shadow:0 5px 30px #aaa;
-
-}
-
-
-
-
-.login-box input{
-
-    width:100%;
-
-    padding:12px;
-
-    margin:10px 0;
-
-}
-
-
-
-/* ===============================
- OFFER
-================================ */
-
-
-.offer{
-
-    background:#fff0f5;
-
-    padding:40px;
-
-    border-radius:25px;
-
-    text-align:center;
-
-}
-
-
-
-/* ===============================
- FOOTER
-================================ */
-
-
-footer{
-
-    background:#111827;
-
-    color:white;
-
-    text-align:center;
-
-    padding:25px;
-
-}
-
-
-
-
-/* ===============================
- MOBILE
-================================ */
-
-
-@media(max-width:900px){
-
-
-header{
-
-    flex-direction:column;
-
-    gap:20px;
-
-}
-
-
-nav{
-
-    flex-wrap:wrap;
-
-    justify-content:center;
-
-}
-
-
-
-.hero{
-
-    flex-direction:column;
-
-    padding:30px;
-
-    text-align:center;
-
-}
-
-
-
-.hero-text h1{
-
-    font-size:35px;
-
-}
-
 
 
 .product-container{
 
-    grid-template-columns:250px;
+    grid-template-columns:1fr;
 
 }
-
-
 
 }
