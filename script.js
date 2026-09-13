@@ -308,7 +308,33 @@ total.innerHTML=sum;
 
 }
 
+function increaseQty(index){
 
+cart[index].quantity++;
+
+updateCart();
+
+}
+
+
+
+function decreaseQty(index){
+
+if(cart[index].quantity > 1){
+
+cart[index].quantity--;
+
+}
+else{
+
+cart.splice(index,1);
+
+}
+
+
+updateCart();
+
+}
 
 
 function removeCart(index){
