@@ -1,102 +1,137 @@
+/* =========================
+   BARQ ONLINE STORE CSS
+   ========================= */
+
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
-
-
-html{
-    scroll-behavior:smooth;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
 
 body{
-    background:#fff;
+    background:#ffffff;
     color:#111827;
 }
 
 
-/* TOP BAR */
+/* =========================
+   TOP BAR
+========================= */
+
 
 .top-bar{
+
     background:#111827;
     color:white;
     padding:12px;
     text-align:center;
     font-size:15px;
+    font-weight:bold;
+
 }
 
 
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
+
 
 header{
+
     display:flex;
     justify-content:space-between;
     align-items:center;
     padding:25px 8%;
     background:white;
+
 }
 
 
 .logo{
-    font-size:32px;
-    font-weight:bold;
+
+    font-size:34px;
+    font-weight:900;
     color:#08152f;
+
 }
 
 
 .logo span{
+
     display:block;
-    font-size:11px;
+    font-size:12px;
     letter-spacing:4px;
+    color:#111827;
+
 }
 
 
 
 nav{
+
     display:flex;
     align-items:center;
-    gap:22px;
+    gap:25px;
+
 }
 
 
 nav a{
+
     text-decoration:none;
     color:#111827;
     font-weight:bold;
+    transition:.3s;
+
+}
+
+
+nav a:hover{
+
+    color:#e91e63;
+
 }
 
 
 
 nav button{
+
     background:#e91e63;
     color:white;
     border:none;
     padding:12px 25px;
     border-radius:12px;
     cursor:pointer;
+    font-size:15px;
+
 }
 
 
 
-/* HERO */
+/* =========================
+ HERO
+========================= */
 
 
 .hero{
 
+    width:90%;
     max-width:1200px;
     margin:40px auto;
+
     padding:70px 50px;
 
     background:#fff0f5;
+
     border-radius:35px;
 
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:50px;
 
 }
 
@@ -104,10 +139,12 @@ nav button{
 
 .hero-text h1{
 
-    font-size:58px;
+    font-size:60px;
     line-height:1.1;
+    color:#08152f;
 
 }
+
 
 
 .hero-text h1 span{
@@ -117,12 +154,14 @@ nav button{
 }
 
 
+
 .hero-text h2{
 
     margin:25px 0;
     font-size:30px;
 
 }
+
 
 
 .hero-text p{
@@ -139,26 +178,33 @@ nav button{
     background:#e91e63;
     color:white;
     border:none;
+
     padding:16px 40px;
-    border-radius:14px;
+
+    border-radius:15px;
+
     cursor:pointer;
 
-}
+    font-size:16px;
 
+}
 
 
 
 .hero-box{
 
     background:white;
-    padding:40px;
-    border-radius:30px;
 
-    box-shadow:0 15px 35px #ddd;
+    padding:40px;
+
+    border-radius:30px;
 
     text-align:center;
 
+    box-shadow:0 10px 35px rgba(0,0,0,.12);
+
 }
+
 
 
 .icons{
@@ -169,19 +215,27 @@ nav button{
 }
 
 
-/* TRUST SECTION */
+
+/* =========================
+ TRUST SECTION
+========================= */
+
 
 .trust{
 
     width:90%;
     max-width:1200px;
+
     margin:50px auto;
 
     display:grid;
+
     grid-template-columns:repeat(4,1fr);
+
     gap:25px;
 
 }
+
 
 
 .trust div{
@@ -194,55 +248,25 @@ nav button{
 
     text-align:center;
 
-    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
 
-    transition:0.3s;
+    transition:.3s;
 
 }
+
 
 
 .trust div:hover{
 
     transform:translateY(-8px);
 
-    box-shadow:0 15px 35px rgba(233,30,99,0.15);
-
 }
 
 
 
-.trust div:first-child{
+.trust div:first-letter{
 
-    border-top:5px solid #e91e63;
-
-}
-
-
-.trust div:nth-child(2){
-
-    border-top:5px solid #111827;
-
-}
-
-
-.trust div:nth-child(3){
-
-    border-top:5px solid #e91e63;
-
-}
-
-
-.trust div:nth-child(4){
-
-    border-top:5px solid #111827;
-
-}
-
-
-
-.trust div::first-line{
-
-    font-size:45px;
+    font-size:40px;
 
 }
 
@@ -251,41 +275,15 @@ nav button{
 .trust h3{
 
     margin-top:15px;
-
     font-size:20px;
 
-    color:#111827;
-
 }
 
 
 
-@media(max-width:900px){
-
-    .trust{
-
-        grid-template-columns:repeat(2,1fr);
-
-    }
-
-}
-
-
-@media(max-width:600px){
-
-    .trust{
-
-        grid-template-columns:1fr;
-
-    }
-
-}
-
-
-
-
-
-/* GENERAL SECTIONS */
+/* =========================
+ SECTIONS
+========================= */
 
 
 .categories,
@@ -301,10 +299,31 @@ nav button{
 
 
 
-h2{
+.categories h2,
+.brands h2,
+.products h2,
+.offer h2{
 
     font-size:38px;
-    margin-bottom:30px;
+    margin-bottom:35px;
+
+}
+
+
+
+
+/* =========================
+ CATEGORY CARDS
+========================= */
+
+
+.category-container{
+
+    display:grid;
+
+    grid-template-columns:repeat(5,1fr);
+
+    gap:20px;
 
 }
 
@@ -312,21 +331,35 @@ h2{
 
 .category{
 
-background:#fff0f5;
+    background:#fff0f5;
 
-padding:35px 20px;
+    height:170px;
 
-border-radius:25px;
+    border-radius:25px;
 
-text-align:center;
+    display:flex;
 
-flex:1;
+    flex-direction:column;
 
-min-width:180px;
+    justify-content:center;
 
-cursor:pointer;
+    align-items:center;
 
-transition:.3s;
+    font-size:40px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+
+
+.category h3{
+
+    margin-top:15px;
+
+    font-size:20px;
 
 }
 
@@ -334,62 +367,73 @@ transition:.3s;
 
 .category:hover{
 
-background:#e91e63;
+    background:#e91e63;
 
-color:white;
+    color:white;
 
-transform:translateY(-8px);
+    transform:translateY(-8px);
+
+}
+
+
+
+/* =========================
+ BRANDS
+========================= */
+
+
+.brand-list{
+
+    display:flex;
+
+    gap:20px;
+
+    flex-wrap:wrap;
 
 }
 
-
-.category:first-line{
-
-font-size:45px;
-
-}
 
 
 .brand-list div{
 
-background:white;
+    background:#fff0f5;
 
-padding:20px 35px;
+    padding:20px 35px;
 
-border-radius:15px;
+    border-radius:15px;
 
-font-weight:bold;
+    font-weight:bold;
 
-box-shadow:0 5px 20px #ddd;
-
-transition:.3s;
+    transition:.3s;
 
 }
+
 
 
 .brand-list div:hover{
 
-background:#e91e63;
+    background:#e91e63;
 
-color:white;
-
-transform:translateY(-5px);
+    color:white;
 
 }
 
 
-/* SEARCH */
+
+/* =========================
+ PRODUCTS
+========================= */
 
 
 .search-box input{
 
-    width:300px;
-
     padding:12px;
 
-    border-radius:10px;
+    width:250px;
 
     border:1px solid #ddd;
+
+    border-radius:10px;
 
     margin-bottom:25px;
 
@@ -397,18 +441,13 @@ transform:translateY(-5px);
 
 
 
-
-
-/* PRODUCTS */
-
-
 .product-container{
 
-    display:grid;
+    display:grid !important;
 
     grid-template-columns:repeat(3,1fr);
 
-    gap:30px;
+    gap:35px;
 
 }
 
@@ -417,20 +456,17 @@ transform:translateY(-5px);
 .product{
 
     background:white;
-    padding:20px;
-    border-radius:20px;
-    box-shadow:0 5px 20px #ddd;
+
+    padding:25px;
+
+    border-radius:25px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.1);
 
     transition:.3s;
 
 }
-.product{
-    background:white;
-    padding:20px;
-    border-radius:20px;
-    box-shadow:0 5px 20px #ddd;
-    transition:.3s;
-}
+
 
 
 .product:hover{
@@ -441,13 +477,6 @@ transform:translateY(-5px);
 
 }
 
-.product:hover{
-
-    transform:translateY(-10px);
-
-    box-shadow:0 15px 35px rgba(0,0,0,.15);
-
-}
 
 
 
@@ -469,7 +498,10 @@ transform:translateY(-5px);
 
     margin-top:15px;
 
+    font-size:22px;
+
 }
+
 
 
 .brand{
@@ -477,6 +509,7 @@ transform:translateY(-5px);
     color:#777;
 
 }
+
 
 
 .price{
@@ -491,18 +524,6 @@ transform:translateY(-5px);
 
 
 
-.stars{
-
-    margin:10px 0;
-
-}
-
-
-
-
-/* BUTTONS */
-
-
 .product-actions{
 
     display:grid;
@@ -511,7 +532,7 @@ transform:translateY(-5px);
 
     gap:10px;
 
-    margin-top:15px;
+    margin-top:20px;
 
 }
 
@@ -519,9 +540,9 @@ transform:translateY(-5px);
 
 .product-actions button{
 
-    border:none;
+    padding:14px;
 
-    padding:15px;
+    border:none;
 
     border-radius:12px;
 
@@ -530,21 +551,12 @@ transform:translateY(-5px);
 }
 
 
+
 .view-btn{
 
     background:#111827;
 
     color:white;
-
-}
-
-
-
-.heart-btn{
-
-    background:#fff0f5;
-
-    color:#e91e63;
 
 }
 
@@ -562,9 +574,19 @@ transform:translateY(-5px);
 
 
 
+.heart-btn{
+
+    background:#fff0f5;
+
+    color:#e91e63;
+
+}
 
 
-/* CART */
+
+/* =========================
+ CART
+========================= */
 
 
 .cart-box{
@@ -583,32 +605,55 @@ transform:translateY(-5px);
 
     background:white;
 
-    padding:30px;
+    padding:35px;
 
     z-index:9999;
 
-    box-shadow:-10px 0 30px #aaa;
+    box-shadow:-10px 0 30px rgba(0,0,0,.2);
 
 }
 
 
 
-.checkout-trust{
+.cart-box button{
 
-    display:flex;
+    width:100%;
 
-    flex-wrap:wrap;
+    padding:14px;
 
-    gap:10px;
+    margin-top:15px;
 
-    margin:20px 0;
+    border:none;
+
+    border-radius:12px;
+
+    background:#e91e63;
+
+    color:white;
+
+    cursor:pointer;
 
 }
 
 
 
+#cartCount{
 
-/* LOGIN */
+    background:#e91e63;
+
+    color:white;
+
+    padding:4px 9px;
+
+    border-radius:50%;
+
+}
+
+
+
+/* =========================
+ LOGIN
+========================= */
 
 
 .login-box{
@@ -618,22 +663,22 @@ transform:translateY(-5px);
     position:fixed;
 
     top:50%;
+
     left:50%;
 
     transform:translate(-50%,-50%);
 
     background:white;
 
-    padding:30px;
+    padding:35px;
 
-    border-radius:20px;
+    border-radius:25px;
 
-    box-shadow:0 10px 40px #aaa;
+    box-shadow:0 10px 40px rgba(0,0,0,.2);
 
     z-index:9999;
 
 }
-
 
 
 
@@ -653,20 +698,17 @@ transform:translateY(-5px);
 
 
 
-
-
-.login-box button,
-.cart-box button{
+.login-box button{
 
     width:100%;
 
-    padding:13px;
+    padding:12px;
 
     margin-top:10px;
 
     border:none;
 
-    border-radius:12px;
+    border-radius:10px;
 
     background:#e91e63;
 
@@ -676,9 +718,9 @@ transform:translateY(-5px);
 
 
 
-
-
-/* OFFER */
+/* =========================
+ OFFER
+========================= */
 
 
 .offer{
@@ -695,6 +737,10 @@ transform:translateY(-5px);
 
 
 
+/* =========================
+ FOOTER
+========================= */
+
 
 footer{
 
@@ -704,14 +750,15 @@ footer{
 
     text-align:center;
 
-    padding:30px;
+    padding:35px;
 
 }
 
 
 
-
-/* MOBILE */
+/* =========================
+ MOBILE
+========================= */
 
 
 @media(max-width:900px){
@@ -721,7 +768,7 @@ header{
 
     flex-direction:column;
 
-    gap:20px;
+    gap:25px;
 
 }
 
@@ -735,7 +782,6 @@ nav{
 }
 
 
-
 .hero{
 
     flex-direction:column;
@@ -745,7 +791,7 @@ nav{
 
 .hero-text h1{
 
-    font-size:38px;
+    font-size:40px;
 
 }
 
@@ -769,158 +815,10 @@ nav{
 
 .product-container{
 
-    grid-template-columns:1fr;
-
-}
-
-/* ==========================
-   TRUST SECTION
-========================== */
-
-.trust{
-
-    width:90%;
-    max-width:1200px;
-
-    margin:40px auto;
-
-    display:grid;
-
-    grid-template-columns:repeat(4,1fr);
-
-    gap:20px;
-
-}
-
-
-.trust div{
-
-    background:#fff0f5;
-
-    padding:25px;
-
-    border-radius:20px;
-
-    text-align:center;
-
-    font-size:30px;
-
-}
-
-
-.trust h3{
-
-    font-size:18px;
-
-    margin-top:10px;
+    grid-template-columns:1fr !important;
 
 }
 
 
 
-/* ==========================
-   SEARCH BAR
-========================== */
-
-
-.search-box{
-
-    display:flex;
-
-    justify-content:center;
-
-    margin-bottom:35px;
-
 }
-
-
-
-#searchInput{
-
-    width:400px;
-
-    height:45px;
-
-    border-radius:30px;
-
-    border:1px solid #ddd;
-
-    padding:0 20px;
-
-    font-size:16px;
-
-    outline:none;
-
-}
-
-
-
-#searchInput:focus{
-
-    border-color:#e91e63;
-
-    box-shadow:0 0 10px #ffd0df;
-
-}
-
-
-
-/* ==========================
-   CART TRUST
-========================== */
-
-
-.checkout-trust{
-
-    margin-top:20px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:10px;
-
-    font-size:14px;
-
-}
-
-
-
-/* ==========================
-   MOBILE
-========================== */
-
-
-@media(max-width:900px){
-
-
-.trust{
-
-    grid-template-columns:1fr 1fr;
-
-}
-
-
-#searchInput{
-
-    width:90%;
-
-}
-
-
-}
-
-
-
-@media(max-width:500px){
-
-
-.trust{
-
-    grid-template-columns:1fr;
-
-}
-
-
-}
-
