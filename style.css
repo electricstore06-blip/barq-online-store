@@ -1,3 +1,8 @@
+/* =========================
+   BARQ ONLINE STORE FINAL CSS
+========================= */
+
+
 *{
     margin:0;
     padding:0;
@@ -7,7 +12,7 @@
 
 
 body{
-    background:#fff;
+    background:white;
     color:#111827;
 }
 
@@ -18,11 +23,8 @@ body{
 
     background:#111827;
     color:white;
-
-    padding:12px;
-
     text-align:center;
-
+    padding:12px;
     font-size:14px;
 
 }
@@ -34,20 +36,332 @@ body{
 header{
 
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
     padding:25px 8%;
 
 }
 
 
-
 .logo{
 
     font-size:32px;
+    font-weight:bold;
+
+}
+
+
+.logo span{
+
+    display:block;
+    font-size:11px;
+    letter-spacing:4px;
+
+}
+
+
+nav{
+
+    display:flex;
+    align-items:center;
+    gap:20px;
+
+}
+
+
+nav a{
+
+    text-decoration:none;
+    color:#111827;
+    font-weight:bold;
+
+}
+
+
+nav button{
+
+    background:#e91e63;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:20px;
+    cursor:pointer;
+
+}
+
+
+
+/* HERO */
+
+
+.hero{
+
+    width:85%;
+    min-height:420px;
+    margin:40px auto;
+
+    background:#fff0f5;
+
+    border-radius:30px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    gap:60px;
+
+}
+
+
+
+.hero-text h1{
+
+    font-size:45px;
+
+}
+
+
+
+.hero-text h1 span{
+
+    color:#e91e63;
+
+}
+
+
+
+.hero-text h2{
+
+    margin:20px 0;
+
+}
+
+
+
+.hero-text button{
+
+    background:#e91e63;
+
+    color:white;
+
+    border:none;
+
+    padding:15px 35px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+}
+
+
+
+.hero-box{
+
+    background:white;
+
+    padding:35px;
+
+    border-radius:25px;
+
+    text-align:center;
+
+}
+
+
+
+/* SECTIONS */
+
+
+.categories,
+.brands,
+.products,
+.offer{
+
+    width:85%;
+    margin:50px auto;
+
+}
+
+
+
+.categories h2,
+.brands h2,
+.products h2,
+.offer h2{
+
+    text-align:center;
+    font-size:35px;
+    margin-bottom:35px;
+
+}
+
+
+
+/* CATEGORY */
+
+
+.category-container{
+
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+
+}
+
+
+
+.category{
+
+    width:150px;
+
+    padding:30px 20px;
+
+    background:#fff0f5;
+
+    border-radius:20px;
+
+    text-align:center;
+
+    font-size:30px;
+
+}
+
+
+.category h3{
+
+    font-size:18px;
+    margin-top:10px;
+
+}
+
+
+
+/* BRANDS */
+
+
+.brand-list{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+}
+
+
+.brand-list div{
+
+    background:#fff0f5;
+
+    padding:20px 35px;
+
+    border-radius:15px;
+
+}
+
+
+
+/* =====================
+   PRODUCTS
+===================== */
+
+
+.product-container{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,250px);
+
+    justify-content:center;
+
+    gap:35px;
+
+}
+
+
+
+
+.product{
+
+    width:250px;
+
+    background:white;
+
+    padding:15px;
+
+    border-radius:20px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.12);
+
+    overflow:hidden;
+
+}
+
+
+
+/* FIX PRODUCT IMAGE */
+
+.product img,
+.product-img{
+
+    width:130px !important;
+
+    height:130px !important;
+
+    max-width:130px !important;
+
+    max-height:130px !important;
+
+    object-fit:contain !important;
+
+    display:block;
+
+    margin:0 auto 15px auto;
+
+}
+
+
+
+/* PRODUCT TEXT */
+
+
+.product h3{
+
+    font-size:18px;
+
+    margin:10px 0;
+
+}
+
+
+.brand{
+
+    color:#777;
+
+    font-size:14px;
+
+}
+
+
+
+.stars{
+
+    margin:10px 0;
+
+}
+
+
+
+.price{
+
+    color:#e91e63;
+
+    font-size:18px;
 
     font-weight:bold;
 
@@ -55,13 +369,205 @@ header{
 
 
 
-.logo span{
+/* BUTTONS */
 
-    display:block;
 
-    font-size:11px;
+.product-actions{
 
-    letter-spacing:4px;
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+    margin-top:15px;
+
+}
+
+
+
+.product-actions button{
+
+    width:100%;
+
+    padding:10px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#e91e63;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+
+
+.heart-btn{
+
+    background:#fff0f5 !important;
+
+    color:#e91e63 !important;
+
+}
+
+
+
+/* CART */
+
+
+.cart-box{
+
+    display:none;
+
+    position:fixed;
+
+    right:0;
+
+    top:0;
+
+    width:350px;
+
+    height:100vh;
+
+    background:white;
+
+    padding:25px;
+
+    z-index:9999;
+
+    box-shadow:-5px 0 20px #aaa;
+
+}
+
+
+
+.cart-box button{
+
+    width:100%;
+
+    padding:12px;
+
+    margin-top:10px;
+
+    background:#e91e63;
+
+    color:white;
+
+    border:none;
+
+    border-radius:10px;
+
+}
+
+
+
+/* CART NUMBER */
+
+
+#cartCount{
+
+    background:#e91e63;
+
+    color:white;
+
+    padding:3px 8px;
+
+    border-radius:50%;
+
+}
+
+
+
+/* LOGIN */
+
+
+.login-box{
+
+    display:none;
+
+    position:fixed;
+
+    top:50%;
+
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    z-index:9999;
+
+    box-shadow:0 5px 20px #aaa;
+
+}
+
+
+.login-box input{
+
+    width:100%;
+
+    padding:12px;
+
+    margin:10px 0;
+
+}
+
+
+
+/* OFFER */
+
+
+.offer{
+
+    background:#fff0f5;
+
+    padding:40px;
+
+    border-radius:25px;
+
+    text-align:center;
+
+}
+
+
+
+/* FOOTER */
+
+
+footer{
+
+    background:#111827;
+
+    color:white;
+
+    text-align:center;
+
+    padding:25px;
+
+}
+
+
+
+
+/* MOBILE */
+
+
+@media(max-width:900px){
+
+
+header{
+
+    flex-direction:column;
+
+    gap:20px;
 
 }
 
@@ -69,40 +575,39 @@ header{
 
 nav{
 
-    display:flex;
+    flex-wrap:wrap;
 
-    gap:20px;
+    justify-content:center;
+
+}
+
+
+
+.hero{
+
+    flex-direction:column;
+
+    padding:40px;
+
+}
+
+
+
+.product-container{
+
+    grid-template-columns:250px;
+
+}
+
+
+
+.category-container{
+
+    flex-direction:column;
 
     align-items:center;
 
 }
 
-
-
-nav a{
-
-    text-decoration:none;
-
-    color:#111827;
-
-    font-weight:bold;
-
-}
-
-
-
-nav button{
-
-    background:#e91e63;
-
-    color:white;
-
-    border:0;
-
-    padding:10px 20px;
-
-    border-radius:20px;
-
-    cursor:pointer;
 
 }
