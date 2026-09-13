@@ -662,3 +662,38 @@ width:100%;
     font-size:14px !important;
 
 }
+.product-img{
+
+width:150px !important;
+
+height:150px !important;
+
+object-fit:contain !important;
+
+display:block !important;
+
+margin:auto !important;
+
+}
+
+
+.product{
+
+width:260px !important;
+
+min-height:380px !important;
+
+}
+
+
+.product-container{
+
+display:flex !important;
+
+flex-wrap:wrap !important;
+
+gap:25px !important;
+
+justify-content:center !important;
+
+}
