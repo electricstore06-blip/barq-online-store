@@ -89,7 +89,7 @@ card.className="product";
 card.innerHTML=`
 
 <img 
-class="product-image"
+class="product-img"
 src="${product.image || 'barq-new.png'}"
 alt="${product.name || 'BARQ Product'}"
 >
