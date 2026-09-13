@@ -169,21 +169,16 @@ nav button{
 }
 
 
-
-
 /* TRUST SECTION */
-
 
 .trust{
 
     width:90%;
     max-width:1200px;
-
-    margin:40px auto;
+    margin:50px auto;
 
     display:grid;
     grid-template-columns:repeat(4,1fr);
-
     gap:25px;
 
 }
@@ -193,15 +188,61 @@ nav button{
 
     background:white;
 
-    padding:25px;
+    padding:35px 20px;
 
-    border-radius:20px;
+    border-radius:25px;
 
     text-align:center;
 
-    box-shadow:0 5px 20px #eee;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
 
-    font-size:35px;
+    transition:0.3s;
+
+}
+
+
+.trust div:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 15px 35px rgba(233,30,99,0.15);
+
+}
+
+
+
+.trust div:first-child{
+
+    border-top:5px solid #e91e63;
+
+}
+
+
+.trust div:nth-child(2){
+
+    border-top:5px solid #111827;
+
+}
+
+
+.trust div:nth-child(3){
+
+    border-top:5px solid #e91e63;
+
+}
+
+
+.trust div:nth-child(4){
+
+    border-top:5px solid #111827;
+
+}
+
+
+
+.trust div::first-line{
+
+    font-size:45px;
 
 }
 
@@ -209,10 +250,37 @@ nav button{
 
 .trust h3{
 
-    font-size:18px;
-    margin-top:10px;
+    margin-top:15px;
+
+    font-size:20px;
+
+    color:#111827;
 
 }
+
+
+
+@media(max-width:900px){
+
+    .trust{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+
+@media(max-width:600px){
+
+    .trust{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
 
 
 
@@ -242,76 +310,72 @@ h2{
 
 
 
-
-/* CATEGORY */
-
-
-.category-container{
-
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:20px;
-
-}
-
-
-
 .category{
 
-    background:#fff0f5;
+background:#fff0f5;
 
-    padding:35px 20px;
+padding:35px 20px;
 
-    border-radius:20px;
+border-radius:25px;
 
-    text-align:center;
+text-align:center;
 
-    font-size:35px;
+flex:1;
 
-}
+min-width:180px;
 
+cursor:pointer;
 
-.category h3{
-
-    font-size:18px;
-
-    margin-top:15px;
+transition:.3s;
 
 }
 
 
 
+.category:hover{
 
+background:#e91e63;
 
-/* BRANDS */
+color:white;
 
-
-.brand-list{
-
-    display:flex;
-
-    flex-wrap:wrap;
-
-    gap:20px;
+transform:translateY(-8px);
 
 }
 
+
+.category:first-line{
+
+font-size:45px;
+
+}
 
 
 .brand-list div{
 
-    background:#fff0f5;
+background:white;
 
-    padding:20px 40px;
+padding:20px 35px;
 
-    border-radius:15px;
+border-radius:15px;
 
-    font-weight:bold;
+font-weight:bold;
+
+box-shadow:0 5px 20px #ddd;
+
+transition:.3s;
 
 }
 
 
+.brand-list div:hover{
 
+background:#e91e63;
+
+color:white;
+
+transform:translateY(-5px);
+
+}
 
 
 /* SEARCH */
@@ -353,12 +417,20 @@ h2{
 .product{
 
     background:white;
-
     padding:20px;
+    border-radius:20px;
+    box-shadow:0 5px 20px #ddd;
 
-    border-radius:25px;
+    transition:.3s;
 
-    box-shadow:0 10px 25px #ddd;
+}
+
+
+.product:hover{
+
+    transform:translateY(-10px);
+
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
 
 }
 
