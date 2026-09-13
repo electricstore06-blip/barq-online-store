@@ -684,4 +684,51 @@ box-shadow:0 15px 35px rgba(0,0,0,.15);
 
 }
 
+@media(max-width:768px){
 
+
+.category-container{
+
+grid-template-columns:1fr 1fr;
+
+}
+
+
+.category{
+
+height:150px;
+
+}
+.login-box button,
+.cart-box button{
+
+
+background:#ed1b62;
+
+color:white;
+
+border:none;
+
+padding:12px 25px;
+
+border-radius:25px;
+
+font-size:16px;
+
+cursor:pointer;
+
+margin:5px;
+
+}
+
+
+
+.login-box button:hover,
+.cart-box button:hover{
+
+background:#c91450;
+
+}
+
+
+}
