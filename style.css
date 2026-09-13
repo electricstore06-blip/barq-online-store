@@ -1123,4 +1123,208 @@ background:#c91450;
 
 }
 
+/* =====================================
+   BARQ PROFESSIONAL CHECKOUT DESIGN
+===================================== */
 
+
+.checkout-container{
+
+    width:90%;
+    max-width:1100px;
+    margin:50px auto;
+
+    display:grid;
+    grid-template-columns:1fr 350px;
+
+    gap:40px;
+
+}
+
+
+/* MAIN CHECKOUT CARD */
+
+.checkout-form{
+
+    background:white;
+
+    padding:40px;
+
+    border-radius:30px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.08);
+
+}
+
+
+
+.checkout-form h1{
+
+    font-size:38px;
+
+    color:#101828;
+
+    margin-bottom:30px;
+
+}
+
+
+
+.checkout-form h2{
+
+    margin-top:25px;
+
+    margin-bottom:15px;
+
+    color:#101828;
+
+}
+
+
+
+/* INPUTS */
+
+
+.checkout-form input,
+.checkout-form textarea{
+
+    width:100%;
+
+    padding:16px;
+
+    margin-bottom:15px;
+
+    border:1px solid #ddd;
+
+    border-radius:15px;
+
+    font-size:16px;
+
+}
+
+
+
+.checkout-form textarea{
+
+    height:120px;
+
+}
+
+
+
+/* PAYMENT */
+
+
+.payment-option{
+
+    background:#fff0f5;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    margin:10px 0;
+
+}
+
+
+
+.payment-option input{
+
+    width:auto;
+
+}
+
+
+
+/* ORDER SUMMARY */
+
+
+.order-summary{
+
+    background:#fff0f5;
+
+    padding:30px;
+
+    border-radius:30px;
+
+    height:max-content;
+
+}
+
+
+
+.order-summary h2{
+
+    font-size:26px;
+
+}
+
+
+
+.order-total{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    margin-top:20px;
+
+}
+
+
+
+/* BUTTON */
+
+
+.checkout-btn{
+
+    width:100%;
+
+    margin-top:25px;
+
+    padding:18px;
+
+    border:none;
+
+    border-radius:30px;
+
+    background:#ec1b63;
+
+    color:white;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
+
+
+.checkout-btn:hover{
+
+    background:#c91450;
+
+}
+
+
+
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.checkout-container{
+
+grid-template-columns:1fr;
+
+}
+
+
+}
