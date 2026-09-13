@@ -1997,3 +1997,27 @@ color:#e91e63;
     padding: 6px 15px;
     cursor: pointer;
 }
+.cart-box {
+    padding: 20px;
+}
+
+#cartItems {
+    margin-top: 15px;
+}
+
+#cartItems > div {
+    background: #fff0f6;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+}
+
+#cartItems button {
+    width: auto;
+    background: #ec1975;
+    color: white;
+    border: none;
+    padding: 6px 20px;
+    border-radius: 20px;
+    margin-top: 8px;
+}
