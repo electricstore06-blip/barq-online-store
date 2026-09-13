@@ -765,4 +765,84 @@ background:#c91450;
 }
 
 
+/* ===========================
+   HERO BANNER SIZE FIX
+=========================== */
+
+.hero{
+
+    width:90%;
+    min-height:520px;
+    padding:50px 70px;
+    margin:30px auto;
+
+}
+
+
+.hero h1{
+
+    font-size:65px;
+    line-height:1.05;
+
+}
+
+
+.hero h2{
+
+    font-size:32px;
+    margin-top:20px;
+
+}
+
+
+.hero p{
+
+    font-size:20px;
+    margin-top:18px;
+
+}
+
+
+.hero-box{
+
+    padding:35px;
+    width:380px;
+
+}
+
+
+.hero-box h3{
+
+    font-size:24px;
+
+}
+
+
+
+/* Tablet */
+
+@media(max-width:900px){
+
+.hero{
+
+    padding:35px;
+    min-height:auto;
+
+}
+
+
+.hero h1{
+
+    font-size:45px;
+
+}
+
+
+.hero-box{
+
+    width:100%;
+    margin-top:30px;
+
+}
+
 }
