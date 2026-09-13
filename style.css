@@ -532,4 +532,68 @@ width:100%;
 }
 
 
+/* FINAL PRODUCT IMAGE SIZE FIX */
+
+.product-image{
+
+    width:180px !important;
+
+    height:180px !important;
+
+    object-fit:contain !important;
+
+    display:block;
+
+    margin:auto;
+
+}
+
+
+.product{
+
+    width:250px !important;
+
+    padding:15px !important;
+
+    background:white;
+
+    border-radius:20px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,0.12);
+
+}
+
+
+.product-container{
+
+    display:grid !important;
+
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+    gap:25px;
+
+}
+
+
+
+.product h3{
+
+    font-size:18px !important;
+
+}
+
+
+.product p{
+
+    font-size:14px !important;
+
+}
+
+
+.product button{
+
+    padding:10px !important;
+
+    font-size:14px !important;
+
 }
