@@ -1,320 +1,328 @@
-/* ===========================
-   BARQ ONLINE STORE DESIGN
-   COMPLETE STYLE FILE
-=========================== */
-
-
-/* RESET */
-
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:Arial,sans-serif;
+}
+
+
+html{
+    scroll-behavior:smooth;
 }
 
 
 body{
-
-    background:#ffffff;
-    color:#101828;
-
+    background:#fff;
+    color:#111827;
 }
 
 
-
-html{
-
-    scroll-behavior:smooth;
-
-}
-
-
-
-/* ===========================
-TOP BAR
-=========================== */
-
+/* TOP BAR */
 
 .top-bar{
-
-    background:#101828;
+    background:#111827;
     color:white;
-    text-align:center;
     padding:12px;
-    font-size:18px;
-    font-weight:bold;
-
+    text-align:center;
+    font-size:15px;
 }
 
 
 
-/* ===========================
-HEADER
-=========================== */
-
+/* HEADER */
 
 header{
-
     display:flex;
     justify-content:space-between;
     align-items:center;
-
     padding:25px 8%;
-
     background:white;
-
 }
 
 
-
 .logo{
-
-    font-size:40px;
-    font-weight:900;
-    color:#0b1b40;
-
+    font-size:32px;
+    font-weight:bold;
+    color:#08152f;
 }
 
 
 .logo span{
-
     display:block;
-    font-size:14px;
-    letter-spacing:8px;
-
+    font-size:11px;
+    letter-spacing:4px;
 }
 
 
 
 nav{
-
     display:flex;
     align-items:center;
-    gap:30px;
-
+    gap:22px;
 }
-
 
 
 nav a{
-
     text-decoration:none;
-    color:#101828;
+    color:#111827;
     font-weight:bold;
-    font-size:18px;
-
 }
 
 
 
-#loginButton{
-
-    background:#ec1b63;
+nav button{
+    background:#e91e63;
     color:white;
     border:none;
-    padding:15px 30px;
-    border-radius:15px;
-    font-size:17px;
+    padding:12px 25px;
+    border-radius:12px;
     cursor:pointer;
-
 }
 
 
-/* ===========================
-HERO SMALL VERSION
-=========================== */
+
+/* HERO */
+
 
 .hero{
 
-    margin:30px auto;
-    width:90%;
+    max-width:1200px;
+    margin:40px auto;
+    padding:70px 50px;
 
     background:#fff0f5;
-
     border-radius:35px;
 
-    padding:45px 60px;
-
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
-    min-height:430px;
-
-}
-
-
-.hero-text{
-
-    max-width:550px;
+    gap:50px;
 
 }
 
 
-.hero h1{
 
-    font-size:55px;
+.hero-text h1{
 
+    font-size:58px;
     line-height:1.1;
 
-    margin:0;
+}
+
+
+.hero-text h1 span{
+
+    color:#e91e63;
 
 }
 
 
-.hero h1 span{
+.hero-text h2{
 
-    color:#ec1b63;
-
-}
-
-
-.hero h2{
-
-    margin-top:20px;
-
+    margin:25px 0;
     font-size:30px;
 
 }
 
 
-.hero p{
+.hero-text p{
 
-    margin-top:15px;
-
-    font-size:20px;
+    font-size:18px;
+    margin-bottom:30px;
 
 }
+
 
 
 .hero button{
 
-    margin-top:25px;
-
-    background:#ec1b63;
-
+    background:#e91e63;
     color:white;
-
     border:none;
-
-    padding:15px 40px;
-
-    border-radius:15px;
-
-    font-size:18px;
+    padding:16px 40px;
+    border-radius:14px;
+    cursor:pointer;
 
 }
+
 
 
 
 .hero-box{
 
     background:white;
-
-    padding:35px;
-
+    padding:40px;
     border-radius:30px;
 
-    width:350px;
+    box-shadow:0 15px 35px #ddd;
 
     text-align:center;
-
-    box-shadow:0 15px 40px rgba(0,0,0,.12);
 
 }
 
 
+.icons{
+
+    font-size:38px;
+    margin-top:20px;
+
+}
 
 
-/* ===========================
-TRUST SECTION
-=========================== */
-
+/* TRUST SECTION */
 
 .trust{
 
     width:90%;
-    margin:60px auto;
+    max-width:1200px;
+    margin:50px auto;
 
     display:grid;
-
     grid-template-columns:repeat(4,1fr);
-
     gap:25px;
 
 }
-
 
 
 .trust div{
 
     background:white;
 
-    padding:40px 20px;
+    padding:35px 20px;
 
-    border-radius:30px;
+    border-radius:25px;
 
     text-align:center;
 
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
 
-    transition:.3s;
+    transition:0.3s;
 
 }
 
 
 .trust div:hover{
 
-    transform:translateY(-10px);
+    transform:translateY(-8px);
+
+    box-shadow:0 15px 35px rgba(233,30,99,0.15);
 
 }
 
 
 
-.trust div:first-letter{
+.trust div:first-child{
 
-    font-size:35px;
+    border-top:5px solid #e91e63;
+
+}
+
+
+.trust div:nth-child(2){
+
+    border-top:5px solid #111827;
 
 }
 
-/* ================================
-   CATEGORY SECTION
-================================ */
 
+.trust div:nth-child(3){
 
-.category-container{
-
-display:grid;
-
-grid-template-columns:repeat(5,1fr);
-
-gap:25px;
+    border-top:5px solid #e91e63;
 
 }
+
+
+.trust div:nth-child(4){
+
+    border-top:5px solid #111827;
+
+}
+
+
+
+.trust div::first-line{
+
+    font-size:45px;
+
+}
+
+
+
+.trust h3{
+
+    margin-top:15px;
+
+    font-size:20px;
+
+    color:#111827;
+
+}
+
+
+
+@media(max-width:900px){
+
+    .trust{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+
+@media(max-width:600px){
+
+    .trust{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+
+
+
+
+/* GENERAL SECTIONS */
+
+
+.categories,
+.brands,
+.products,
+.offer{
+
+    width:90%;
+    max-width:1200px;
+    margin:60px auto;
+
+}
+
+
+
+h2{
+
+    font-size:38px;
+    margin-bottom:30px;
+
+}
+
 
 
 .category{
 
-height:180px;
-
 background:#fff0f5;
+
+padding:35px 20px;
 
 border-radius:25px;
 
-display:flex;
+text-align:center;
 
-flex-direction:column;
+flex:1;
 
-justify-content:center;
-
-align-items:center;
-
-font-size:22px;
-
-font-weight:700;
+min-width:180px;
 
 cursor:pointer;
 
@@ -323,9 +331,10 @@ transition:.3s;
 }
 
 
+
 .category:hover{
 
-background:#ed1b62;
+background:#e91e63;
 
 color:white;
 
@@ -334,240 +343,147 @@ transform:translateY(-8px);
 }
 
 
-.category:first-child{
+.category:first-line{
+
+font-size:45px;
 
 }
-
-
-
-.category h3{
-
-margin-top:15px;
-
-}
-
-
-
-
-
-
-/* ===========================
-BRANDS
-=========================== */
-
-
-.brands{
-
-    width:90%;
-    margin:80px auto;
-
-}
-
-
-
-.brand-list{
-
-    display:flex;
-    gap:25px;
-
-}
-
 
 
 .brand-list div{
 
-    background:#fff0f5;
+background:white;
 
-    padding:25px 50px;
+padding:20px 35px;
 
-    border-radius:20px;
+border-radius:15px;
 
-    font-size:20px;
+font-weight:bold;
 
-    font-weight:bold;
+box-shadow:0 5px 20px #ddd;
+
+transition:.3s;
+
+}
+
+
+.brand-list div:hover{
+
+background:#e91e63;
+
+color:white;
+
+transform:translateY(-5px);
 
 }
 
 
-/* ===========================
-SEPHORA STYLE PRODUCT CARDS
-=========================== */
-
-
-.products{
-
-    width:90%;
-    margin:80px auto;
-
-}
+/* SEARCH */
 
 
 .search-box input{
 
-    width:350px;
-    padding:15px 20px;
+    width:300px;
 
-    border-radius:30px;
+    padding:12px;
+
+    border-radius:10px;
 
     border:1px solid #ddd;
 
-    font-size:16px;
+    margin-bottom:25px;
 
 }
 
+
+
+
+
+/* PRODUCTS */
 
 
 .product-container{
 
     display:grid;
 
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(3,1fr);
 
     gap:30px;
 
-    margin-top:40px;
-
 }
 
 
-
-/* PRODUCT CARD */
 
 .product{
 
-    background:#ffffff;
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 5px 20px #ddd;
 
-    border-radius:22px;
-
-    padding:18px;
-
-    position:relative;
-
-    overflow:hidden;
-
-    border:1px solid #eee;
-
-    transition:.35s ease;
+    transition:.3s;
 
 }
-
+.product{
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 5px 20px #ddd;
+    transition:.3s;
+}
 
 
 .product:hover{
 
-    transform:translateY(-8px);
+    transform:translateY(-10px);
 
-    box-shadow:0 20px 45px rgba(0,0,0,.12);
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
 
 }
 
+.product:hover{
 
+    transform:translateY(-10px);
 
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
 
-/* IMAGE */
+}
+
 
 
 .product img{
 
     width:100%;
 
-    height:280px;
+    height:250px;
 
     object-fit:cover;
 
     border-radius:18px;
 
-    transition:.4s ease;
-
 }
 
-
-
-.product:hover img{
-
-    transform:scale(1.05);
-
-}
-
-
-
-/* PRODUCT TITLE */
 
 
 .product h3{
 
-    font-size:22px;
-
-    margin-top:18px;
-
-    color:#111827;
+    margin-top:15px;
 
 }
 
 
-
-.product p{
+.brand{
 
     color:#777;
 
-    font-size:16px;
-
-    margin-top:8px;
-
 }
 
 
+.price{
 
-/* STARS */
+    color:#e91e63;
 
-
-.product .stars{
-
-    color:#ffb400;
-
-    font-size:20px;
-
-    margin-top:10px;
-
-}
-
-
-
-/* PRICE */
-
-
-.product .price{
-
-    color:#ec1b63;
-
-    font-size:24px;
-
-    font-weight:800;
-
-    margin-top:10px;
-
-}
-
-
-
-/* BUTTONS */
-
-
-.product button{
-
-    width:100%;
-
-    padding:15px;
-
-    margin-top:15px;
-
-    border-radius:25px;
-
-    border:none;
-
-    cursor:pointer;
-
-    font-size:16px;
+    font-size:22px;
 
     font-weight:bold;
 
@@ -575,9 +491,48 @@ SEPHORA STYLE PRODUCT CARDS
 
 
 
-.product button:first-of-type{
+.stars{
 
-    background:#101828;
+    margin:10px 0;
+
+}
+
+
+
+
+/* BUTTONS */
+
+
+.product-actions{
+
+    display:grid;
+
+    grid-template-columns:1fr 55px;
+
+    gap:10px;
+
+    margin-top:15px;
+
+}
+
+
+
+.product-actions button{
+
+    border:none;
+
+    padding:15px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+}
+
+
+.view-btn{
+
+    background:#111827;
 
     color:white;
 
@@ -585,9 +540,21 @@ SEPHORA STYLE PRODUCT CARDS
 
 
 
-.product button:last-of-type{
+.heart-btn{
 
-    background:#ec1b63;
+    background:#fff0f5;
+
+    color:#e91e63;
+
+}
+
+
+
+.add-btn{
+
+    grid-column:1/3;
+
+    background:#e91e63;
 
     color:white;
 
@@ -595,89 +562,14 @@ SEPHORA STYLE PRODUCT CARDS
 
 
 
-.product button:hover{
-
-    opacity:.85;
-
-}
 
 
-
-/* HEART BUTTON */
-
-
-.product .wishlist{
-
-    position:absolute;
-
-    top:20px;
-
-    right:20px;
-
-    background:white;
-
-    width:45px;
-
-    height:45px;
-
-    border-radius:50%;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    font-size:22px;
-
-    box-shadow:0 5px 15px rgba(0,0,0,.15);
-
-}
-
-
-
-/* MOBILE */
-
-
-@media(max-width:1000px){
-
-.product-container{
-
-grid-template-columns:repeat(2,1fr);
-
-}
-
-
-
-
-
-@media(max-width:600px){
-
-.product-container{
-
-grid-template-columns:1fr;
-
-}
-
-
-.product img{
-
-height:250px;
-
-}
-
-
-
-
-
-
-
-/* ===========================
-CART
-=========================== */
+/* CART */
 
 
 .cart-box{
+
+    display:none;
 
     position:fixed;
 
@@ -685,31 +577,98 @@ CART
 
     top:0;
 
-    height:100%;
-
     width:380px;
+
+    height:100vh;
 
     background:white;
 
     padding:30px;
 
-    box-shadow:-10px 0 40px rgba(0,0,0,.2);
+    z-index:9999;
 
-    z-index:999;
+    box-shadow:-10px 0 30px #aaa;
 
 }
 
 
 
-.cart-box button{
+.checkout-trust{
 
-    padding:12px 25px;
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+    margin:20px 0;
+
+}
+
+
+
+
+/* LOGIN */
+
+
+.login-box{
+
+    display:none;
+
+    position:fixed;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    box-shadow:0 10px 40px #aaa;
+
+    z-index:9999;
+
+}
+
+
+
+
+.login-box input{
+
+    width:100%;
+
+    padding:12px;
+
+    margin:10px 0;
 
     border-radius:10px;
 
+    border:1px solid #ddd;
+
+}
+
+
+
+
+
+.login-box button,
+.cart-box button{
+
+    width:100%;
+
+    padding:13px;
+
+    margin-top:10px;
+
     border:none;
 
-    background:#ec1b63;
+    border-radius:12px;
+
+    background:#e91e63;
 
     color:white;
 
@@ -717,78 +676,42 @@ CART
 
 
 
-/* ===========================
-LOGIN
-=========================== */
 
 
-.login-box{
+/* OFFER */
 
-    position:fixed;
 
-    top:50%;
+.offer{
 
-    left:50%;
+    background:#fff0f5;
 
-    transform:translate(-50%,-50%);
-
-    background:white;
-
-    padding:40px;
+    padding:45px;
 
     border-radius:30px;
 
-    box-shadow:0 20px 50px rgba(0,0,0,.2);
+    text-align:center;
 
 }
 
 
 
-.login-box input{
 
-    display:block;
+footer{
 
-    width:300px;
+    background:#111827;
 
-    padding:15px;
+    color:white;
 
-    margin:15px;
+    text-align:center;
 
-}
-
-
-.login-box button,
-.cart-box button{
-
-background:#ed1b62;
-
-color:white;
-
-border:none;
-
-padding:12px 25px;
-
-border-radius:25px;
-
-font-size:16px;
-
-cursor:pointer;
-
-margin:5px;
+    padding:30px;
 
 }
 
 
-.login-box button:hover,
-.cart-box button:hover{
 
-background:#c91450;
 
-}
-
-/* ===========================
-MOBILE
-=========================== */
+/* MOBILE */
 
 
 @media(max-width:900px){
@@ -798,8 +721,9 @@ header{
 
     flex-direction:column;
 
-}
+    gap:20px;
 
+}
 
 
 nav{
@@ -816,19 +740,14 @@ nav{
 
     flex-direction:column;
 
-    padding:40px;
-
 }
 
 
-
-.hero h1{
+.hero-text h1{
 
     font-size:38px;
 
 }
-
-
 
 
 
@@ -854,1406 +773,137 @@ nav{
 
 }
 
+/* ==========================
+   TRUST SECTION
+========================== */
 
-
-.brand-list{
-
-    flex-wrap:wrap;
-
-}
-
-
-/* ================================
-   BARQ PRODUCT HOVER IMPROVEMENT
-================================ */
-
-
-.product{
-
-transition:0.3s ease;
-
-}
-
-
-.product:hover{
-
-transform:translateY(-10px);
-
-box-shadow:0 15px 35px rgba(0,0,0,.15);
-
-}
-
-@media(max-width:768px){
-
-
-.category-container{
-
-grid-template-columns:1fr 1fr;
-
-}
-
-
-.category{
-
-height:150px;
-
-}
-.login-box button,
-.cart-box button{
-
-
-background:#ed1b62;
-
-color:white;
-
-border:none;
-
-padding:12px 25px;
-
-border-radius:25px;
-
-font-size:16px;
-
-cursor:pointer;
-
-margin:5px;
-
-}
-
-
-
-.login-box button:hover,
-.cart-box button:hover{
-
-background:#c91450;
-
-}
-
-
-/* ===========================
-   HERO BANNER SIZE FIX
-=========================== */
-
-.hero{
+.trust{
 
     width:90%;
-    min-height:520px;
-    padding:50px 70px;
-    margin:30px auto;
+    max-width:1200px;
 
-}
-
-
-.hero h1{
-
-    font-size:65px;
-    line-height:1.05;
-
-}
-
-
-.hero h2{
-
-    font-size:32px;
-    margin-top:20px;
-
-}
-
-
-.hero p{
-
-    font-size:20px;
-    margin-top:18px;
-
-}
-
-
-.hero-box{
-
-    padding:35px;
-    width:380px;
-
-}
-
-
-.hero-box h3{
-
-    font-size:24px;
-
-}
-
-
-
-/* Tablet */
-
-@media(max-width:900px){
-
-.hero{
-
-    padding:35px;
-    min-height:auto;
-
-}
-
-
-.hero h1{
-
-    font-size:45px;
-
-}
-
-
-.hero-box{
-
-    width:100%;
-    margin-top:30px;
-
-}
-/* =====================================
-   BARQ HERO BANNER SIZE IMPROVEMENT
-===================================== */
-
-
-.hero{
-
-    width:90%;
-    min-height:520px;
-    padding:55px 70px;
-    margin:35px auto;
-
-}
-
-
-
-.hero h1{
-
-    font-size:65px;
-    line-height:1.05;
-
-}
-
-
-
-.hero h2{
-
-    font-size:32px;
-    margin-top:20px;
-
-}
-
-
-
-.hero p{
-
-    font-size:20px;
-    margin-top:20px;
-
-}
-
-
-
-.hero-box{
-
-    padding:35px;
-    width:380px;
-    border-radius:35px;
-
-}
-
-
-
-.hero-box h3{
-
-    font-size:25px;
-
-}
-
-
-
-.hero-box p{
-
-    font-size:18px;
-
-}
-
-
-
-/* Button improvement */
-
-.hero button{
-
-    padding:15px 40px;
-    font-size:18px;
-
-}
-
-
-
-/* Mobile banner */
-
-@media(max-width:900px){
-
-
-.hero{
-
-    min-height:auto;
-    padding:40px 25px;
-
-}
-
-
-.hero h1{
-
-    font-size:42px;
-
-}
-
-
-.hero h2{
-
-    font-size:25px;
-
-}
-
-
-.hero-box{
-
-    width:100%;
-    margin-top:30px;
-
-}
-
-/* =====================================
-   BARQ PROFESSIONAL CHECKOUT DESIGN
-===================================== */
-
-
-.checkout-container{
-
-    width:90%;
-    max-width:1100px;
-    margin:50px auto;
-
-    display:grid;
-    grid-template-columns:1fr 350px;
-
-    gap:40px;
-
-}
-
-
-/* MAIN CHECKOUT CARD */
-
-.checkout-form{
-
-    background:white;
-
-    padding:40px;
-
-    border-radius:30px;
-
-    box-shadow:0 15px 40px rgba(0,0,0,.08);
-
-}
-
-
-
-.checkout-form h1{
-
-    font-size:38px;
-
-    color:#101828;
-
-    margin-bottom:30px;
-
-}
-
-
-
-.checkout-form h2{
-
-    margin-top:25px;
-
-    margin-bottom:15px;
-
-    color:#101828;
-
-}
-
-
-
-/* INPUTS */
-
-
-.checkout-form input,
-.checkout-form textarea{
-
-    width:100%;
-
-    padding:16px;
-
-    margin-bottom:15px;
-
-    border:1px solid #ddd;
-
-    border-radius:15px;
-
-    font-size:16px;
-
-}
-
-
-
-.checkout-form textarea{
-
-    height:120px;
-
-}
-
-
-
-/* PAYMENT */
-
-
-.payment-option{
-
-    background:#fff0f5;
-
-    padding:15px;
-
-    border-radius:15px;
-
-    margin:10px 0;
-
-}
-
-
-
-.payment-option input{
-
-    width:auto;
-
-}
-
-
-
-/* ORDER SUMMARY */
-
-
-.order-summary{
-
-    background:#fff0f5;
-
-    padding:30px;
-
-    border-radius:30px;
-
-    height:max-content;
-
-}
-
-
-
-.order-summary h2{
-
-    font-size:26px;
-
-}
-
-
-
-.order-total{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    font-size:22px;
-
-    font-weight:bold;
-
-    margin-top:20px;
-
-}
-
-
-
-/* BUTTON */
-
-
-.checkout-btn{
-
-    width:100%;
-
-    margin-top:25px;
-
-    padding:18px;
-
-    border:none;
-
-    border-radius:30px;
-
-    background:#ec1b63;
-
-    color:white;
-
-    font-size:20px;
-
-    font-weight:bold;
-
-    cursor:pointer;
-
-}
-
-
-
-.checkout-btn:hover{
-
-    background:#c91450;
-
-}
-
-
-
-
-/* MOBILE */
-
-@media(max-width:900px){
-
-.checkout-container{
-
-grid-template-columns:1fr;
-
-}
-
-/* ==================================
-   BARQ CHECKOUT PROFESSIONAL DESIGN
-================================== */
-
-
-.checkout-container{
-
-    width:90%;
-    max-width:1100px;
-    margin:60px auto;
-
-    background:#fff0f5;
-
-    padding:50px;
-
-    border-radius:35px;
-
-    box-shadow:0 20px 50px rgba(0,0,0,.08);
-
-}
-
-
-
-.checkout-container h1{
-
-    font-size:45px;
-
-    color:#101828;
-
-    margin-bottom:30px;
-
-}
-
-
-
-.checkout-container h2{
-
-    font-size:28px;
-
-    margin:30px 0 20px;
-
-    color:#101828;
-
-}
-
-
-
-/* INPUTS */
-
-
-.checkout-container input,
-.checkout-container textarea{
-
-
-    width:100%;
-
-    padding:18px;
-
-    margin-bottom:18px;
-
-    border-radius:15px;
-
-    border:1px solid #ddd;
-
-    font-size:17px;
-
-    outline:none;
-
-}
-
-
-
-.checkout-container input:focus,
-.checkout-container textarea:focus{
-
-    border-color:#ec1b63;
-
-}
-
-
-
-/* PAYMENT BOX */
-
-
-.payment-method{
-
-    background:white;
-
-    padding:25px;
-
-    border-radius:25px;
-
-}
-
-
-
-.payment-method label{
-
-    display:block;
-
-    padding:15px;
-
-    background:#fff0f5;
-
-    border-radius:15px;
-
-    margin:10px 0;
-
-    font-size:18px;
-
-    cursor:pointer;
-
-}
-
-
-
-.payment-method input{
-
-    width:auto;
-
-    margin-right:10px;
-
-}
-
-
-
-/* PLACE ORDER BUTTON */
-
-
-.checkout-container button{
-
-    width:100%;
-
-    margin-top:25px;
-
-    padding:18px;
-
-    border:none;
-
-    border-radius:20px;
-
-    background:#ec1b63;
-
-    color:white;
-
-    font-size:20px;
-
-    font-weight:bold;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-
-
-.checkout-container button:hover{
-
-    background:#c91450;
-
-    transform:translateY(-3px);
-
-}
-
-
-
-/* FOOTER */
-
-
-footer{
-
-    margin-top:80px;
-
-    text-align:center;
-
-    padding:30px;
-
-    background:#101828;
-
-    color:white;
-
-}
-
-
-
-/* MOBILE */
-
-
-@media(max-width:700px){
-
-
-.checkout-container{
-
-    padding:25px;
-
-}
-
-
-.checkout-container h1{
-
-    font-size:32px;
-
-}
-
-/* =====================================
-   BARQ CHECKOUT PROFESSIONAL DESIGN
-===================================== */
-
-
-.checkout-page{
-
-    width:90%;
-    max-width:1100px;
-    margin:50px auto;
-
-}
-
-
-
-.checkout-page h1{
-
-    font-size:42px;
-    color:#101828;
-    margin-bottom:30px;
-
-}
-
-
-
-.checkout-page h2{
-
-    font-size:28px;
-    margin:25px 0;
-    color:#101828;
-
-}
-
-
-
-/* CHECKOUT CARD */
-
-.checkout-container{
-
-    background:#fff0f5;
-
-    padding:40px;
-
-    border-radius:35px;
-
-    box-shadow:0 15px 40px rgba(0,0,0,.08);
-
-}
-
-
-
-/* INPUT AREA */
-
-.checkout-container input,
-.checkout-container textarea{
-
-
-    width:100%;
-
-    padding:18px;
-
-    margin:10px 0;
-
-    border:1px solid #ddd;
-
-    border-radius:15px;
-
-    font-size:16px;
-
-    outline:none;
-
-}
-
-
-
-.checkout-container input:focus,
-.checkout-container textarea:focus{
-
-    border-color:#ec1b63;
-
-}
-
-
-
-/* CUSTOMER INFORMATION GRID */
-
-
-.customer-info{
+    margin:40px auto;
 
     display:grid;
 
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(4,1fr);
 
     gap:20px;
 
 }
 
 
-
-/* PAYMENT */
-
-
-.payment-method{
-
-    background:white;
-
-    padding:25px;
-
-    border-radius:25px;
-
-    margin-top:25px;
-
-}
-
-
-
-.payment-method label{
-
-    display:block;
-
-    padding:12px;
-
-    font-size:18px;
-
-    cursor:pointer;
-
-}
-
-
-
-/* RADIO BUTTON */
-
-.payment-method input[type="radio"]{
-
-    width:auto;
-
-    margin-right:10px;
-
-}
-
-
-
-/* PLACE ORDER BUTTON */
-
-
-.place-order,
-.checkout-container button{
-
-    background:#ec1b63;
-
-    color:white;
-
-    border:none;
-
-    padding:18px 45px;
-
-    border-radius:30px;
-
-    font-size:18px;
-
-    cursor:pointer;
-
-    margin-top:25px;
-
-}
-
-
-
-.place-order:hover,
-.checkout-container button:hover{
-
-    background:#c91450;
-
-}
-
-
-
-/* FOOTER */
-
-
-footer{
-
-    text-align:center;
-
-    padding:30px;
-
-    margin-top:60px;
-
-    background:#101828;
-
-    color:white;
-
-}
-
-
-
-/* MOBILE */
-
-
-@media(max-width:768px){
-
-
-.customer-info{
-
-grid-template-columns:1fr;
-
-}
-
-
-.checkout-container{
-
-padding:25px;
-
-}
-
-
-.checkout-page h1{
-
-font-size:32px;
-
-}
-/* ============================
-BARQ FINAL IMPROVEMENTS
-============================ */
-
-
-/* better sections */
-
-.categories,
-.offer{
-
-width:90%;
-margin:70px auto;
-
-}
-
-
-.categories h2,
-.products h2,
-.brands h2,
-.offer h2{
-
-font-size:42px;
-margin-bottom:35px;
-
-}
-
-
-
-/* professional product cards */
-
-
-.product{
-
-border-radius:25px;
-overflow:hidden;
-background:white;
-position:relative;
-
-}
-
-
-
-.product img{
-
-height:260px;
-
-}
-
-
-
-.product h3{
-
-font-size:22px;
-
-}
-
-
-
-.product button{
-
-cursor:pointer;
-
-}
-
-
-
-.product:hover{
-
-transform:translateY(-8px);
-
-}
-
-
-
-/* checkout page */
-
-
-.checkout-container{
-
-width:90%;
-max-width:900px;
-margin:60px auto;
-
-}
-
-
-.checkout-card{
-
-background:white;
-
-padding:40px;
-
-border-radius:30px;
-
-box-shadow:0 20px 50px rgba(0,0,0,.12);
-
-}
-
-
-
-.checkout-card input,
-.checkout-card textarea{
-
-width:100%;
-
-padding:18px;
-
-margin:10px 0;
-
-border-radius:15px;
-
-border:1px solid #ddd;
-
-font-size:16px;
-
-}
-
-
-
-.checkout-card textarea{
-
-height:120px;
-
-}
-
-
-
-.checkout-card button{
-
-background:#ec1b63;
-
-color:white;
-
-border:none;
-
-padding:18px 50px;
-
-border-radius:25px;
-
-font-size:18px;
-
-cursor:pointer;
-
-}
-
-
-
-/* hide popup */
-
-
-#cartBox,
-#loginBox{
-
-display:none;
-
-}
-
-
-
-/* mobile fix */
-
-
-@media(max-width:900px){
-
-.hero{
-
-padding:35px;
-
-}
-
-
-.hero h1{
-
-font-size:42px;
-
-}
-
-
-.product-container{
-
-grid-template-columns:1fr;
-
-}
-
-/* ===============================
-   BARQ CHECKOUT PAGE DESIGN
-================================ */
-
-
-.checkout-page{
-
-    width:90%;
-    max-width:1200px;
-    margin:60px auto;
-
-}
-
-
-
-.checkout-page h1{
-
-    font-size:45px;
-    color:#101828;
-    margin-bottom:30px;
-
-}
-
-
-
-.checkout-container{
-
-    display:grid;
-    grid-template-columns:1fr 400px;
-    gap:40px;
-
-}
-
-
-
-.checkout-card{
-
-    background:white;
-
-    padding:35px;
-
-    border-radius:30px;
-
-    box-shadow:0 15px 40px rgba(0,0,0,.10);
-
-}
-
-
-
-.checkout-card h2{
-
-    font-size:28px;
-    margin-bottom:25px;
-
-}
-
-
-
-.checkout-card input,
-.checkout-card textarea{
-
-    width:100%;
-
-    padding:16px;
-
-    margin-bottom:18px;
-
-    border:1px solid #ddd;
-
-    border-radius:15px;
-
-    font-size:16px;
-
-}
-
-
-
-.checkout-card textarea{
-
-    height:120px;
-
-}
-
-
-
-.payment-option{
-
-    display:flex;
-
-    gap:15px;
-
-    padding:15px;
-
-    border-radius:15px;
+.trust div{
 
     background:#fff0f5;
 
-    margin-bottom:12px;
-
-}
-
-
-
-.order-summary{
-
-    background:#101828;
-
-    color:white;
-
-    padding:35px;
-
-    border-radius:30px;
-
-    height:max-content;
-
-}
-
-
-
-.order-summary h2{
-
-    color:white;
-
-}
-
-
-
-.place-order{
-
-    width:100%;
-
-    padding:18px;
-
-    background:#ec1b63;
-
-    color:white;
-
-    border:none;
+    padding:25px;
 
     border-radius:20px;
 
-    font-size:20px;
+    text-align:center;
 
-    cursor:pointer;
-
-    margin-top:25px;
+    font-size:30px;
 
 }
 
 
-.place-order:hover{
+.trust h3{
 
-    background:#c91450;
+    font-size:18px;
+
+    margin-top:10px;
 
 }
 
 
 
-/* MOBILE CHECKOUT */
+/* ==========================
+   SEARCH BAR
+========================== */
+
+
+.search-box{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin-bottom:35px;
+
+}
+
+
+
+#searchInput{
+
+    width:400px;
+
+    height:45px;
+
+    border-radius:30px;
+
+    border:1px solid #ddd;
+
+    padding:0 20px;
+
+    font-size:16px;
+
+    outline:none;
+
+}
+
+
+
+#searchInput:focus{
+
+    border-color:#e91e63;
+
+    box-shadow:0 0 10px #ffd0df;
+
+}
+
+
+
+/* ==========================
+   CART TRUST
+========================== */
+
+
+.checkout-trust{
+
+    margin-top:20px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+    font-size:14px;
+
+}
+
+
+
+/* ==========================
+   MOBILE
+========================== */
+
 
 @media(max-width:900px){
 
 
-.checkout-container{
-
-grid-template-columns:1fr;
-
-}
-
-/* ============================
-   CHECKOUT PAGE DESIGN
-============================ */
-
-
-.checkout-page{
-
-    width:90%;
-    max-width:1200px;
-    margin:60px auto;
-
-}
-
-
-.checkout-card{
-
-    background:white;
-
-    border-radius:30px;
-
-    padding:40px;
-
-    box-shadow:0 15px 40px rgba(0,0,0,.12);
-
-}
-
-
-
-.checkout-page h1{
-
-    font-size:45px;
-    color:#101828;
-
-}
-
-
-.checkout-page h2{
-
-    margin-top:30px;
-    font-size:28px;
-
-}
-
-
-.checkout-form{
-
-    display:grid;
+.trust{
 
     grid-template-columns:1fr 1fr;
 
-    gap:20px;
-
 }
 
 
+#searchInput{
 
-.checkout-form input,
-.checkout-form textarea{
-
-
-    padding:16px;
-
-    border-radius:12px;
-
-    border:1px solid #ddd;
-
-    font-size:16px;
-
-}
-
-
-
-.checkout-form textarea{
-
-    grid-column:1/3;
-
-    height:120px;
-
-}
-
-
-
-.payment-box{
-
-    margin-top:30px;
-
-}
-
-
-.payment-box label{
-
-    display:block;
-
-    padding:12px;
-
-    background:#fff0f5;
-
-    border-radius:15px;
-
-    margin:10px 0;
-
-}
-
-
-
-.place-order{
-
-
-    margin-top:30px;
-
-    background:#ec1b63;
-
-    color:white;
-
-    border:none;
-
-    padding:18px 50px;
-
-    border-radius:20px;
-
-    font-size:18px;
-
-    cursor:pointer;
-
-}
-
-
-
-.place-order:hover{
-
-    background:#c91450;
-
-}
-
-
-
-@media(max-width:700px){
-
-
-.checkout-form{
-
-grid-template-columns:1fr;
-
-}
-
-
-.checkout-form textarea{
-
-grid-column:auto;
+    width:90%;
 
 }
 
@@ -2262,5 +912,15 @@ grid-column:auto;
 
 
 
+@media(max-width:500px){
 
+
+.trust{
+
+    grid-template-columns:1fr;
+
+}
+
+
+}
 
