@@ -2259,3 +2259,30 @@ cursor:pointer;
 background:#c91558;
 
 }
+.cart-item-controls{
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:15px;
+
+}
+
+
+.cart-item-controls button{
+
+    width:45px;
+    height:40px;
+    padding:0;
+    font-size:20px;
+
+}
+
+
+.cart-qty{
+
+    font-size:18px;
+    font-weight:bold;
+
+}
