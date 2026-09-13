@@ -678,5 +678,24 @@ nav{
 }
 
 
+/* ================================
+   BARQ PRODUCT HOVER IMPROVEMENT
+================================ */
+
+
+.product{
+
+transition:0.3s ease;
 
 }
+
+
+.product:hover{
+
+transform:translateY(-10px);
+
+box-shadow:0 15px 35px rgba(0,0,0,.15);
+
+}
+
+
