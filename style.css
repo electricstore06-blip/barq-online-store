@@ -1953,3 +1953,18 @@ color:#e91e63;
     font-size: 14px;
     font-weight: bold;
 }
+.checkout-trust {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+
+.checkout-trust span {
+    background: #fff0f6;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+}
