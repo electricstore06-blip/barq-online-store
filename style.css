@@ -1,114 +1,141 @@
-/* ==========================
-   PRODUCTS SECTION
-========================== */
+/* =========================
+GLOBAL
+========================= */
+
+*{
+box-sizing:border-box;
+}
+
+
+body{
+
+margin:0;
+
+font-family:Arial, sans-serif;
+
+background:#fff;
+
+color:#111;
+
+}
+
+
+/* =========================
+PRODUCT SECTION
+========================= */
+
 
 .products{
 
-    width:85%;
-    margin:60px auto;
+width:90%;
+
+margin:60px auto;
 
 }
+
 
 
 .products h2{
 
-    text-align:center;
-    font-size:38px;
-    margin-bottom:35px;
+text-align:center;
+
+font-size:38px;
+
+margin-bottom:30px;
 
 }
 
 
 
-/* ==========================
-   SEARCH BAR
-========================== */
+/* =========================
+SEARCH BAR
+========================= */
 
 
 .search-box{
 
-    width:100%;
+width:100%;
 
-    display:flex;
+display:flex;
 
-    justify-content:center;
+justify-content:center;
 
-    margin-bottom:40px;
+margin-bottom:40px;
 
 }
-
 
 
 #searchInput{
 
-    width:420px;
+width:420px;
 
-    height:45px;
+height:45px;
 
-    padding:0 20px;
+padding:0 20px;
 
-    border-radius:25px;
+border-radius:30px;
 
-    border:1px solid #ddd;
+border:1px solid #ddd;
 
-    font-size:16px;
+font-size:16px;
 
-    outline:none;
+outline:none;
 
 }
-
 
 
 #searchInput:focus{
 
-    border-color:#e91e63;
-
-    box-shadow:0 0 10px #ffd0df;
+border-color:#e91e63;
 
 }
 
 
 
-
-/* ==========================
-   PRODUCT GRID
-========================== */
+/* =========================
+PRODUCT GRID
+========================= */
 
 
 .product-container{
 
-    display:grid;
+display:grid;
 
-    grid-template-columns:repeat(auto-fit,250px);
+grid-template-columns:
 
-    justify-content:center;
+repeat(auto-fit,minmax(250px,250px));
 
-    gap:35px;
+justify-content:center;
+
+gap:35px;
 
 }
 
 
 
-/* ==========================
-   PRODUCT CARD
-========================== */
+/* =========================
+PRODUCT CARD
+========================= */
 
 
 .product{
 
-    width:250px;
 
-    min-height:420px;
+width:250px;
 
-    background:white;
+background:white;
 
-    padding:20px;
+border-radius:25px;
 
-    border-radius:25px;
+padding:20px;
 
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
+box-shadow:
 
-    transition:.3s;
+0 10px 30px rgba(0,0,0,.08);
+
+
+transition:.3s;
+
 
 }
 
@@ -116,96 +143,95 @@
 
 .product:hover{
 
-    transform:translateY(-8px);
+transform:translateY(-8px);
 
 }
 
 
 
+/* =========================
+PRODUCT IMAGE
+========================= */
 
 
-/* ==========================
-   PRODUCT IMAGE FIX
-========================== */
-
-
-.product img,
 .product-img{
 
-    width:150px !important;
 
-    height:150px !important;
+width:150px !important;
 
-    max-width:150px !important;
+height:150px !important;
 
-    max-height:150px !important;
 
-    object-fit:contain !important;
+object-fit:contain !important;
 
-    display:block;
 
-    margin:0 auto 20px;
+display:block;
 
-    border-radius:15px;
+
+margin:0 auto 20px;
+
+
+border-radius:15px;
+
 
 }
 
 
 
-
-
-/* ==========================
-   PRODUCT TEXT
-========================== */
+/* =========================
+TEXT
+========================= */
 
 
 .product h3{
 
-    font-size:18px;
+font-size:18px;
 
-    margin-bottom:8px;
+margin:10px 0;
 
 }
 
 
 .brand{
 
-    color:#777;
-
-    font-size:14px;
+color:#777;
 
 }
 
 
 .stars{
 
-    margin:12px 0;
+margin:10px 0;
 
 }
 
 
 .price{
 
-    color:#e91e63;
+color:#e91e63;
 
-    font-size:20px;
+font-size:20px;
 
-    font-weight:bold;
+font-weight:bold;
 
 }
 
 
 
-/* ==========================
-   BUTTONS
-========================== */
+/* =========================
+BUTTONS
+========================= */
 
 
 .product-actions{
 
-    display:flex;
 
-    gap:5px;
+display:flex;
+
+flex-direction:column;
+
+gap:8px;
+
 
 }
 
@@ -213,43 +239,54 @@
 
 .product-actions button{
 
-    flex:1;
 
-    height:40px;
+height:40px;
 
-    border:none;
+border:none;
 
-    border-radius:20px;
+border-radius:20px;
 
-    background:#e91e63;
+background:#e91e63;
 
-    color:white;
+color:white;
 
-    cursor:pointer;
+cursor:pointer;
+
+font-size:14px;
+
 
 }
+
 
 
 .product-actions button:hover{
 
-    background:#c2185b;
+
+background:#c2185b;
+
 
 }
 
 
 
-
-/* ==========================
-   MOBILE
-========================== */
+/* =========================
+MOBILE
+========================= */
 
 
 @media(max-width:700px){
 
 
+.products{
+
+width:95%;
+
+}
+
+
 #searchInput{
 
-    width:90%;
+width:90%;
 
 }
 
@@ -257,7 +294,9 @@
 
 .product-container{
 
-    grid-template-columns:250px;
+
+grid-template-columns:250px;
+
 
 }
 
