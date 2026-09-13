@@ -1098,5 +1098,181 @@ grid-column:auto;
 }
 
 
+/* =========================
+   CHECKOUT PAGE DESIGN
+========================= */
+
+.checkout-page {
+    padding: 60px 8%;
+    background: #fafafa;
+    min-height: 70vh;
+}
+
+
+.checkout-page h1 {
+    font-size: 42px;
+    color: #111827;
+    margin-bottom: 30px;
+}
+
+
+.checkout-box {
+
+    background:white;
+    max-width:700px;
+    padding:40px;
+    border-radius:20px;
+
+    box-shadow:
+    0 15px 40px rgba(0,0,0,0.08);
+
+}
+
+
+.checkout-box h2 {
+
+    margin-top:20px;
+    margin-bottom:15px;
+
+    color:#111827;
+}
+
+
+
+.checkout-box input,
+.checkout-box textarea {
+
+
+    width:100%;
+
+    padding:14px;
+
+    margin-bottom:15px;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+}
+
+
+
+.checkout-box textarea {
+
+    height:120px;
+
+    resize:none;
+
+}
+
+
+
+.checkout-box label {
+
+    display:block;
+
+    margin:12px 0;
+
+    font-size:17px;
+
+}
+
+
+
+.checkout-box button {
+
+
+    margin-top:25px;
+
+    width:100%;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:30px;
+
+    background:#e91e63;
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
+
+
+.checkout-box button:hover {
+
+    background:#c2185b;
+
+}
+
+
+
+/* Checkout logo */
+
+header {
+
+    padding:25px 8%;
+
+}
+
+
+.logo {
+
+    font-size:42px;
+
+    font-weight:800;
+
+    color:#0f172a;
+
+}
+
+
+.logo span {
+
+    display:block;
+
+    font-size:14px;
+
+    letter-spacing:8px;
+
+}
+
+
+
+/* Mobile */
+
+@media(max-width:700px){
+
+
+.checkout-page {
+
+padding:30px 20px;
+
+}
+
+
+.checkout-box {
+
+padding:25px;
+
+}
+
+
+.checkout-page h1 {
+
+font-size:32px;
+
+}
+
+
 }
 
