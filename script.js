@@ -90,6 +90,7 @@ card.innerHTML=`
 
 <img 
 class="product-img"
+style="width:120px;height:120px;object-fit:contain;display:block;margin:auto;"
 src="${product.image || 'barq-new.png'}"
 alt="${product.name || 'BARQ Product'}"
 >
