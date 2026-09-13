@@ -1975,3 +1975,25 @@ color:#e91e63;
     border-radius: 20px;
     font-size: 13px;
 }
+.cart-box {
+    padding: 25px;
+}
+
+.cart-box h2 {
+    font-size: 24px;
+}
+
+#cartItems div {
+    padding: 12px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+#cartItems button {
+    background: #ec1975;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 6px 15px;
+    cursor: pointer;
+}
