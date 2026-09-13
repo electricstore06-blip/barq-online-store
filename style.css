@@ -386,12 +386,9 @@ footer{
 
 /* MOBILE */
 
-@media(max-width:900px){
-
-header{
-    flex-direction:column;
-    gap:20px;
+ flex-direction:column;
 }
+
 
 
 .hero{
