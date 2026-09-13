@@ -686,5 +686,154 @@ nav{
 
 }
 
+/* ==========================
+   TRUST SECTION
+========================== */
+
+.trust{
+
+    width:90%;
+    max-width:1200px;
+
+    margin:40px auto;
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:20px;
 
 }
+
+
+.trust div{
+
+    background:#fff0f5;
+
+    padding:25px;
+
+    border-radius:20px;
+
+    text-align:center;
+
+    font-size:30px;
+
+}
+
+
+.trust h3{
+
+    font-size:18px;
+
+    margin-top:10px;
+
+}
+
+
+
+/* ==========================
+   SEARCH BAR
+========================== */
+
+
+.search-box{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin-bottom:35px;
+
+}
+
+
+
+#searchInput{
+
+    width:400px;
+
+    height:45px;
+
+    border-radius:30px;
+
+    border:1px solid #ddd;
+
+    padding:0 20px;
+
+    font-size:16px;
+
+    outline:none;
+
+}
+
+
+
+#searchInput:focus{
+
+    border-color:#e91e63;
+
+    box-shadow:0 0 10px #ffd0df;
+
+}
+
+
+
+/* ==========================
+   CART TRUST
+========================== */
+
+
+.checkout-trust{
+
+    margin-top:20px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+    font-size:14px;
+
+}
+
+
+
+/* ==========================
+   MOBILE
+========================== */
+
+
+@media(max-width:900px){
+
+
+.trust{
+
+    grid-template-columns:1fr 1fr;
+
+}
+
+
+#searchInput{
+
+    width:90%;
+
+}
+
+
+}
+
+
+
+@media(max-width:500px){
+
+
+.trust{
+
+    grid-template-columns:1fr;
+
+}
+
+
+}
+
