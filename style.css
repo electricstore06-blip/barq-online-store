@@ -1326,5 +1326,210 @@ grid-template-columns:1fr;
 
 }
 
+/* ==================================
+   BARQ CHECKOUT PROFESSIONAL DESIGN
+================================== */
+
+
+.checkout-container{
+
+    width:90%;
+    max-width:1100px;
+    margin:60px auto;
+
+    background:#fff0f5;
+
+    padding:50px;
+
+    border-radius:35px;
+
+    box-shadow:0 20px 50px rgba(0,0,0,.08);
+
+}
+
+
+
+.checkout-container h1{
+
+    font-size:45px;
+
+    color:#101828;
+
+    margin-bottom:30px;
+
+}
+
+
+
+.checkout-container h2{
+
+    font-size:28px;
+
+    margin:30px 0 20px;
+
+    color:#101828;
+
+}
+
+
+
+/* INPUTS */
+
+
+.checkout-container input,
+.checkout-container textarea{
+
+
+    width:100%;
+
+    padding:18px;
+
+    margin-bottom:18px;
+
+    border-radius:15px;
+
+    border:1px solid #ddd;
+
+    font-size:17px;
+
+    outline:none;
+
+}
+
+
+
+.checkout-container input:focus,
+.checkout-container textarea:focus{
+
+    border-color:#ec1b63;
+
+}
+
+
+
+/* PAYMENT BOX */
+
+
+.payment-method{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:25px;
+
+}
+
+
+
+.payment-method label{
+
+    display:block;
+
+    padding:15px;
+
+    background:#fff0f5;
+
+    border-radius:15px;
+
+    margin:10px 0;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+}
+
+
+
+.payment-method input{
+
+    width:auto;
+
+    margin-right:10px;
+
+}
+
+
+
+/* PLACE ORDER BUTTON */
+
+
+.checkout-container button{
+
+    width:100%;
+
+    margin-top:25px;
+
+    padding:18px;
+
+    border:none;
+
+    border-radius:20px;
+
+    background:#ec1b63;
+
+    color:white;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+
+
+.checkout-container button:hover{
+
+    background:#c91450;
+
+    transform:translateY(-3px);
+
+}
+
+
+
+/* FOOTER */
+
+
+footer{
+
+    margin-top:80px;
+
+    text-align:center;
+
+    padding:30px;
+
+    background:#101828;
+
+    color:white;
+
+}
+
+
+
+/* MOBILE */
+
+
+@media(max-width:700px){
+
+
+.checkout-container{
+
+    padding:25px;
+
+}
+
+
+.checkout-container h1{
+
+    font-size:32px;
+
+}
+
 
 }
