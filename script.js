@@ -177,18 +177,30 @@ container.appendChild(card);
 // ===============================
 
 
-
 function addToCart(name,price){
 
+
+let existing = cart.find(item => item.name === name);
+
+
+if(existing){
+
+existing.quantity++;
+
+}
+else{
 
 cart.push({
 
 name:name,
 
-price:Number(price)
+price:Number(price),
+
+quantity:1
 
 });
 
+}
 
 
 document.getElementById("cartCount").innerHTML=cart.length;
@@ -198,6 +210,8 @@ updateCart();
 
 
 }
+
+
 
 
 
