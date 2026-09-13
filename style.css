@@ -844,5 +844,118 @@ background:#c91450;
     margin-top:30px;
 
 }
+/* =====================================
+   BARQ HERO BANNER SIZE IMPROVEMENT
+===================================== */
+
+
+.hero{
+
+    width:90%;
+    min-height:520px;
+    padding:55px 70px;
+    margin:35px auto;
 
 }
+
+
+
+.hero h1{
+
+    font-size:65px;
+    line-height:1.05;
+
+}
+
+
+
+.hero h2{
+
+    font-size:32px;
+    margin-top:20px;
+
+}
+
+
+
+.hero p{
+
+    font-size:20px;
+    margin-top:20px;
+
+}
+
+
+
+.hero-box{
+
+    padding:35px;
+    width:380px;
+    border-radius:35px;
+
+}
+
+
+
+.hero-box h3{
+
+    font-size:25px;
+
+}
+
+
+
+.hero-box p{
+
+    font-size:18px;
+
+}
+
+
+
+/* Button improvement */
+
+.hero button{
+
+    padding:15px 40px;
+    font-size:18px;
+
+}
+
+
+
+/* Mobile banner */
+
+@media(max-width:900px){
+
+
+.hero{
+
+    min-height:auto;
+    padding:40px 25px;
+
+}
+
+
+.hero h1{
+
+    font-size:42px;
+
+}
+
+
+.hero h2{
+
+    font-size:25px;
+
+}
+
+
+.hero-box{
+
+    width:100%;
+    margin-top:30px;
+
+}
+
+
