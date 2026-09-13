@@ -156,10 +156,12 @@ HERO
 
 .hero h1{
 
-    font-size:80px;
-    line-height:1.1;
+font-size:65px;
+line-height:1.15;
 
 }
+
+
 
 
 
@@ -587,7 +589,34 @@ LOGIN
 }
 
 
+.login-box button,
+.cart-box button{
 
+background:#ed1b62;
+
+color:white;
+
+border:none;
+
+padding:12px 25px;
+
+border-radius:25px;
+
+font-size:16px;
+
+cursor:pointer;
+
+margin:5px;
+
+}
+
+
+.login-box button:hover,
+.cart-box button:hover{
+
+background:#c91450;
+
+}
 
 /* ===========================
 MOBILE
