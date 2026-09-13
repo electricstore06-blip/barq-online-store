@@ -244,11 +244,9 @@ document.getElementById("cartBox").style.display="none";
 function updateCart(){
 
 
-
 let items=document.getElementById("cartItems");
 
 let total=document.getElementById("cartTotal");
-
 
 
 items.innerHTML="";
@@ -257,12 +255,10 @@ items.innerHTML="";
 let sum=0;
 
 
-
 cart.forEach((item,index)=>{
 
 
 items.innerHTML += `
-
 
 <div class="cart-item">
 
@@ -271,43 +267,46 @@ items.innerHTML += `
 
 <br>
 
-
 ${item.price} ريال
-
 
 <br>
 
 
+<button onclick="decreaseQty(${index})">
+-
+</button>
+
+
+<span>
+${item.quantity}
+</span>
+
+
+<button onclick="increaseQty(${index})">
++
+</button>
+
+
 <button onclick="removeCart(${index})">
-
 X
-
 </button>
 
 
 </div>
 
-
-<hr>
-
-
 `;
 
 
-
-sum += item.price;
+sum += item.price * item.quantity;
 
 
 });
 
 
-
 total.innerHTML=sum;
 
 
-
 }
-
 
 
 
