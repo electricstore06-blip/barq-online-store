@@ -1945,3 +1945,11 @@ letter-spacing:1px;
 color:#e91e63;
 
 }
+.cart-count {
+    background: #ec1975;
+    color: white;
+    border-radius: 50%;
+    padding: 3px 8px;
+    font-size: 14px;
+    font-weight: bold;
+}
