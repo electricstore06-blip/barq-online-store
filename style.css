@@ -614,5 +614,201 @@ header{
 
 }
 
+/* ===============================
+   BARQ STORE IMPROVEMENTS
+================================ */
+
+
+/* FEATURE SECTION */
+
+.features{
+
+    width:90%;
+    max-width:1200px;
+    margin:50px auto;
+
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:25px;
 
 }
+
+
+.feature{
+
+    background:#fff0f5;
+    padding:25px;
+    border-radius:20px;
+    text-align:center;
+    font-weight:bold;
+
+    transition:.3s;
+
+}
+
+
+.feature:hover{
+
+    transform:translateY(-8px);
+    box-shadow:0 10px 25px #ddd;
+
+}
+
+
+.feature span{
+
+    display:block;
+    font-size:35px;
+    margin-bottom:10px;
+
+}
+
+
+
+/* CATEGORY IMPROVEMENT */
+
+
+.category{
+
+    cursor:pointer;
+    transition:.3s;
+
+}
+
+
+.category:hover{
+
+    transform:translateY(-8px);
+    box-shadow:0 10px 20px #eee;
+
+}
+
+
+
+
+/* PRODUCT IMPROVEMENT */
+
+
+.product{
+
+    transition:.3s;
+
+}
+
+
+.product:hover{
+
+    transform:translateY(-8px);
+    box-shadow:0 15px 30px #ddd;
+
+}
+
+
+
+.product img{
+
+    height:250px !important;
+
+}
+
+
+
+/* BUTTON EFFECT */
+
+
+.product-actions button,
+.hero button,
+nav button{
+
+    transition:.3s;
+
+}
+
+
+.product-actions button:hover,
+.hero button:hover,
+nav button:hover{
+
+    transform:scale(1.05);
+
+}
+
+
+
+/* CART DESIGN */
+
+
+.cart-box{
+
+    border-radius:25px 0 0 25px;
+
+}
+
+
+.cart-box h2{
+
+    color:#111827;
+    margin-bottom:20px;
+
+}
+
+
+.cart-box .checkout{
+
+    background:#111827;
+    color:white;
+    font-size:18px;
+
+}
+
+
+
+
+/* HEADER STICKY */
+
+
+header{
+
+    position:sticky;
+    top:0;
+    z-index:1000;
+
+}
+
+
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+
+.features{
+
+grid-template-columns:1fr 1fr;
+
+}
+
+
+
+}
+
+
+@media(max-width:600px){
+
+
+.features{
+
+grid-template-columns:1fr;
+
+}
+
+
+.product-container{
+
+grid-template-columns:1fr !important;
+
+}
+
+
+}
+
