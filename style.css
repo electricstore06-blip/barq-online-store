@@ -420,4 +420,199 @@ header{
 
 }
 
+/* =========================
+FEATURE BOXES IMPROVEMENT
+========================= */
+
+.features{
+
+    width:90%;
+    max-width:1200px;
+    margin:50px auto;
+
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:25px;
+
+}
+
+
+.feature{
+
+    background:#fff0f5;
+    padding:25px;
+    border-radius:20px;
+    text-align:center;
+    font-weight:bold;
+    font-size:18px;
+
+}
+
+
+.feature span{
+
+    display:block;
+    font-size:35px;
+    margin-bottom:15px;
+
+}
+
+
+
+/* =========================
+CATEGORY IMPROVEMENT
+========================= */
+
+
+.category-container{
+
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:25px;
+
+}
+
+
+.category{
+
+    height:130px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    transition:.3s;
+}
+
+
+.category:hover{
+
+    transform:translateY(-8px);
+    box-shadow:0 10px 25px #ddd;
+
+}
+
+
+
+/* =========================
+PRODUCT IMPROVEMENT
+========================= */
+
+
+.product-container{
+
+    display:grid !important;
+    grid-template-columns:repeat(3,1fr);
+    gap:35px;
+
+}
+
+
+
+.product{
+
+    overflow:hidden;
+    transition:.3s;
+
+}
+
+
+.product:hover{
+
+    transform:translateY(-8px);
+    box-shadow:0 15px 35px #ccc;
+
+}
+
+
+.product img{
+
+    height:280px;
+
+}
+
+
+
+.product-actions button:hover{
+
+    opacity:.85;
+
+}
+
+
+
+
+/* =========================
+CART IMPROVEMENT
+========================= */
+
+
+.cart-box{
+
+    border-radius:25px 0 0 25px;
+
+}
+
+
+.cart-box h2{
+
+    font-size:28px;
+    margin-bottom:20px;
+
+}
+
+
+.cart-box button{
+
+    font-size:16px;
+
+}
+
+
+
+/* =========================
+MOBILE
+========================= */
+
+
+@media(max-width:900px){
+
+
+.features{
+
+    grid-template-columns:1fr;
+
+}
+
+
+.category-container{
+
+    grid-template-columns:1fr;
+
+}
+
+
+.product-container{
+
+    grid-template-columns:1fr !important;
+
+}
+
+
+.hero{
+
+    flex-direction:column;
+
+}
+
+
+header{
+
+    flex-direction:column;
+    gap:20px;
+
+}
+
+
 }
