@@ -384,9 +384,11 @@ footer{
 
 
 
-/* MOBILE */
+@media(max-width:900px){
 
- flex-direction:column;
+header{
+    flex-direction:column;
+    gap:15px;
 }
 
 
