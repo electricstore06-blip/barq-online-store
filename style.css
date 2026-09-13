@@ -697,3 +697,17 @@ gap:25px !important;
 justify-content:center !important;
 
 }
+/* EMERGENCY IMAGE SIZE LOCK */
+
+body .product img,
+body .product-image,
+body .product-img,
+body .product-container img{
+
+    width:150px !important;
+    height:150px !important;
+    max-width:150px !important;
+    max-height:150px !important;
+    object-fit:contain !important;
+
+}
