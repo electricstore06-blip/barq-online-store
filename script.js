@@ -383,7 +383,9 @@ window.removeCart=removeCart;
 
 window.checkout=checkout;
 
+window.increaseQty=increaseQty;
 
+window.decreaseQty=decreaseQty;
 
 // START STORE
 
