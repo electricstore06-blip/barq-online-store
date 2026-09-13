@@ -160,22 +160,25 @@ font-weight:bold;
 
 }
 
-
-
-/* BUTTON */
+/* =========================
+   PRODUCT BUTTONS
+   KEEP PRODUCT SIZE SAME
+========================= */
 
 .product-actions{
 
-display:flex;
+display:grid;
+
+grid-template-columns:1fr 45px;
 
 gap:8px;
+
+margin-top:15px;
 
 }
 
 
 .product-actions button{
-
-flex:1;
 
 height:40px;
 
@@ -183,21 +186,82 @@ border:none;
 
 border-radius:20px;
 
-background:#e91e63;
+cursor:pointer;
+
+font-size:14px;
+
+transition:.3s;
+
+}
+
+
+/* VIEW DETAILS */
+
+.view-btn{
+
+background:#111827 !important;
 
 color:white;
 
-cursor:pointer;
+}
+
+
+/* HEART */
+
+.heart-btn{
+
+background:#fff0f5 !important;
+
+color:#e91e63;
+
+font-size:18px !important;
+
+}
+
+
+/* ADD TO CART */
+
+.add-btn{
+
+grid-column:1 / 3;
+
+background:#e91e63 !important;
+
+color:white;
+
+}
+
+
+/* HOVER */
+
+.view-btn:hover{
+
+background:#263247 !important;
+
+transform:translateY(-2px);
+
+}
+
+
+.heart-btn:hover{
+
+background:#ffe0eb !important;
+
+transform:scale(1.05);
+
+}
+
+
+.add-btn:hover{
+
+background:#c2185b !important;
+
+transform:translateY(-2px);
 
 }
 
 
 
-.product-actions button:hover{
-
-background:#c2185b;
-
-}
 
 
 
