@@ -1955,10 +1955,17 @@ color:#e91e63;
 }
 .checkout-trust {
     display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin: 20px 0;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 8px;
+    margin: 15px 0;
+    text-align: center;
+}
+
+.checkout-trust span {
+    background: #fff0f6;
+    padding: 8px;
+    border-radius: 12px;
+    font-size: 14px;
 }
 
 
