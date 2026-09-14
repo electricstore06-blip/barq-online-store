@@ -1,732 +1,552 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8">
 
-<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="description"
+        content="BARQ Online Store - Electronics, accessories and authentic products."
+    >
 
+    <title>BARQ Online Store</title>
 
-<title>
-BARQ Online Store | Premium Beauty Products
-</title>
+    <link rel="icon" href="barq-new.png">
 
-
-<meta name="description"
-content="BARQ Online Store - Authentic cosmetics, skincare and beauty products with fast delivery.">
-
-
-<link rel="icon" href="barq-new.png">
-
-
-<link rel="stylesheet" href="style.css">
-
-
+    <link rel="stylesheet" href="style.css">
 </head>
-
-
 
 <body>
 
+    <!-- =========================
+         TOP BAR
+    ========================== -->
 
+    <div class="top-bar">
+        🚚 Free Shipping
+        <span>|</span>
+        ❤️ Authentic Products
+        <span>|</span>
+        🔒 Secure Payment
+    </div>
 
-<!-- TOP BAR -->
 
+    <!-- =========================
+         HEADER
+    ========================== -->
 
-<div class="top-bar">
+    <header>
 
-🚚 Free Shipping | ❤️ Authentic Products | 🔒 Secure Payment
+        <div class="logo">
+            ⚡ BARQ
+            <span>ONLINE STORE</span>
+        </div>
 
-</div>
+        <nav>
 
+            <a href="#home">Home</a>
 
+            <a href="#categories">Categories</a>
 
+            <a href="#brands">Brands</a>
 
+            <a href="#products">Products</a>
 
+            <a href="#offers">Deals</a>
 
-<!-- HEADER -->
+            <button type="button" id="loginButton">
+                Login
+            </button>
 
+            <button type="button" id="cartButton">
+                🛒 Cart
+                <span id="cartCount">0</span>
+            </button>
 
-<header>
+        </nav>
 
+    </header>
 
-<div class="logo">
 
-⚡ BARQ
+    <!-- =========================
+         HERO
+    ========================== -->
 
-<span>
-ONLINE STORE
-</span>
+    <main>
 
-</div>
+        <section class="hero" id="home">
 
+            <div class="hero-text">
 
+                <h1>
+                    Shop Smart.
+                    <span>Shop BARQ.</span>
+                </h1>
 
+                <h2>
+                    Quality Electronics & Accessories
+                </h2>
 
+                <p>
+                    Discover authentic products, great prices,
+                    and a shopping experience made for you.
+                </p>
 
-<nav>
+                <button type="button" id="shopNowButton">
+                    Shop Now
+                </button>
 
+            </div>
 
-<a href="#">
-Home
-</a>
 
+            <div class="hero-box">
 
+                <div class="icons">
+                    ⚡ 📱 🎧 💻
+                </div>
 
-<a href="#products">
-Shop
-</a>
+                <h3>
+                    BARQ Online Store
+                </h3>
 
+                <p>
+                    Your trusted online electronics store.
+                </p>
 
+            </div>
 
-<a href="#brands">
-Brands
-</a>
+        </section>
 
 
+        <!-- =========================
+             TRUST FEATURES
+        ========================== -->
 
-<a href="#deals">
-Deals
-</a>
+        <section class="trust-section">
 
+            <div class="trust-box">
 
+                <div>🚚</div>
 
-<a href="checkout.html">
-🔒 Checkout
-</a>
+                <h3>
+                    Fast Delivery
+                </h3>
 
+                <p>
+                    Quick and reliable delivery.
+                </p>
 
+            </div>
 
 
+            <div class="trust-box">
 
-<a href="#" onclick="openCart()">
+                <div>❤️</div>
 
-🛒 Cart
+                <h3>
+                    Authentic Products
+                </h3>
 
-<span id="cartCount">
-0
-</span>
+                <p>
+                    Quality products you can trust.
+                </p>
 
+            </div>
 
-</a>
 
+            <div class="trust-box">
 
+                <div>🔒</div>
 
+                <h3>
+                    Secure Payment
+                </h3>
 
-<button id="loginButton" onclick="showLogin()">
+                <p>
+                    Safe and secure checkout.
+                </p>
 
-🔒 Login
+            </div>
 
-</button>
 
+            <div class="trust-box">
 
+                <div>⭐</div>
 
+                <h3>
+                    Great Service
+                </h3>
 
+                <p>
+                    Customer satisfaction comes first.
+                </p>
 
-<a id="adminLink"
-href="admin.html"
-style="display:none;">
+            </div>
 
-⚙ Admin
+        </section>
 
-</a>
 
+        <!-- =========================
+             CATEGORIES
+        ========================== -->
 
+        <section class="categories" id="categories">
 
+            <h2>
+                Shop by Category
+            </h2>
 
-</nav>
+            <div class="category-container">
 
+                <div class="category">
+                    <div class="category-icon">📱</div>
+                    <h3>Mobile</h3>
+                    <p>Phones & accessories</p>
+                </div>
 
-</header>
 
+                <div class="category">
+                    <div class="category-icon">💻</div>
+                    <h3>Laptops</h3>
+                    <p>Laptops & computers</p>
+                </div>
 
 
+                <div class="category">
+                    <div class="category-icon">🎧</div>
+                    <h3>Audio</h3>
+                    <p>Headphones & speakers</p>
+                </div>
 
 
+                <div class="category">
+                    <div class="category-icon">⌚</div>
+                    <h3>Smart Devices</h3>
+                    <p>Smart watches & devices</p>
+                </div>
 
 
+                <div class="category">
+                    <div class="category-icon">🔌</div>
+                    <h3>Accessories</h3>
+                    <p>Cables, chargers & more</p>
+                </div>
 
+            </div>
 
-<!-- HERO -->
+        </section>
 
 
-<section class="hero">
+        <!-- =========================
+             BRANDS
+        ========================== -->
 
+        <section class="brands" id="brands">
 
-<div class="hero-text">
+            <h2>
+                Popular Brands
+            </h2>
 
+            <div class="brand-list">
 
-<h1>
+                <div>Apple</div>
 
-Everything you need.
+                <div>Samsung</div>
 
-<br>
+                <div>Huawei</div>
 
-<span>
-All in one store.
-</span>
+                <div>Lenovo</div>
 
+                <div>JBL</div>
 
-</h1>
+                <div>Anker</div>
 
+            </div>
 
+        </section>
 
 
-<h2>
+        <!-- =========================
+             PRODUCTS
+        ========================== -->
 
-Premium Cosmetics & Best Deals
+        <section class="products" id="products">
 
-</h2>
+            <div class="products-header">
 
+                <div>
 
+                    <h2>
+                        Featured Products
+                    </h2>
 
-<p>
+                    <p>
+                        Explore our latest products.
+                    </p>
 
-Authentic beauty products |
-Fast shipping |
-Secure payment
+                </div>
 
-</p>
 
+                <div class="search-box">
 
+                    <input
+                        type="search"
+                        id="searchInput"
+                        placeholder="Search products..."
+                        aria-label="Search products"
+                    >
 
+                    <button
+                        type="button"
+                        id="searchButton"
+                    >
+                        🔍
+                    </button>
 
-<button onclick="document.querySelector('#products').scrollIntoView()">
+                </div>
 
-Shop Products
+            </div>
 
-</button>
 
+            <div
+                class="product-container"
+                id="productContainer"
+            >
 
+                <!-- Products are loaded by script.js -->
 
+            </div>
 
-</div>
+        </section>
 
 
+        <!-- =========================
+             DEALS
+        ========================== -->
 
+        <section class="offer" id="offers">
 
+            <h2>
+                🔥 BARQ Deals
+            </h2>
 
+            <p>
+                Discover special offers and selected products
+                at great prices.
+            </p>
 
-<div class="hero-box">
+            <button
+                type="button"
+                id="dealsButton"
+            >
+                View Deals
+            </button>
 
+        </section>
 
-<h3>
+    </main>
 
-BARQ BEAUTY
 
-</h3>
+    <!-- =========================
+         CART
+    ========================== -->
 
+    <aside
+        class="cart-box"
+        id="cartBox"
+        aria-label="Shopping cart"
+    >
 
+        <div class="cart-header">
 
-<p>
+            <h2>
+                Your Cart
+            </h2>
 
-Top cosmetics brands at the best prices
+            <button
+                type="button"
+                id="closeCartButton"
+                aria-label="Close cart"
+            >
+                ✕
+            </button>
 
-</p>
+        </div>
 
 
+        <div
+            class="cart-items"
+            id="cartItems"
+        >
 
-<div class="icons">
+            <p class="empty-cart">
+                Your cart is empty.
+            </p>
 
-💄 💋 🧴 ✨
+        </div>
 
-</div>
 
+        <div class="cart-footer">
 
+            <div class="cart-total">
 
-</div>
+                <span>
+                    Total
+                </span>
 
+                <strong id="cartTotal">
+                    SAR 0
+                </strong>
 
+            </div>
 
-</section>
 
+            <button
+                type="button"
+                id="checkoutButton"
+            >
+                Proceed to Checkout
+            </button>
 
+        </div>
 
+    </aside>
 
 
+    <!-- =========================
+         LOGIN
+    ========================== -->
 
+    <div
+        class="login-overlay"
+        id="loginOverlay"
+    >
 
+        <div
+            class="login-box"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="loginTitle"
+        >
 
-<!-- TRUST -->
+            <button
+                type="button"
+                class="close-login"
+                id="closeLoginButton"
+                aria-label="Close login"
+            >
+                ✕
+            </button>
 
 
-<section class="trust">
+            <h2 id="loginTitle">
+                Welcome to BARQ
+            </h2>
 
+            <p>
+                Login to your account
+            </p>
 
-<div>
-🚚
-<h3>
-Fast Delivery
-</h3>
-</div>
 
+            <form id="loginForm">
 
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="Email Address"
+                    autocomplete="email"
+                    required
+                >
 
-<div>
-🔒
-<h3>
-Secure Payment
-</h3>
-</div>
 
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Password"
+                    autocomplete="current-password"
+                    required
+                >
 
 
-<div>
-❤️
-<h3>
-Authentic Products
-</h3>
-</div>
+                <button
+                    type="submit"
+                >
+                    Login
+                </button>
 
+            </form>
 
 
-<div>
-↩
-<h3>
-Easy Returns
-</h3>
-</div>
+            <p
+                class="login-message"
+                id="loginMessage"
+            ></p>
 
+        </div>
 
-</section>
+    </div>
 
 
+    <!-- =========================
+         FOOTER
+    ========================== -->
 
+    <footer>
 
+        <div class="footer-content">
 
+            <div class="footer-brand">
 
+                <div class="logo">
+                    ⚡ BARQ
+                    <span>ONLINE STORE</span>
+                </div>
 
+                <p>
+                    Quality products. Trusted service.
+                </p>
 
-<!-- CATEGORIES -->
+            </div>
 
 
-<section class="categories">
+            <div class="footer-links">
 
+                <a href="#home">
+                    Home
+                </a>
 
-<h2>
-Shop By Category
-</h2>
+                <a href="#categories">
+                    Categories
+                </a>
 
+                <a href="#products">
+                    Products
+                </a>
 
+                <a href="#offers">
+                    Deals
+                </a>
 
+            </div>
 
-<div class="category-container">
+        </div>
 
 
+        <p class="copyright">
+            © 2026 BARQ Online Store. All rights reserved.
+        </p>
 
-<div class="category">
+    </footer>
 
-💄
 
-<h3>
-Makeup
-</h3>
+    <!-- =========================
+         SCRIPTS
+    ========================== -->
 
-</div>
+    <script type="module" src="script.js"></script>
 
-
-
-
-
-<div class="category">
-
-🧴
-
-<h3>
-Skincare
-</h3>
-
-</div>
-
-
-
-
-
-<div class="category">
-
-💋
-
-<h3>
-Lip Care
-</h3>
-
-</div>
-
-
-
-
-
-<div class="category">
-
-✨
-
-<h3>
-Beauty Tools
-</h3>
-
-</div>
-
-
-
-
-
-<div class="category">
-
-🌸
-
-<h3>
-Fragrance
-</h3>
-
-</div>
-
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-
-
-
-
-
-<!-- BRANDS -->
-
-
-<section class="brands" id="brands">
-
-
-<h2>
-
-Popular Brands
-
-</h2>
-
-
-
-<div class="brand-list">
-
-
-<div>
-Maybelline
-</div>
-
-
-<div>
-NYX
-</div>
-
-
-<div>
-CeraVe
-</div>
-
-
-<div>
-The Ordinary
-</div>
-
-
-<div>
-MAC
-</div>
-
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<!-- PRODUCTS -->
-
-
-<section class="products" id="products">
-
-<h2>Our Products</h2>
-
-
-<div class="search-box">
-
-<input 
-type="text" 
-id="searchInput"
-placeholder="Search products..."
->
-
-</div>
-
-
-
-<div class="product-container">
-
-</div>
-
-
-</section
-
-
-
-
-
-<!-- DEALS -->
-
-
-<section class="offer" id="deals">
-
-
-<h2>
-
-Special Offers
-
-</h2>
-
-
-
-<p>
-
-Up to 30% discount on selected cosmetics
-
-</p>
-
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<!-- CART -->
-
-
-<div id="cartBox" class="cart-box">
-
-
-
-<h2>
-
-Your Cart
-
-</h2>
-
-
-
-
-<div id="cartItems">
-
-</div>
-
-
-
-
-
-
-<h3>
-
-Total:
-
-<span id="cartTotal">
-
-0
-
-</span>
-
-ريال
-
-
-</h3>
-
-
-
-
-
-
-<button onclick="checkout()">
-
-Checkout
-
-</button>
-
-
-
-
-
-
-
-<div class="checkout-trust">
-
-
-<span>
-🔒 Secure Payment
-</span>
-
-
-<span>
-🚚 Fast Delivery
-</span>
-
-
-<span>
-↩ Easy Returns
-</span>
-
-
-<span>
-💬 WhatsApp Support
-</span>
-
-
-
-</div>
-
-
-
-
-
-
-<button onclick="closeCart()">
-
-Close
-
-</button>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<!-- LOGIN -->
-
-
-<div id="loginBox" class="login-box">
-
-
-
-<h2>
-
-BARQ Account
-
-</h2>
-
-
-
-
-<input 
-id="email"
-type="email"
-placeholder="Email"
->
-
-
-
-
-
-<input
-id="password"
-type="password"
-placeholder="Password"
->
-
-
-
-
-
-
-<button onclick="registerUser()">
-
-Register
-
-</button>
-
-
-
-
-
-<button onclick="loginUser()">
-
-Login
-
-</button>
-
-
-
-
-
-<button onclick="closeLogin()">
-
-Close
-
-</button>
-
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<footer>
-
-
-<p>
-
-© 2026 BARQ Online Store
-
-</p>
-
-
-</footer>
-
-
-
-
-
-
-
-
-
-<script type="module" src="script.js"></script>
-
-
-<script type="module" src="auth.js"></script>
-
-
-
+    <script type="module" src="auth.js"></script>
 
 </body>
-
-
 </html>
