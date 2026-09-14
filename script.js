@@ -136,7 +136,14 @@ function saveCart() {
    ========================================================= */
 
 function formatPrice(price) {
-    return `${price.toFixed(2)} SAR`;
+
+    const number = Number(price);
+
+    if (!Number.isFinite(number)) {
+        return "0.00 SAR";
+    }
+
+    return `${number.toFixed(2)} SAR`;
 }
 
 
