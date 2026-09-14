@@ -146,7 +146,7 @@ nav button{
 /* HERO IMAGE */
 
 .hero-box{
-    transform:scale(.75);
+    transform:scale(.55);
 }
 
 
@@ -219,7 +219,7 @@ nav button{
 /* PRODUCTS */
 
 .products{
-    padding:40px 10%;
+    padding:30px 10%;
 }
 
 
@@ -232,7 +232,7 @@ nav button{
 
 /* MOBILE */
 
-@media(max-width:900px){
+@media(max-width:800px){
 
 header{
     flex-direction:column;
