@@ -17,13 +17,11 @@ body{
 /* TOP BAR */
 
 .top-bar{
-
     background:#111827;
     color:white;
     text-align:center;
-    padding:10px;
-    font-size:18px;
-
+    padding:6px;
+    font-size:12px;
 }
 
 
@@ -42,18 +40,15 @@ header{
 /* LOGO */
 
 .logo{
-
-    font-size:32px;
+    font-size:22px;
     font-weight:bold;
+    line-height:1;
 }
 
-
 .logo span{
-
     display:block;
-    font-size:12px;
-    letter-spacing:3px;
-
+    font-size:8px;
+    letter-spacing:2px;
 }
 
 
