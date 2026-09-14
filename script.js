@@ -4,95 +4,80 @@ import {
 collection,
 getDocs
 }
-from
+from 
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-
-let productsData = [];
-
-let cart = JSON.parse(localStorage.getItem("barqCart")) || [];
+let cart=[];
 
 
 
-
-// =========================
-// LOAD PRODUCTS
-// =========================
-
+// ===============================
+// LOAD PRODUCTS FROM FIREBASE
+// ===============================
 
 async function loadProducts(){
 
-
 try{
-
 
 const snapshot = await getDocs(collection(db,"products"));
 
-
-productsData=[];
-
+let products=[];
 
 
 snapshot.forEach((doc)=>{
 
-
-productsData.push({
+products.push({
 
 id:doc.id,
-
 ...doc.data()
 
 });
 
-
 });
 
 
+console.log("Products:",products);
 
-displayProducts(productsData);
 
+displayProducts(products);
 
 
 }
 
 catch(error){
 
+console.log("Firebase Error:",error);
 
-console.log(error);
-
+}
 
 }
 
 
 
-}
 
-
-
-
-
-// =========================
+// ===============================
 // DISPLAY PRODUCTS
-// =========================
-
+// ===============================
 
 function displayProducts(products){
-
 
 let container=document.querySelector(".product-container");
 
 
-if(!container) return;
+if(!container){
 
+console.log("Products container missing");
+
+return;
+
+}
 
 
 container.innerHTML="";
 
 
-
 products.forEach(product=>{
-
 
 
 let card=document.createElement("div");
@@ -101,61 +86,43 @@ let card=document.createElement("div");
 card.className="product";
 
 
-
 card.innerHTML=`
 
-
 <img 
-class="product-img"
 src="${product.image || 'barq-new.png'}"
+alt="${product.name || 'BARQ Product'}"
 >
 
 
 <h3>
-
 ${product.name || "BARQ Product"}
-
 </h3>
 
 
-
 <p class="brand">
-
 ${product.brand || "BARQ"}
-
 </p>
-
-
 
 
 <div class="stars">
 
-⭐⭐⭐⭐⭐
+⭐⭐⭐⭐⭐ <span>(4.8)</span>
 
 </div>
 
 
-
-
 <p class="price">
-
 ${product.price || 0} ريال
-
 </p>
 
 
-
-
-
 <div class="product-actions">
-
 
 <button class="view-btn">
 
 View Details
 
 </button>
-
 
 
 <button class="add-btn">
@@ -165,54 +132,31 @@ Add To Cart
 </button>
 
 
-
 <button class="heart-btn">
 
 ❤️
 
 </button>
 
-
-
 </div>
-
-
 
 `;
 
 
 
-
-
-card.querySelector(".add-btn")
-.onclick=()=>{
+card.querySelector(".add-btn").onclick=function(){
 
 
 addToCart(
 
-product.name,
+product.name || "BARQ Product",
 
-product.price
+product.price || 0
 
 );
 
 
 };
-
-
-
-
-
-
-card.querySelector(".view-btn")
-.onclick=()=>{
-
-
-showDetails(product);
-
-
-};
-
 
 
 
@@ -223,173 +167,37 @@ container.appendChild(card);
 });
 
 
-
 }
 
 
 
 
-
-
-
-// =========================
-// SEARCH
-// =========================
-
-
-
-let search=document.getElementById("searchInput");
-
-
-
-if(search){
-
-
-search.addEventListener("input",()=>{
-
-
-let value=search.value.toLowerCase();
-
-
-
-let result=productsData.filter(product=>
-
-
-
-(product.name || "")
-.toLowerCase()
-.includes(value)
-
-
-
-);
-
-
-
-displayProducts(result);
-
-
-
-});
-
-
-}
-
-
-
-
-
-
-// =========================
-// PRODUCT DETAILS
-// =========================
-
-
-
-function showDetails(product){
-
-
-
-alert(
-
-`
-${product.name}
-
-Brand:
-${product.brand || "BARQ"}
-
-Price:
-${product.price} ريال
-
-
-${product.description || "Premium beauty product"}
-
-`
-
-);
-
-
-
-}
-
-
-
-
-
-
-// =========================
-// CART SYSTEM
-// =========================
-
-
-
-function saveCart(){
-
-
-localStorage.setItem(
-
-"barqCart",
-
-JSON.stringify(cart)
-
-);
-
-
-}
-
-
+// ===============================
+// CART FUNCTIONS
+// ===============================
 
 
 
 function addToCart(name,price){
 
 
-
-let item=cart.find(
-
-x=>x.name===name
-
-);
-
-
-
-if(item){
-
-
-item.quantity++;
-
-
-}
-
-else{
-
-
 cart.push({
 
 name:name,
 
-price:Number(price),
-
-quantity:1
-
+price:Number(price)
 
 });
 
 
-}
 
-
-
-saveCart();
+document.getElementById("cartCount").innerHTML=cart.length;
 
 
 updateCart();
 
 
 }
-
-
-
 
 
 
@@ -397,8 +205,7 @@ updateCart();
 function openCart(){
 
 
-document.getElementById("cartBox")
-.style.display="block";
+document.getElementById("cartBox").style.display="block";
 
 
 updateCart();
@@ -409,16 +216,13 @@ updateCart();
 
 
 
-
 function closeCart(){
 
 
-document.getElementById("cartBox")
-.style.display="none";
+document.getElementById("cartBox").style.display="none";
 
 
 }
-
 
 
 
@@ -431,12 +235,6 @@ let items=document.getElementById("cartItems");
 
 let total=document.getElementById("cartTotal");
 
-let count=document.getElementById("cartCount");
-
-
-
-if(!items)return;
-
 
 
 items.innerHTML="";
@@ -444,27 +242,18 @@ items.innerHTML="";
 
 let sum=0;
 
-let qty=0;
-
 
 
 cart.forEach((item,index)=>{
 
 
-qty += item.quantity;
-
-
-
-items.innerHTML +=`
+items.innerHTML += `
 
 
 <div class="cart-item">
 
 
-<b>
-${item.name}
-</b>
-
+<b>${item.name}</b>
 
 <br>
 
@@ -472,29 +261,7 @@ ${item.name}
 ${item.price} ريال
 
 
-
 <br>
-
-
-<button onclick="decreaseQty(${index})">
-
--
-
-</button>
-
-
-
-${item.quantity}
-
-
-
-<button onclick="increaseQty(${index})">
-
-+
-
-</button>
-
-
 
 
 <button onclick="removeCart(${index})">
@@ -504,81 +271,28 @@ X
 </button>
 
 
-
 </div>
+
+
+<hr>
 
 
 `;
 
 
 
-sum += item.price * item.quantity;
-
+sum += item.price;
 
 
 });
 
 
 
-
-
 total.innerHTML=sum;
 
 
-count.innerHTML=qty;
-
-
-
-saveCart();
-
-
 
 }
-
-
-
-
-
-
-function increaseQty(index){
-
-
-cart[index].quantity++;
-
-
-updateCart();
-
-
-}
-
-
-
-
-function decreaseQty(index){
-
-
-
-if(cart[index].quantity>1){
-
-
-cart[index].quantity--;
-
-}
-
-else{
-
-
-cart.splice(index,1);
-
-
-}
-
-
-updateCart();
-
-
-}
-
 
 
 
@@ -590,7 +304,13 @@ function removeCart(index){
 cart.splice(index,1);
 
 
+
+document.getElementById("cartCount").innerHTML=cart.length;
+
+
+
 updateCart();
+
 
 
 }
@@ -602,7 +322,7 @@ updateCart();
 function checkout(){
 
 
-window.location.href="checkout.html";
+alert("Thank you for shopping with BARQ");
 
 
 }
@@ -611,28 +331,21 @@ window.location.href="checkout.html";
 
 
 
+// MAKE BUTTONS WORK
 
 
-// GLOBAL BUTTONS
-
+window.addToCart=addToCart;
 
 window.openCart=openCart;
 
 window.closeCart=closeCart;
 
-window.addToCart=addToCart;
+window.removeCart=removeCart;
 
 window.checkout=checkout;
 
-window.increaseQty=increaseQty;
-
-window.decreaseQty=decreaseQty;
-
-window.removeCart=removeCart;
 
 
-
+// START STORE
 
 loadProducts();
-
-updateCart();
