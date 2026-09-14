@@ -971,3 +971,242 @@ header{
     transform:scale(1.05);
 
 }    
+/* =====================================
+   BARQ STORE SIZE REDUCTION FIX
+   KEEP DESIGN SAME - ONLY SCALE DOWN
+===================================== */
+
+
+/* HEADER SMALL */
+
+header{
+    padding:15px 5%;
+}
+
+
+.logo{
+    font-size:24px;
+}
+
+
+.logo span{
+    font-size:9px;
+}
+
+
+/* NAV SMALL */
+
+nav{
+    gap:12px;
+}
+
+
+nav a{
+    font-size:14px;
+}
+
+
+nav button{
+    padding:8px 15px;
+    font-size:14px;
+}
+
+
+/* HERO SMALL */
+
+.hero{
+
+    max-width:1000px;
+
+    margin:25px auto;
+
+    padding:35px 30px;
+
+    border-radius:20px;
+
+    gap:25px;
+
+}
+
+
+
+.hero-text h1{
+
+    font-size:38px;
+
+}
+
+
+
+.hero-text h2{
+
+    font-size:22px;
+
+    margin:15px 0;
+
+}
+
+
+
+.hero-text p{
+
+    font-size:15px;
+
+}
+
+
+
+.hero button{
+
+    padding:12px 25px;
+
+}
+
+
+
+/* HERO BOX SMALL */
+
+
+.hero-box{
+
+    padding:25px;
+
+    border-radius:18px;
+
+}
+
+
+
+.icons{
+
+    font-size:25px;
+
+}
+
+
+
+/* SECTION TITLES */
+
+.categories h2,
+.brands h2,
+.products h2,
+.offer h2{
+
+    font-size:28px;
+
+}
+
+
+
+/* PRODUCT AREA SMALL */
+
+
+.product-container{
+
+    grid-template-columns:repeat(3,300px) !important;
+
+    gap:20px;
+
+}
+
+
+
+.product{
+
+    width:300px !important;
+
+    padding:15px;
+
+    border-radius:15px;
+
+}
+
+
+
+.product img{
+
+    height:180px !important;
+
+}
+
+
+
+.product h3{
+
+    font-size:17px;
+
+}
+
+
+
+/* BUTTONS SMALL */
+
+
+.product-actions button{
+
+    padding:10px;
+
+    font-size:14px;
+
+}
+
+
+/* CATEGORY SMALL */
+
+
+.category{
+
+    padding:20px;
+
+}
+
+
+
+/* OFFER SMALL */
+
+
+.offer{
+
+    padding:30px;
+
+}
+
+
+/* MOBILE */
+
+
+@media(max-width:900px){
+
+
+.product-container{
+
+    grid-template-columns:1fr !important;
+
+}
+
+
+.product{
+
+    width:100% !important;
+
+}
+
+
+
+.hero{
+
+    flex-direction:column;
+
+}
+
+
+header{
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+
+}
