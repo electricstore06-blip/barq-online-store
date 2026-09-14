@@ -1,83 +1,45 @@
 let cart = [];
+let total = 0;
 
+function addToCart(name, price) {
 
-function addToCart(name,price){
+    cart.push({
+        name: name,
+        price: price
+    });
 
-cart.push({
-name:name,
-price:price
-});
+    total += price;
 
-updateCart();
-
-alert(name + " added to cart");
-
+    updateCart();
 }
 
 
+function updateCart() {
 
-function updateCart(){
+    let items = document.getElementById("cartItems");
+    let totalBox = document.getElementById("cartTotal");
 
-let items=document.getElementById("cartItems");
+    items.innerHTML = "";
 
-let total=document.getElementById("cartTotal");
+    cart.forEach(function(item){
 
+        let product = document.createElement("p");
 
-items.innerHTML="";
+        product.innerHTML = 
+        item.name + " - $" + item.price;
 
-let sum=0;
+        items.appendChild(product);
 
-
-cart.forEach((product,index)=>{
-
-
-items.innerHTML +=
-
-`
-<p>
-${product.name} 
-$${product.price}
-
-<button onclick="removeItem(${index})">
-❌
-</button>
-
-</p>
-`;
-
-sum += product.price;
+    });
 
 
-});
-
-
-total.innerHTML=sum.toFixed(2);
-
+    totalBox.innerHTML = total.toFixed(2);
 
 }
-
-
-
-function removeItem(index){
-
-cart.splice(index,1);
-
-updateCart();
-
-}
-
-
-
-function openCart(){
-
-document.getElementById("cartBox").style.display="block";
-
-}
-
 
 
 function closeCart(){
 
-document.getElementById("cartBox").style.display="none";
+    document.getElementById("cartBox").style.display = "none";
 
 }
