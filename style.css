@@ -36,22 +36,24 @@ header{
     background:white;
 }
 
-
-
-
-/* LOGO */
-
 .logo{
-    font-size:28px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:32px;
     font-weight:bold;
-    line-height:1;
 }
 
 .logo span{
     display:block;
     font-size:10px;
     letter-spacing:3px;
+    text-align:center;
 }
+
+
+
+
 
 
 /* NAV */
@@ -70,7 +72,6 @@ nav a{
     font-size:18px;
 }
 
-}
 /* FINAL LOGO SIZE FIX */
 
 .logo{
