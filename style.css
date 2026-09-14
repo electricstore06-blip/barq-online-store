@@ -1,1902 +1,576 @@
-/* =========================================================
-   BARQ ONLINE STORE - COMPACT DESIGN
-   ========================================================= */
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #ffffff;
-    color: #111827;
-    line-height: 1.5;
-}
-
-/* =========================================================
-   TOP BAR
-   ========================================================= */
-
-.top-bar {
-    background: #111827;
-    color: white;
-    text-align: center;
-    padding: 10px 15px;
-    font-size: 15px;
-    font-weight: 600;
-}
-
-.top-bar span {
-    margin: 0 8px;
-}
-
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-header {
-    width: 100%;
-    background: white;
-    border-bottom: 1px solid #eeeeee;
-    padding: 22px 5%;
-}
-
-/* =========================================================
-   LOGO
-   ========================================================= */
-
-.logo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 58px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    color: #111827;
-    line-height: 1;
-}
-
-.logo span {
-    display: block;
-    margin-top: 8px;
-
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: 6px;
-    color: #111827;
-}
-
-/* =========================================================
-   NAVIGATION
-   ========================================================= */
-
-nav {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-
-    gap: 12px;
-    margin-top: 25px;
-}
-
-nav a {
-    text-decoration: none;
-    color: #111827;
-
-    font-size: 17px;
-    font-weight: 600;
-
-    padding: 9px 12px;
-
-    transition: 0.2s;
-}
-
-nav a:hover {
-    color: #e91e63;
-}
-
-nav button {
-    border: none;
-    background: #e91e63;
-    color: white;
-
-    padding: 10px 20px;
-
-    border-radius: 10px;
-
-    font-size: 16px;
-    font-weight: 700;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-nav button:hover {
-    background: #c91552;
-}
-
-#cartCount {
-    display: inline-flex;
-
-    align-items: center;
-    justify-content: center;
-
-    min-width: 25px;
-    height: 25px;
-
-    margin-left: 5px;
-
-    background: white;
-    color: #e91e63;
-
-    border-radius: 50%;
-
-    font-size: 14px;
-    font-weight: 700;
-}
-
-/* =========================================================
-   MAIN
-   ========================================================= */
-
-main {
-    width: 100%;
-}
-
-/* =========================================================
-   HERO
-   ========================================================= */
-
-.hero {
-    max-width: 1100px;
-
-    margin: 35px auto;
-
-    padding: 45px 30px;
-
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-
-    gap: 35px;
-
-    align-items: center;
-}
-
-.hero-text h1 {
-    font-size: 42px;
-    line-height: 1.15;
-    margin-bottom: 15px;
-}
-
-.hero-text h1 span {
-    display: block;
-    color: #e91e63;
-}
-
-.hero-text h2 {
-    font-size: 22px;
-    margin-bottom: 12px;
-}
-
-.hero-text p {
-    font-size: 16px;
-    color: #555;
-    margin-bottom: 22px;
-}
-
-.hero-text button {
-    border: none;
-    background: #e91e63;
-    color: white;
-
-    padding: 12px 25px;
-
-    border-radius: 10px;
-
-    font-size: 16px;
-    font-weight: 700;
-
-    cursor: pointer;
-}
-
-.hero-box {
-    background: #fff1f6;
-
-    border-radius: 20px;
-
-    padding: 45px 25px;
-
-    text-align: center;
-}
-
-.hero-box .icons {
-    font-size: 42px;
-    margin-bottom: 15px;
-}
-
-.hero-box h3 {
-    font-size: 24px;
-    margin-bottom: 8px;
-}
-
-.hero-box p {
-    color: #666;
-}
-
-/* =========================================================
-   TRUST
-   ========================================================= */
-
-.trust-section {
-    max-width: 1100px;
-
-    margin: 20px auto 45px;
-
-    padding: 0 20px;
-
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-
-    gap: 15px;
-}
-
-.trust-box {
-    text-align: center;
-
-    padding: 22px 15px;
-
-    background: #fafafa;
-
-    border-radius: 12px;
-}
-
-.trust-box > div {
-    font-size: 30px;
-    margin-bottom: 8px;
-}
-
-.trust-box h3 {
-    font-size: 17px;
-    margin-bottom: 5px;
-}
-
-.trust-box p {
-    font-size: 13px;
-    color: #666;
-}
-
-/* =========================================================
-   CATEGORIES
-   ========================================================= */
-
-.categories {
-    max-width: 1100px;
-
-    margin: 0 auto;
-
-    padding: 45px 20px;
-}
-
-.categories h2,
-.brands h2,
-.products h2,
-.offer h2 {
-    text-align: center;
-
-    font-size: 30px;
-
-    margin-bottom: 25px;
-}
-
-.category-container {
-    display: grid;
-
-    grid-template-columns: repeat(5, 1fr);
-
-    gap: 15px;
-}
-
-.category {
-    background: white;
-
-    border: 1px solid #eeeeee;
-
-    border-radius: 12px;
-
-    padding: 22px 10px;
-
-    text-align: center;
-
-    transition: 0.2s;
-}
-
-.category:hover {
-    transform: translateY(-3px);
-
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-}
-
-.category-icon {
-    font-size: 32px;
-    margin-bottom: 8px;
-}
-
-.category h3 {
-    font-size: 16px;
-}
-
-.category p {
-    color: #777;
-    font-size: 12px;
-    margin-top: 4px;
-}
-
-/* =========================================================
-   BRANDS
-   ========================================================= */
-
-.brands {
-    background: #f8f8f8;
-
-    padding: 45px 20px;
-}
-
-.brand-list {
-    max-width: 1000px;
-
-    margin: auto;
-
-    display: grid;
-
-    grid-template-columns: repeat(6, 1fr);
-
-    gap: 12px;
-}
-
-.brand-list div {
-    background: white;
-
-    border-radius: 10px;
-
-    padding: 15px 8px;
-
-    text-align: center;
-
-    font-size: 15px;
-    font-weight: 700;
-}
-
-/* =========================================================
-   PRODUCTS
-   ========================================================= */
-
-.products {
-    max-width: 1100px;
-
-    margin: auto;
-
-    padding: 50px 20px;
-}
-
-.products-header {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 20px;
-
-    margin-bottom: 25px;
-}
-
-.products-header h2 {
-    text-align: left;
-    margin-bottom: 5px;
-}
-
-.products-header p {
-    color: #777;
-    font-size: 14px;
-}
-
-.search-box {
-    display: flex;
-
-    gap: 6px;
-}
-
-.search-box input {
-    width: 230px;
-
-    padding: 10px 12px;
-
-    border: 1px solid #ddd;
-
-    border-radius: 8px;
-
-    font-size: 14px;
-}
-
-.search-box button {
-    border: none;
-
-    background: #e91e63;
+/* ===============================
+   BARQ ONLINE STORE
+   CLEAN RESPONSIVE SIZE
+================================ */
 
-    color: white;
 
-    padding: 0 14px;
-
-    border-radius: 8px;
-
-    cursor: pointer;
-}
-
-/* =========================================================
-   PRODUCT GRID
-   ========================================================= */
-
-.product-container {
-    display: grid;
-
-    grid-template-columns: repeat(4, 1fr);
-
-    gap: 18px;
-}
-
-.product-card {
-    background: white;
-
-    border: 1px solid #eeeeee;
-
-    border-radius: 12px;
-
-    overflow: hidden;
-
-    transition: 0.2s;
-}
-
-.product-card:hover {
-    transform: translateY(-3px);
-
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-}
-
-.product-image-wrap {
-    position: relative;
-
-    background: #f7f7f7;
-}
-
-.product-image-wrap img {
-    display: block;
-
-    width: 100%;
-
-    aspect-ratio: 1 / 1;
-
-    object-fit: cover;
-}
-
-.favorite-button {
-    position: absolute;
-
-    top: 8px;
-    right: 8px;
-
-    width: 32px;
-    height: 32px;
-
-    border: none;
-
-    background: white;
-
-    border-radius: 50%;
-
-    font-size: 18px;
-
-    cursor: pointer;
-}
-
-.product-info {
-    padding: 15px;
-}
-
-.product-category {
-    font-size: 11px;
-
-    color: #e91e63;
-
-    font-weight: 700;
-
-    text-transform: uppercase;
-}
-
-.product-info h3 {
-    font-size: 17px;
-
-    margin: 5px 0;
-}
-
-.product-description {
-    font-size: 12px;
-
-    color: #777;
-
-    min-height: 38px;
-
-    margin-bottom: 10px;
-}
-
-.product-price {
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-    margin-bottom: 12px;
-}
-
-.product-price strong {
-    color: #e91e63;
-
-    font-size: 17px;
-}
-
-.product-price span {
-    color: #999;
-
-    font-size: 12px;
-
-    text-decoration: line-through;
-}
-
-.product-actions {
-    display: flex;
-
-    gap: 7px;
-}
-
-.product-actions button {
-    flex: 1;
-
-    padding: 8px 5px;
-
-    border-radius: 7px;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    cursor: pointer;
-}
-
-.view-button {
-    background: white;
-
-    border: 1px solid #ddd;
-
-    color: #333;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-.add-cart-button {
-    background: #e91e63;
 
-    border: 1px solid #e91e63;
-
-    color: white;
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    color:#111827;
+    background:white;
 }
-
-/* =========================================================
-   DEALS
-   ========================================================= */
-
-.offer {
-    max-width: 1100px;
 
-    margin: 30px auto 50px;
 
-    padding: 45px 20px;
-
-    background: #fff1f6;
-
-    border-radius: 20px;
-
-    text-align: center;
+img{
+    max-width:100%;
 }
 
-.offer h2 {
-    margin-bottom: 10px;
-}
 
-.offer p {
-    color: #666;
 
-    font-size: 15px;
-
-    margin-bottom: 18px;
-}
+/* TOP BAR */
 
-.offer button {
-    border: none;
+.top-bar{
 
-    background: #e91e63;
+    background:#111827;
+    color:white;
 
-    color: white;
+    height:35px;
 
-    padding: 10px 22px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 
-    border-radius: 9px;
+    gap:15px;
 
-    font-weight: 700;
+    font-size:14px;
 
-    cursor: pointer;
 }
 
-/* =========================================================
-   CART
-   ========================================================= */
 
-.cart-box {
-    position: fixed;
 
-    top: 0;
-    right: -400px;
+/* HEADER */
 
-    width: 360px;
-    max-width: 90%;
+header{
 
-    height: 100vh;
+    max-width:1200px;
 
-    background: white;
+    margin:auto;
 
-    box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+    height:80px;
 
-    z-index: 1000;
+    display:flex;
 
-    transition: right 0.3s ease;
+    align-items:center;
 
-    display: flex;
+    justify-content:space-between;
 
-    flex-direction: column;
-}
-
-.cart-box.active {
-    right: 0;
-}
-
-.cart-header {
-    display: flex;
-
-    align-items: center;
+    padding:0 25px;
 
-    justify-content: space-between;
-
-    padding: 18px;
-
-    border-bottom: 1px solid #eee;
 }
-
-.cart-header h2 {
-    font-size: 20px;
-}
-
-.cart-header button {
-    border: none;
 
-    background: none;
 
-    font-size: 20px;
 
-    cursor: pointer;
-}
-
-.cart-items {
-    flex: 1;
+.logo{
 
-    overflow-y: auto;
+    font-size:28px;
 
-    padding: 15px;
-}
+    font-weight:800;
 
-.cart-item {
-    display: flex;
+    color:#111827;
 
-    gap: 10px;
+    line-height:1;
 
-    padding: 12px 0;
-
-    border-bottom: 1px solid #eee;
 }
-
-.cart-item img {
-    width: 65px;
 
-    height: 65px;
 
-    object-fit: cover;
+.logo span{
 
-    border-radius: 8px;
-}
+    display:block;
 
-.cart-item-info {
-    flex: 1;
-}
+    font-size:10px;
 
-.cart-item-info h4 {
-    font-size: 14px;
-}
+    letter-spacing:6px;
 
-.cart-item-info strong {
-    font-size: 13px;
+    margin-top:5px;
 
-    color: #e91e63;
 }
 
-.quantity-controls {
-    display: flex;
 
-    align-items: center;
 
-    gap: 8px;
 
-    margin-top: 7px;
-}
+nav{
 
-.quantity-button {
-    width: 25px;
-    height: 25px;
+    display:flex;
 
-    border: 1px solid #ddd;
+    align-items:center;
 
-    background: white;
+    gap:28px;
 
-    border-radius: 5px;
-
-    cursor: pointer;
 }
-
-.remove-cart-button {
-    border: none;
 
-    background: none;
 
-    color: #e91e63;
+nav a{
 
-    font-size: 11px;
+    text-decoration:none;
 
-    cursor: pointer;
+    color:#111827;
 
-    margin-top: 5px;
-}
+    font-size:15px;
 
-.cart-footer {
-    padding: 18px;
+    font-weight:600;
 
-    border-top: 1px solid #eee;
 }
 
-.cart-total {
-    display: flex;
 
-    justify-content: space-between;
 
-    margin-bottom: 12px;
+nav button{
 
-    font-size: 16px;
-}
+    border:none;
 
-#checkoutButton {
-    width: 100%;
+    background:#ec1761;
 
-    border: none;
+    color:white;
 
-    background: #e91e63;
+    padding:12px 25px;
 
-    color: white;
+    border-radius:25px;
 
-    padding: 12px;
+    font-size:15px;
 
-    border-radius: 8px;
+    font-weight:bold;
 
-    font-weight: 700;
+    cursor:pointer;
 
-    cursor: pointer;
 }
 
-/* =========================================================
-   LOGIN
-   ========================================================= */
 
-.login-overlay {
-    position: fixed;
 
-    inset: 0;
+#cartButton{
 
-    background: rgba(0,0,0,0.45);
+    display:flex;
 
-    display: none;
+    gap:10px;
 
-    align-items: center;
+    align-items:center;
 
-    justify-content: center;
-
-    z-index: 2000;
 }
 
-.login-overlay.active {
-    display: flex;
-}
 
-.login-box {
-    position: relative;
 
-    width: 360px;
-    max-width: 90%;
+#cartCount{
 
-    background: white;
+    background:white;
 
-    padding: 30px;
+    color:#ec1761;
 
-    border-radius: 15px;
+    border-radius:50%;
 
-    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    padding:5px 9px;
 
-    text-align: center;
 }
-
-.close-login {
-    position: absolute;
 
-    top: 10px;
-    right: 12px;
 
-    border: none;
 
-    background: none;
-
-    font-size: 18px;
-
-    cursor: pointer;
-}
-
-.login-box h2 {
-    margin-bottom: 5px;
-}
+/* HERO */
 
-.login-box > p {
-    color: #777;
+.hero{
 
-    font-size: 14px;
+    max-width:1200px;
 
-    margin-bottom: 18px;
-}
+    margin:auto;
 
-.login-box form {
-    display: flex;
+    min-height:360px;
 
-    flex-direction: column;
+    display:flex;
 
-    gap: 10px;
-}
+    align-items:center;
 
-.login-box input {
-    padding: 11px;
+    justify-content:space-between;
 
-    border: 1px solid #ddd;
+    padding:40px 25px;
 
-    border-radius: 7px;
 }
-
-.login-box form button {
-    padding: 11px;
-
-    border: none;
-
-    background: #e91e63;
 
-    color: white;
 
-    border-radius: 7px;
 
-    font-weight: 700;
+.hero-text{
 
-    cursor: pointer;
-}
+    width:50%;
 
-.login-message {
-    margin-top: 10px;
 }
 
-/* =========================================================
-   FOOTER
-   ========================================================= */
 
-footer {
-    background: #111827;
+.hero-text h1{
 
-    color: white;
+    font-size:48px;
 
-    padding: 30px 20px;
+    line-height:1.05;
 
-    margin-top: 30px;
 }
-
-.footer-content {
-    max-width: 1100px;
-
-    margin: auto;
 
-    display: flex;
 
-    justify-content: space-between;
-
-    align-items: center;
-
-    gap: 30px;
-}
 
-.footer-brand .logo {
-    align-items: flex-start;
+.hero-text h1 span{
 
-    color: white;
+    color:#ec1761;
 
-    font-size: 25px;
 }
 
-.footer-brand .logo span {
-    color: white;
 
-    font-size: 10px;
 
-    letter-spacing: 3px;
-}
-
-.footer-brand p {
-    margin-top: 8px;
+.hero-text h2{
 
-    color: #ccc;
+    font-size:25px;
 
-    font-size: 13px;
-}
+    margin:20px 0;
 
-.footer-links {
-    display: flex;
-
-    gap: 18px;
 }
-
-.footer-links a {
-    color: white;
 
-    text-decoration: none;
 
-    font-size: 13px;
-}
 
-.copyright {
-    text-align: center;
+.hero-text p{
 
-    margin-top: 25px;
+    font-size:17px;
 
-    padding-top: 15px;
+    color:#64748b;
 
-    border-top: 1px solid rgba(255,255,255,0.15);
+    line-height:1.6;
 
-    color: #ccc;
+    max-width:450px;
 
-    font-size: 12px;
 }
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
 
-@media (max-width: 900px) {
 
-    .logo {
-        font-size: 48px;
-    }
 
-    nav {
-        gap: 5px;
-    }
+#shopNowButton{
 
-    nav a {
-        font-size: 15px;
-    }
+    margin-top:25px;
 
-    .hero {
-        grid-template-columns: 1fr;
-    }
+    background:#ec1761;
 
-    .trust-section {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    color:white;
 
-    .category-container {
-        grid-template-columns: repeat(3, 1fr);
-    }
+    border:none;
 
-    .brand-list {
-        grid-template-columns: repeat(3, 1fr);
-    }
+    padding:12px 35px;
 
-    .product-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
+    border-radius:25px;
 
-@media (max-width: 600px) {
-
-    .top-bar {
-        font-size: 12px;
-    }
-
-    header {
-        padding: 18px 12px;
-    }
-
-    .logo {
-        font-size: 38px;
-    }
-
-    .logo span {
-        font-size: 11px;
-        letter-spacing: 4px;
-    }
-
-    nav {
-        margin-top: 18px;
-    }
-
-    nav a {
-        font-size: 13px;
-        padding: 6px;
-    }
-
-    nav button {
-        padding: 8px 12px;
-        font-size: 13px;
-    }
-
-    .hero {
-        margin: 20px auto;
-        padding: 30px 18px;
-    }
-
-    .hero-text h1 {
-        font-size: 32px;
-    }
-
-    .trust-section {
-        grid-template-columns: 1fr 1fr;
-        padding: 0 12px;
-    }
-
-    .category-container {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .brand-list {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .products-header {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .products-header h2 {
-        text-align: center;
-    }
-
-    .search-box input {
-        width: 100%;
-    }
-
-    .product-container {
-        grid-template-columns: 1fr;
-    }
-
-    .footer-content {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .footer-brand .logo {
-        align-items: center;
-    }
-
-    .footer-links {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-/* =========================================
-   BARQ - EXTRA COMPACT INTERFACE
-   ========================================= */
-
-/* TRUST SECTION */
-.trust-section {
-    max-width: 900px;
-    margin: 15px auto 30px;
-    padding: 0 15px;
-    gap: 12px;
-}
+    font-weight:bold;
 
-.trust-box {
-    padding: 16px 10px;
-    border-radius: 14px;
 }
 
-.trust-box > div {
-    font-size: 22px !important;
-    margin-bottom: 5px;
-}
 
-.trust-box h3 {
-    font-size: 15px;
-    margin-bottom: 3px;
-}
 
-.trust-box p {
-    font-size: 11px;
-}
 
+.hero-box{
 
-/* CATEGORY SECTION */
-.categories {
-    max-width: 950px;
-    padding: 30px 15px;
-}
+    width:45%;
 
-.categories h2,
-.brands h2,
-.products h2,
-.offer h2 {
-    font-size: 24px;
-    margin-bottom: 18px;
-}
+    text-align:center;
 
-.category-container {
-    gap: 10px;
 }
 
-.category {
-    padding: 14px 8px;
-    border-radius: 12px;
-}
 
-/* SMALL CATEGORY ICONS */
-.category-icon {
-    font-size: 22px !important;
-    margin-bottom: 5px;
-}
 
-.category-icon img {
-    width: 35px !important;
-    height: 35px !important;
-    object-fit: contain;
-}
+.hero-box .icons{
 
-.category h3 {
-    font-size: 14px;
-}
+    font-size:80px;
 
-.category p {
-    font-size: 10px;
-    margin-top: 2px;
 }
 
 
-/* BRAND SECTION */
-.brands {
-    padding: 30px 15px;
-}
 
-.brand-list {
-    max-width: 900px;
-    gap: 8px;
-}
+/* TRUST */
 
-.brand-list div {
-    padding: 10px 6px;
-    font-size: 13px;
-}
 
+.trust-section{
 
-/* PRODUCT SECTION */
-.products {
-    max-width: 950px;
-    padding: 35px 15px;
-}
+    max-width:1200px;
 
-.product-container {
-    gap: 12px;
-}
+    margin:auto;
 
-.product-info {
-    padding: 11px;
-}
+    display:grid;
 
-.product-image-wrap img {
-    aspect-ratio: 1 / 1;
-    max-height: 180px;
-    object-fit: contain;
-}
+    grid-template-columns:repeat(4,1fr);
 
-.product-info h3 {
-    font-size: 15px;
-}
+    gap:20px;
 
-.product-description {
-    font-size: 11px;
-    min-height: 32px;
-}
+    padding:30px 25px;
 
-.product-price strong {
-    font-size: 15px;
 }
 
-.product-actions button {
-    padding: 7px 4px;
-    font-size: 11px;
-}
 
+.trust-box{
 
-/* =========================================
-   EXTRA SMALL SCREENS
-   ========================================= */
+    text-align:center;
 
-@media (max-width: 900px) {
+    padding:25px;
 
-    .trust-section {
-        max-width: 800px;
-    }
+    border-radius:20px;
 
-    .category-container {
-        gap: 8px;
-    }
+    background:#fff;
 
-    .category-icon {
-        font-size: 20px !important;
-    }
+    box-shadow:0 5px 20px #00000010;
 
-    .category-icon img {
-        width: 30px !important;
-        height: 30px !important;
-    }
 }
 
 
-@media (max-width: 600px) {
-
-    .trust-box {
-        padding: 12px 7px;
-    }
-
-    .trust-box > div {
-        font-size: 19px !important;
-    }
-
-    .trust-box h3 {
-        font-size: 13px;
-    }
-
-    .trust-box p {
-        font-size: 10px;
-    }
-
-    .category {
-        padding: 11px 6px;
-    }
-
-    .category-icon {
-        font-size: 18px !important;
-    }
-
-    .category-icon img {
-        width: 27px !important;
-        height: 27px !important;
-    }
-
-    .category h3 {
-        font-size: 13px;
-    }
-
-    .category p {
-        font-size: 9px;
-    }
-/* =========================================
-   BARQ - MAKE CARDS / IMAGES MUCH SMALLER
-   ========================================= */
-
-/* TRUST CARDS */
-.trust-section {
-    max-width: 850px !important;
-    margin: 20px auto 30px !important;
-    padding: 0 12px !important;
-    gap: 10px !important;
-}
+.trust-box div{
 
-.trust-box {
-    padding: 18px 10px !important;
-    min-height: 150px !important;
-    border-radius: 18px !important;
-}
+    font-size:35px;
 
-/* ALL POSSIBLE TRUST ICON TYPES */
-.trust-box > div,
-.trust-box .trust-icon,
-.trust-box .icon,
-.trust-box img,
-.trust-box svg {
-    width: auto !important;
-    height: auto !important;
-    max-width: 45px !important;
-    max-height: 45px !important;
-    font-size: 32px !important;
-    margin: 0 auto 8px !important;
 }
 
-/* TRUST TITLES */
-.trust-box h3 {
-    font-size: 20px !important;
-    line-height: 1.2 !important;
-    margin: 5px 0 !important;
-}
 
-/* TRUST DESCRIPTION */
-.trust-box p {
-    font-size: 13px !important;
-    line-height: 1.3 !important;
-    margin: 0 !important;
-}
+.trust-box h3{
 
+    font-size:18px;
 
-/* =========================================
-   CATEGORY CARDS
-   ========================================= */
+    margin:10px;
 
-.categories {
-    max-width: 850px !important;
-    padding: 30px 12px !important;
 }
 
-.category-container {
-    gap: 10px !important;
-}
 
-.category {
-    padding: 15px 8px !important;
-    min-height: 120px !important;
-    border-radius: 14px !important;
-}
+.trust-box p{
 
-/* CATEGORY ICONS / IMAGES */
-.category-icon,
-.category-icon img,
-.category-icon svg {
-    font-size: 26px !important;
-    width: 38px !important;
-    height: 38px !important;
-    max-width: 38px !important;
-    max-height: 38px !important;
-    object-fit: contain !important;
-    margin: 0 auto 6px !important;
-}
+    color:#64748b;
 
-/* CATEGORY TITLE */
-.category h3 {
-    font-size: 16px !important;
-    line-height: 1.2 !important;
-    margin: 3px 0 !important;
-}
+    font-size:14px;
 
-/* CATEGORY DESCRIPTION */
-.category p {
-    font-size: 11px !important;
-    line-height: 1.2 !important;
-    margin-top: 3px !important;
 }
 
 
-/* =========================================
-   OFFER CARDS
-   ========================================= */
 
-.offer {
-    max-width: 850px !important;
-    margin: 25px auto 35px !important;
-    padding: 30px 15px !important;
-}
-
-
-/* =========================================
-   MOBILE
-   ========================================= */
-
-@media (max-width: 600px) {
-
-    .trust-section {
-        max-width: 500px !important;
-        gap: 8px !important;
-    }
-
-    .trust-box {
-        min-height: 125px !important;
-        padding: 12px 6px !important;
-    }
-
-    .trust-box > div,
-    .trust-box .trust-icon,
-    .trust-box .icon,
-    .trust-box img,
-    .trust-box svg {
-        max-width: 32px !important;
-        max-height: 32px !important;
-        font-size: 24px !important;
-    }
-
-    .trust-box h3 {
-        font-size: 15px !important;
-    }
-
-    .trust-box p {
-        font-size: 10px !important;
-    }
-
-    .category {
-        min-height: 105px !important;
-        padding: 10px 5px !important;
-    }
-
-    .category-icon,
-    .category-icon img,
-    .category-icon svg {
-        width: 30px !important;
-        height: 30px !important;
-        max-width: 30px !important;
-        max-height: 30px !important;
-        font-size: 20px !important;
-    }
-
-    .category h3 {
-        font-size: 13px !important;
-    }
-
-    .category p {
-        font-size: 9px !important;
-    }
-}
-/* =========================================================
-   BARQ STORE — COMPACT SIZE
-   Match the compact desktop design
-   ========================================================= */
-
-/* ---------- GLOBAL ---------- */
-
-* {
-    box-sizing: border-box;
-}
+/* CATEGORIES */
 
-body {
-    margin: 0;
-    font-size: 14px;
-}
 
-/* Keep main content compact */
-.hero,
-.trust-section,
 .categories,
 .brands,
 .products,
-.deals {
-    max-width: 900px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+.offer{
+
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:40px 25px;
+
 }
 
 
-/* =========================================================
-   TOP BAR
-   ========================================================= */
 
-.top-bar {
-    height: 30px !important;
-    padding: 0 15px !important;
-    font-size: 11px !important;
-}
+.categories h2,
+.brands h2,
+.products h2,
+.offer h2{
 
-.top-bar span {
-    font-size: 11px !important;
-}
+    font-size:28px;
 
+    margin-bottom:25px;
 
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-header {
-    height: 62px !important;
-    padding: 8px 20px !important;
-}
-
-.logo {
-    width: 100px !important;
-    height: auto !important;
-}
-
-nav {
-    gap: 25px !important;
-}
-
-nav a {
-    font-size: 12px !important;
-}
-
-#loginButton,
-#cartButton {
-    padding: 7px 14px !important;
-    font-size: 12px !important;
 }
 
 
-/* =========================================================
-   HERO
-   ========================================================= */
 
-.hero {
-    min-height: 300px !important;
-    padding: 35px 0 !important;
-}
+.category-container{
 
-.hero-content {
-    max-width: 900px !important;
-    margin: auto !important;
-}
+    display:grid;
 
-.hero h1 {
-    font-size: 38px !important;
-    line-height: 1.05 !important;
-    margin-bottom: 12px !important;
-}
+    grid-template-columns:repeat(5,1fr);
 
-.hero p {
-    font-size: 14px !important;
-    line-height: 1.5 !important;
-    max-width: 400px !important;
-}
+    gap:15px;
 
-.hero button,
-.shop-now,
-#shopNowButton {
-    padding: 10px 20px !important;
-    font-size: 13px !important;
 }
 
 
-/* =========================================================
-   TRUST SECTION
-   ========================================================= */
 
-.trust-section {
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 0 !important;
+.category{
 
-    padding: 18px 0 !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
+    background:#fff1f5;
 
-    max-width: 900px !important;
-}
+    border-radius:18px;
 
-.trust-box {
-    min-height: 65px !important;
+    padding:25px 10px;
 
-    padding: 8px 12px !important;
+    text-align:center;
 
-    border-radius: 0 !important;
-
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 10px !important;
-}
-
-/* Icons */
-.trust-box > div,
-.trust-box .trust-icon,
-.trust-box .icon,
-.trust-box img,
-.trust-box svg {
-    width: 25px !important;
-    height: 25px !important;
-    max-width: 25px !important;
-    max-height: 25px !important;
-
-    font-size: 22px !important;
-
-    margin: 0 !important;
-    flex-shrink: 0 !important;
-}
-
-/* Trust title */
-.trust-box h3 {
-    font-size: 12px !important;
-    line-height: 1.2 !important;
-    margin: 0 0 3px 0 !important;
-}
-
-/* Trust text */
-.trust-box p {
-    font-size: 9px !important;
-    line-height: 1.2 !important;
-    margin: 0 !important;
 }
 
 
-/* =========================================================
-   CATEGORY SECTION
-   ========================================================= */
 
-.categories {
-    padding: 22px 0 !important;
-}
+.category-icon{
 
-.categories h2 {
-    font-size: 18px !important;
-    margin-bottom: 12px !important;
-}
+    font-size:35px;
 
-.category-container {
-    display: grid !important;
-    grid-template-columns: repeat(5, 1fr) !important;
-    gap: 12px !important;
-}
-
-.category {
-    min-height: 58px !important;
-
-    padding: 10px 8px !important;
-
-    border-radius: 10px !important;
-
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important;
-}
-
-/* Category icons */
-.category-icon,
-.category-icon img,
-.category-icon svg {
-    width: 25px !important;
-    height: 25px !important;
-
-    max-width: 25px !important;
-    max-height: 25px !important;
-
-    font-size: 22px !important;
-
-    object-fit: contain !important;
-
-    margin: 0 !important;
-    flex-shrink: 0 !important;
-}
-
-/* Category title */
-.category h3 {
-    font-size: 11px !important;
-    line-height: 1.2 !important;
-    margin: 0 !important;
-}
-
-/* Category description */
-.category p {
-    font-size: 8px !important;
-    line-height: 1.2 !important;
-    margin: 2px 0 0 !important;
 }
 
 
-/* =========================================================
-   BRANDS
-   ========================================================= */
 
-.brands {
-    padding: 0 0 20px !important;
-}
+.category h3{
 
-.brands h2 {
-    font-size: 18px !important;
-    margin-bottom: 12px !important;
-}
+    margin:10px;
 
-.brand-container {
-    display: grid !important;
-    grid-template-columns: repeat(6, 1fr) !important;
-    gap: 10px !important;
-}
+    font-size:18px;
 
-.brand {
-    height: 38px !important;
-    padding: 8px !important;
-
-    border-radius: 9px !important;
-
-    font-size: 11px !important;
 }
 
 
-/* =========================================================
-   PRODUCTS
-   ========================================================= */
 
-.products {
-    padding: 0 0 30px !important;
-}
+.category p{
 
-.products h2 {
-    font-size: 18px !important;
-    margin-bottom: 5px !important;
-}
+    color:#64748b;
 
-.products > p {
-    font-size: 10px !important;
-    margin-top: 0 !important;
-}
+    font-size:13px;
 
-.product-container {
-    display: grid !important;
-
-    grid-template-columns: repeat(4, 1fr) !important;
-
-    gap: 12px !important;
-
-    margin-top: 15px !important;
-}
-
-.product-card {
-    min-height: 270px !important;
-
-    padding: 10px !important;
-
-    border-radius: 12px !important;
-}
-
-.product-card img {
-    width: 100% !important;
-    height: 145px !important;
-
-    object-fit: contain !important;
-}
-
-.product-card h3 {
-    font-size: 12px !important;
-    margin: 7px 0 4px !important;
-}
-
-.product-card p {
-    font-size: 9px !important;
-}
-
-.product-card .price {
-    font-size: 14px !important;
-}
-
-.product-card button {
-    padding: 7px 10px !important;
-    font-size: 10px !important;
 }
 
 
-/* =========================================================
-   SEARCH
-   ========================================================= */
 
-#searchInput {
-    width: 235px !important;
-    height: 32px !important;
+/* BRANDS */
 
-    padding: 7px 12px !important;
 
-    font-size: 10px !important;
+.brand-list{
 
-    border-radius: 18px !important;
-}
+    display:grid;
 
-#searchButton {
-    width: 32px !important;
-    height: 32px !important;
+    grid-template-columns:repeat(6,1fr);
+
+    gap:15px;
+
 }
 
 
-/* =========================================================
-   OFFERS
-   ========================================================= */
 
-.offer {
-    max-width: 900px !important;
-    margin: 20px auto !important;
-    padding: 25px !important;
-}
+.brand-list div{
 
-.offer h2 {
-    font-size: 24px !important;
-}
+    background:#f1f5f9;
 
-.offer p {
-    font-size: 12px !important;
+    padding:15px;
+
+    text-align:center;
+
+    border-radius:15px;
+
+    font-weight:bold;
+
 }
 
 
-/* =========================================================
-   CART
-   ========================================================= */
 
-#cartBox {
-    width: 330px !important;
+/* PRODUCTS */
+
+
+.products-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
 }
 
-#cartBox h2 {
-    font-size: 18px !important;
+
+
+.search-box input{
+
+    padding:12px 20px;
+
+    width:230px;
+
+    border-radius:25px;
+
+    border:1px solid #ddd;
+
 }
 
 
-/* =========================================================
-   MOBILE
-   ========================================================= */
 
-@media (max-width: 700px) {
+.product-container{
 
-    .hero,
-    .trust-section,
-    .categories,
-    .brands,
-    .products,
-    .deals {
-        max-width: 94% !important;
-    }
+    margin-top:25px;
 
-    nav {
-        gap: 10px !important;
-    }
+    display:grid;
 
-    nav a {
-        font-size: 10px !important;
-    }
+    grid-template-columns:repeat(4,1fr);
 
-    .hero h1 {
-        font-size: 30px !important;
-    }
+    gap:20px;
 
-    .trust-section {
-        grid-template-columns: repeat(2, 1fr) !important;
-    }
+}
 
-    .category-container {
-        grid-template-columns: repeat(2, 1fr) !important;
-    }
 
-    .brand-container {
-        grid-template-columns: repeat(3, 1fr) !important;
-    }
 
-    .product-container {
-        grid-template-columns: repeat(2, 1fr) !important;
-    }
+.product-card{
+
+    border-radius:20px;
+
+    background:white;
+
+    box-shadow:0 5px 20px #00000015;
+
+    padding:15px;
+
+}
+
+
+
+.product-card img{
+
+    height:180px;
+
+    width:100%;
+
+    object-fit:contain;
+
+}
+
+
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+
+header{
+
+    flex-direction:column;
+
+    height:auto;
+
+    gap:20px;
+
+}
+
+
+.hero{
+
+    flex-direction:column;
+
+}
+
+
+.hero-text,
+.hero-box{
+
+    width:100%;
+
+}
+
+
+.category-container,
+.product-container,
+.trust-section{
+
+    grid-template-columns:1fr;
+
+}
+
+
+
+.brand-list{
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+
+
 }
