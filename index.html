@@ -9,8 +9,15 @@
 
 
 <title>
-BARQ Checkout
+BARQ Online Store | Premium Beauty Products
 </title>
+
+
+<meta name="description"
+content="BARQ Online Store - Authentic cosmetics, skincare and beauty products with fast delivery.">
+
+
+<link rel="icon" href="barq-new.png">
 
 
 <link rel="stylesheet" href="style.css">
@@ -23,6 +30,10 @@ BARQ Checkout
 <body>
 
 
+
+<!-- TOP BAR -->
+
+
 <div class="top-bar">
 
 🚚 Free Shipping | ❤️ Authentic Products | 🔒 Secure Payment
@@ -30,6 +41,11 @@ BARQ Checkout
 </div>
 
 
+
+
+
+
+<!-- HEADER -->
 
 
 <header>
@@ -43,8 +59,83 @@ BARQ Checkout
 ONLINE STORE
 </span>
 
-
 </div>
+
+
+
+
+
+<nav>
+
+
+<a href="#">
+Home
+</a>
+
+
+
+<a href="#products">
+Shop
+</a>
+
+
+
+<a href="#brands">
+Brands
+</a>
+
+
+
+<a href="#deals">
+Deals
+</a>
+
+
+
+<a href="checkout.html">
+🔒 Checkout
+</a>
+
+
+
+
+
+<a href="#" onclick="openCart()">
+
+🛒 Cart
+
+<span id="cartCount">
+0
+</span>
+
+
+</a>
+
+
+
+
+<button id="loginButton" onclick="showLogin()">
+
+🔒 Login
+
+</button>
+
+
+
+
+
+<a id="adminLink"
+href="admin.html"
+style="display:none;">
+
+⚙ Admin
+
+</a>
+
+
+
+
+</nav>
 
 
 </header>
@@ -53,90 +144,94 @@ ONLINE STORE
 
 
 
-<section class="checkout-page">
+
+
+
+
+<!-- HERO -->
+
+
+<section class="hero">
+
+
+<div class="hero-text">
 
 
 <h1>
-BARQ Checkout
+
+Everything you need.
+
+<br>
+
+<span>
+All in one store.
+</span>
+
+
 </h1>
 
 
 
-<div class="checkout-box">
-
 
 <h2>
-Customer Information
+
+Premium Cosmetics & Best Deals
+
 </h2>
 
 
 
-<input type="text" placeholder="Full Name">
+<p>
 
+Authentic beauty products |
+Fast shipping |
+Secure payment
 
-<input type="text" placeholder="Phone Number">
-
-
-<input type="email" placeholder="Email">
-
-
-<textarea placeholder="Delivery Address"></textarea>
+</p>
 
 
 
 
+<button onclick="document.querySelector('#products').scrollIntoView()">
 
-<h2>
-Payment Method
-</h2>
-
-
-
-<label>
-
-<input type="radio" name="payment">
-
-Mada
-
-</label>
-
-
-
-<br>
-
-
-
-<label>
-
-<input type="radio" name="payment">
-
-Visa / Mastercard
-
-</label>
-
-
-
-<br>
-
-
-
-<label>
-
-<input type="radio" name="payment">
-
-Apple Pay
-
-</label>
-
-
-
-
-
-<button>
-
-Place Order
+Shop Products
 
 </button>
+
+
+
+
+</div>
+
+
+
+
+
+
+<div class="hero-box">
+
+
+<h3>
+
+BARQ BEAUTY
+
+</h3>
+
+
+
+<p>
+
+Top cosmetics brands at the best prices
+
+</p>
+
+
+
+<div class="icons">
+
+💄 💋 🧴 ✨
+
+</div>
 
 
 
@@ -150,7 +245,461 @@ Place Order
 
 
 
+
+
+
+<!-- TRUST -->
+
+
+<section class="trust">
+
+
+<div>
+🚚
+<h3>
+Fast Delivery
+</h3>
+</div>
+
+
+
+<div>
+🔒
+<h3>
+Secure Payment
+</h3>
+</div>
+
+
+
+<div>
+❤️
+<h3>
+Authentic Products
+</h3>
+</div>
+
+
+
+<div>
+↩
+<h3>
+Easy Returns
+</h3>
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+<!-- CATEGORIES -->
+
+
+<section class="categories">
+
+
+<h2>
+Shop By Category
+</h2>
+
+
+
+
+<div class="category-container">
+
+
+
+<div class="category">
+
+💄
+
+<h3>
+Makeup
+</h3>
+
+</div>
+
+
+
+
+
+<div class="category">
+
+🧴
+
+<h3>
+Skincare
+</h3>
+
+</div>
+
+
+
+
+
+<div class="category">
+
+💋
+
+<h3>
+Lip Care
+</h3>
+
+</div>
+
+
+
+
+
+<div class="category">
+
+✨
+
+<h3>
+Beauty Tools
+</h3>
+
+</div>
+
+
+
+
+
+<div class="category">
+
+🌸
+
+<h3>
+Fragrance
+</h3>
+
+</div>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+
+<!-- BRANDS -->
+
+
+<section class="brands" id="brands">
+
+
+<h2>
+
+Popular Brands
+
+</h2>
+
+
+
+<div class="brand-list">
+
+
+<div>
+Maybelline
+</div>
+
+
+<div>
+NYX
+</div>
+
+
+<div>
+CeraVe
+</div>
+
+
+<div>
+The Ordinary
+</div>
+
+
+<div>
+MAC
+</div>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- PRODUCTS -->
+
+
+<section class="products" id="products">
+
+<h2>Our Products</h2>
+
+
+<div class="search-box">
+
+<input 
+type="text" 
+id="searchInput"
+placeholder="Search products..."
+>
+
+</div>
+
+
+
+<div class="product-container">
+
+</div>
+
+
+</section
+
+
+
+
+
+<!-- DEALS -->
+
+
+<section class="offer" id="deals">
+
+
+<h2>
+
+Special Offers
+
+</h2>
+
+
+
+<p>
+
+Up to 30% discount on selected cosmetics
+
+</p>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- CART -->
+
+
+<div id="cartBox" class="cart-box">
+
+
+
+<h2>
+
+Your Cart
+
+</h2>
+
+
+
+
+<div id="cartItems">
+
+</div>
+
+
+
+
+
+
+<h3>
+
+Total:
+
+<span id="cartTotal">
+
+0
+
+</span>
+
+ريال
+
+
+</h3>
+
+
+
+
+
+
+<button onclick="checkout()">
+
+Checkout
+
+</button>
+
+
+
+
+
+
+
+<div class="checkout-trust">
+
+
+<span>
+🔒 Secure Payment
+</span>
+
+
+<span>
+🚚 Fast Delivery
+</span>
+
+
+<span>
+↩ Easy Returns
+</span>
+
+
+<span>
+💬 WhatsApp Support
+</span>
+
+
+
+</div>
+
+
+
+
+
+
+<button onclick="closeCart()">
+
+Close
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- LOGIN -->
+
+
+<div id="loginBox" class="login-box">
+
+
+
+<h2>
+
+BARQ Account
+
+</h2>
+
+
+
+
+<input 
+id="email"
+type="email"
+placeholder="Email"
+>
+
+
+
+
+
+<input
+id="password"
+type="password"
+placeholder="Password"
+>
+
+
+
+
+
+
+<button onclick="registerUser()">
+
+Register
+
+</button>
+
+
+
+
+
+<button onclick="loginUser()">
+
+Login
+
+</button>
+
+
+
+
+
+<button onclick="closeLogin()">
+
+Close
+
+</button>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
 <footer>
+
 
 <p>
 
@@ -158,7 +707,22 @@ Place Order
 
 </p>
 
+
 </footer>
+
+
+
+
+
+
+
+
+
+<script type="module" src="script.js"></script>
+
+
+<script type="module" src="auth.js"></script>
+
 
 
 
