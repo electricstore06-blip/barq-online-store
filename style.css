@@ -111,175 +111,17 @@ nav a{
 /* HERO SECTION */
 
 .hero{
-
-    max-width:1100px;
+    width:90%;
+    max-width:1200px;
     margin:40px auto;
-    padding:50px;
-    background:linear-gradient(135deg,#ffffff,#f8f5ef);
+    padding:45px;
+    background:#fff1f6;
     border-radius:25px;
 
     display:flex;
     justify-content:space-between;
     align-items:center;
     gap:40px;
-
-}
-
-
-.hero-text h1{
-
-    font-size:48px;
-    line-height:1.1;
-    color:#111827;
-
-}
-
-
-.hero-text h1 span{
-
-    color:#e91e63;
-
-}
-
-
-.hero-text h2{
-
-    margin:15px 0;
-    font-size:24px;
-
-}
-
-
-.hero-text p{
-
-    color:#555;
-    font-size:16px;
-    margin-bottom:25px;
-
-}
-
-
-.hero button{
-
-    background:#e91e63;
-    color:white;
-    border:none;
-    padding:14px 30px;
-    border-radius:30px;
-    font-size:16px;
-    cursor:pointer;
-    transition:.3s;
-
-}
-
-
-.hero button:hover{
-
-    background:#c2185b;
-
-}
-
-
-/* RIGHT BOX */
-
-.hero-box{
-
-    background:white;
-    padding:35px;
-    border-radius:25px;
-    text-align:center;
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
-
-}
-
-
-.hero-box h3{
-
-    font-size:26px;
-
-}
-
-
-.icons{
-
-    font-size:35px;
-    margin-top:20px;
-
-}
-/* BEAUTY BANNER */
-
-.hero{
-    width:90%;
-    max-width:1200px;
-    margin:40px auto;
-    padding:40px;
-    background:#fff0f5;
-    border-radius:25px;
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:30px;
-}
-
-
-.hero-text{
-    flex:1;
-}
-
-
-.hero-text h1{
-    font-size:42px;
-}
-
-
-.hero-text span{
-    color:#e91e63;
-}
-
-
-.hero-image{
-    flex:1;
-}
-
-.hero-image{
-    width:50%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-
-
-.hero-image img{
-    width:100%;
-    max-width:550px;
-    height:auto;
-    object-fit:contain;
-    border-radius:20px;
-}
-
-
-
-.hero button{
-    margin-top:20px;
-    background:#e91e63;
-    color:white;
-    border:none;
-    padding:12px 30px;
-    border-radius:20px;
-    cursor:pointer;
-}
-/* BEAUTY BANNER */
-
-.hero{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    max-width:1200px;
-    margin:40px auto;
-    padding:45px;
-    background:#fff1f6;
-    border-radius:25px;
 }
 
 
@@ -290,6 +132,7 @@ nav a{
 
 .hero-text h1{
     font-size:42px;
+    line-height:1.1;
     color:#111827;
 }
 
@@ -299,25 +142,42 @@ nav a{
 }
 
 
-.hero-image{
-    width:45%;
-    text-align:center;
+.hero-text p{
+    color:#555;
+    font-size:16px;
+    margin-top:10px;
 }
+
+
+.hero button{
+    margin-top:20px;
+    background:#e91e63;
+    color:white;
+    border:none;
+    padding:12px 30px;
+    border-radius:25px;
+    cursor:pointer;
+}
+
 
 .hero-image{
     width:50%;
     display:flex;
     justify-content:center;
-    align-items:center;
 }
 
 
 .hero-image img{
     width:100%;
-    max-width:550px;
-    height:auto;
-    object-fit:contain;
+    max-width:520px;
+    height:260px;
+    object-fit:cover;
     border-radius:20px;
 }
+
+.icons{
+
+    font-size:35px;
+    margin-top:20px;
 
 }
