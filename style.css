@@ -1480,3 +1480,423 @@ footer {
         font-size: 9px !important;
     }
 }
+/* =========================================================
+   BARQ STORE — COMPACT SIZE
+   Match the compact desktop design
+   ========================================================= */
+
+/* ---------- GLOBAL ---------- */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Keep main content compact */
+.hero,
+.trust-section,
+.categories,
+.brands,
+.products,
+.deals {
+    max-width: 900px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+
+/* =========================================================
+   TOP BAR
+   ========================================================= */
+
+.top-bar {
+    height: 30px !important;
+    padding: 0 15px !important;
+    font-size: 11px !important;
+}
+
+.top-bar span {
+    font-size: 11px !important;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+header {
+    height: 62px !important;
+    padding: 8px 20px !important;
+}
+
+.logo {
+    width: 100px !important;
+    height: auto !important;
+}
+
+nav {
+    gap: 25px !important;
+}
+
+nav a {
+    font-size: 12px !important;
+}
+
+#loginButton,
+#cartButton {
+    padding: 7px 14px !important;
+    font-size: 12px !important;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero {
+    min-height: 300px !important;
+    padding: 35px 0 !important;
+}
+
+.hero-content {
+    max-width: 900px !important;
+    margin: auto !important;
+}
+
+.hero h1 {
+    font-size: 38px !important;
+    line-height: 1.05 !important;
+    margin-bottom: 12px !important;
+}
+
+.hero p {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    max-width: 400px !important;
+}
+
+.hero button,
+.shop-now,
+#shopNowButton {
+    padding: 10px 20px !important;
+    font-size: 13px !important;
+}
+
+
+/* =========================================================
+   TRUST SECTION
+   ========================================================= */
+
+.trust-section {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 0 !important;
+
+    padding: 18px 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+
+    max-width: 900px !important;
+}
+
+.trust-box {
+    min-height: 65px !important;
+
+    padding: 8px 12px !important;
+
+    border-radius: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+}
+
+/* Icons */
+.trust-box > div,
+.trust-box .trust-icon,
+.trust-box .icon,
+.trust-box img,
+.trust-box svg {
+    width: 25px !important;
+    height: 25px !important;
+    max-width: 25px !important;
+    max-height: 25px !important;
+
+    font-size: 22px !important;
+
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+}
+
+/* Trust title */
+.trust-box h3 {
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    margin: 0 0 3px 0 !important;
+}
+
+/* Trust text */
+.trust-box p {
+    font-size: 9px !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+}
+
+
+/* =========================================================
+   CATEGORY SECTION
+   ========================================================= */
+
+.categories {
+    padding: 22px 0 !important;
+}
+
+.categories h2 {
+    font-size: 18px !important;
+    margin-bottom: 12px !important;
+}
+
+.category-container {
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 12px !important;
+}
+
+.category {
+    min-height: 58px !important;
+
+    padding: 10px 8px !important;
+
+    border-radius: 10px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+}
+
+/* Category icons */
+.category-icon,
+.category-icon img,
+.category-icon svg {
+    width: 25px !important;
+    height: 25px !important;
+
+    max-width: 25px !important;
+    max-height: 25px !important;
+
+    font-size: 22px !important;
+
+    object-fit: contain !important;
+
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+}
+
+/* Category title */
+.category h3 {
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+}
+
+/* Category description */
+.category p {
+    font-size: 8px !important;
+    line-height: 1.2 !important;
+    margin: 2px 0 0 !important;
+}
+
+
+/* =========================================================
+   BRANDS
+   ========================================================= */
+
+.brands {
+    padding: 0 0 20px !important;
+}
+
+.brands h2 {
+    font-size: 18px !important;
+    margin-bottom: 12px !important;
+}
+
+.brand-container {
+    display: grid !important;
+    grid-template-columns: repeat(6, 1fr) !important;
+    gap: 10px !important;
+}
+
+.brand {
+    height: 38px !important;
+    padding: 8px !important;
+
+    border-radius: 9px !important;
+
+    font-size: 11px !important;
+}
+
+
+/* =========================================================
+   PRODUCTS
+   ========================================================= */
+
+.products {
+    padding: 0 0 30px !important;
+}
+
+.products h2 {
+    font-size: 18px !important;
+    margin-bottom: 5px !important;
+}
+
+.products > p {
+    font-size: 10px !important;
+    margin-top: 0 !important;
+}
+
+.product-container {
+    display: grid !important;
+
+    grid-template-columns: repeat(4, 1fr) !important;
+
+    gap: 12px !important;
+
+    margin-top: 15px !important;
+}
+
+.product-card {
+    min-height: 270px !important;
+
+    padding: 10px !important;
+
+    border-radius: 12px !important;
+}
+
+.product-card img {
+    width: 100% !important;
+    height: 145px !important;
+
+    object-fit: contain !important;
+}
+
+.product-card h3 {
+    font-size: 12px !important;
+    margin: 7px 0 4px !important;
+}
+
+.product-card p {
+    font-size: 9px !important;
+}
+
+.product-card .price {
+    font-size: 14px !important;
+}
+
+.product-card button {
+    padding: 7px 10px !important;
+    font-size: 10px !important;
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+#searchInput {
+    width: 235px !important;
+    height: 32px !important;
+
+    padding: 7px 12px !important;
+
+    font-size: 10px !important;
+
+    border-radius: 18px !important;
+}
+
+#searchButton {
+    width: 32px !important;
+    height: 32px !important;
+}
+
+
+/* =========================================================
+   OFFERS
+   ========================================================= */
+
+.offer {
+    max-width: 900px !important;
+    margin: 20px auto !important;
+    padding: 25px !important;
+}
+
+.offer h2 {
+    font-size: 24px !important;
+}
+
+.offer p {
+    font-size: 12px !important;
+}
+
+
+/* =========================================================
+   CART
+   ========================================================= */
+
+#cartBox {
+    width: 330px !important;
+}
+
+#cartBox h2 {
+    font-size: 18px !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .hero,
+    .trust-section,
+    .categories,
+    .brands,
+    .products,
+    .deals {
+        max-width: 94% !important;
+    }
+
+    nav {
+        gap: 10px !important;
+    }
+
+    nav a {
+        font-size: 10px !important;
+    }
+
+    .hero h1 {
+        font-size: 30px !important;
+    }
+
+    .trust-section {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .category-container {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .brand-container {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+
+    .product-container {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
