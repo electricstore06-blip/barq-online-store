@@ -23,20 +23,16 @@ body{
 
 }
 
-
-
 header{
 
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:25px 6%;
+    padding:15px 6%;
     background:white;
     flex-wrap:wrap;
 
 }
-
-
 
 
 
