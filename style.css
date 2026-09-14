@@ -25,26 +25,29 @@ body{
 
 
 
-
-
 header{
 
     display:flex;
-    flex-direction:column;
-    justify-content:center;
+    justify-content:space-between;
     align-items:center;
     padding:25px 6%;
     background:white;
+    flex-wrap:wrap;
 
 }
+
+
+
 
 
 .logo{
 
-    font-size:24px;
+    font-size:38px;
     font-weight:bold;
+    text-align:center;
 
 }
+
 
 
 
@@ -56,19 +59,20 @@ header{
 
 }
 
-
-
 nav{
 
     display:flex;
     align-items:center;
-    gap:15px;
+    gap:35px;
 
 }
 
 
 
-nav a{
+
+
+
+nava{
 
     text-decoration:none;
     color:#111827;
