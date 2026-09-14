@@ -117,10 +117,18 @@ nav a{
     padding:45px;
     background:#fff1f6;
     border-radius:25px;
+/* BEAUTY BANNER FINAL */
 
+.hero{
     display:flex;
     justify-content:space-between;
     align-items:center;
+    max-width:1200px;
+    min-height:380px;
+    margin:40px auto;
+    padding:45px;
+    background:#fff1f6;
+    border-radius:25px;
     gap:40px;
 }
 
@@ -132,7 +140,6 @@ nav a{
 
 .hero-text h1{
     font-size:42px;
-    line-height:1.1;
     color:#111827;
 }
 
@@ -143,19 +150,19 @@ nav a{
 
 
 .hero-text p{
-    color:#555;
+    margin-top:15px;
     font-size:16px;
-    margin-top:10px;
+    color:#555;
 }
 
 
 .hero button{
-    margin-top:20px;
-    background:#e91e63;
+    margin-top:25px;
+    background:#ec1b63;
     color:white;
     border:none;
-    padding:12px 30px;
-    border-radius:25px;
+    padding:14px 35px;
+    border-radius:30px;
     cursor:pointer;
 }
 
@@ -169,15 +176,8 @@ nav a{
 
 .hero-image img{
     width:100%;
-    max-width:520px;
+    max-width:550px;
     height:260px;
     object-fit:cover;
     border-radius:20px;
-}
-
-.icons{
-
-    font-size:35px;
-    margin-top:20px;
-
 }
