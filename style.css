@@ -1,0 +1,85 @@
+/* RESET */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+
+body{
+
+    background:white;
+    color:#111827;
+
+}
+
+
+/* TOP BAR */
+
+.top-bar{
+
+    background:#111827;
+    color:white;
+    text-align:center;
+    padding:10px;
+    font-size:14px;
+
+}
+
+
+
+/* HEADER */
+
+header{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 6%;
+    background:white;
+
+}
+
+
+
+/* LOGO */
+
+.logo{
+
+    font-size:28px;
+    font-weight:bold;
+
+}
+
+
+.logo span{
+
+    display:block;
+    font-size:10px;
+    letter-spacing:3px;
+
+}
+
+
+
+/* NAVIGATION */
+
+nav{
+
+    display:flex;
+    gap:25px;
+    align-items:center;
+
+}
+
+
+nav a{
+
+    text-decoration:none;
+    color:#111827;
+    font-weight:bold;
+    font-size:15px;
+
+}
