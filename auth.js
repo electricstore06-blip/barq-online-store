@@ -1,205 +1,320 @@
-import {
-getAuth,
-createUserWithEmailAndPassword,
-signInWithEmailAndPassword,
-signOut,
-onAuthStateChanged
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+/* =========================================================
+   BARQ ONLINE STORE
+   auth.js
+   ========================================================= */
 
 
-import { firebaseConfig } from "./firebase-config.js";
+/* =========================================================
+   DOM ELEMENTS
+   ========================================================= */
+
+const loginButton = document.getElementById("loginButton");
+const closeLoginButton = document.getElementById("closeLoginButton");
+const loginOverlay = document.getElementById("loginOverlay");
+
+const loginForm = document.getElementById("loginForm");
+const loginEmail = document.getElementById("loginEmail");
+const loginPassword = document.getElementById("loginPassword");
+const loginMessage = document.getElementById("loginMessage");
 
 
-import { initializeApp }
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+/* =========================================================
+   LOGIN STATE
+   ========================================================= */
+
+let loggedInUser = JSON.parse(
+    localStorage.getItem("barqUser")
+) || null;
 
 
+/* =========================================================
+   SAVE USER
+   ========================================================= */
 
-const app = initializeApp(firebaseConfig);
+function saveUser(user) {
 
+    loggedInUser = user;
 
-const auth=getAuth(app);
-
-
-
-
-// SHOW LOGIN
-
-window.showLogin=function(){
-
-document.getElementById("loginBox").style.display="block";
-
-}
-
-
-
-
-// CLOSE LOGIN
-
-window.closeLogin=function(){
-
-document.getElementById("loginBox").style.display="none";
+    localStorage.setItem(
+        "barqUser",
+        JSON.stringify(user)
+    );
 
 }
 
 
+/* =========================================================
+   REMOVE USER
+   ========================================================= */
+
+function logoutUser() {
+
+    loggedInUser = null;
+
+    localStorage.removeItem("barqUser");
+
+    updateLoginButton();
+
+}
 
 
+/* =========================================================
+   OPEN LOGIN
+   ========================================================= */
 
-// REGISTER
+function openLogin() {
 
+    if (!loginOverlay) {
+        return;
+    }
 
-window.registerUser=function(){
+    loginOverlay.classList.add("active");
 
+    document.body.classList.add("login-open");
 
-let email=document.getElementById("email").value;
-
-let password=document.getElementById("password").value;
-
-
-
-createUserWithEmailAndPassword(auth,email,password)
-
-
-.then(()=>{
+}
 
 
-alert("Account created successfully");
+/* =========================================================
+   CLOSE LOGIN
+   ========================================================= */
+
+function closeLogin() {
+
+    if (!loginOverlay) {
+        return;
+    }
+
+    loginOverlay.classList.remove("active");
+
+    document.body.classList.remove("login-open");
+
+}
 
 
-closeLogin();
+/* =========================================================
+   UPDATE LOGIN BUTTON
+   ========================================================= */
+
+function updateLoginButton() {
+
+    if (!loginButton) {
+        return;
+    }
+
+    if (loggedInUser) {
+
+        loginButton.textContent = "Logout";
+
+        loginButton.setAttribute(
+            "aria-label",
+            "Logout from your account"
+        );
+
+    } else {
+
+        loginButton.textContent = "Login";
+
+        loginButton.setAttribute(
+            "aria-label",
+            "Open login"
+        );
+
+    }
+
+}
 
 
-})
+/* =========================================================
+   SHOW LOGIN MESSAGE
+   ========================================================= */
+
+function showLoginMessage(message, type = "") {
+
+    if (!loginMessage) {
+        return;
+    }
+
+    loginMessage.textContent = message;
+
+    loginMessage.className = "login-message";
+
+    if (type) {
+        loginMessage.classList.add(type);
+    }
+
+}
 
 
-.catch(error=>{
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+function handleLogin(event) {
+
+    event.preventDefault();
+
+    if (!loginEmail || !loginPassword) {
+        return;
+    }
 
 
-alert(error.message);
+    const email = loginEmail.value.trim();
 
+    const password = loginPassword.value.trim();
+
+
+    if (!email || !password) {
+
+        showLoginMessage(
+            "Please enter your email and password.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!email.includes("@")) {
+
+        showLoginMessage(
+            "Please enter a valid email address.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (password.length < 4) {
+
+        showLoginMessage(
+            "Password must contain at least 4 characters.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const user = {
+        email: email
+    };
+
+
+    saveUser(user);
+
+    showLoginMessage(
+        "Login successful!",
+        "success"
+    );
+
+
+    updateLoginButton();
+
+
+    setTimeout(() => {
+
+        closeLogin();
+
+        if (loginForm) {
+            loginForm.reset();
+        }
+
+        showLoginMessage("");
+
+    }, 700);
+
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+   ========================================================= */
+
+if (loginButton) {
+
+    loginButton.addEventListener("click", () => {
+
+        if (loggedInUser) {
+
+            logoutUser();
+
+        } else {
+
+            openLogin();
+
+        }
+
+    });
+
+}
+
+
+/* =========================================================
+   CLOSE LOGIN BUTTON
+   ========================================================= */
+
+if (closeLoginButton) {
+
+    closeLoginButton.addEventListener(
+        "click",
+        closeLogin
+    );
+
+}
+
+
+/* =========================================================
+   LOGIN FORM
+   ========================================================= */
+
+if (loginForm) {
+
+    loginForm.addEventListener(
+        "submit",
+        handleLogin
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE LOGIN WHEN CLICKING OUTSIDE BOX
+   ========================================================= */
+
+if (loginOverlay) {
+
+    loginOverlay.addEventListener("click", event => {
+
+        if (event.target === loginOverlay) {
+
+            closeLogin();
+
+        }
+
+    });
+
+}
+
+
+/* =========================================================
+   ESC KEY
+   ========================================================= */
+
+document.addEventListener("keydown", event => {
+
+    if (event.key === "Escape") {
+
+        closeLogin();
+
+    }
 
 });
 
 
-};
-
-
-
-
-
-
-
-// LOGIN
-
-
-window.loginUser=function(){
-
-
-let email=document.getElementById("email").value;
-
-let password=document.getElementById("password").value;
-
-
-
-signInWithEmailAndPassword(auth,email,password)
-
-
-.then(()=>{
-
-
-alert("Login successful");
-
-
-closeLogin();
-
-
-})
-
-
-.catch(error=>{
-
-
-alert(error.message);
-
-
-});
-
-
-};
-
-
-
-
-
-
-// LOGOUT
-
-
-window.logoutUser=function(){
-
-
-signOut(auth)
-
-
-.then(()=>{
-
-
-location.reload();
-
-
-});
-
-
-};
-
-
-
-
-
-
-
-// USER STATUS
-
-
-onAuthStateChanged(auth,(user)=>{
-
-
-let loginButton=document.getElementById("loginButton");
-
-
-if(!loginButton)return;
-
-
-
-
-if(user){
-
-
-loginButton.innerHTML="👤 "+user.email+" | Logout";
-
-
-loginButton.onclick=logoutUser;
-
-
-
-}
-
-else{
-
-
-loginButton.innerHTML="🔒 Login";
-
-
-loginButton.onclick=showLogin;
-
-
-
-}
-
-
-
-});
+/* =========================================================
+   INITIALIZE AUTH
+   ========================================================= */
+
+updateLoginButton();
