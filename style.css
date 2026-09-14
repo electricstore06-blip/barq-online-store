@@ -22,7 +22,6 @@ body{
 }
 
 
-
 header{
 
     display:flex;
@@ -30,9 +29,9 @@ header{
     align-items:center;
     padding:15px 6%;
     background:white;
-    flex-wrap:wrap;
 
 }
+
 
 
 
@@ -46,11 +45,15 @@ header{
 
 .logo{
 
+  .logo{
+
     font-size:24px;
     font-weight:bold;
-    line-height:1;
 
 }
+  
+
+
 
 .logo span{
 
@@ -72,9 +75,7 @@ nav{
 
 
 
-
-
-nava{
+nav a{
 
     text-decoration:none;
     color:#111827;
@@ -82,6 +83,7 @@ nava{
     font-size:14px;
 
 }
+
 
 
 
