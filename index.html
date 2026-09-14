@@ -1,71 +1,89 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
 <title>BARQ Online Store</title>
-
 <link rel="stylesheet" href="style.css">
-
 </head>
-
 
 <body>
 
-
 <div class="top-bar">
-🚚 Free Shipping | ❤️ Authentic Products | 🔒 Secure Payment
+🚚 Free shipping | ❤️ Authentic products | 🔒 Secure payment
 </div>
+
+<header>
 
 <div class="logo">
-    ⚡
-    <div>
-        BARQ
-        <span>ONLINE STORE</span>
-    </div>
+⚡ BARQ
+<span>ONLINE STORE</span>
 </div>
 
-
 <nav>
-
 <a href="#">Home</a>
 <a href="#">Shop</a>
-<a href="#">Brands</a>
+<a href="#">Categories</a>
 <a href="#">Deals</a>
-<a href="#">🛒 Cart 0</a>
-
+<a href="#">Contact</a>
 </nav>
 
+<div onclick="openCart()" style="cursor:pointer;">
+🛒 <span id="cartCount">0</span>
+</div>
 
 </header>
 
+
 <section class="hero">
 
-    <div class="hero-text">
-        <h1>Beauty Products<br>
-        <span>Premium Cosmetics</span></h1>
+<div class="hero-text">
 
-        <p>Discover skincare, makeup and beauty essentials.</p>
+<p class="small">BEAUTY & COSMETICS</p>
 
-        <button>Shop Now</button>
-    </div>
+<h1>
+Look Good,<br>
+<span>Feel Confident</span>
+</h1>
+
+<p>
+Premium cosmetics, skincare and beauty essentials for your everyday glow.
+</p>
+
+<button>
+Shop Cosmetics →
+</button>
+
+</div>
 
 
-    <div class="hero-image">
-    <img src="beauty-banner.jpg" alt="Beauty Products">  
-    </div>
+<div class="hero-image">
+
+<img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348">
+
+</div>
 
 </section>
 
 
 
-<footer>
+<div id="cartBox" class="cart-box">
 
-© 2026 BARQ Online Store
+<h2>Your Cart</h2>
 
-</footer>
+<div id="cartItems"></div>
 
+<h3>
+Total: $<span id="cartTotal">0</span>
+</h3>
+
+<button onclick="checkout()">Checkout</button>
+
+<button onclick="closeCart()">Close</button>
+
+</div>
+
+
+
+<script src="script.js"></script>
 
 </body>
-
 </html>
