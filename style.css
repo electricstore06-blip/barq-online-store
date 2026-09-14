@@ -294,3 +294,14 @@ border-radius:10px;
 cursor:pointer;
 
 }
+.cart-box{
+display:none;
+position:fixed;
+right:20px;
+top:80px;
+background:white;
+padding:25px;
+width:300px;
+box-shadow:0 0 20px #999;
+z-index:999;
+}
