@@ -1,38 +1,41 @@
-/* =========================================
-   BARQ STORE SIZE CONTROL
-========================================= */
+/* =========================
+   BARQ ONLINE STORE CLEAN CSS
+   COMPACT SIZE VERSION
+========================= */
 
 *{
+    margin:0;
+    padding:0;
     box-sizing:border-box;
 }
 
 body{
-    margin:0;
     font-family:Arial, Helvetica, sans-serif;
     color:#111827;
+    background:#ffffff;
 }
 
 
-/* =========================================
-   TOP BAR
-========================================= */
+/* TOP BAR */
 
 .top-bar{
     background:#111827;
     color:white;
     text-align:center;
-    padding:10px;
-    font-size:14px;
+    padding:8px;
+    font-size:13px;
+}
+
+.top-bar span{
+    margin:0 10px;
 }
 
 
-/* =========================================
-   HEADER
-========================================= */
+
+/* HEADER */
 
 header{
-    width:100%;
-    height:75px;
+    height:80px;
     display:flex;
     align-items:center;
     justify-content:space-between;
@@ -41,479 +44,135 @@ header{
 }
 
 
-/* LOGO */
+/* LOGO SMALL */
 
 .logo{
-    display:flex;
-    flex-direction:column;
-    font-weight:800;
     font-size:26px;
-    line-height:1;
+    font-weight:800;
     color:#111827;
+    line-height:1;
 }
 
 
 .logo span{
-    font-size:10px;
-    letter-spacing:5px;
-    margin-top:6px;
+    display:block;
+    font-size:9px;
+    letter-spacing:4px;
+    margin-top:5px;
 }
 
 
-/* NAVIGATION */
+
+/* NAV */
 
 nav{
     display:flex;
     align-items:center;
-    gap:35px;
+    gap:25px;
 }
 
 
 nav a{
     text-decoration:none;
     color:#111827;
-    font-size:15px;
+    font-size:14px;
     font-weight:600;
 }
 
 
-nav button{
+button{
     border:none;
-    background:#ec1b5b;
-    color:white;
-    padding:12px 22px;
-    border-radius:20px;
-    font-size:15px;
     cursor:pointer;
+    background:#ec1764;
+    color:white;
+    border-radius:20px;
+    padding:10px 22px;
+    font-size:14px;
+    font-weight:bold;
 }
 
 
 #cartButton{
-    display:flex;
-    gap:10px;
-    align-items:center;
+    padding:10px 20px;
 }
 
 
-/* =========================================
-   HERO SECTION
-========================================= */
+/* HERO */
 
 .hero{
-
-    max-width:1200px;
-    margin:auto;
-
+    min-height:330px;
     display:flex;
     align-items:center;
     justify-content:space-between;
-
-    padding:60px 20px;
-
+    padding:40px 10%;
+    background:#fafafa;
 }
 
 
 .hero-text{
-
     width:45%;
-
 }
 
 
 .hero-text h1{
-
-    font-size:48px;
+    font-size:42px;
     line-height:1.1;
-    margin:0;
-
 }
 
 
 .hero-text h1 span{
-
-    color:#ec1b5b;
-
+    color:#ec1764;
 }
 
 
 .hero-text h2{
-
-    font-size:24px;
-    margin:20px 0;
-
+    font-size:20px;
+    margin:15px 0;
 }
 
 
 .hero-text p{
-
-    font-size:17px;
-    color:#555;
-    line-height:1.6;
-
-}
-
-
-.hero-text button{
-
-    margin-top:20px;
-
-    background:#ec1b5b;
-    color:white;
-
-    border:none;
-
-    padding:14px 35px;
-
-    border-radius:25px;
-
     font-size:15px;
-
+    line-height:1.6;
+    color:#555;
 }
 
-
-
-/* HERO IMAGE */
 
 .hero-box{
-
-    width:45%;
+    width:40%;
     text-align:center;
-
 }
 
 
-.hero-box img{
-
-    max-width:420px;
-    width:100%;
-
+.icons{
+    font-size:55px;
 }
 
 
-/* =========================================
-   TRUST SECTION
-========================================= */
-
-
-.trust-section{
-
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-
-    gap:20px;
-
-    max-width:1200px;
-
-    margin:auto;
-
-    padding:20px;
-
-}
-
-
-.trust-box{
-
-    text-align:center;
-
-    padding:20px;
-
-}
-
-
-.trust-box div{
-
-    font-size:35px;
-
-}
-
-
-.trust-box h3{
-
-    font-size:18px;
-
-}
-
-
-.trust-box p{
-
-    font-size:14px;
-    color:#666;
-
-}
-
-
-
-/* =========================================
-   CATEGORY SIZE
-========================================= */
-
-
-.category-container{
-
-    max-width:1200px;
-
-    margin:auto;
-
-    display:grid;
-
-    grid-template-columns:repeat(5,1fr);
-
-    gap:15px;
-
-}
-
-
-.category{
-
-    background:#fff4f7;
-
-    border-radius:15px;
-
-    padding:20px;
-
-    text-align:center;
-
-}
-
-
-.category-icon{
-
-    font-size:35px;
-
-}
-
-
-.category h3{
-
-    font-size:18px;
-
-}
-
-
-
-/* =========================================
-   PRODUCTS
-========================================= */
-
-
-.products{
-
-    max-width:1200px;
-
-    margin:auto;
-
-}
-
-
-.product-card{
-
-    border-radius:15px;
-
-    padding:15px;
-
-}
-
-
-.product-card img{
-
-    width:100%;
-
-    height:180px;
-
-    object-fit:contain;
-
-}
-
-
-
-/* =========================================
-   MOBILE
-========================================= */
-
-
-@media(max-width:900px){
-
-
-header{
-
-    height:auto;
-
-    flex-direction:column;
-
-    gap:20px;
-
-}
-
-
-nav{
-
-    flex-wrap:wrap;
-
-    justify-content:center;
-
-}
-
-
-.hero{
-
-    flex-direction:column;
-
-}
-
-
-.hero-text,
-.hero-box{
-
-    width:100%;
-
-    text-align:center;
-
-}
-
-
-.hero-text h1{
-
-    font-size:36px;
-
-}
-
-
-.trust-section{
-
-grid-template-columns:1fr 1fr;
-
-}
-
-
-.category-container{
-
-grid-template-columns:1fr 1fr;
-
-}
-
-
-/* =========================================================
-   BARQ STORE SIZE FIX - FINAL COMPACT DESIGN
-   ========================================================= */
-
-
-/* GLOBAL SCALE */
-body{
-    font-size:14px;
-}
-
-
-/* TOP BAR */
-.top-bar{
-    height:35px;
-    padding:8px;
-    font-size:13px;
-}
-
-
-/* HEADER */
-header{
-    padding:12px 60px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-}
-
-
-/* LOGO */
-.logo{
-    font-size:28px;
-    line-height:1;
-    font-weight:800;
-}
-
-.logo span{
-    display:block;
-    font-size:10px;
-    letter-spacing:4px;
-    margin-top:5px;
-}
-
-
-/* NAVIGATION */
-nav{
-    gap:25px;
-}
-
-nav a{
-    font-size:14px;
-}
-
-
-nav button{
-    padding:10px 22px;
-    font-size:14px;
-    border-radius:20px;
-}
-
-
-/* CART BUTTON */
-#cartButton{
-    padding:10px 22px;
-}
-
-
-/* HERO SECTION */
-.hero{
-    padding:45px 80px;
-    min-height:350px;
-}
-
-
-.hero-text h1{
-    font-size:48px;
-    line-height:1.05;
-}
-
-
-.hero-text h1 span{
-    font-size:48px;
-}
-
-
-.hero-text h2{
+.hero-box h3{
     font-size:22px;
 }
 
 
-.hero-text p{
-    font-size:15px;
-    max-width:400px;
-}
 
+/* TRUST SECTION */
 
-.hero-text button{
-    padding:12px 25px;
-    font-size:14px;
-}
-
-
-/* HERO IMAGE */
-.hero img,
-.hero-box img{
-    max-width:420px;
-}
-
-
-/* TRUST BOX */
 .trust-section{
-    padding:25px 60px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
     gap:20px;
+    padding:30px 10%;
 }
 
 
 .trust-box{
+    text-align:center;
     padding:20px;
 }
 
 
 .trust-box div{
-    font-size:28px;
+    font-size:35px;
 }
 
 
@@ -524,127 +183,216 @@ nav button{
 
 .trust-box p{
     font-size:13px;
+    color:#666;
 }
+
+
 
 
 /* CATEGORY */
+
 .categories{
-    padding:40px 60px;
+    padding:40px 10%;
 }
 
 
+.categories h2,
+.brands h2,
+.products h2{
+    font-size:25px;
+    margin-bottom:20px;
+}
+
+
+
 .category-container{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
     gap:15px;
 }
 
 
 .category{
+    background:#fff1f5;
+    border-radius:15px;
     padding:20px;
-    border-radius:18px;
+    text-align:center;
 }
 
 
 .category-icon{
-    font-size:30px;
+    font-size:35px;
 }
 
 
 .category h3{
-    font-size:17px;
+    font-size:16px;
+    margin:10px 0;
 }
 
 
 .category p{
     font-size:12px;
+    color:#666;
 }
 
 
+
+
 /* BRANDS */
+
 .brands{
-    padding:30px 60px;
+    padding:20px 10%;
+}
+
+
+.brand-list{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:15px;
 }
 
 
 .brand-list div{
-    padding:12px 25px;
+    background:#f5f7fa;
+    padding:15px;
+    border-radius:12px;
+    text-align:center;
     font-size:14px;
+    font-weight:bold;
 }
+
 
 
 /* PRODUCTS */
+
 .products{
-    padding:40px 60px;
+    padding:40px 10%;
 }
 
 
-.products-header h2{
-    font-size:24px;
+.products-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+
+.search-box input{
+    padding:10px;
+    border:1px solid #ddd;
+    border-radius:20px;
 }
 
 
 .product-container{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
     gap:20px;
+    margin-top:25px;
 }
 
 
 .product-card{
     border-radius:15px;
+    padding:15px;
+    box-shadow:0 5px 20px #ddd;
 }
 
 
 .product-card img{
-    height:180px;
+    width:100%;
+    height:150px;
     object-fit:contain;
 }
 
 
-.product-info h3{
-    font-size:16px;
-}
 
+/* DEALS */
 
-.product-description{
-    font-size:13px;
-}
-
-
-/* OFFER SECTION */
 .offer{
+    margin:40px 10%;
     padding:40px;
+    text-align:center;
+    background:#fff1f5;
+    border-radius:25px;
 }
 
 
 .offer h2{
-    font-size:25px;
+    font-size:28px;
 }
 
 
-/* MOBILE FIX */
+
+/* CART */
+
+.cart-box{
+    width:350px;
+}
+
+
+
+/* FOOTER */
+
+footer{
+    background:#111827;
+    color:white;
+    padding:30px 10%;
+}
+
+
+.footer-content{
+    display:flex;
+    justify-content:space-between;
+}
+
+
+footer a{
+    color:white;
+    text-decoration:none;
+}
+
+
+
+/* MOBILE */
+
 @media(max-width:900px){
 
 header{
-    padding:15px 25px;
-}
-
-
-.logo{
-    font-size:22px;
-}
-
-
-.hero{
-    padding:30px;
-}
-
-
-.hero-text h1,
-.hero-text h1 span{
-    font-size:36px;
+    flex-direction:column;
+    height:auto;
+    padding:20px;
 }
 
 
 nav{
-    gap:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+
+.hero{
+    flex-direction:column;
+}
+
+
+.hero-text,
+.hero-box{
+    width:100%;
+    text-align:center;
+}
+
+
+.category-container,
+.product-container,
+.trust-section{
+    grid-template-columns:1fr 1fr;
+}
+
+
+.brand-list{
+    grid-template-columns:repeat(3,1fr);
 }
 
 }
