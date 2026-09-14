@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>BARQ Cosmetics Store</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
+
 <body>
+
 
 <div class="top-bar">
 🚚 Free shipping | 💗 Authentic products | 🔒 Secure payment
 </div>
+
 
 
 <header>
@@ -21,31 +29,44 @@
 <span>ONLINE STORE</span>
 </div>
 
+
 <nav>
+
 <a href="#">Home</a>
 <a href="#">Shop</a>
 <a href="#">Categories</a>
 <a href="#">Deals</a>
 <a href="#">Contact</a>
+
 </nav>
+
 
 <div class="icons">
 🔍 👤 ♡ 🛒
 </div>
 
+
 </header>
+
+
+
 
 
 <section class="hero">
 
+
 <div class="hero-text">
 
-<p class="small">BEAUTY & COSMETICS</p>
+<p class="small">
+BEAUTY & COSMETICS
+</p>
+
 
 <h1>
 Look Good,<br>
 <span>Feel Confident</span>
 </h1>
+
 
 <p>
 Premium cosmetics, skincare and beauty essentials 
@@ -57,7 +78,9 @@ for your everyday glow — all in one place.
 Shop Cosmetics →
 </button>
 
+
 </div>
+
 
 
 <div class="hero-image">
@@ -66,16 +89,26 @@ Shop Cosmetics →
 
 </div>
 
+
 </section>
+
+
+
+
 
 
 
 <section class="categories">
 
-<h2>Shop Beauty Categories</h2>
+
+<h2>
+Shop Beauty Categories
+</h2>
+
 
 
 <div class="cards">
+
 
 <div>
 💄
@@ -109,102 +142,207 @@ Shop Cosmetics →
 
 </div>
 
+
 </section>
+
+
+
+
 
 
 
 <section class="products">
 
-<h2>Featured Cosmetics</h2>
+
+<h2>
+Featured Cosmetics
+</h2>
+
 
 
 <div class="product-grid">
 
 
+
+
+
 <div class="product">
+
 
 <img src="https://images.unsplash.com/photo-1586495777744-4413f21062fa">
 
-<h3>Lipstick Collection</h3>
 
-<p>$19.99</p>
+<h3>
+Lipstick Collection
+</h3>
 
-<button>Add To Cart</button>
+
+<p>
+$19.99
+</p>
+
+
+<button onclick="addToCart('Lipstick Collection',19.99)">
+Add To Cart
+</button>
+
 
 </div>
 
 
 
+
+
+
+
 <div class="product">
+
 
 <img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883">
 
-<h3>Skin Care Cream</h3>
 
-<p>$29.99</p>
+<h3>
+Skin Care Cream
+</h3>
 
-<button>Add To Cart</button>
+
+<p>
+$29.99
+</p>
+
+
+<button onclick="addToCart('Skin Care Cream',29.99)">
+Add To Cart
+</button>
+
 
 </div>
+
+
+
+
+
 
 
 
 <div class="product">
 
+
 <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9">
 
-<h3>Beauty Set</h3>
 
-<p>$39.99</p>
+<h3>
+Beauty Set
+</h3>
 
-<button>Add To Cart</button>
+
+<p>
+$39.99
+</p>
+
+
+<button onclick="addToCart('Beauty Set',39.99)">
+Add To Cart
+</button>
+
 
 </div>
 
 
 
-<section class="offer">
 
-<h2>
-Save Up To 30% On Beauty Products
-</h2>
 
-<button>
-Shop Now →
-</button>
+</div>
+
 
 </section>
 
 
 
+
+
+
+
+<section class="offer">
+
+
+<h2>
+Save Up To 30% On Beauty Products
+</h2>
+
+
+<button>
+Shop Now →
+</button>
+
+
+</section>
+
+
+
+
+
+
+
 <footer>
 
-<h2>⚡ BARQ</h2>
+
+<h2>
+⚡ BARQ
+</h2>
+
 
 <p>
 Quality cosmetics. Better shopping.
 </p>
 
+
 </footer>
-</footer>
+
+
+
+
+
+
+
+<!-- CART -->
 
 
 <div id="cartBox" class="cart-box">
 
-<h2>Your Cart</h2>
+
+<h2>
+Your Cart
+</h2>
+
 
 <div id="cartItems"></div>
 
-<h3>Total: $<span id="cartTotal">0</span></h3>
 
-<button onclick="closeCart()">Close</button>
+
+<h3>
+Total: $<span id="cartTotal">0</span>
+</h3>
+
+
+
+<button onclick="closeCart()">
+Close
+</button>
+
+
 
 </div>
+
+
+
+
+
 
 
 <script src="script.js"></script>
 
 
 </body>
-</html>
 
+</html>
