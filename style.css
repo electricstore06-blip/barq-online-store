@@ -75,3 +75,31 @@ nav a{
     font-weight:bold;
 
 }
+/* FINAL LOGO SIZE FIX */
+
+.logo{
+    font-size:28px;
+    font-weight:bold;
+    line-height:1;
+}
+
+.logo span{
+    display:block;
+    font-size:10px;
+    letter-spacing:3px;
+}
+
+
+/* HEADER SIZE FIX */
+
+header{
+    padding:15px 6%;
+    min-height:90px;
+}
+
+
+/* NAV SIZE FIX */
+
+nav a{
+    font-size:16px;
+}
