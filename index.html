@@ -1,552 +1,345 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+<!-- ================================
+     BARQ STORE - FEATURED PRODUCTS
+================================= -->
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<section class="barq-products">
 
-    <meta
-        name="description"
-        content="BARQ Online Store - Electronics, accessories and authentic products."
-    >
 
-    <title>BARQ Online Store</title>
+    <!-- CATEGORY MENU -->
 
-    <link rel="icon" href="barq-new.png">
+    <div class="barq-categories">
 
-    <link rel="stylesheet" href="style.css">
-</head>
+        <div class="barq-category">
+            <span>📱</span>
+            <p>Phones</p>
+        </div>
 
-<body>
+        <div class="barq-category">
+            <span>💻</span>
+            <p>Computers</p>
+        </div>
 
-    <!-- =========================
-         TOP BAR
-    ========================== -->
+        <div class="barq-category">
+            <span>🎧</span>
+            <p>Accessories</p>
+        </div>
 
-    <div class="top-bar">
-        🚚 Free Shipping
-        <span>|</span>
-        ❤️ Authentic Products
-        <span>|</span>
-        🔒 Secure Payment
+        <div class="barq-category">
+            <span>⌚</span>
+            <p>Smart Watches</p>
+        </div>
+
+        <div class="barq-category">
+            <span>🏠</span>
+            <p>Home</p>
+        </div>
+
+        <div class="barq-category">
+            <span>🎮</span>
+            <p>Gaming</p>
+        </div>
+
     </div>
 
 
-    <!-- =========================
-         HEADER
-    ========================== -->
 
-    <header>
+    <!-- HEADER -->
 
-        <div class="logo">
-            ⚡ BARQ
-            <span>ONLINE STORE</span>
-        </div>
+    <div class="barq-products-header">
 
-        <nav>
+        <div class="barq-title">
 
-            <a href="#home">Home</a>
+            <span>BEST SELLERS</span>
 
-            <a href="#categories">Categories</a>
-
-            <a href="#brands">Brands</a>
-
-            <a href="#products">Products</a>
-
-            <a href="#offers">Deals</a>
-
-            <button type="button" id="loginButton">
-                Login
-            </button>
-
-            <button type="button" id="cartButton">
-                🛒 Cart
-                <span id="cartCount">0</span>
-            </button>
-
-        </nav>
-
-    </header>
-
-
-    <!-- =========================
-         HERO
-    ========================== -->
-
-    <main>
-
-        <section class="hero" id="home">
-
-            <div class="hero-text">
-
-                <h1>
-                    Shop Smart.
-                    <span>Shop BARQ.</span>
-                </h1>
-
-                <h2>
-                    Quality Electronics & Accessories
-                </h2>
-
-                <p>
-                    Discover authentic products, great prices,
-                    and a shopping experience made for you.
-                </p>
-
-                <button type="button" id="shopNowButton">
-                    Shop Now
-                </button>
-
-            </div>
-
-
-            <div class="hero-box">
-
-                <div class="icons">
-                    ⚡ 📱 🎧 💻
-                </div>
-
-                <h3>
-                    BARQ Online Store
-                </h3>
-
-                <p>
-                    Your trusted online electronics store.
-                </p>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             TRUST FEATURES
-        ========================== -->
-
-        <section class="trust-section">
-
-            <div class="trust-box">
-
-                <div>🚚</div>
-
-                <h3>
-                    Fast Delivery
-                </h3>
-
-                <p>
-                    Quick and reliable delivery.
-                </p>
-
-            </div>
-
-
-            <div class="trust-box">
-
-                <div>❤️</div>
-
-                <h3>
-                    Authentic Products
-                </h3>
-
-                <p>
-                    Quality products you can trust.
-                </p>
-
-            </div>
-
-
-            <div class="trust-box">
-
-                <div>🔒</div>
-
-                <h3>
-                    Secure Payment
-                </h3>
-
-                <p>
-                    Safe and secure checkout.
-                </p>
-
-            </div>
-
-
-            <div class="trust-box">
-
-                <div>⭐</div>
-
-                <h3>
-                    Great Service
-                </h3>
-
-                <p>
-                    Customer satisfaction comes first.
-                </p>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             CATEGORIES
-        ========================== -->
-
-        <section class="categories" id="categories">
-
-            <h2>
-                Shop by Category
-            </h2>
-
-            <div class="category-container">
-
-                <div class="category">
-                    <div class="category-icon">📱</div>
-                    <h3>Mobile</h3>
-                    <p>Phones & accessories</p>
-                </div>
-
-
-                <div class="category">
-                    <div class="category-icon">💻</div>
-                    <h3>Laptops</h3>
-                    <p>Laptops & computers</p>
-                </div>
-
-
-                <div class="category">
-                    <div class="category-icon">🎧</div>
-                    <h3>Audio</h3>
-                    <p>Headphones & speakers</p>
-                </div>
-
-
-                <div class="category">
-                    <div class="category-icon">⌚</div>
-                    <h3>Smart Devices</h3>
-                    <p>Smart watches & devices</p>
-                </div>
-
-
-                <div class="category">
-                    <div class="category-icon">🔌</div>
-                    <h3>Accessories</h3>
-                    <p>Cables, chargers & more</p>
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             BRANDS
-        ========================== -->
-
-        <section class="brands" id="brands">
-
-            <h2>
-                Popular Brands
-            </h2>
-
-            <div class="brand-list">
-
-                <div>Apple</div>
-
-                <div>Samsung</div>
-
-                <div>Huawei</div>
-
-                <div>Lenovo</div>
-
-                <div>JBL</div>
-
-                <div>Anker</div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             PRODUCTS
-        ========================== -->
-
-        <section class="products" id="products">
-
-            <div class="products-header">
-
-                <div>
-
-                    <h2>
-                        Featured Products
-                    </h2>
-
-                    <p>
-                        Explore our latest products.
-                    </p>
-
-                </div>
-
-
-                <div class="search-box">
-
-                    <input
-                        type="search"
-                        id="searchInput"
-                        placeholder="Search products..."
-                        aria-label="Search products"
-                    >
-
-                    <button
-                        type="button"
-                        id="searchButton"
-                    >
-                        🔍
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="product-container"
-                id="productContainer"
-            >
-
-                <!-- Products are loaded by script.js -->
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             DEALS
-        ========================== -->
-
-        <section class="offer" id="offers">
-
-            <h2>
-                🔥 BARQ Deals
-            </h2>
+            <h1>
+                Featured Products
+            </h1>
 
             <p>
-                Discover special offers and selected products
-                at great prices.
-            </p>
-
-            <button
-                type="button"
-                id="dealsButton"
-            >
-                View Deals
-            </button>
-
-        </section>
-
-    </main>
-
-
-    <!-- =========================
-         CART
-    ========================== -->
-
-    <aside
-        class="cart-box"
-        id="cartBox"
-        aria-label="Shopping cart"
-    >
-
-        <div class="cart-header">
-
-            <h2>
-                Your Cart
-            </h2>
-
-            <button
-                type="button"
-                id="closeCartButton"
-                aria-label="Close cart"
-            >
-                ✕
-            </button>
-
-        </div>
-
-
-        <div
-            class="cart-items"
-            id="cartItems"
-        >
-
-            <p class="empty-cart">
-                Your cart is empty.
+                Discover our most popular products from BARQ STORE
             </p>
 
         </div>
 
 
-        <div class="cart-footer">
 
-            <div class="cart-total">
+        <div class="barq-tools">
 
-                <span>
-                    Total
-                </span>
+            <div class="barq-search">
 
-                <strong id="cartTotal">
-                    SAR 0
-                </strong>
+                🔍
+
+                <input 
+                type="search" 
+                placeholder="Search products">
 
             </div>
 
 
-            <button
-                type="button"
-                id="checkoutButton"
-            >
-                Proceed to Checkout
+            <button class="barq-sort">
+                Sort By Popular ▼
             </button>
-
-        </div>
-
-    </aside>
-
-
-    <!-- =========================
-         LOGIN
-    ========================== -->
-
-    <div
-        class="login-overlay"
-        id="loginOverlay"
-    >
-
-        <div
-            class="login-box"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="loginTitle"
-        >
-
-            <button
-                type="button"
-                class="close-login"
-                id="closeLoginButton"
-                aria-label="Close login"
-            >
-                ✕
-            </button>
-
-
-            <h2 id="loginTitle">
-                Welcome to BARQ
-            </h2>
-
-            <p>
-                Login to your account
-            </p>
-
-
-            <form id="loginForm">
-
-                <input
-                    type="email"
-                    id="loginEmail"
-                    placeholder="Email Address"
-                    autocomplete="email"
-                    required
-                >
-
-
-                <input
-                    type="password"
-                    id="loginPassword"
-                    placeholder="Password"
-                    autocomplete="current-password"
-                    required
-                >
-
-
-                <button
-                    type="submit"
-                >
-                    Login
-                </button>
-
-            </form>
-
-
-            <p
-                class="login-message"
-                id="loginMessage"
-            ></p>
 
         </div>
 
     </div>
 
 
-    <!-- =========================
-         FOOTER
-    ========================== -->
 
-    <footer>
 
-        <div class="footer-content">
 
-            <div class="footer-brand">
+    <!-- PRODUCT GRID -->
 
-                <div class="logo">
-                    ⚡ BARQ
-                    <span>ONLINE STORE</span>
-                </div>
+    <div class="barq-product-grid">
 
-                <p>
-                    Quality products. Trusted service.
-                </p>
+
+
+        <!-- PRODUCT 1 -->
+
+        <div class="barq-product-card">
+
+            <label class="barq-badge">
+                BEST SELLER
+            </label>
+
+
+            <button class="barq-heart">
+                ♡
+            </button>
+
+
+            <img src="images/product-1.jpg"
+            alt="BARQ Product">
+
+
+            <div class="barq-rating">
+                ⭐⭐⭐⭐⭐
+                <small>(124)</small>
+            </div>
+
+
+            <h4>
+                BARQ
+            </h4>
+
+
+            <h2>
+                Premium Wireless Headphones
+            </h2>
+
+
+            <p>
+                High quality sound • Long battery
+            </p>
+
+
+            <div class="barq-price">
+
+                $62
+
+                <del>
+                    $80
+                </del>
 
             </div>
 
 
-            <div class="footer-links">
+            <button class="barq-cart">
+                🛒 Add To Cart
+            </button>
 
-                <a href="#home">
-                    Home
-                </a>
-
-                <a href="#categories">
-                    Categories
-                </a>
-
-                <a href="#products">
-                    Products
-                </a>
-
-                <a href="#offers">
-                    Deals
-                </a>
-
-            </div>
 
         </div>
 
 
-        <p class="copyright">
-            © 2026 BARQ Online Store. All rights reserved.
-        </p>
-
-    </footer>
 
 
-    <!-- =========================
-         SCRIPTS
-    ========================== -->
 
-    <script type="module" src="script.js"></script>
+        <!-- PRODUCT 2 -->
 
-    <script type="module" src="auth.js"></script>
 
-</body>
-</html>
+        <div class="barq-product-card">
+
+            <label class="barq-badge new">
+                NEW
+            </label>
+
+
+            <button class="barq-heart">
+                ♡
+            </button>
+
+
+            <img src="images/product-2.jpg"
+            alt="BARQ Product">
+
+
+            <div class="barq-rating">
+                ⭐⭐⭐⭐⭐
+                <small>(98)</small>
+            </div>
+
+
+            <h4>
+                BARQ
+            </h4>
+
+
+            <h2>
+                Smart Watch Pro
+            </h2>
+
+
+            <p>
+                Fitness tracking • Waterproof
+            </p>
+
+
+            <div class="barq-price">
+
+                $89
+
+                <del>
+                    $120
+                </del>
+
+            </div>
+
+
+            <button class="barq-cart">
+                🛒 Add To Cart
+            </button>
+
+
+        </div>
+
+
+
+
+
+
+        <!-- PRODUCT 3 -->
+
+
+        <div class="barq-product-card">
+
+            <label class="barq-badge sale">
+                SALE
+            </label>
+
+
+            <button class="barq-heart">
+                ♡
+            </button>
+
+
+            <img src="images/product-3.jpg"
+            alt="BARQ Product">
+
+
+            <div class="barq-rating">
+                ⭐⭐⭐⭐⭐
+                <small>(76)</small>
+            </div>
+
+
+            <h4>
+                BARQ
+            </h4>
+
+
+            <h2>
+                Gaming Keyboard RGB
+            </h2>
+
+
+            <p>
+                Mechanical keys • Fast response
+            </p>
+
+
+            <div class="barq-price">
+
+                $35
+
+                <del>
+                    $50
+                </del>
+
+            </div>
+
+
+            <button class="barq-cart">
+                🛒 Add To Cart
+            </button>
+
+
+        </div>
+
+
+
+
+
+
+
+        <!-- PRODUCT 4 -->
+
+
+        <div class="barq-product-card">
+
+
+            <label class="barq-badge hot">
+                HOT
+            </label>
+
+
+            <button class="barq-heart">
+                ♡
+            </button>
+
+
+            <img src="images/product-4.jpg"
+            alt="BARQ Product">
+
+
+            <div class="barq-rating">
+                ⭐⭐⭐⭐⭐
+                <small>(142)</small>
+            </div>
+
+
+            <h4>
+                BARQ
+            </h4>
+
+
+            <h2>
+                Smart Home Device
+            </h2>
+
+
+            <p>
+                Modern design • Easy control
+            </p>
+
+
+            <div class="barq-price">
+
+                $45
+
+            </div>
+
+
+            <button class="barq-cart">
+                🛒 Add To Cart
+            </button>
+
+
+        </div>
+
+
+
+    </div>
+
+
+</section>
