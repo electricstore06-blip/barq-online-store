@@ -11,7 +11,6 @@ body{
     color:#111827;
 }
 
-
 .top-bar{
 
     background:#111827;
@@ -22,6 +21,8 @@ body{
     white-space:nowrap;
 
 }
+
+
 
 header{
 
@@ -44,16 +45,22 @@ header{
 
 }
 
+.logo{
 
+    font-size:24px;
+    font-weight:bold;
+    line-height:1;
 
+}
 
 .logo span{
 
     display:block;
-    font-size:9px;
-    letter-spacing:2px;
+    font-size:10px;
+    letter-spacing:3px;
 
 }
+
 
 nav{
 
