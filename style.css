@@ -1123,4 +1123,199 @@ footer {
         flex-wrap: wrap;
         justify-content: center;
     }
+/* =========================================
+   BARQ - EXTRA COMPACT INTERFACE
+   ========================================= */
+
+/* TRUST SECTION */
+.trust-section {
+    max-width: 900px;
+    margin: 15px auto 30px;
+    padding: 0 15px;
+    gap: 12px;
+}
+
+.trust-box {
+    padding: 16px 10px;
+    border-radius: 14px;
+}
+
+.trust-box > div {
+    font-size: 22px !important;
+    margin-bottom: 5px;
+}
+
+.trust-box h3 {
+    font-size: 15px;
+    margin-bottom: 3px;
+}
+
+.trust-box p {
+    font-size: 11px;
+}
+
+
+/* CATEGORY SECTION */
+.categories {
+    max-width: 950px;
+    padding: 30px 15px;
+}
+
+.categories h2,
+.brands h2,
+.products h2,
+.offer h2 {
+    font-size: 24px;
+    margin-bottom: 18px;
+}
+
+.category-container {
+    gap: 10px;
+}
+
+.category {
+    padding: 14px 8px;
+    border-radius: 12px;
+}
+
+/* SMALL CATEGORY ICONS */
+.category-icon {
+    font-size: 22px !important;
+    margin-bottom: 5px;
+}
+
+.category-icon img {
+    width: 35px !important;
+    height: 35px !important;
+    object-fit: contain;
+}
+
+.category h3 {
+    font-size: 14px;
+}
+
+.category p {
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+
+/* BRAND SECTION */
+.brands {
+    padding: 30px 15px;
+}
+
+.brand-list {
+    max-width: 900px;
+    gap: 8px;
+}
+
+.brand-list div {
+    padding: 10px 6px;
+    font-size: 13px;
+}
+
+
+/* PRODUCT SECTION */
+.products {
+    max-width: 950px;
+    padding: 35px 15px;
+}
+
+.product-container {
+    gap: 12px;
+}
+
+.product-info {
+    padding: 11px;
+}
+
+.product-image-wrap img {
+    aspect-ratio: 1 / 1;
+    max-height: 180px;
+    object-fit: contain;
+}
+
+.product-info h3 {
+    font-size: 15px;
+}
+
+.product-description {
+    font-size: 11px;
+    min-height: 32px;
+}
+
+.product-price strong {
+    font-size: 15px;
+}
+
+.product-actions button {
+    padding: 7px 4px;
+    font-size: 11px;
+}
+
+
+/* =========================================
+   EXTRA SMALL SCREENS
+   ========================================= */
+
+@media (max-width: 900px) {
+
+    .trust-section {
+        max-width: 800px;
+    }
+
+    .category-container {
+        gap: 8px;
+    }
+
+    .category-icon {
+        font-size: 20px !important;
+    }
+
+    .category-icon img {
+        width: 30px !important;
+        height: 30px !important;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .trust-box {
+        padding: 12px 7px;
+    }
+
+    .trust-box > div {
+        font-size: 19px !important;
+    }
+
+    .trust-box h3 {
+        font-size: 13px;
+    }
+
+    .trust-box p {
+        font-size: 10px;
+    }
+
+    .category {
+        padding: 11px 6px;
+    }
+
+    .category-icon {
+        font-size: 18px !important;
+    }
+
+    .category-icon img {
+        width: 27px !important;
+        height: 27px !important;
+    }
+
+    .category h3 {
+        font-size: 13px;
+    }
+
+    .category p {
+        font-size: 9px;
+    }
 }
