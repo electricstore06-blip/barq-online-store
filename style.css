@@ -29,11 +29,14 @@ body{
 /* HEADER */
 
 header{
+
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:15px 5%;
+    padding:15px 6%;
     background:white;
+    border-bottom:1px solid #eee;
+
 }
 
 .logo{
