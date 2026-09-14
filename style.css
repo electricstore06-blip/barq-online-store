@@ -1,198 +1,121 @@
-/* ===============================
-   BARQ ONLINE STORE
-   CLEAN RESPONSIVE SIZE
-================================ */
-
+/* =========================================
+   BARQ STORE SIZE CONTROL
+========================================= */
 
 *{
-    margin:0;
-    padding:0;
     box-sizing:border-box;
 }
 
-
 body{
+    margin:0;
     font-family:Arial, Helvetica, sans-serif;
     color:#111827;
+}
+
+
+/* =========================================
+   TOP BAR
+========================================= */
+
+.top-bar{
+    background:#111827;
+    color:white;
+    text-align:center;
+    padding:10px;
+    font-size:14px;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+header{
+    width:100%;
+    height:75px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 8%;
     background:white;
 }
 
 
-img{
-    max-width:100%;
-}
-
-
-
-/* TOP BAR */
-
-.top-bar{
-
-    background:#111827;
-    color:white;
-
-    height:35px;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    gap:15px;
-
-    font-size:14px;
-
-}
-
-
-
-/* HEADER */
-
-header{
-
-    max-width:1200px;
-
-    margin:auto;
-
-    height:80px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    padding:0 25px;
-
-}
-
-
+/* LOGO */
 
 .logo{
-
-    font-size:28px;
-
+    display:flex;
+    flex-direction:column;
     font-weight:800;
-
-    color:#111827;
-
+    font-size:26px;
     line-height:1;
-
+    color:#111827;
 }
 
 
 .logo span{
-
-    display:block;
-
     font-size:10px;
-
-    letter-spacing:6px;
-
-    margin-top:5px;
-
+    letter-spacing:5px;
+    margin-top:6px;
 }
 
 
-
+/* NAVIGATION */
 
 nav{
-
     display:flex;
-
     align-items:center;
-
-    gap:28px;
-
+    gap:35px;
 }
 
 
 nav a{
-
     text-decoration:none;
-
     color:#111827;
-
     font-size:15px;
-
     font-weight:600;
-
 }
-
 
 
 nav button{
-
     border:none;
-
-    background:#ec1761;
-
+    background:#ec1b5b;
     color:white;
-
-    padding:12px 25px;
-
-    border-radius:25px;
-
+    padding:12px 22px;
+    border-radius:20px;
     font-size:15px;
-
-    font-weight:bold;
-
     cursor:pointer;
-
 }
-
 
 
 #cartButton{
-
     display:flex;
-
     gap:10px;
-
     align-items:center;
-
 }
 
 
-
-#cartCount{
-
-    background:white;
-
-    color:#ec1761;
-
-    border-radius:50%;
-
-    padding:5px 9px;
-
-}
-
-
-
-/* HERO */
+/* =========================================
+   HERO SECTION
+========================================= */
 
 .hero{
 
     max-width:1200px;
-
     margin:auto;
 
-    min-height:360px;
-
     display:flex;
-
     align-items:center;
-
     justify-content:space-between;
 
-    padding:40px 25px;
+    padding:60px 20px;
 
 }
 
 
-
 .hero-text{
 
-    width:50%;
+    width:45%;
 
 }
 
@@ -200,100 +123,90 @@ nav button{
 .hero-text h1{
 
     font-size:48px;
-
-    line-height:1.05;
+    line-height:1.1;
+    margin:0;
 
 }
-
 
 
 .hero-text h1 span{
 
-    color:#ec1761;
+    color:#ec1b5b;
 
 }
 
 
-
 .hero-text h2{
 
-    font-size:25px;
-
+    font-size:24px;
     margin:20px 0;
 
 }
 
 
-
 .hero-text p{
 
     font-size:17px;
-
-    color:#64748b;
-
+    color:#555;
     line-height:1.6;
-
-    max-width:450px;
 
 }
 
 
+.hero-text button{
 
-#shopNowButton{
+    margin-top:20px;
 
-    margin-top:25px;
-
-    background:#ec1761;
-
+    background:#ec1b5b;
     color:white;
 
     border:none;
 
-    padding:12px 35px;
+    padding:14px 35px;
 
     border-radius:25px;
 
-    font-weight:bold;
+    font-size:15px;
 
 }
 
 
 
+/* HERO IMAGE */
 
 .hero-box{
 
     width:45%;
-
     text-align:center;
 
 }
 
 
+.hero-box img{
 
-.hero-box .icons{
-
-    font-size:80px;
+    max-width:420px;
+    width:100%;
 
 }
 
 
-
-/* TRUST */
+/* =========================================
+   TRUST SECTION
+========================================= */
 
 
 .trust-section{
+
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+
+    gap:20px;
 
     max-width:1200px;
 
     margin:auto;
 
-    display:grid;
-
-    grid-template-columns:repeat(4,1fr);
-
-    gap:20px;
-
-    padding:30px 25px;
+    padding:20px;
 
 }
 
@@ -302,13 +215,7 @@ nav button{
 
     text-align:center;
 
-    padding:25px;
-
-    border-radius:20px;
-
-    background:#fff;
-
-    box-shadow:0 5px 20px #00000010;
+    padding:20px;
 
 }
 
@@ -324,53 +231,28 @@ nav button{
 
     font-size:18px;
 
-    margin:10px;
-
 }
 
 
 .trust-box p{
 
-    color:#64748b;
-
     font-size:14px;
+    color:#666;
 
 }
 
 
 
-/* CATEGORIES */
+/* =========================================
+   CATEGORY SIZE
+========================================= */
 
 
-.categories,
-.brands,
-.products,
-.offer{
+.category-container{
 
     max-width:1200px;
 
     margin:auto;
-
-    padding:40px 25px;
-
-}
-
-
-
-.categories h2,
-.brands h2,
-.products h2,
-.offer h2{
-
-    font-size:28px;
-
-    margin-bottom:25px;
-
-}
-
-
-
-.category-container{
 
     display:grid;
 
@@ -381,19 +263,17 @@ nav button{
 }
 
 
-
 .category{
 
-    background:#fff1f5;
+    background:#fff4f7;
 
-    border-radius:18px;
+    border-radius:15px;
 
-    padding:25px 10px;
+    padding:20px;
 
     text-align:center;
 
 }
-
 
 
 .category-icon{
@@ -403,10 +283,7 @@ nav button{
 }
 
 
-
 .category h3{
-
-    margin:10px;
 
     font-size:18px;
 
@@ -414,109 +291,34 @@ nav button{
 
 
 
-.category p{
-
-    color:#64748b;
-
-    font-size:13px;
-
-}
+/* =========================================
+   PRODUCTS
+========================================= */
 
 
+.products{
 
-/* BRANDS */
+    max-width:1200px;
 
-
-.brand-list{
-
-    display:grid;
-
-    grid-template-columns:repeat(6,1fr);
-
-    gap:15px;
+    margin:auto;
 
 }
-
-
-
-.brand-list div{
-
-    background:#f1f5f9;
-
-    padding:15px;
-
-    text-align:center;
-
-    border-radius:15px;
-
-    font-weight:bold;
-
-}
-
-
-
-/* PRODUCTS */
-
-
-.products-header{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-}
-
-
-
-.search-box input{
-
-    padding:12px 20px;
-
-    width:230px;
-
-    border-radius:25px;
-
-    border:1px solid #ddd;
-
-}
-
-
-
-.product-container{
-
-    margin-top:25px;
-
-    display:grid;
-
-    grid-template-columns:repeat(4,1fr);
-
-    gap:20px;
-
-}
-
 
 
 .product-card{
 
-    border-radius:20px;
-
-    background:white;
-
-    box-shadow:0 5px 20px #00000015;
+    border-radius:15px;
 
     padding:15px;
 
 }
 
 
-
 .product-card img{
 
-    height:180px;
-
     width:100%;
+
+    height:180px;
 
     object-fit:contain;
 
@@ -524,18 +326,30 @@ nav button{
 
 
 
-/* MOBILE */
+/* =========================================
+   MOBILE
+========================================= */
+
 
 @media(max-width:900px){
 
 
 header{
 
-    flex-direction:column;
-
     height:auto;
 
+    flex-direction:column;
+
     gap:20px;
+
+}
+
+
+nav{
+
+    flex-wrap:wrap;
+
+    justify-content:center;
 
 }
 
@@ -552,25 +366,30 @@ header{
 
     width:100%;
 
+    text-align:center;
+
 }
 
 
-.category-container,
-.product-container,
+.hero-text h1{
+
+    font-size:36px;
+
+}
+
+
 .trust-section{
 
-    grid-template-columns:1fr;
+grid-template-columns:1fr 1fr;
 
 }
 
 
+.category-container{
 
-.brand-list{
-
-    grid-template-columns:repeat(2,1fr);
+grid-template-columns:1fr 1fr;
 
 }
-
 
 
 }
