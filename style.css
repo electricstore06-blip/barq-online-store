@@ -1037,4 +1037,218 @@ footer {
     .product img {
         height: 250px;
     }
+/* =========================================================
+   BARQ STORE — COMPACT INTERFACE
+   ========================================================= */
+
+body {
+    font-size: 16px;
+}
+
+/* TOP BAR */
+.top-bar {
+    padding: 12px 20px;
+    font-size: 16px;
+}
+
+/* HEADER */
+header {
+    padding: 25px 50px;
+}
+
+/* LOGO */
+.logo {
+    font-size: 42px;
+}
+
+.logo span {
+    font-size: 14px;
+    letter-spacing: 5px;
+}
+
+/* NAVIGATION */
+nav {
+    gap: 18px;
+}
+
+nav a {
+    font-size: 17px;
+}
+
+nav button {
+    font-size: 16px;
+    padding: 12px 22px;
+}
+
+/* HERO */
+.hero {
+    padding: 60px 50px;
+    gap: 50px;
+}
+
+.hero-text h1 {
+    font-size: 48px;
+    line-height: 1.15;
+}
+
+.hero-text h2 {
+    font-size: 25px;
+}
+
+.hero-text p {
+    font-size: 17px;
+}
+
+.hero-text button {
+    padding: 14px 28px;
+    font-size: 17px;
+}
+
+.hero-box {
+    padding: 35px;
+}
+
+.hero-box h3 {
+    font-size: 25px;
+}
+
+/* TRUST */
+.trust-section {
+    padding: 35px 50px;
+    gap: 20px;
+}
+
+.trust-box {
+    padding: 25px;
+}
+
+.trust-box h3 {
+    font-size: 19px;
+}
+
+.trust-box p {
+    font-size: 14px;
+}
+
+/* CATEGORIES */
+.categories {
+    padding: 55px 50px;
+}
+
+.categories > h2,
+.brands > h2,
+.products h2,
+.offer h2 {
+    font-size: 32px;
+}
+
+.category-container {
+    gap: 20px;
+}
+
+.category {
+    padding: 25px;
+}
+
+.category-icon {
+    font-size: 38px;
+}
+
+.category h3 {
+    font-size: 18px;
+}
+
+.category p {
+    font-size: 14px;
+}
+
+/* BRANDS */
+.brands {
+    padding: 50px;
+}
+
+.brand-list {
+    gap: 18px;
+}
+
+.brand-list div {
+    padding: 15px 25px;
+    font-size: 17px;
+}
+
+/* PRODUCTS */
+.products {
+    padding: 55px 50px;
+}
+
+.products-header {
+    margin-bottom: 30px;
+}
+
+.search-box input {
+    padding: 12px 16px;
+    font-size: 15px;
+}
+
+.search-box button {
+    padding: 12px 16px;
+}
+
+/* PRODUCT CARDS */
+.product-container {
+    gap: 25px;
+}
+
+.product-card {
+    padding: 18px;
+}
+
+.product-card h3 {
+    font-size: 19px;
+}
+
+.product-description {
+    font-size: 14px;
+}
+
+.product-price strong {
+    font-size: 20px;
+}
+
+.product-actions button {
+    padding: 10px 15px;
+    font-size: 14px;
+}
+
+/* DEALS */
+.offer {
+    padding: 55px 30px;
+}
+
+.offer p {
+    font-size: 16px;
+}
+
+.offer button {
+    padding: 12px 25px;
+    font-size: 16px;
+}
+
+/* CART */
+.cart-box {
+    width: 380px;
+    max-width: 90vw;
+}
+
+/* FOOTER */
+footer {
+    padding: 35px 50px;
+}
+
+footer .logo {
+    font-size: 32px;
+}
+
+footer .logo span {
+    font-size: 11px;
 }
