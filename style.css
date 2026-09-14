@@ -260,3 +260,44 @@ nav a{
     border-radius:20px;
     cursor:pointer;
 }
+/* BEAUTY BANNER */
+
+.hero{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    max-width:1200px;
+    margin:40px auto;
+    padding:45px;
+    background:#fff1f6;
+    border-radius:25px;
+}
+
+
+.hero-text{
+    width:45%;
+}
+
+
+.hero-text h1{
+    font-size:42px;
+    color:#111827;
+}
+
+
+.hero-text span{
+    color:#ec1b63;
+}
+
+
+.hero-image{
+    width:45%;
+    text-align:center;
+}
+
+
+.hero-image img{
+    width:100%;
+    max-width:420px;
+    height:auto;
+}
