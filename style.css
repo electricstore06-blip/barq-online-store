@@ -16,21 +16,21 @@ body{
 /* TOP BAR */
 
 .top-bar{
-    height:35px;
+    height:30px;
     background:#111827;
     color:white;
     display:flex;
     justify-content:center;
     align-items:center;
-    gap:12px;
-    font-size:13px;
+    gap:10px;
+    font-size:10px;
 }
 
 
 /* HEADER */
 
 header{
-    height:75px;
+    height:55px;
     display:flex;
     align-items:center;
     justify-content:space-between;
@@ -45,13 +45,13 @@ header{
     display:flex;
     flex-direction:column;
     align-items:center;
-    font-size:28px;
-    font-weight:800;
+    font-size:22px;
+    font-weight:600;
     line-height:1;
 }
 
 .logo span{
-    font-size:10px;
+    font-size:8px;
     letter-spacing:5px;
     margin-top:6px;
 }
@@ -62,15 +62,15 @@ header{
 nav{
     display:flex;
     align-items:center;
-    gap:25px;
+    gap:15px;
 }
 
 
 nav a{
     text-decoration:none;
     color:#111827;
-    font-size:15px;
-    font-weight:600;
+    font-size:12px;
+    font-weight:400;
 }
 
 
@@ -78,9 +78,9 @@ nav button{
     border:none;
     background:#ec1761;
     color:white;
-    padding:12px 25px;
-    border-radius:25px;
-    font-size:15px;
+    padding:12px 20px;
+    border-radius:20px;
+    font-size:12px;
     cursor:pointer;
 }
 
@@ -88,24 +88,24 @@ nav button{
 /* CART */
 
 #cartButton{
-    padding:12px 22px;
+    padding:12px 20px;
 }
 
 
 /* HERO */
 
 .hero{
-    min-height:420px;
+    min-height:400px;
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:40px 10%;
+    padding:35px 10%;
     background:#fafafa;
 }
 
 
 .hero-text{
-    max-width:450px;
+    max-width:400px;
 }
 
 
@@ -122,7 +122,7 @@ nav button{
 
 
 .hero-text h2{
-    font-size:22px;
+    font-size:20px;
 }
 
 
