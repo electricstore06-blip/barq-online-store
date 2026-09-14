@@ -27,18 +27,16 @@ body{
 
 
 
-/* HEADER */
-
 header{
 
     display:flex;
-    justify-content:space-between;
+    flex-direction:column;
+    justify-content:center;
     align-items:center;
-    padding:15px 6%;
+    padding:25px 6%;
     background:white;
 
 }
-
 
 
 .logo{
