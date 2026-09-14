@@ -110,14 +110,7 @@ nav a{
 }
 /* HERO SECTION */
 
-.hero{
-    width:90%;
-    max-width:1200px;
-    margin:40px auto;
-    padding:45px;
-    background:#fff1f6;
-    border-radius:25px;
-/* BEAUTY BANNER FINAL */
+/* HERO SECTION */
 
 .hero{
     display:flex;
