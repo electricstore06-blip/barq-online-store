@@ -5,7 +5,6 @@
     font-family:Arial,sans-serif;
 }
 
-
 body{
     background:white;
     color:#111827;
@@ -23,53 +22,42 @@ body{
 }
 
 
-
 /* HEADER */
 
 header{
-
     display:flex;
     justify-content:space-between;
     align-items:center;
     padding:25px 8%;
     background:white;
-
 }
 
 
 .logo{
-
     font-size:32px;
     font-weight:bold;
-
+    color:#111827;
 }
 
 
 .logo span{
-
     display:block;
     font-size:10px;
     letter-spacing:3px;
-
 }
 
 
 
 nav a{
-
     margin:0 15px;
     text-decoration:none;
-    color:#111;
-    cursor:pointer;
-
+    color:#111827;
 }
-
 
 
 /* HERO */
 
 .hero{
-
     margin:20px 5%;
     border-radius:30px;
     background:#f9dce5;
@@ -77,75 +65,54 @@ nav a{
     align-items:center;
     justify-content:space-between;
     padding:50px;
-
 }
-
 
 
 .hero-text{
-
     width:45%;
-
 }
-
 
 
 .small{
-
     color:#d81b60;
     font-weight:bold;
-    font-size:22px;
-
+    font-size:20px;
 }
 
 
-
-h1{
-
+.hero h1{
     font-size:60px;
     line-height:1.1;
-
 }
 
 
-h1 span{
-
+.hero h1 span{
     color:#d81b60;
-
 }
 
 
-
-.hero-text p{
-
+.hero p{
     font-size:20px;
     margin:20px 0;
-
 }
-
 
 
 button{
-
     background:#d81b60;
     color:white;
     border:none;
     padding:15px 30px;
     border-radius:10px;
     cursor:pointer;
-    font-size:16px;
-
 }
 
 
 
 .hero-image img{
-
     width:500px;
     height:500px;
     object-fit:cover;
     border-radius:25px;
-
 }
 
 
@@ -153,39 +120,29 @@ button{
 /* BRANDS */
 
 .brands{
-
-    padding:40px 8%;
-
+    padding:50px 8%;
 }
 
 
 .brands h2{
-
     font-size:35px;
     margin-bottom:25px;
-
 }
-
 
 
 .brand-list{
-
     display:flex;
     gap:20px;
     flex-wrap:wrap;
-
 }
 
 
-
 .brand-list span{
-
     background:#fce7ef;
     color:#d81b60;
     padding:15px 30px;
     border-radius:30px;
     font-weight:bold;
-
 }
 
 
@@ -194,26 +151,18 @@ button{
 
 
 .products{
-
     padding:60px 8%;
-
 }
-
 
 
 .products h2{
-
     font-size:38px;
     margin-bottom:15px;
-
 }
 
 
-
 .products-subtitle{
-
-    margin-bottom:25px;
-
+    margin-bottom:30px;
 }
 
 
@@ -223,13 +172,11 @@ button{
     width:500px;
     max-width:100%;
     padding:15px;
-    border:2px solid #222;
+    border:2px solid #111;
     border-radius:15px;
     font-size:16px;
-    margin-bottom:40px;
 
 }
-
 
 
 
@@ -238,6 +185,7 @@ button{
     display:flex;
     flex-wrap:wrap;
     gap:30px;
+    margin-top:40px;
 
 }
 
@@ -276,7 +224,6 @@ button{
 }
 
 
-
 .brand{
 
     color:#777;
@@ -284,12 +231,11 @@ button{
 }
 
 
-
 .price{
 
     color:#d81b60;
     font-weight:bold;
-    margin-top:5px;
+    margin:10px;
 
 }
 
@@ -297,11 +243,10 @@ button{
 
 .add-btn{
 
-    margin-top:15px;
     width:100%;
+    margin-top:15px;
 
 }
-
 
 
 
@@ -314,15 +259,14 @@ button{
     position:fixed;
     right:20px;
     top:80px;
+    width:320px;
     background:white;
     padding:25px;
-    width:320px;
     border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,.2);
+    box-shadow:0 10px 40px #999;
     z-index:999;
 
 }
-
 
 
 .cart-box button{
@@ -334,17 +278,7 @@ button{
 
 
 
-.cart-item{
-
-    margin-bottom:15px;
-
-}
-
-
-
-
-/* CHECKOUT MOBILE */
-
+/* MOBILE */
 
 @media(max-width:900px){
 
@@ -357,13 +291,11 @@ header{
 }
 
 
-
 .hero{
 
     flex-direction:column;
 
 }
-
 
 
 .hero-text{
@@ -372,6 +304,12 @@ header{
 
 }
 
+
+.hero h1{
+
+    font-size:45px;
+
+}
 
 
 .hero-image img{
@@ -382,12 +320,10 @@ header{
 }
 
 
-
 .product-container{
 
     justify-content:center;
 
 }
-
 
 }
