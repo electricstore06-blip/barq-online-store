@@ -374,4 +374,27 @@ justify-content:center;
     border-radius:10px;
     cursor:pointer;
 }
+/* POPULAR BRANDS */
 
+.brands-section{
+    padding:60px 80px;
+}
+
+.brands-section h2{
+    font-size:32px;
+    margin-bottom:25px;
+}
+
+.brand-list{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.brand-list span{
+    background:#fce7ef;
+    padding:15px 30px;
+    border-radius:30px;
+    font-weight:bold;
+    color:#d81b60;
+}
