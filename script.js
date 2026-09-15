@@ -17,7 +17,29 @@ image:"beauty-banner.jpg"
 ];
 
 let cart = [];let cart = [];
+const productContainer = document.querySelector(".product-container");
 
+products.forEach(product=>{
+
+productContainer.innerHTML += `
+
+<div class="product-card">
+
+<img src="${product.image}">
+
+<h3>${product.name}</h3>
+
+<p>${product.price} SAR</p>
+
+<button onclick="addToCart('${product.name}',${product.price})">
+Add To Cart
+</button>
+
+</div>
+
+`;
+
+});
 
 function addToCart(name, price){
 
