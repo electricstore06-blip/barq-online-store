@@ -103,7 +103,7 @@ function displayProducts(products) {
 
             <img
                 class="product-img"
-                src="${product.image || "beauty-banner.jpg"}"
+               src="${product.image && product.image.startsWith("http") ? product.image : "https://images.unsplash.com/photo-1596462502278-27bfdc403348"}"
                 alt="${product.name || "BARQ Beauty Product"}"
             >
 
