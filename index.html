@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
 
-<title>BARQ Online Store</title>
+    <meta charset="UTF-8">
 
-<link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BARQ Online Store</title>
+
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -12,49 +17,67 @@
 <body>
 
 
+<!-- TOP BAR -->
+
 <div class="top-bar">
-🚚 Free shipping | ❤️ Authentic products | 🔒 Secure payment
+
+    🚚 Free shipping | ❤️ Authentic products | 🔒 Secure payment
+
 </div>
 
 
+
+<!-- HEADER -->
 
 <header>
 
 
-<div class="logo">
+    <div class="logo">
 
-⚡ BARQ
+        ⚡ BARQ
 
-<span>
-ONLINE STORE
-</span>
+        <span>
+            ONLINE STORE
+        </span>
 
-</div>
-
-
-
-<nav>
-
-<a href="#">Home</a>
-<a href="#products">Shop</a>
-<a href="#">Categories</a>
-<a href="#">Deals</a>
-<a href="#">Contact</a>
+    </div>
 
 
-<a onclick="openCart()">
 
-🛒 Cart
+    <nav>
 
-<span id="cartCount">
-0
-</span>
+        <a href="#">
+            Home
+        </a>
 
-</a>
+        <a href="#products">
+            Shop
+        </a>
+
+        <a href="#brands">
+            Categories
+        </a>
+
+        <a href="#products">
+            Deals
+        </a>
+
+        <a href="#">
+            Contact
+        </a>
 
 
-</nav>
+        <a href="#" onclick="openCart(); return false;">
 
+            🛒 Cart
+
+            <span id="cartCount">
+                0
+            </span>
+
+        </a>
+
+    </nav>
 
 
 </header>
@@ -62,49 +85,58 @@ ONLINE STORE
 
 
 
+<!-- HERO -->
+
 <section class="hero">
 
 
-<div class="hero-text">
+    <div class="hero-text">
 
 
-<p class="small">
-BEAUTY & COSMETICS
-</p>
+        <p class="small">
+            BEAUTY & COSMETICS
+        </p>
 
 
-<h1>
-Look Good,
-<br>
-<span>
-Feel Confident
-</span>
-</h1>
+        <h1>
 
+            Look Good,
 
+            <br>
 
-<p>
-Premium cosmetics, skincare and beauty essentials for your everyday glow.
-</p>
+            <span>
+                Feel Confident
+            </span>
 
-
-
-<button>
-Shop Cosmetics →
-</button>
-
-
-</div>
+        </h1>
 
 
 
-<div class="hero-image">
+        <p>
+            Premium cosmetics, skincare and beauty essentials for your everyday glow.
+        </p>
 
 
-<img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348">
+
+        <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+
+            Shop Cosmetics →
+
+        </button>
 
 
-</div>
+    </div>
+
+
+
+    <div class="hero-image">
+
+        <img
+            src="https://images.unsplash.com/photo-1596462502278-27bfdc403348"
+            alt="Beauty products"
+        >
+
+    </div>
 
 
 </section>
@@ -112,18 +144,83 @@ Shop Cosmetics →
 
 
 
+
+<!-- BRANDS -->
+
+<section id="brands" class="brands">
+
+
+    <h2>
+        Popular Brands
+    </h2>
+
+
+    <div class="brand-list">
+
+        <div>
+            Maybelline
+        </div>
+
+        <div>
+            NYX
+        </div>
+
+        <div>
+            CeraVe
+        </div>
+
+        <div>
+            The Ordinary
+        </div>
+
+        <div>
+            MAC
+        </div>
+
+    </div>
+
+
+</section>
+
+
+
+
+
+<!-- PRODUCTS -->
 
 <section id="products" class="products">
 
 
-<h2>
-Featured Beauty Products
-</h2>
+    <h2>
+        Featured Beauty Products
+    </h2>
 
 
-<div class="product-container">
+    <p class="products-subtitle">
+        Discover your next beauty favorite
+    </p>
 
-</div>
+
+
+    <!-- SEARCH -->
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search cosmetics, skincare, makeup..."
+        >
+
+    </div>
+
+
+
+    <!-- FIREBASE PRODUCTS APPEAR HERE -->
+
+    <div class="product-container">
+
+    </div>
 
 
 </section>
@@ -132,58 +229,57 @@ Featured Beauty Products
 
 
 
+<!-- CART -->
+
 <div id="cartBox" class="cart-box">
 
 
-<h2>
-Your Cart
-</h2>
+    <h2>
+        Your Cart
+    </h2>
 
 
 
-<div id="cartItems">
+    <div id="cartItems">
+
+    </div>
+
+
+
+    <h3>
+
+        Total:
+
+        <span id="cartTotal">
+            0
+        </span>
+
+        SAR
+
+    </h3>
+
+
+
+    <button onclick="checkout()">
+        Checkout
+    </button>
+
+
+
+    <button onclick="closeCart()">
+        Close
+    </button>
+
 
 </div>
 
 
 
-<h3>
-
-Total:
-
-<span id="cartTotal">
-0
-</span>
-
-SAR
-
-</h3>
 
 
+<!-- JAVASCRIPT -->
 
-<button onclick="checkout()">
-Checkout
-</button>
-
-
-
-<button onclick="closeCart()">
-Close
-</button>
-
-
-
-</div>
-
-
-
-
-
-
-<script src="firebase-config.js"></script>
-
-<script src="script.js"></script>
-
+<script type="module" src="script.js"></script>
 
 
 </body>
