@@ -1,4 +1,22 @@
-let cart = [];
+const products = [
+{
+name:"Beauty Product 1",
+price:50,
+image:"beauty-banner.jpg"
+},
+{
+name:"Beauty Product 2",
+price:80,
+image:"beauty-banner.jpg"
+},
+{
+name:"Beauty Product 3",
+price:120,
+image:"beauty-banner.jpg"
+}
+];
+
+let cart = [];let cart = [];
 
 
 function addToCart(name, price){
