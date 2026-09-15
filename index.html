@@ -1,10 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>BARQ Online Store</title>
 
@@ -17,9 +13,7 @@
 
 
 <div class="top-bar">
-
-🚚 Free Shipping | ❤️ Authentic Beauty Products | 🔒 Secure Shopping
-
+🚚 Free shipping | ❤️ Authentic products | 🔒 Secure payment
 </div>
 
 
@@ -41,28 +35,14 @@ ONLINE STORE
 
 <nav>
 
-<a href="#">
-Home
-</a>
-
-<a href="#">
-Shop
-</a>
-
-<a href="#">
-Categories
-</a>
-
-<a href="#">
-Deals
-</a>
-
-<a href="#">
-Contact
-</a>
+<a href="#">Home</a>
+<a href="#products">Shop</a>
+<a href="#">Categories</a>
+<a href="#">Deals</a>
+<a href="#">Contact</a>
 
 
-<a href="#" onclick="openCart()">
+<a onclick="openCart()">
 
 🛒 Cart
 
@@ -73,18 +53,11 @@ Contact
 </a>
 
 
-<button id="loginButton">
-
-Login
-
-</button>
-
-
 </nav>
 
 
-</header>
 
+</header>
 
 
 
@@ -96,38 +69,28 @@ Login
 
 
 <p class="small">
-
 BEAUTY & COSMETICS
-
 </p>
 
 
 <h1>
-
 Look Good,
-
 <br>
-
 <span>
 Feel Confident
 </span>
-
 </h1>
 
 
 
 <p>
-
-Premium cosmetics, skincare, makeup and beauty essentials for your everyday glow.
-
+Premium cosmetics, skincare and beauty essentials for your everyday glow.
 </p>
 
 
 
 <button>
-
-Shop Beauty
-
+Shop Cosmetics →
 </button>
 
 
@@ -135,74 +98,10 @@ Shop Beauty
 
 
 
-
 <div class="hero-image">
 
-<img src="barq-new.png">
 
-</div>
-
-
-</section>
-
-
-
-
-
-
-
-<section class="categories">
-
-
-<h2>
-
-Beauty Categories
-
-</h2>
-
-
-
-<div class="cards">
-
-
-<div>
-
-💄
-
-Makeup
-
-</div>
-
-
-
-<div>
-
-🧴
-
-Skincare
-
-</div>
-
-
-
-<div>
-
-💋
-
-Lip Care
-
-</div>
-
-
-
-<div>
-
-✨
-
-Fragrance
-
-</div>
-
+<img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348">
 
 
 </div>
@@ -214,63 +113,20 @@ Fragrance
 
 
 
-
-
-<section class="products">
+<section id="products" class="products">
 
 
 <h2>
-
 Featured Beauty Products
-
 </h2>
-
-
-
-<input 
-type="text"
-id="searchInput"
-placeholder="Search beauty products..."
->
-
-
 
 
 <div class="product-container">
 
-
 </div>
 
 
-
 </section>
-
-
-
-
-
-
-
-<section class="offer">
-
-
-<h2>
-
-Special Offers
-
-</h2>
-
-
-<p>
-
-Discover premium beauty products from BARQ.
-
-</p>
-
-
-</section>
-
-
 
 
 
@@ -280,9 +136,7 @@ Discover premium beauty products from BARQ.
 
 
 <h2>
-
 Your Cart
-
 </h2>
 
 
@@ -307,20 +161,16 @@ SAR
 
 
 
-
 <button onclick="checkout()">
-
 Checkout
-
 </button>
 
 
 
 <button onclick="closeCart()">
-
 Close
-
 </button>
+
 
 
 </div>
@@ -330,34 +180,12 @@ Close
 
 
 
+<script src="firebase-config.js"></script>
 
-<footer>
+<script src="script.js"></script>
 
-
-<h3>
-
-BARQ ONLINE STORE
-
-</h3>
-
-
-<p>
-
-Cosmetics • Skincare • Makeup • Beauty Tools • Fragrance
-
-</p>
-
-
-</footer>
-
-
-
-
-
-<script type="module" src="script.js"></script>
 
 
 </body>
-
 
 </html>
