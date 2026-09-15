@@ -1,432 +1,412 @@
 import { db } from "./firebase-config.js";
 
-
 import {
-collection,
-getDocs
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    collection,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
+// ==============================
+// BARQ PRODUCTS
+// ==============================
 
 let productsData = [];
+
+
+// ==============================
+// CART
+// ==============================
 
 let cart = JSON.parse(localStorage.getItem("barqCart")) || [];
 
 
-
-
+// ==============================
 // LOAD PRODUCTS FROM FIRESTORE
+// ==============================
 
-async function loadProducts(){
+async function loadProducts() {
 
+    const container = document.querySelector(".product-container");
 
-try{
+    if (!container) return;
 
+    container.innerHTML = "<p>Loading products...</p>";
 
-const snapshot = await getDocs(collection(db,"products"));
+    try {
 
+        const snapshot = await getDocs(
+            collection(db, "products")
+        );
 
-productsData=[];
+        productsData = [];
 
+        snapshot.forEach((doc) => {
 
-snapshot.forEach((doc)=>{
+            productsData.push({
+                id: doc.id,
+                ...doc.data()
+            });
 
+        });
 
-productsData.push({
+        displayProducts(productsData);
 
-id:doc.id,
+    } catch (error) {
 
-...doc.data()
+        console.error("Firebase product loading error:", error);
 
-});
+        container.innerHTML = `
+            <p>
+                Unable to load products.
+            </p>
+        `;
 
-
-});
-
-
-displayProducts(productsData);
-
+    }
 
 }
 
-catch(error){
 
-console.log(error);
-
-}
-
-
-}
-
-
-
-
-
-
+// ==============================
 // DISPLAY PRODUCTS
+// ==============================
 
-function displayProducts(products){
+function displayProducts(products) {
 
+    const container = document.querySelector(".product-container");
 
-let container=document.querySelector(".product-container");
+    if (!container) return;
 
-
-if(!container) return;
-
-
-
-container.innerHTML="";
+    container.innerHTML = "";
 
 
+    if (products.length === 0) {
 
-products.forEach(product=>{
+        container.innerHTML = `
+            <p>
+                No products found.
+            </p>
+        `;
 
+        return;
 
-let card=document.createElement("div");
-
-
-card.className="product";
-
-
-
-card.innerHTML=`
-
-
-<img class="product-img" 
-src="${product.image || 'barq-new.png'}">
+    }
 
 
+    products.forEach((product) => {
 
-<h3>
-${product.name || "BARQ Beauty Product"}
-</h3>
+        const card = document.createElement("div");
 
-
-
-<p class="brand">
-
-${product.brand || "BARQ"}
-
-</p>
+        card.className = "product";
 
 
+        card.innerHTML = `
 
-<p class="price">
+            <img
+                class="product-img"
+                src="${product.image || "beauty-banner.jpg"}"
+                alt="${product.name || "BARQ Beauty Product"}"
+            >
 
-${product.price || 0} SAR
+            <h3>
+                ${product.name || "BARQ Beauty Product"}
+            </h3>
 
-</p>
+            <p class="brand">
+                ${product.brand || "BARQ"}
+            </p>
 
+            <p class="price">
+                ${Number(product.price || 0).toFixed(2)} SAR
+            </p>
 
+            <button class="add-btn">
+                Add To Cart
+            </button>
 
-<button class="add-btn">
-
-Add To Cart
-
-</button>
-
-
-`;
-
-
-
-card.querySelector(".add-btn").onclick=()=>{
-
-
-addToCart(
-
-product.name,
-
-product.price
-
-);
+        `;
 
 
-};
+        const addButton = card.querySelector(".add-btn");
 
 
+        addButton.addEventListener("click", () => {
 
-container.appendChild(card);
+            addToCart(
+                product.name || "BARQ Beauty Product",
+                Number(product.price || 0)
+            );
+
+        });
 
 
+        container.appendChild(card);
 
-});
-
+    });
 
 }
 
 
-
-
-
-
-
+// ==============================
 // SEARCH
+// ==============================
+
+const searchInput = document.getElementById("searchInput");
 
 
-let search=document.getElementById("searchInput");
+if (searchInput) {
+
+    searchInput.addEventListener("input", () => {
+
+        const value = searchInput.value
+            .trim()
+            .toLowerCase();
 
 
-if(search){
+        const results = productsData.filter((product) => {
+
+            const name = (product.name || "").toLowerCase();
+
+            const brand = (product.brand || "").toLowerCase();
+
+            return (
+                name.includes(value) ||
+                brand.includes(value)
+            );
+
+        });
 
 
-search.addEventListener("input",()=>{
+        displayProducts(results);
 
-
-let value=search.value.toLowerCase();
-
-
-
-let result=productsData.filter(product=>
-
-(product.name || "")
-.toLowerCase()
-.includes(value)
-
-);
-
-
-
-displayProducts(result);
-
-
-
-});
-
-
-}
-
-
-
-
-
-
-
-// CART
-
-
-function saveCart(){
-
-localStorage.setItem(
-
-"barqCart",
-
-JSON.stringify(cart)
-
-);
+    });
 
 }
 
 
+// ==============================
+// SAVE CART
+// ==============================
 
+function saveCart() {
 
-
-
-function addToCart(name,price){
-
-
-let item=cart.find(x=>x.name===name);
-
-
-
-if(item){
-
-
-item.quantity++;
-
-
-}
-
-else{
-
-
-cart.push({
-
-name:name,
-
-price:Number(price),
-
-quantity:1
-
-});
-
+    localStorage.setItem(
+        "barqCart",
+        JSON.stringify(cart)
+    );
 
 }
 
 
+// ==============================
+// ADD TO CART
+// ==============================
 
-saveCart();
+function addToCart(name, price) {
 
-updateCart();
+    const existingItem = cart.find(
+        (item) => item.name === name
+    );
 
+
+    if (existingItem) {
+
+        existingItem.quantity++;
+
+    } else {
+
+        cart.push({
+
+            name: name,
+
+            price: Number(price),
+
+            quantity: 1
+
+        });
+
+    }
+
+
+    saveCart();
+
+    updateCart();
 
 }
 
 
+// ==============================
+// UPDATE CART
+// ==============================
+
+function updateCart() {
+
+    const items = document.getElementById("cartItems");
+
+    const total = document.getElementById("cartTotal");
+
+    const count = document.getElementById("cartCount");
 
 
+    if (!items) return;
 
 
+    items.innerHTML = "";
 
 
-function updateCart(){
+    let sum = 0;
+
+    let quantity = 0;
 
 
-let items=document.getElementById("cartItems");
+    cart.forEach((item, index) => {
 
-let total=document.getElementById("cartTotal");
-
-let count=document.getElementById("cartCount");
-
+        const itemTotal =
+            Number(item.price) * Number(item.quantity);
 
 
-if(!items) return;
+        sum += itemTotal;
+
+        quantity += Number(item.quantity);
 
 
+        items.innerHTML += `
 
-items.innerHTML="";
+            <div class="cart-item">
 
+                <b>
+                    ${item.name}
+                </b>
 
+                <br>
 
-let sum=0;
+                ${Number(item.price).toFixed(2)} SAR
 
-let qty=0;
+                <br>
 
+                Quantity:
+                ${item.quantity}
 
+                <button
+                    onclick="removeCart(${index})"
+                >
+                    X
+                </button>
 
-cart.forEach((item,index)=>{
+            </div>
 
+        `;
 
-sum += item.price * item.quantity;
-
-qty += item.quantity;
-
-
-
-items.innerHTML += `
-
-
-<div>
-
-
-<b>${item.name}</b>
-
-<br>
-
-${item.price} SAR
+    });
 
 
-<br>
+    if (total) {
+
+        total.innerHTML = sum.toFixed(2);
+
+    }
 
 
-Quantity:
+    if (count) {
 
-${item.quantity}
+        count.innerHTML = quantity;
 
-
-<button onclick="removeCart(${index})">
-
-X
-
-</button>
+    }
 
 
-</div>
-
-
-`;
-
-
-});
-
-
-
-total.innerHTML=sum;
-
-count.innerHTML=qty;
-
-
-
-saveCart();
-
-
+    saveCart();
 
 }
 
 
+// ==============================
+// OPEN CART
+// ==============================
+
+function openCart() {
+
+    const cartBox =
+        document.getElementById("cartBox");
 
 
+    if (!cartBox) return;
 
 
+    cartBox.style.display = "block";
 
-function openCart(){
-
-
-document.getElementById("cartBox").style.display="block";
-
-
-updateCart();
-
-
-}
-
-
-
-
-
-function closeCart(){
-
-
-document.getElementById("cartBox").style.display="none";
-
+    updateCart();
 
 }
 
 
+// ==============================
+// CLOSE CART
+// ==============================
+
+function closeCart() {
+
+    const cartBox =
+        document.getElementById("cartBox");
 
 
-
-function removeCart(index){
-
-
-cart.splice(index,1);
+    if (!cartBox) return;
 
 
-updateCart();
-
-
-}
-
-
-
-
-
-
-function checkout(){
-
-
-window.location.href="checkout.html";
-
+    cartBox.style.display = "none";
 
 }
 
 
+// ==============================
+// REMOVE CART ITEM
+// ==============================
+
+function removeCart(index) {
+
+    cart.splice(index, 1);
+
+    saveCart();
+
+    updateCart();
+
+}
 
 
+// ==============================
+// CHECKOUT
+// ==============================
+
+function checkout() {
+
+    if (cart.length === 0) {
+
+        alert("Your cart is empty.");
+
+        return;
+
+    }
 
 
+    window.location.href = "checkout.html";
 
-window.openCart=openCart;
-
-window.closeCart=closeCart;
-
-window.checkout=checkout;
-
-window.removeCart=removeCart;
+}
 
 
+// ==============================
+// MAKE FUNCTIONS AVAILABLE TO HTML
+// ==============================
+
+window.openCart = openCart;
+
+window.closeCart = closeCart;
+
+window.removeCart = removeCart;
+
+window.checkout = checkout;
+
+
+// ==============================
+// START BARQ STORE
+// ==============================
 
 loadProducts();
 
