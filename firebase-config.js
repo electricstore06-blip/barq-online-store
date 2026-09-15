@@ -1,35 +1,43 @@
-// BARQ Online Store Firebase Configuration
+import { initializeApp } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-import { initializeApp } from 
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-import { getFirestore } from 
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+import { getAuth }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 
 
 const firebaseConfig = {
 
-apiKey: "AIzaSyCV3N68e7GXNgNALXTiWjsYOQVFhqisTIc",
+apiKey: "YOUR_API_KEY",
 
-authDomain: "barq-online-store.firebaseapp.com",
+authDomain: "YOUR_AUTH_DOMAIN",
 
-projectId: "barq-online-store",
+projectId: "YOUR_PROJECT_ID",
 
-storageBucket: "barq-online-store.firebasestorage.app",
+storageBucket: "YOUR_STORAGE_BUCKET",
 
-messagingSenderId: "44237208872",
+messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
 
-appId: "1:44237208872:web:525a5bcf8c7b9d5978e41d",
-
-measurementId: "G-KS2BC3EXDD"
+appId: "YOUR_APP_ID"
 
 };
+
+
 
 
 const app = initializeApp(firebaseConfig);
 
 
+
 const db = getFirestore(app);
 
+const auth = getAuth(app);
 
-export { db, firebaseConfig };
+
+
+export { db, auth };
