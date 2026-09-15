@@ -1,160 +1,433 @@
-const products = [
-{
-name:"Beauty Product 1",
-price:50,
-image:"beauty-banner.jpg"
-},
-{
-name:"Beauty Product 2",
-price:80,
-image:"beauty-banner.jpg"
-},
-{
-name:"Beauty Product 3",
-price:120,
-image:"beauty-banner.jpg"
-}
-];
+import { db } from "./firebase-config.js";
 
-let cart = [];let cart = [];
-const productContainer = document.querySelector(".product-container");
+
+import {
+collection,
+getDocs
+}
+from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+
+let productsData = [];
+
+let cart = JSON.parse(localStorage.getItem("barqCart")) || [];
+
+
+
+
+// LOAD PRODUCTS FROM FIRESTORE
+
+async function loadProducts(){
+
+
+try{
+
+
+const snapshot = await getDocs(collection(db,"products"));
+
+
+productsData=[];
+
+
+snapshot.forEach((doc)=>{
+
+
+productsData.push({
+
+id:doc.id,
+
+...doc.data()
+
+});
+
+
+});
+
+
+displayProducts(productsData);
+
+
+}
+
+catch(error){
+
+console.log(error);
+
+}
+
+
+}
+
+
+
+
+
+
+// DISPLAY PRODUCTS
+
+function displayProducts(products){
+
+
+let container=document.querySelector(".product-container");
+
+
+if(!container) return;
+
+
+
+container.innerHTML="";
+
+
 
 products.forEach(product=>{
 
-productContainer.innerHTML += `
 
-<div class="product-card">
+let card=document.createElement("div");
 
-<img src="${product.image}">
 
-<h3>${product.name}</h3>
+card.className="product";
 
-<p>${product.price} SAR</p>
 
-<button onclick="addToCart('${product.name}',${product.price})">
+
+card.innerHTML=`
+
+
+<img class="product-img" 
+src="${product.image || 'barq-new.png'}">
+
+
+
+<h3>
+${product.name || "BARQ Beauty Product"}
+</h3>
+
+
+
+<p class="brand">
+
+${product.brand || "BARQ"}
+
+</p>
+
+
+
+<p class="price">
+
+${product.price || 0} SAR
+
+</p>
+
+
+
+<button class="add-btn">
+
 Add To Cart
+
 </button>
 
-</div>
 
 `;
 
+
+
+card.querySelector(".add-btn").onclick=()=>{
+
+
+addToCart(
+
+product.name,
+
+product.price
+
+);
+
+
+};
+
+
+
+container.appendChild(card);
+
+
+
 });
 
-function addToCart(name, price){
-
-let existing = cart.find(item => item.name === name);
-
-if(existing){
-
-existing.quantity++;
-
-}else{
-
-cart.push({
-name:name,
-price:price,
-quantity:1
-});
 
 }
+
+
+
+
+
+
+
+// SEARCH
+
+
+let search=document.getElementById("searchInput");
+
+
+if(search){
+
+
+search.addEventListener("input",()=>{
+
+
+let value=search.value.toLowerCase();
+
+
+
+let result=productsData.filter(product=>
+
+(product.name || "")
+.toLowerCase()
+.includes(value)
+
+);
+
+
+
+displayProducts(result);
+
+
+
+});
+
+
+}
+
+
+
+
+
+
+
+// CART
+
+
+function saveCart(){
+
+localStorage.setItem(
+
+"barqCart",
+
+JSON.stringify(cart)
+
+);
+
+}
+
+
+
+
+
+
+function addToCart(name,price){
+
+
+let item=cart.find(x=>x.name===name);
+
+
+
+if(item){
+
+
+item.quantity++;
+
+
+}
+
+else{
+
+
+cart.push({
+
+name:name,
+
+price:Number(price),
+
+quantity:1
+
+});
+
+
+}
+
+
+
+saveCart();
 
 updateCart();
 
+
 }
+
+
+
+
+
 
 
 
 function updateCart(){
 
-let items = document.getElementById("cartItems");
-let totalBox = document.getElementById("cartTotal");
-let countBox = document.getElementById("cartCount");
+
+let items=document.getElementById("cartItems");
+
+let total=document.getElementById("cartTotal");
+
+let count=document.getElementById("cartCount");
+
+
+
+if(!items) return;
+
 
 
 items.innerHTML="";
 
-let total = 0;
-let count = 0;
 
 
-cart.forEach(function(item,index){
+let sum=0;
+
+let qty=0;
 
 
-total += item.price * item.quantity;
 
-count += item.quantity;
-
-
-let product = document.createElement("div");
+cart.forEach((item,index)=>{
 
 
-product.innerHTML = `
+sum += item.price * item.quantity;
 
-<p>
-${item.name}<br>
+qty += item.quantity;
 
-$${item.price} x ${item.quantity}
 
-<button onclick="removeItem(${index})">
-❌
+
+items.innerHTML += `
+
+
+<div>
+
+
+<b>${item.name}</b>
+
+<br>
+
+${item.price} SAR
+
+
+<br>
+
+
+Quantity:
+
+${item.quantity}
+
+
+<button onclick="removeCart(${index})">
+
+X
+
 </button>
 
-</p>
+
+</div>
+
 
 `;
-
-items.appendChild(product);
 
 
 });
 
 
-totalBox.innerHTML = total.toFixed(2);
 
-countBox.innerHTML = count;
+total.innerHTML=sum;
 
-
-}
+count.innerHTML=qty;
 
 
 
-function removeItem(index){
+saveCart();
 
-cart.splice(index,1);
 
-updateCart();
 
 }
+
+
+
+
 
 
 
 function openCart(){
 
+
 document.getElementById("cartBox").style.display="block";
 
+
+updateCart();
+
+
 }
+
+
 
 
 
 function closeCart(){
 
+
 document.getElementById("cartBox").style.display="none";
 
+
 }
+
+
+
+
+
+function removeCart(index){
+
+
+cart.splice(index,1);
+
+
+updateCart();
+
+
+}
+
+
+
 
 
 
 function checkout(){
 
-if(cart.length===0){
 
-alert("Your cart is empty");
+window.location.href="checkout.html";
 
-}else{
-
-alert("Thank you for shopping with BARQ!");
 
 }
 
-}
+
+
+
+
+
+
+window.openCart=openCart;
+
+window.closeCart=closeCart;
+
+window.checkout=checkout;
+
+window.removeCart=removeCart;
+
+
+
+loadProducts();
+
+updateCart();
