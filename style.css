@@ -308,5 +308,70 @@ justify-content:center;
 
 }
 
+/* BRANDS */
 
+.brands{
+    padding:50px 8%;
 }
+
+.brands h2{
+    font-size:32px;
+    margin-bottom:20px;
+}
+
+.brands-list{
+    display:flex;
+    gap:25px;
+    flex-wrap:wrap;
+}
+
+.brands-list div{
+    font-size:18px;
+    color:#333;
+}
+
+
+/* PRODUCTS */
+
+.products{
+    padding:50px 8%;
+}
+
+.products h2{
+    font-size:38px;
+    margin-bottom:15px;
+}
+
+.product-grid{
+    display:flex;
+    gap:30px;
+    flex-wrap:wrap;
+}
+
+
+.product-card{
+    width:250px;
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+
+
+.product-card img{
+    width:150px;
+    height:150px;
+    object-fit:contain;
+}
+
+
+.product-card button{
+    background:#db1961;
+    color:white;
+    border:none;
+    padding:12px 30px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
