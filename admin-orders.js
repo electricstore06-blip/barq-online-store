@@ -45,42 +45,33 @@ onAuthStateChanged(auth, async (user) => {
     }
 
 
+    console.log(
+        "Logged-in user:",
+        user.email
+    );
+
+
     try {
 
-        /*
-         * Check the user's UID inside:
-         *
-         * admins
-         * └── USER_UID
-         *     └── role: "admin"
-         */
+        /* Check this user's admin document */
 
         const adminRef =
-            doc(
-                db,
-                "admins",
-                user.uid
-            );
+            doc(db, "admins", user.uid);
 
-
-        const adminSnapshot =
+        const adminSnap =
             await getDoc(adminRef);
 
 
-        /* User is NOT an admin */
+        /* Admin document does not exist */
 
-        if (
-            !adminSnapshot.exists() ||
-            adminSnapshot.data().role !== "admin"
-        ) {
+        if (!adminSnap.exists()) {
 
-            console.warn(
-                "Unauthorized admin page access:",
-                user.email
+            console.error(
+                "User is not an admin."
             );
 
             alert(
-                "You are not authorized to access the admin page."
+                "Access denied. You are not an administrator."
             );
 
             await signOut(auth);
@@ -92,22 +83,48 @@ onAuthStateChanged(auth, async (user) => {
         }
 
 
-        /* User IS an admin */
+        /* Check admin role */
+
+        const adminData =
+            adminSnap.data();
+
+
+        if (adminData.role !== "admin") {
+
+            console.error(
+                "User does not have admin role."
+            );
+
+            alert(
+                "Access denied. You are not an administrator."
+            );
+
+            await signOut(auth);
+
+            window.location.href =
+                "index.html";
+
+            return;
+        }
+
 
         console.log(
-            "Admin access granted:",
+            "Admin access confirmed:",
             user.email
         );
 
+
+        /* Only now load orders */
 
         loadOrders();
 
     }
 
+
     catch (error) {
 
         console.error(
-            "Admin authorization error:",
+            "Admin verification error:",
             error
         );
 
@@ -167,14 +184,10 @@ async function loadOrders() {
         orders.sort((a, b) => {
 
             const dateA =
-                new Date(
-                    a.date || 0
-                ).getTime();
+                new Date(a.date || 0).getTime();
 
             const dateB =
-                new Date(
-                    b.date || 0
-                ).getTime();
+                new Date(b.date || 0).getTime();
 
             return dateB - dateA;
 
@@ -268,21 +281,15 @@ function displayOrder(order) {
 
 
     const subtotal =
-        Number(
-            order.subtotal || 0
-        );
+        Number(order.subtotal || 0);
 
 
     const delivery =
-        Number(
-            order.delivery || 0
-        );
+        Number(order.delivery || 0);
 
 
     const total =
-        Number(
-            order.total || 0
-        );
+        Number(order.total || 0);
 
 
     /* =========================================
@@ -325,14 +332,10 @@ function displayOrder(order) {
     ) {
 
         const latitude =
-            Number(
-                order.latitude
-            );
+            Number(order.latitude);
 
         const longitude =
-            Number(
-                order.longitude
-            );
+            Number(order.longitude);
 
 
         if (
@@ -376,8 +379,7 @@ function displayOrder(order) {
         order.items.length > 0
     ) {
 
-        productsHTML =
-            "<ul>";
+        productsHTML = "<ul>";
 
 
         order.items.forEach((item) => {
@@ -388,40 +390,27 @@ function displayOrder(order) {
 
 
             const quantity =
-                Number(
-                    item.quantity || 0
-                );
+                Number(item.quantity || 0);
 
 
             const price =
-                Number(
-                    item.price || 0
-                );
+                Number(item.price || 0);
 
 
             productsHTML += `
                 <li>
-                    <strong>
-                        ${name}
-                    </strong>
-
+                    <strong>${name}</strong>
                     <br>
-
-                    Quantity:
-                    ${quantity}
-
+                    Quantity: ${quantity}
                     <br>
-
-                    Price:
-                    SAR ${price.toFixed(2)}
+                    Price: SAR ${price.toFixed(2)}
                 </li>
             `;
 
         });
 
 
-        productsHTML +=
-            "</ul>";
+        productsHTML += "</ul>";
 
     }
 
@@ -462,37 +451,25 @@ function displayOrder(order) {
 
 
             <p>
-                <strong>
-                    Name:
-                </strong>
-
+                <strong>Name:</strong>
                 ${customerName}
             </p>
 
 
             <p>
-                <strong>
-                    Phone:
-                </strong>
-
+                <strong>Phone:</strong>
                 ${phone}
             </p>
 
 
             <p>
-                <strong>
-                    Email:
-                </strong>
-
+                <strong>Email:</strong>
                 ${email}
             </p>
 
 
             <p>
-                <strong>
-                    Address:
-                </strong>
-
+                <strong>Address:</strong>
                 ${address}
             </p>
 
@@ -531,28 +508,19 @@ function displayOrder(order) {
 
 
             <p>
-                <strong>
-                    Method:
-                </strong>
-
+                <strong>Method:</strong>
                 ${paymentMethod}
             </p>
 
 
             <p>
-                <strong>
-                    Subtotal:
-                </strong>
-
+                <strong>Subtotal:</strong>
                 SAR ${subtotal.toFixed(2)}
             </p>
 
 
             <p>
-                <strong>
-                    Delivery:
-                </strong>
-
+                <strong>Delivery:</strong>
                 SAR ${delivery.toFixed(2)}
             </p>
 
