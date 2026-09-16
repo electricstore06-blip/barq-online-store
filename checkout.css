@@ -2,11 +2,11 @@
    BARQ CHECKOUT
 ============================== */
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
 
@@ -14,9 +14,9 @@
    BODY
 ============================== */
 
-body{
-    background:#f8f8f8;
-    color:#111827;
+body {
+    background: #f8f8f8;
+    color: #111827;
 }
 
 
@@ -24,21 +24,21 @@ body{
    CHECKOUT PAGE
 ============================== */
 
-.checkout-page{
-    min-height:100vh;
-    padding:55px 20px 80px;
+.checkout-page {
+    min-height: 100vh;
+    padding: 55px 20px 80px;
 }
 
 
 /* ==============================
-   TITLE
+   MAIN TITLE
 ============================== */
 
-.checkout-page h1{
-    text-align:center;
-    font-size:42px;
-    margin-bottom:40px;
-    color:#111827;
+.checkout-page > h1 {
+    text-align: center;
+    font-size: 42px;
+    margin-bottom: 40px;
+    color: #111827;
 }
 
 
@@ -46,41 +46,37 @@ body{
    CHECKOUT BOX
 ============================== */
 
-.checkout-box{
-    width:100%;
-    max-width:600px;
+.checkout-box {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
 
-    margin:0 auto;
+    background: white;
 
-    background:white;
+    padding: 40px;
 
-    padding:40px;
+    border-radius: 22px;
 
-    border-radius:22px;
-
-    box-shadow:
-        0 10px 35px rgba(0,0,0,0.10);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.10);
 }
 
 
 /* ==============================
-   SECTION HEADINGS
+   HEADINGS
 ============================== */
 
-.checkout-box h2{
-    font-size:25px;
-
-    margin-top:30px;
-    margin-bottom:18px;
-
-    color:#111827;
+.checkout-box h2 {
+    font-size: 25px;
+    margin-top: 30px;
+    margin-bottom: 18px;
+    color: #111827;
 }
 
 
 /* First heading */
 
-.checkout-box h2:first-child{
-    margin-top:0;
+.checkout-box h2:first-child {
+    margin-top: 0;
 }
 
 
@@ -88,18 +84,16 @@ body{
    NORMAL LABELS
 ============================== */
 
-.checkout-box > label:not(.payment-option){
+.checkout-box > label:not(.payment-option) {
+    display: block;
 
-    display:block;
+    margin-top: 18px;
+    margin-bottom: 8px;
 
-    margin-top:18px;
-    margin-bottom:8px;
+    font-size: 16px;
+    font-weight: bold;
 
-    font-size:16px;
-
-    font-weight:bold;
-
-    color:#111827;
+    color: #111827;
 }
 
 
@@ -109,23 +103,23 @@ body{
 
 .checkout-box input[type="text"],
 .checkout-box input[type="email"],
-.checkout-box input[type="tel"]{
+.checkout-box input[type="tel"] {
 
-    width:100%;
+    display: block;
 
-    padding:15px 16px;
+    width: 100%;
 
-    border:1px solid #d7d7d7;
+    padding: 15px 16px;
 
-    border-radius:11px;
+    border: 1px solid #d7d7d7;
 
-    font-size:16px;
+    border-radius: 11px;
 
-    background:white;
+    font-size: 16px;
 
-    color:#111827;
+    background: white;
 
-    outline:none;
+    outline: none;
 
     transition:
         border-color 0.2s ease,
@@ -139,23 +133,11 @@ body{
 
 .checkout-box input[type="text"]:focus,
 .checkout-box input[type="email"]:focus,
-.checkout-box input[type="tel"]:focus{
+.checkout-box input[type="tel"]:focus {
 
-    border-color:#d81b60;
+    border-color: #d81b60;
 
-    box-shadow:
-        0 0 0 3px rgba(216,27,96,0.10);
-}
-
-
-/* ==============================
-   PLACEHOLDER
-============================== */
-
-.checkout-box input::placeholder,
-.checkout-box textarea::placeholder{
-
-    color:#777;
+    box-shadow: 0 0 0 3px rgba(216, 27, 96, 0.10);
 }
 
 
@@ -163,27 +145,27 @@ body{
    DELIVERY ADDRESS
 ============================== */
 
-.checkout-box textarea{
+.checkout-box textarea {
 
-    width:100%;
+    display: block;
 
-    height:120px;
+    width: 100%;
 
-    padding:15px 16px;
+    height: 120px;
 
-    border:1px solid #d7d7d7;
+    padding: 15px 16px;
 
-    border-radius:11px;
+    border: 1px solid #d7d7d7;
 
-    font-size:16px;
+    border-radius: 11px;
 
-    background:white;
+    font-size: 16px;
 
-    color:#111827;
+    background: white;
 
-    resize:vertical;
+    resize: vertical;
 
-    outline:none;
+    outline: none;
 
     transition:
         border-color 0.2s ease,
@@ -195,49 +177,47 @@ body{
    TEXTAREA FOCUS
 ============================== */
 
-.checkout-box textarea:focus{
+.checkout-box textarea:focus {
 
-    border-color:#d81b60;
+    border-color: #d81b60;
 
-    box-shadow:
-        0 0 0 3px rgba(216,27,96,0.10);
+    box-shadow: 0 0 0 3px rgba(216, 27, 96, 0.10);
 }
 
 
 /* ==============================
-   PAYMENT METHOD
+   PAYMENT OPTIONS
 ============================== */
 
-.payment-option{
+.checkout-box .payment-option {
 
-    display:flex;
+    width: 100%;
 
-    align-items:center;
+    display: flex;
 
-    width:100%;
+    align-items: center;
 
-    margin-top:12px;
+    gap: 12px;
 
-    padding:14px 15px;
+    margin: 0 0 12px 0;
 
-    border:1px solid #e2e2e2;
+    padding: 15px 16px;
 
-    border-radius:10px;
+    border: 1px solid #e2e2e2;
 
-    background:white;
+    border-radius: 11px;
 
-    font-size:16px;
+    background: white;
 
-    font-weight:normal;
+    font-size: 16px;
 
-    color:#111827;
+    font-weight: normal;
 
-    cursor:pointer;
+    cursor: pointer;
 
     transition:
         border-color 0.2s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
+        background 0.2s ease;
 }
 
 
@@ -245,31 +225,31 @@ body{
    PAYMENT HOVER
 ============================== */
 
-.payment-option:hover{
+.checkout-box .payment-option:hover {
 
-    border-color:#d81b60;
+    border-color: #d81b60;
 
-    background:#fff7fa;
+    background: #fff7fa;
 }
 
 
 /* ==============================
-   PAYMENT RADIO
+   RADIO BUTTON
 ============================== */
 
-.payment-option input[type="radio"]{
+.checkout-box .payment-option input[type="radio"] {
 
-    width:18px;
+    width: 18px;
 
-    height:18px;
+    height: 18px;
 
-    margin:0 12px 0 0;
+    margin: 0;
 
-    accent-color:#d81b60;
+    flex-shrink: 0;
 
-    cursor:pointer;
+    accent-color: #d81b60;
 
-    flex-shrink:0;
+    cursor: pointer;
 }
 
 
@@ -277,26 +257,11 @@ body{
    PAYMENT TEXT
 ============================== */
 
-.payment-option span{
+.checkout-box .payment-option span {
 
-    display:block;
+    font-size: 16px;
 
-    line-height:1.2;
-}
-
-
-/* ==============================
-   SELECTED PAYMENT
-============================== */
-
-.payment-option:has(input[type="radio"]:checked){
-
-    border-color:#d81b60;
-
-    background:#fff7fa;
-
-    box-shadow:
-        0 0 0 2px rgba(216,27,96,0.08);
+    color: #111827;
 }
 
 
@@ -304,32 +269,33 @@ body{
    PLACE ORDER BUTTON
 ============================== */
 
-.checkout-box button{
+.checkout-box button {
 
-    width:100%;
+    display: block;
 
-    margin-top:30px;
+    width: 100%;
 
-    padding:16px;
+    margin-top: 30px;
 
-    background:#d81b60;
+    padding: 16px;
 
-    color:white;
+    background: #d81b60;
 
-    border:none;
+    color: white;
 
-    border-radius:11px;
+    border: none;
 
-    font-size:18px;
+    border-radius: 11px;
 
-    font-weight:bold;
+    font-size: 18px;
 
-    cursor:pointer;
+    font-weight: bold;
+
+    cursor: pointer;
 
     transition:
         background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+        transform 0.2s ease;
 }
 
 
@@ -337,14 +303,11 @@ body{
    BUTTON HOVER
 ============================== */
 
-.checkout-box button:hover{
+.checkout-box button:hover {
 
-    background:#b91550;
+    background: #b91550;
 
-    transform:translateY(-1px);
-
-    box-shadow:
-        0 6px 15px rgba(216,27,96,0.20);
+    transform: translateY(-1px);
 }
 
 
@@ -352,11 +315,9 @@ body{
    BUTTON ACTIVE
 ============================== */
 
-.checkout-box button:active{
+.checkout-box button:active {
 
-    transform:translateY(0);
-
-    box-shadow:none;
+    transform: translateY(0);
 }
 
 
@@ -364,47 +325,42 @@ body{
    MOBILE
 ============================== */
 
-@media(max-width:600px){
+@media (max-width: 600px) {
 
-    .checkout-page{
+    .checkout-page {
 
-        padding:35px 15px 60px;
-
+        padding: 35px 15px 60px;
     }
 
 
-    .checkout-page h1{
+    .checkout-page > h1 {
 
-        font-size:32px;
+        font-size: 32px;
 
-        margin-bottom:30px;
-
+        margin-bottom: 30px;
     }
 
 
-    .checkout-box{
+    .checkout-box {
 
-        padding:25px 20px;
+        padding: 25px 20px;
 
-        border-radius:18px;
-
+        border-radius: 18px;
     }
 
 
-    .checkout-box h2{
+    .checkout-box h2 {
 
-        font-size:22px;
-
+        font-size: 22px;
     }
 
 
     .checkout-box input[type="text"],
     .checkout-box input[type="email"],
     .checkout-box input[type="tel"],
-    .checkout-box textarea{
+    .checkout-box textarea {
 
-        font-size:16px;
-
+        font-size: 16px;
     }
 
 }
@@ -414,26 +370,17 @@ body{
    VERY SMALL MOBILE
 ============================== */
 
-@media(max-width:400px){
+@media (max-width: 400px) {
 
-    .checkout-page h1{
+    .checkout-page > h1 {
 
-        font-size:28px;
-
+        font-size: 28px;
     }
 
 
-    .checkout-box{
+    .checkout-box {
 
-        padding:22px 16px;
-
-    }
-
-
-    .payment-option{
-
-        padding:13px;
-
+        padding: 22px 16px;
     }
 
 }
