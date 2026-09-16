@@ -9,6 +9,11 @@
     font-family:Arial, sans-serif;
 }
 
+
+/* ==============================
+   BODY
+============================== */
+
 body{
     background:#f8f8f8;
     color:#111827;
@@ -44,6 +49,7 @@ body{
 .checkout-box{
     width:100%;
     max-width:600px;
+
     margin:0 auto;
 
     background:white;
@@ -63,21 +69,30 @@ body{
 
 .checkout-box h2{
     font-size:25px;
+
     margin-top:30px;
     margin-bottom:18px;
+
     color:#111827;
 }
 
 
+/* First heading */
+
+.checkout-box h2:first-child{
+    margin-top:0;
+}
+
+
 /* ==============================
-   LABELS
+   NORMAL LABELS
 ============================== */
 
-.checkout-box label{
+.checkout-box > label:not(.payment-option){
+
     display:block;
 
     margin-top:18px;
-
     margin-bottom:8px;
 
     font-size:16px;
@@ -108,6 +123,8 @@ body{
 
     background:white;
 
+    color:#111827;
+
     outline:none;
 
     transition:
@@ -132,7 +149,18 @@ body{
 
 
 /* ==============================
-   ADDRESS
+   PLACEHOLDER
+============================== */
+
+.checkout-box input::placeholder,
+.checkout-box textarea::placeholder{
+
+    color:#777;
+}
+
+
+/* ==============================
+   DELIVERY ADDRESS
 ============================== */
 
 .checkout-box textarea{
@@ -149,14 +177,24 @@ body{
 
     font-size:16px;
 
+    background:white;
+
+    color:#111827;
+
     resize:vertical;
 
     outline:none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 
-    Place Order
-</button>
+/* ==============================
+   TEXTAREA FOCUS
+============================== */
+
 .checkout-box textarea:focus{
 
     border-color:#d81b60;
@@ -165,37 +203,18 @@ body{
         0 0 0 3px rgba(216,27,96,0.10);
 }
 
-<h2>
-Payment Method
-</h2>
 
-<label class="payment-option">
-    <input type="radio" name="payment" value="Mada">
-    <span>Mada</span>
-</label>
+/* ==============================
+   PAYMENT METHOD
+============================== */
 
-<label class="payment-option">
-    <input type="radio" name="payment" value="Visa / Mastercard">
-    <span>Visa / Mastercard</span>
-</label>
-
-<label class="payment-option">
-    <input type="radio" name="payment" value="Apple Pay">
-    <span>Apple Pay</span>
-</label>
-
-<button>
-    Place Order
-</button>
-
-
-/* Payment labels */
-
-.checkout-box h2 + label{
+.payment-option{
 
     display:flex;
 
     align-items:center;
+
+    width:100%;
 
     margin-top:12px;
 
@@ -205,21 +224,79 @@ Payment Method
 
     border-radius:10px;
 
+    background:white;
+
+    font-size:16px;
+
     font-weight:normal;
+
+    color:#111827;
 
     cursor:pointer;
 
     transition:
         border-color 0.2s ease,
-        background 0.2s ease;
+        background 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 
-.checkout-box h2 + label:hover{
+/* ==============================
+   PAYMENT HOVER
+============================== */
+
+.payment-option:hover{
 
     border-color:#d81b60;
 
     background:#fff7fa;
+}
+
+
+/* ==============================
+   PAYMENT RADIO
+============================== */
+
+.payment-option input[type="radio"]{
+
+    width:18px;
+
+    height:18px;
+
+    margin:0 12px 0 0;
+
+    accent-color:#d81b60;
+
+    cursor:pointer;
+
+    flex-shrink:0;
+}
+
+
+/* ==============================
+   PAYMENT TEXT
+============================== */
+
+.payment-option span{
+
+    display:block;
+
+    line-height:1.2;
+}
+
+
+/* ==============================
+   SELECTED PAYMENT
+============================== */
+
+.payment-option:has(input[type="radio"]:checked){
+
+    border-color:#d81b60;
+
+    background:#fff7fa;
+
+    box-shadow:
+        0 0 0 2px rgba(216,27,96,0.08);
 }
 
 
@@ -251,21 +328,35 @@ Payment Method
 
     transition:
         background 0.2s ease,
-        transform 0.2s ease;
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
+
+/* ==============================
+   BUTTON HOVER
+============================== */
 
 .checkout-box button:hover{
 
     background:#b91550;
 
     transform:translateY(-1px);
+
+    box-shadow:
+        0 6px 15px rgba(216,27,96,0.20);
 }
 
+
+/* ==============================
+   BUTTON ACTIVE
+============================== */
 
 .checkout-box button:active{
 
     transform:translateY(0);
+
+    box-shadow:none;
 }
 
 
@@ -335,6 +426,13 @@ Payment Method
     .checkout-box{
 
         padding:22px 16px;
+
+    }
+
+
+    .payment-option{
+
+        padding:13px;
 
     }
 
