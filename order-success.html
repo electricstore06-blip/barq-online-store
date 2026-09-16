@@ -1,1 +1,111 @@
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BARQ Order Success</title>
+
+    <link rel="stylesheet" href="order-success.css">
+
+</head>
+
+
+<body>
+
+
+<div class="success-page">
+
+
+    <div class="success-box">
+
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+
+        <h1>
+            Order Confirmed!
+        </h1>
+
+
+        <p class="success-message">
+            Thank you for shopping with BARQ.
+        </p>
+
+
+        <p>
+            Your order has been received successfully.
+        </p>
+
+
+        <div class="order-details">
+
+
+            <div>
+                <span>Order Number</span>
+                <strong id="order-number">
+                    #BARQ1001
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Total Amount</span>
+                <strong id="order-total">
+                    SAR 0.00
+                </strong>
+            </div>
+
+
+        </div>
+
+
+
+        <a href="index.html" class="home-button">
+            Continue Shopping
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+const total =
+localStorage.getItem("barqOrderTotal");
+
+
+if(total){
+
+    document.getElementById("order-total").textContent =
+    "SAR " + Number(total).toFixed(2);
+
+}
+
+
+
+const orderNumber =
+"BARQ" + Math.floor(1000 + Math.random() * 9000);
+
+
+document.getElementById("order-number").textContent =
+"#" + orderNumber;
+
+
+
+</script>
+
+
+</body>
+
+</html>
