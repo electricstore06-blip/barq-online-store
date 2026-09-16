@@ -6,11 +6,12 @@
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BARQ Online Store</title>
 
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="stylesheet" href="style.css">
-  
+    <title>BARQ Online Store</title>
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -32,7 +33,6 @@
 
 <header>
 
-
     <div class="logo">
 
         ⚡ BARQ
@@ -42,7 +42,6 @@
         </span>
 
     </div>
-
 
 
     <nav>
@@ -68,6 +67,8 @@
         </a>
 
 
+        <!-- CART LINK -->
+
         <a href="#" onclick="openCart(); return false;">
 
             🛒 Cart
@@ -75,12 +76,19 @@
             <span id="cartCount">
                 0
             </span>
-<a href="#" onclick="document.getElementById('loginBox').style.display='flex'; return false;">
-    🔐 Login
-</a>
-  
-    </nav>
 
+        </a>
+
+
+        <!-- LOGIN LINK -->
+
+        <a href="#" onclick="openLogin(); return false;">
+
+            🔐 Login
+
+        </a>
+
+    </nav>
 
 </header>
 
@@ -113,14 +121,14 @@
         </h1>
 
 
-
         <p>
             Premium cosmetics, skincare and beauty essentials for your everyday glow.
         </p>
 
 
-
-        <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+        <button
+            onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})"
+        >
 
             Shop Cosmetics →
 
@@ -128,7 +136,6 @@
 
 
     </div>
-
 
 
     <div class="hero-image">
@@ -146,17 +153,38 @@
 
 
 
-<section class="brands">
+<!-- BRANDS -->
 
-<h2>Popular Brands</h2>
+<section id="brands" class="brands">
 
-<div class="brand-list">
-<span>Maybelline</span>
-<span>NYX</span>
-<span>CeraVe</span>
-<span>The Ordinary</span>
-<span>MAC</span>
-</div>
+    <h2>
+        Popular Brands
+    </h2>
+
+
+    <div class="brand-list">
+
+        <span>
+            Maybelline
+        </span>
+
+        <span>
+            NYX
+        </span>
+
+        <span>
+            CeraVe
+        </span>
+
+        <span>
+            The Ordinary
+        </span>
+
+        <span>
+            MAC
+        </span>
+
+    </div>
 
 </section>
 
@@ -178,7 +206,6 @@
     </p>
 
 
-
     <!-- SEARCH -->
 
     <div class="search-box">
@@ -190,7 +217,6 @@
         >
 
     </div>
-
 
 
     <!-- FIREBASE PRODUCTS APPEAR HERE -->
@@ -205,7 +231,6 @@
 
 
 
-
 <!-- CART -->
 
 <div id="cartBox" class="cart-box">
@@ -216,11 +241,9 @@
     </h2>
 
 
-
     <div id="cartItems">
 
     </div>
-
 
 
     <h3>
@@ -236,29 +259,48 @@
     </h3>
 
 
-
     <button onclick="checkout()">
         Checkout
     </button>
 
 
-
     <button onclick="closeCart()">
         Close
     </button>
+
+
+</div>
+
+
+
+
 <!-- LOGIN BOX -->
 
 <div id="loginBox" class="login-box">
 
+
     <div class="login-content">
 
-        <button class="login-close" onclick="closeLogin()">
+
+        <button
+            class="login-close"
+            onclick="closeLogin()"
+        >
+
             ×
+
         </button>
 
-        <h2>BARQ Login</h2>
 
-        <p>Login to your BARQ account</p>
+        <h2>
+            BARQ Login
+        </h2>
+
+
+        <p>
+            Login to your BARQ account
+        </p>
+
 
         <input
             type="email"
@@ -266,28 +308,35 @@
             placeholder="Email"
         >
 
+
         <input
             type="password"
             id="loginPassword"
             placeholder="Password"
         >
 
+
         <button id="loginButton">
             Login
         </button>
 
+
         <p id="loginMessage"></p>
+
 
     </div>
 
+
 </div>
+
+
 
 
 <!-- JAVASCRIPT -->
 
 <script type="module" src="script.js"></script>
-<script type="module" src="auth.js"></script>
 
+<script type="module" src="auth.js"></script>
 
 
 </body>
