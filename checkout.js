@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // ==============================
 
     const orderButton =
-        document.querySelector(".checkout-box button");
+       document.getElementById("place-order-btn")
 
     const fullName =
         document.getElementById("full-name");
