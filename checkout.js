@@ -1,7 +1,3 @@
-// =========================================
-// BARQ CHECKOUT JAVASCRIPT
-// =========================================
-
 import { db } from "./firebase-config.js";
 
 import {
@@ -10,376 +6,464 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-document.addEventListener("DOMContentLoaded", function () {
+/* =========================================
+   CART
+========================================= */
+
+let cart =
+    JSON.parse(localStorage.getItem("barqCart")) || [];
 
 
-    // =========================================
-    // GET CART
-    // =========================================
+/* =========================================
+   PAGE ELEMENTS
+========================================= */
 
-    const cart =
-        JSON.parse(localStorage.getItem("barqCart")) || [];
+const orderItems =
+    document.getElementById("order-items");
 
+const subtotalElement =
+    document.getElementById("subtotal");
 
-    // =========================================
-    // ORDER SUMMARY ELEMENTS
-    // =========================================
+const deliveryElement =
+    document.getElementById("delivery");
 
-    const orderItems =
-        document.getElementById("order-items");
+const totalElement =
+    document.getElementById("total");
 
-    const subtotalElement =
-        document.getElementById("subtotal");
+const placeOrderButton =
+    document.getElementById("place-order-btn");
 
-    const deliveryElement =
-        document.getElementById("delivery");
-
-    const totalElement =
-        document.getElementById("total");
+const checkoutMessage =
+    document.getElementById("checkout-message");
 
 
-    // =========================================
-    // CUSTOMER ELEMENTS
-    // =========================================
+/* =========================================
+   CUSTOMER LOCATION ELEMENTS
+========================================= */
 
-    const orderButton =
-        document.getElementById("place-order-btn");
+const locationButton =
+    document.getElementById("get-location-btn");
 
-    const fullName =
-        document.getElementById("full-name");
+const locationStatus =
+    document.getElementById("location-status");
 
-    const phone =
-        document.getElementById("phone");
+const latitudeInput =
+    document.getElementById("latitude");
 
-    const email =
-        document.getElementById("email");
+const longitudeInput =
+    document.getElementById("longitude");
 
-    const address =
-        document.getElementById("address");
-
-    const paymentMethods =
-        document.querySelectorAll(
-            'input[name="payment"]'
-        );
+const accuracyInput =
+    document.getElementById("location-accuracy");
 
 
-    // =========================================
-    // CALCULATE SUBTOTAL
-    // =========================================
+/* =========================================
+   ORDER TOTALS
+========================================= */
 
-    function calculateSubtotal() {
+let subtotal = 0;
 
-        return cart.reduce(
-            function (sum, item) {
+let delivery = 0;
 
-                const price =
-                    Number(item.price) || 0;
+let total = 0;
 
-                const quantity =
-                    Number(item.quantity) || 0;
 
-                return sum + (price * quantity);
+/* =========================================
+   DISPLAY ORDER
+========================================= */
 
-            },
-            0
-        );
+function displayOrder() {
 
+    if (!orderItems) {
+        return;
     }
 
+    orderItems.innerHTML = "";
 
-    // =========================================
-    // DISPLAY ORDER SUMMARY
-    // =========================================
-
-    function renderOrderSummary() {
-
-        if (
-            !orderItems ||
-            !subtotalElement ||
-            !deliveryElement ||
-            !totalElement
-        ) {
-            return;
-        }
+    subtotal = 0;
 
 
-        orderItems.innerHTML = "";
+    if (cart.length === 0) {
 
-
-        // EMPTY CART
-
-        if (cart.length === 0) {
-
-            orderItems.innerHTML = `
-                <p class="empty-order">
-                    Your cart is empty.
-                </p>
-            `;
-
-            subtotalElement.textContent =
-                "SAR 0.00";
-
-            deliveryElement.textContent =
-                "SAR 0.00";
-
-            totalElement.textContent =
-                "SAR 0.00";
-
-            return;
-        }
-
-
-        let subtotal = 0;
-
-
-        // DISPLAY PRODUCTS
-
-        cart.forEach(function (item) {
-
-            const price =
-                Number(item.price) || 0;
-
-            const quantity =
-                Number(item.quantity) || 0;
-
-            const itemTotal =
-                price * quantity;
-
-            subtotal += itemTotal;
-
-
-            const itemElement =
-                document.createElement("div");
-
-            itemElement.className =
-                "order-item";
-
-
-            itemElement.innerHTML = `
-
-                <div class="order-item-info">
-
-                    <strong class="order-item-name">
-                    </strong>
-
-                    <span class="order-item-quantity">
-                        Qty: ${quantity}
-                    </span>
-
-                </div>
-
-                <span class="order-item-price">
-                    SAR ${itemTotal.toFixed(2)}
-                </span>
-
-            `;
-
-
-            itemElement.querySelector(
-                ".order-item-name"
-            ).textContent =
-                item.name || "BARQ Product";
-
-
-            orderItems.appendChild(
-                itemElement
-            );
-
-        });
-
-
-        // =========================================
-        // DELIVERY
-        // =========================================
-
-        const delivery =
-            subtotal > 0 ? 15 : 0;
-
-
-        // =========================================
-        // TOTAL
-        // =========================================
-
-        const total =
-            subtotal + delivery;
-
+        orderItems.innerHTML =
+            "<p>Your cart is empty.</p>";
 
         subtotalElement.textContent =
-            `SAR ${subtotal.toFixed(2)}`;
+            "SAR 0.00";
 
         deliveryElement.textContent =
-            `SAR ${delivery.toFixed(2)}`;
+            "SAR 0.00";
 
         totalElement.textContent =
-            `SAR ${total.toFixed(2)}`;
+            "SAR 0.00";
 
+        return;
     }
 
 
-    // =========================================
-    // SHOW ORDER
-    // =========================================
+    cart.forEach((item) => {
 
-    renderOrderSummary();
+        const itemPrice =
+            Number(item.price) || 0;
 
+        const itemQuantity =
+            Number(item.quantity) || 0;
 
-    // =========================================
-    // PLACE ORDER
-    // =========================================
+        const itemTotal =
+            itemPrice * itemQuantity;
 
-    if (orderButton) {
-
-        orderButton.addEventListener(
-            "click",
-            async function () {
+        subtotal += itemTotal;
 
 
-                // =========================================
-                // CHECK CART
-                // =========================================
+        const itemDiv =
+            document.createElement("div");
 
-                if (cart.length === 0) {
+        itemDiv.className =
+            "order-item";
 
-                    alert(
-                        "Your cart is empty."
+
+        itemDiv.innerHTML = `
+            <div>
+                <strong>${item.name}</strong>
+                <br>
+                Quantity: ${itemQuantity}
+            </div>
+
+            <div>
+                SAR ${itemTotal.toFixed(2)}
+            </div>
+        `;
+
+
+        orderItems.appendChild(itemDiv);
+
+    });
+
+
+    /* Delivery fee */
+
+    delivery =
+        subtotal > 0 ? 15 : 0;
+
+
+    total =
+        subtotal + delivery;
+
+
+    subtotalElement.textContent =
+        "SAR " + subtotal.toFixed(2);
+
+    deliveryElement.textContent =
+        "SAR " + delivery.toFixed(2);
+
+    totalElement.textContent =
+        "SAR " + total.toFixed(2);
+
+}
+
+
+/* =========================================
+   CUSTOMER LOCATION
+========================================= */
+
+if (locationButton) {
+
+    locationButton.addEventListener(
+        "click",
+        function () {
+
+            if (!navigator.geolocation) {
+
+                locationStatus.textContent =
+                    "Location is not supported by this browser.";
+
+                return;
+            }
+
+
+            locationStatus.textContent =
+                "Getting your location...";
+
+            locationButton.disabled =
+                true;
+
+
+            navigator.geolocation.getCurrentPosition(
+
+                function (position) {
+
+                    const latitude =
+                        position.coords.latitude;
+
+                    const longitude =
+                        position.coords.longitude;
+
+                    const accuracy =
+                        position.coords.accuracy;
+
+
+                    latitudeInput.value =
+                        latitude;
+
+                    longitudeInput.value =
+                        longitude;
+
+                    accuracyInput.value =
+                        accuracy;
+
+
+                    locationStatus.textContent =
+                        "✓ Location selected successfully";
+
+
+                    locationButton.textContent =
+                        "📍 Location Selected";
+
+                    locationButton.disabled =
+                        false;
+
+                },
+
+
+                function (error) {
+
+                    locationButton.disabled =
+                        false;
+
+
+                    locationStatus.textContent =
+                        "Unable to get your location. Please allow location permission and try again.";
+
+
+                    console.error(
+                        "Location error:",
+                        error
                     );
 
-                    return;
+                },
+
+
+                {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 0
                 }
 
+            );
 
-                // =========================================
-                // GET CUSTOMER DATA
-                // =========================================
+        }
+    );
 
-                const name =
-                    fullName.value.trim();
-
-                const phoneValue =
-                    phone.value.trim();
-
-                const emailValue =
-                    email.value.trim();
-
-                const addressValue =
-                    address.value.trim();
-
-                const payment =
-                    document.querySelector(
-                        'input[name="payment"]:checked'
-                    );
+}
 
 
-                // =========================================
-                // VALIDATION
-                // =========================================
+/* =========================================
+   PLACE ORDER
+========================================= */
 
-                if (name === "") {
+if (placeOrderButton) {
 
-                    alert(
-                        "Please enter your full name."
-                    );
+    placeOrderButton.addEventListener(
+        "click",
+        async function () {
 
-                    fullName.focus();
-
-                    return;
-                }
+            checkoutMessage.textContent = "";
 
 
-                if (!/^05\d{8}$/.test(phoneValue)) {
+            /* Cart validation */
 
-                    alert(
-                        "Please enter a valid Saudi phone number.\nExample: 05xxxxxxxx"
-                    );
+            if (cart.length === 0) {
 
-                    phone.focus();
+                checkoutMessage.textContent =
+                    "Your cart is empty.";
 
-                    return;
-                }
-
-
-                if (
-                    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
-                    .test(emailValue)
-                ) {
-
-                    alert(
-                        "Please enter a valid email."
-                    );
-
-                    email.focus();
-
-                    return;
-                }
+                return;
+            }
 
 
-                if (addressValue === "") {
+            /* Customer fields */
 
-                    alert(
-                        "Please enter delivery address."
-                    );
+            const fullName =
+                document.getElementById("full-name").value.trim();
 
-                    address.focus();
+            const phone =
+                document.getElementById("phone").value.trim();
 
-                    return;
-                }
+            const email =
+                document.getElementById("email").value.trim();
 
-
-                if (!payment) {
-
-                    alert(
-                        "Please select a payment method."
-                    );
-
-                    return;
-                }
+            const address =
+                document.getElementById("address").value.trim();
 
 
-                // =========================================
-                // CALCULATE TOTALS
-                // =========================================
+            /* Payment */
 
-                const subtotal =
-                    calculateSubtotal();
+            const paymentElement =
+                document.querySelector(
+                    'input[name="payment"]:checked'
+                );
 
 
-                const delivery =
+            /* Location */
+
+            const latitude =
+                latitudeInput.value;
+
+            const longitude =
+                longitudeInput.value;
+
+            const locationAccuracy =
+                accuracyInput.value;
+
+
+            /* =========================================
+               VALIDATION
+            ========================================= */
+
+            if (!fullName) {
+
+                checkoutMessage.textContent =
+                    "Please enter your full name.";
+
+                return;
+            }
+
+
+            if (!/^05\d{8}$/.test(phone)) {
+
+                checkoutMessage.textContent =
+                    "Please enter a valid Saudi phone number.";
+
+                return;
+            }
+
+
+            if (!email) {
+
+                checkoutMessage.textContent =
+                    "Please enter your email.";
+
+                return;
+            }
+
+
+            if (!address) {
+
+                checkoutMessage.textContent =
+                    "Please enter your delivery address.";
+
+                return;
+            }
+
+
+            if (!paymentElement) {
+
+                checkoutMessage.textContent =
+                    "Please select a payment method.";
+
+                return;
+            }
+
+
+            /* Location is required */
+
+            if (!latitude || !longitude) {
+
+                checkoutMessage.textContent =
+                    "Please select your current location.";
+
+                return;
+            }
+
+
+            /* =========================================
+               PREVENT DOUBLE ORDER
+            ========================================= */
+
+            placeOrderButton.disabled =
+                true;
+
+            placeOrderButton.textContent =
+                "Processing Order...";
+
+
+            try {
+
+                /* Recalculate totals */
+
+                subtotal = 0;
+
+
+                cart.forEach((item) => {
+
+                    subtotal +=
+                        Number(item.price || 0) *
+                        Number(item.quantity || 0);
+
+                });
+
+
+                delivery =
                     subtotal > 0 ? 15 : 0;
 
 
-                const total =
+                total =
                     subtotal + delivery;
 
 
-                // =========================================
-                // GENERATE ORDER NUMBER
-                // =========================================
+                /* =========================================
+                   ORDER NUMBER
+                ========================================= */
 
                 const orderNumber =
                     "BARQ" +
-                    Date.now().toString().slice(-6);
+                    Math.floor(
+                        100000 +
+                        Math.random() * 900000
+                    );
 
 
-                // =========================================
-                // CREATE ORDER DATA
-                // =========================================
+                /* =========================================
+                   ORDER DATA
+                ========================================= */
 
                 const orderData = {
 
                     orderNumber: orderNumber,
 
-                    customerName: name,
+                    customerName: fullName,
 
-                    phone: phoneValue,
+                    phone: phone,
 
-                    email: emailValue,
+                    email: email,
 
-                    address: addressValue,
+                    address: address,
+
+
+                    /* CUSTOMER GPS LOCATION */
+
+                    latitude:
+                        Number(latitude),
+
+                    longitude:
+                        Number(longitude),
+
+                    locationAccuracy:
+                        Number(locationAccuracy || 0),
+
+
+                    /* PAYMENT */
 
                     paymentMethod:
-                        payment.value,
+                        paymentElement.value,
+
+
+                    /* PRODUCTS */
 
                     items: cart,
+
+
+                    /* TOTALS */
 
                     subtotal: subtotal,
 
@@ -387,7 +471,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     total: total,
 
+
+                    /* ORDER STATUS */
+
                     status: "Pending",
+
+
+                    /* DATE */
 
                     date:
                         new Date().toISOString()
@@ -395,109 +485,84 @@ document.addEventListener("DOMContentLoaded", function () {
                 };
 
 
-                // =========================================
-                // DISABLE BUTTON
-                // =========================================
+                /* =========================================
+                   SAVE ORDER TO FIREBASE
+                ========================================= */
 
-                orderButton.disabled = true;
-
-                orderButton.textContent =
-                    "Processing Order...";
-
-
-                try {
-
-
-                    // =========================================
-                    // SAVE ORDER TO FIREBASE
-                    // =========================================
-
-                    const orderRef =
-                        await addDoc(
-                            collection(db, "orders"),
-                            orderData
-                        );
-
-
-                    console.log(
-                        "Order saved to Firebase:",
-                        orderRef.id
+                const orderRef =
+                    await addDoc(
+                        collection(db, "orders"),
+                        orderData
                     );
 
 
-                    // =========================================
-                    // SAVE ORDER LOCALLY
-                    // =========================================
+                /* =========================================
+                   SAVE ORDER LOCALLY
+                ========================================= */
 
-                    localStorage.setItem(
-                        "barqOrder",
-                        JSON.stringify(orderData)
-                    );
+                localStorage.setItem(
+                    "barqOrder",
+                    JSON.stringify(orderData)
+                );
 
+                localStorage.setItem(
+                    "barqOrderTotal",
+                    total.toFixed(2)
+                );
 
-                    localStorage.setItem(
-                        "barqOrderTotal",
-                        total.toFixed(2)
-                    );
-
-
-                    // =========================================
-                    // SAVE FIREBASE DOCUMENT ID
-                    // =========================================
-
-                    localStorage.setItem(
-                        "barqOrderId",
-                        orderRef.id
-                    );
+                localStorage.setItem(
+                    "barqOrderId",
+                    orderRef.id
+                );
 
 
-                    // =========================================
-                    // CLEAR CART
-                    // =========================================
+                /* =========================================
+                   CLEAR CART
+                ========================================= */
 
-                    localStorage.removeItem(
-                        "barqCart"
-                    );
-
-
-                    // =========================================
-                    // GO TO SUCCESS PAGE
-                    // =========================================
-
-                    window.location.href =
-                        "order-success.html";
+                localStorage.removeItem(
+                    "barqCart"
+                );
 
 
-                } catch (error) {
+                /* =========================================
+                   GO TO SUCCESS PAGE
+                ========================================= */
 
-
-                    // =========================================
-                    // FIREBASE ERROR
-                    // =========================================
-
-                    console.error(
-                        "Firebase order error:",
-                        error
-                    );
-
-
-                    alert(
-                        "We could not place your order.\n\nPlease check your internet connection and try again."
-                    );
-
-
-                    // ENABLE BUTTON AGAIN
-
-                    orderButton.disabled = false;
-
-                    orderButton.textContent =
-                        "Place Order";
-
-                }
+                window.location.href =
+                    "order-success.html";
 
             }
-        );
 
-    }
 
-});
+            catch (error) {
+
+                console.error(
+                    "Order submission error:",
+                    error
+                );
+
+
+                checkoutMessage.textContent =
+                    "Unable to place your order. Please try again.";
+
+
+                placeOrderButton.disabled =
+                    false;
+
+                placeOrderButton.textContent =
+                    "Place Order";
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+displayOrder();
