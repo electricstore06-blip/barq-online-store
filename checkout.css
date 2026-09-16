@@ -34,7 +34,7 @@ body {
    MAIN TITLE
 ============================== */
 
-.checkout-page > h1 {
+.checkout-page h1 {
     text-align: center;
     font-size: 42px;
     margin-bottom: 40px;
@@ -51,7 +51,7 @@ body {
     max-width: 600px;
     margin: 0 auto;
 
-    background: white;
+    background: #ffffff;
 
     padding: 40px;
 
@@ -62,7 +62,7 @@ body {
 
 
 /* ==============================
-   HEADINGS
+   SECTION HEADINGS
 ============================== */
 
 .checkout-box h2 {
@@ -73,18 +73,18 @@ body {
 }
 
 
-/* First heading */
+/* Customer Information heading */
 
-.checkout-box h2:first-child {
+.checkout-box .customer-title {
     margin-top: 0;
 }
 
 
 /* ==============================
-   NORMAL LABELS
+   LABELS
 ============================== */
 
-.checkout-box > label:not(.payment-option) {
+.checkout-box > label {
     display: block;
 
     margin-top: 18px;
@@ -104,7 +104,6 @@ body {
 .checkout-box input[type="text"],
 .checkout-box input[type="email"],
 .checkout-box input[type="tel"] {
-
     display: block;
 
     width: 100%;
@@ -117,7 +116,9 @@ body {
 
     font-size: 16px;
 
-    background: white;
+    background: #ffffff;
+
+    color: #111827;
 
     outline: none;
 
@@ -134,19 +135,18 @@ body {
 .checkout-box input[type="text"]:focus,
 .checkout-box input[type="email"]:focus,
 .checkout-box input[type="tel"]:focus {
-
     border-color: #d81b60;
 
-    box-shadow: 0 0 0 3px rgba(216, 27, 96, 0.10);
+    box-shadow:
+        0 0 0 3px rgba(216, 27, 96, 0.10);
 }
 
 
 /* ==============================
-   DELIVERY ADDRESS
+   ADDRESS
 ============================== */
 
 .checkout-box textarea {
-
     display: block;
 
     width: 100%;
@@ -161,7 +161,11 @@ body {
 
     font-size: 16px;
 
-    background: white;
+    font-family: Arial, sans-serif;
+
+    background: #ffffff;
+
+    color: #111827;
 
     resize: vertical;
 
@@ -178,10 +182,10 @@ body {
 ============================== */
 
 .checkout-box textarea:focus {
-
     border-color: #d81b60;
 
-    box-shadow: 0 0 0 3px rgba(216, 27, 96, 0.10);
+    box-shadow:
+        0 0 0 3px rgba(216, 27, 96, 0.10);
 }
 
 
@@ -190,28 +194,26 @@ body {
 ============================== */
 
 .checkout-box .payment-option {
-
-    width: 100%;
-
     display: flex;
 
     align-items: center;
 
-    gap: 12px;
+    width: 100%;
 
-    margin: 0 0 12px 0;
+    margin-top: 12px;
+    margin-bottom: 0;
 
-    padding: 15px 16px;
+    padding: 14px 15px;
 
     border: 1px solid #e2e2e2;
 
-    border-radius: 11px;
-
-    background: white;
+    border-radius: 10px;
 
     font-size: 16px;
 
     font-weight: normal;
+
+    color: #111827;
 
     cursor: pointer;
 
@@ -222,11 +224,10 @@ body {
 
 
 /* ==============================
-   PAYMENT HOVER
+   PAYMENT OPTION HOVER
 ============================== */
 
 .checkout-box .payment-option:hover {
-
     border-color: #d81b60;
 
     background: #fff7fa;
@@ -238,18 +239,18 @@ body {
 ============================== */
 
 .checkout-box .payment-option input[type="radio"] {
-
     width: 18px;
-
     height: 18px;
 
-    margin: 0;
+    margin: 0 12px 0 0;
 
-    flex-shrink: 0;
+    padding: 0;
 
     accent-color: #d81b60;
 
     cursor: pointer;
+
+    flex-shrink: 0;
 }
 
 
@@ -258,8 +259,9 @@ body {
 ============================== */
 
 .checkout-box .payment-option span {
-
     font-size: 16px;
+
+    font-weight: normal;
 
     color: #111827;
 }
@@ -270,7 +272,6 @@ body {
 ============================== */
 
 .checkout-box button {
-
     display: block;
 
     width: 100%;
@@ -281,7 +282,7 @@ body {
 
     background: #d81b60;
 
-    color: white;
+    color: #ffffff;
 
     border: none;
 
@@ -304,7 +305,6 @@ body {
 ============================== */
 
 .checkout-box button:hover {
-
     background: #b91550;
 
     transform: translateY(-1px);
@@ -316,7 +316,6 @@ body {
 ============================== */
 
 .checkout-box button:active {
-
     transform: translateY(0);
 }
 
@@ -328,13 +327,11 @@ body {
 @media (max-width: 600px) {
 
     .checkout-page {
-
         padding: 35px 15px 60px;
     }
 
 
-    .checkout-page > h1 {
-
+    .checkout-page h1 {
         font-size: 32px;
 
         margin-bottom: 30px;
@@ -342,7 +339,6 @@ body {
 
 
     .checkout-box {
-
         padding: 25px 20px;
 
         border-radius: 18px;
@@ -350,7 +346,6 @@ body {
 
 
     .checkout-box h2 {
-
         font-size: 22px;
     }
 
@@ -359,7 +354,6 @@ body {
     .checkout-box input[type="email"],
     .checkout-box input[type="tel"],
     .checkout-box textarea {
-
         font-size: 16px;
     }
 
@@ -372,14 +366,12 @@ body {
 
 @media (max-width: 400px) {
 
-    .checkout-page > h1 {
-
+    .checkout-page h1 {
         font-size: 28px;
     }
 
 
     .checkout-box {
-
         padding: 22px 16px;
     }
 
