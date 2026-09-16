@@ -3,13 +3,13 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Order Success - BARQ</title>
+    <title>Order Success - BARQ</title>
 
-<link rel="stylesheet" href="order-success.css">
+    <link rel="stylesheet" href="order-success.css">
 
 </head>
 
@@ -28,17 +28,17 @@
         </div>
 
 
-    <h1>Thank You!</h1>
+        <h1>
+            Thank You!
+        </h1>
 
-<p>
-    <span id="customer-name">
-    </span>
-</p>
 
-<p>
-    Your order has been received successfully.
-</p>  
+        <p id="customer-name"></p>
 
+
+        <p class="success-message">
+            Your order has been received successfully.
+        </p>
 
 
         <div class="order-details">
@@ -68,7 +68,6 @@
         </div>
 
 
-
         <a href="index.html" class="continue-btn">
             Continue Shopping
         </a>
@@ -80,41 +79,29 @@
 </div>
 
 
-
-<script>
-
-const order =
-JSON.parse(localStorage.getItem("barqOrder"));
-
-
-if(order){
-
-document.getElementById("order-number").textContent =
-order.orderNumber;
-
-
-document.getElementById("order-total").textContent =
-"SAR " + order.total.toFixed(2);
-
-
-}
-
-
-</script>
 <script>
 
 const order =
     JSON.parse(localStorage.getItem("barqOrder"));
 
 
-if(order){
+if (order) {
 
     document.getElementById("customer-name").textContent =
-        "Dear " + order.customerName + ",";
+        "Dear " + (order.customerName || "Customer") + ",";
+
+
+    document.getElementById("order-number").textContent =
+        order.orderNumber || "BARQ0000";
+
+
+    document.getElementById("order-total").textContent =
+        "SAR " + Number(order.total || 0).toFixed(2);
 
 }
 
 </script>
+
 
 </body>
 
