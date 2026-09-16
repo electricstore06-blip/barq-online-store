@@ -6,23 +6,23 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-// ==============================
+// ==========================================
 // BARQ PRODUCTS
-// ==============================
+// ==========================================
 
 let productsData = [];
 
 
-// ==============================
+// ==========================================
 // CART
-// ==============================
+// ==========================================
 
 let cart = JSON.parse(localStorage.getItem("barqCart")) || [];
 
 
-// ==============================
+// ==========================================
 // LOAD PRODUCTS FROM FIRESTORE
-// ==============================
+// ==========================================
 
 async function loadProducts() {
 
@@ -53,7 +53,10 @@ async function loadProducts() {
 
     } catch (error) {
 
-        console.error("Firebase product loading error:", error);
+        console.error(
+            "Firebase product loading error:",
+            error
+        );
 
         container.innerHTML = `
             <p>
@@ -62,17 +65,17 @@ async function loadProducts() {
         `;
 
     }
-
 }
 
 
-// ==============================
+// ==========================================
 // DISPLAY PRODUCTS
-// ==============================
+// ==========================================
 
 function displayProducts(products) {
 
-    const container = document.querySelector(".product-container");
+    const container =
+        document.querySelector(".product-container");
 
     if (!container) return;
 
@@ -88,22 +91,29 @@ function displayProducts(products) {
         `;
 
         return;
-
     }
 
 
     products.forEach((product) => {
 
-        const card = document.createElement("div");
+        const card =
+            document.createElement("div");
 
         card.className = "product";
+
+
+        const image =
+            product.image &&
+            product.image.startsWith("http")
+                ? product.image
+                : "https://images.unsplash.com/photo-1596462502278-27bfdc403348";
 
 
         card.innerHTML = `
 
             <img
                 class="product-img"
-               src="${product.image && product.image.startsWith("http") ? product.image : "https://images.unsplash.com/photo-1596462502278-27bfdc403348"}"
+                src="${image}"
                 alt="${product.name || "BARQ Beauty Product"}"
             >
 
@@ -126,17 +136,23 @@ function displayProducts(products) {
         `;
 
 
-        const addButton = card.querySelector(".add-btn");
+        const addButton =
+            card.querySelector(".add-btn");
 
 
-        addButton.addEventListener("click", () => {
+        addButton.addEventListener(
+            "click",
+            () => {
 
-            addToCart(
-                product.name || "BARQ Beauty Product",
-                Number(product.price || 0)
-            );
+                addToCart(
+                    product.name ||
+                    "BARQ Beauty Product",
 
-        });
+                    Number(product.price || 0)
+                );
+
+            }
+        );
 
 
         container.appendChild(card);
@@ -146,46 +162,64 @@ function displayProducts(products) {
 }
 
 
-// ==============================
+// ==========================================
 // SEARCH
-// ==============================
+// ==========================================
 
-const searchInput = document.getElementById("searchInput");
+const searchInput =
+    document.getElementById("searchInput");
 
 
 if (searchInput) {
 
-    searchInput.addEventListener("input", () => {
+    searchInput.addEventListener(
+        "input",
+        () => {
 
-        const value = searchInput.value
-            .trim()
-            .toLowerCase();
-
-
-        const results = productsData.filter((product) => {
-
-            const name = (product.name || "").toLowerCase();
-
-            const brand = (product.brand || "").toLowerCase();
-
-            return (
-                name.includes(value) ||
-                brand.includes(value)
-            );
-
-        });
+            const value =
+                searchInput.value
+                    .trim()
+                    .toLowerCase();
 
 
-        displayProducts(results);
+            const results =
+                productsData.filter(
+                    (product) => {
 
-    });
+                        const name =
+                            (product.name || "")
+                                .toLowerCase();
+
+                        const brand =
+                            (product.brand || "")
+                                .toLowerCase();
+
+                        const category =
+                            (product.category || "")
+                                .toLowerCase();
+
+
+                        return (
+                            name.includes(value) ||
+                            brand.includes(value) ||
+                            category.includes(value)
+                        );
+
+                    }
+                );
+
+
+            displayProducts(results);
+
+        }
+    );
 
 }
 
 
-// ==============================
+// ==========================================
 // SAVE CART
-// ==============================
+// ==========================================
 
 function saveCart() {
 
@@ -197,15 +231,16 @@ function saveCart() {
 }
 
 
-// ==============================
+// ==========================================
 // ADD TO CART
-// ==============================
+// ==========================================
 
 function addToCart(name, price) {
 
-    const existingItem = cart.find(
-        (item) => item.name === name
-    );
+    const existingItem =
+        cart.find(
+            (item) => item.name === name
+        );
 
 
     if (existingItem) {
@@ -231,20 +266,29 @@ function addToCart(name, price) {
 
     updateCart();
 
+
+    // Small confirmation
+    alert(
+        name + " added to your cart."
+    );
+
 }
 
 
-// ==============================
+// ==========================================
 // UPDATE CART
-// ==============================
+// ==========================================
 
 function updateCart() {
 
-    const items = document.getElementById("cartItems");
+    const items =
+        document.getElementById("cartItems");
 
-    const total = document.getElementById("cartTotal");
+    const total =
+        document.getElementById("cartTotal");
 
-    const count = document.getElementById("cartCount");
+    const count =
+        document.getElementById("cartCount");
 
 
     if (!items) return;
@@ -258,38 +302,88 @@ function updateCart() {
     let quantity = 0;
 
 
+    // EMPTY CART
+    if (cart.length === 0) {
+
+        items.innerHTML = `
+            <p class="empty-cart">
+                Your cart is empty.
+            </p>
+        `;
+
+    }
+
+
+    // CART ITEMS
     cart.forEach((item, index) => {
 
+        const itemPrice =
+            Number(item.price);
+
+        const itemQuantity =
+            Number(item.quantity);
+
         const itemTotal =
-            Number(item.price) * Number(item.quantity);
+            itemPrice * itemQuantity;
 
 
         sum += itemTotal;
 
-        quantity += Number(item.quantity);
+        quantity += itemQuantity;
 
 
         items.innerHTML += `
 
             <div class="cart-item">
 
-                <b>
-                    ${item.name}
-                </b>
+                <div class="cart-item-info">
 
-                <br>
+                    <b>
+                        ${item.name}
+                    </b>
 
-                ${Number(item.price).toFixed(2)} SAR
+                    <span>
+                        ${itemPrice.toFixed(2)} SAR
+                    </span>
 
-                <br>
+                    <span>
+                        Subtotal:
+                        ${itemTotal.toFixed(2)} SAR
+                    </span>
 
-                Quantity:
-                ${item.quantity}
+                </div>
+
+
+                <div class="quantity-controls">
+
+                    <button
+                        class="quantity-btn"
+                        onclick="decreaseQuantity(${index})"
+                    >
+                        −
+                    </button>
+
+
+                    <span class="quantity-number">
+                        ${itemQuantity}
+                    </span>
+
+
+                    <button
+                        class="quantity-btn"
+                        onclick="increaseQuantity(${index})"
+                    >
+                        +
+                    </button>
+
+                </div>
+
 
                 <button
+                    class="remove-btn"
                     onclick="removeCart(${index})"
                 >
-                    X
+                    Remove
                 </button>
 
             </div>
@@ -301,14 +395,16 @@ function updateCart() {
 
     if (total) {
 
-        total.innerHTML = sum.toFixed(2);
+        total.innerHTML =
+            sum.toFixed(2);
 
     }
 
 
     if (count) {
 
-        count.innerHTML = quantity;
+        count.innerHTML =
+            quantity;
 
     }
 
@@ -318,9 +414,54 @@ function updateCart() {
 }
 
 
-// ==============================
+// ==========================================
+// INCREASE QUANTITY
+// ==========================================
+
+function increaseQuantity(index) {
+
+    if (!cart[index]) return;
+
+
+    cart[index].quantity++;
+
+
+    saveCart();
+
+    updateCart();
+
+}
+
+
+// ==========================================
+// DECREASE QUANTITY
+// ==========================================
+
+function decreaseQuantity(index) {
+
+    if (!cart[index]) return;
+
+
+    cart[index].quantity--;
+
+
+    if (cart[index].quantity <= 0) {
+
+        cart.splice(index, 1);
+
+    }
+
+
+    saveCart();
+
+    updateCart();
+
+}
+
+
+// ==========================================
 // OPEN CART
-// ==============================
+// ==========================================
 
 function openCart() {
 
@@ -331,16 +472,18 @@ function openCart() {
     if (!cartBox) return;
 
 
-    cartBox.style.display = "block";
+    cartBox.style.display =
+        "block";
+
 
     updateCart();
 
 }
 
 
-// ==============================
+// ==========================================
 // CLOSE CART
-// ==============================
+// ==========================================
 
 function closeCart() {
 
@@ -351,18 +494,23 @@ function closeCart() {
     if (!cartBox) return;
 
 
-    cartBox.style.display = "none";
+    cartBox.style.display =
+        "none";
 
 }
 
 
-// ==============================
+// ==========================================
 // REMOVE CART ITEM
-// ==============================
+// ==========================================
 
 function removeCart(index) {
 
+    if (!cart[index]) return;
+
+
     cart.splice(index, 1);
+
 
     saveCart();
 
@@ -371,42 +519,55 @@ function removeCart(index) {
 }
 
 
-// ==============================
+// ==========================================
 // CHECKOUT
-// ==============================
+// ==========================================
 
 function checkout() {
 
     if (cart.length === 0) {
 
-        alert("Your cart is empty.");
+        alert(
+            "Your cart is empty."
+        );
 
         return;
 
     }
 
 
-    window.location.href = "checkout.html";
+    window.location.href =
+        "checkout.html";
 
 }
 
 
-// ==============================
+// ==========================================
 // MAKE FUNCTIONS AVAILABLE TO HTML
-// ==============================
+// ==========================================
 
-window.openCart = openCart;
+window.openCart =
+    openCart;
 
-window.closeCart = closeCart;
+window.closeCart =
+    closeCart;
 
-window.removeCart = removeCart;
+window.removeCart =
+    removeCart;
 
-window.checkout = checkout;
+window.increaseQuantity =
+    increaseQuantity;
+
+window.decreaseQuantity =
+    decreaseQuantity;
+
+window.checkout =
+    checkout;
 
 
-// ==============================
+// ==========================================
 // START BARQ STORE
-// ==============================
+// ==========================================
 
 loadProducts();
 
