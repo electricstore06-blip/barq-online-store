@@ -406,4 +406,234 @@ body {
         padding: 13px 14px;
     }
 
+/* ==============================
+   ORDER SUMMARY
+============================== */
+
+.order-summary{
+
+    margin-top:35px;
+    padding-top:25px;
+
+    border-top:1px solid #e5e7eb;
+
+}
+
+
+.order-summary h2{
+
+    margin-top:0;
+
+    margin-bottom:20px;
+
+    font-size:25px;
+
+    color:#111827;
+
+}
+
+
+/* ==============================
+   ORDER ITEMS
+============================== */
+
+#order-items{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+
+.order-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:15px;
+
+    background:#f8f8f8;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:11px;
+
+}
+
+
+.order-item-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:5px;
+
+}
+
+
+.order-item-name{
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    color:#111827;
+
+}
+
+
+.order-item-quantity{
+
+    font-size:14px;
+
+    color:#6b7280;
+
+}
+
+
+.order-item-price{
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    color:#111827;
+
+    white-space:nowrap;
+
+}
+
+
+/* ==============================
+   SUMMARY LINES
+============================== */
+
+.order-summary-line{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:10px 0;
+
+    font-size:16px;
+
+    color:#374151;
+
+}
+
+
+.order-summary-total{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-top:10px;
+
+    padding-top:15px;
+
+    border-top:1px solid #e5e7eb;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    color:#111827;
+
+}
+
+
+#total{
+
+    color:#d81b60;
+
+}
+
+
+/* ==============================
+   EMPTY CART
+============================== */
+
+.empty-order{
+
+    padding:18px;
+
+    text-align:center;
+
+    background:#f8f8f8;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:11px;
+
+    color:#6b7280;
+
+    font-size:15px;
+
+}
+
+
+/* ==============================
+   MOBILE ORDER SUMMARY
+============================== */
+
+@media(max-width:600px){
+
+    .order-summary{
+
+        margin-top:30px;
+
+        padding-top:22px;
+
+    }
+
+
+    .order-summary h2{
+
+        font-size:22px;
+
+    }
+
+
+    .order-item{
+
+        padding:13px;
+
+    }
+
+
+    .order-item-name{
+
+        font-size:15px;
+
+    }
+
+
+    .order-item-price{
+
+        font-size:15px;
+
+    }
+
+
+    .order-summary-total{
+
+        font-size:18px;
+
+    }
+
 }
