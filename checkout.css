@@ -642,31 +642,94 @@ body {
 
 .order-summary{
 
-    background:#fff7fa;
+    background:#ffffff;
 
-    border:1px solid #f3c4d5;
+    border:1px solid #e5e7eb;
 
     padding:25px;
 
-    border-radius:16px;
+    border-radius:18px;
 
-    margin-bottom:30px;
+    margin-bottom:35px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,0.06);
 
 }
 
 
 .order-summary h2{
 
-    margin-top:0;
+    font-size:26px;
 
-    margin-bottom:20px;
+    margin-bottom:22px;
 
-    font-size:24px;
+    color:#111827;
 
 }
 
 
-.summary-item{
+/* Product row */
+
+.order-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:15px 0;
+
+    border-bottom:1px solid #eeeeee;
+
+}
+
+
+.order-item-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+
+}
+
+
+.order-item-name{
+
+    font-size:17px;
+
+    font-weight:bold;
+
+    color:#111827;
+
+}
+
+
+.order-item-quantity{
+
+    font-size:14px;
+
+    color:#6b7280;
+
+}
+
+
+.order-item-price{
+
+    font-size:17px;
+
+    font-weight:bold;
+
+    color:#111827;
+
+}
+
+
+/* Subtotal and delivery */
+
+.order-summary-line{
 
     display:flex;
 
@@ -674,26 +737,34 @@ body {
 
     padding:12px 0;
 
-    border-bottom:1px solid #eee;
-
     font-size:16px;
+
+    color:#374151;
 
 }
 
 
-.summary-total{
+/* Total */
+
+.order-summary-total{
 
     display:flex;
 
     justify-content:space-between;
 
-    margin-top:20px;
+    margin-top:18px;
 
-    font-size:20px;
+    padding-top:18px;
+
+    border-top:2px solid #eeeeee;
+
+    font-size:22px;
 
     font-weight:bold;
 
     color:#d81b60;
+
+}
 
 }
 /* ==============================
