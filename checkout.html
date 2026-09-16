@@ -7,182 +7,101 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>BARQ Checkout</title>
+    <title>Order Success - BARQ</title>
 
-    <link rel="stylesheet" href="checkout.css">
-<script type="module" src="checkout.js"></script>
-
+    <link rel="stylesheet" href="order-success.css">
 
 </head>
 
+
 <body>
 
-    <div class="checkout-page">
 
-        <h1>BARQ Checkout</h1>
-
-        <div class="checkout-box">
+<div class="success-page">
 
 
-            <!-- ==============================
-                 ORDER SUMMARY
-            =============================== -->
-
-            <div class="order-summary">
-
-                <h2>Order Summary</h2>
-
-                <div id="order-items"></div>
-
-                <div class="summary-row">
-
-                    <span>Subtotal</span>
-
-                    <span id="subtotal">
-                        SAR 0.00
-                    </span>
-
-                </div>
-
-                <div class="summary-row">
-
-                    <span>Delivery</span>
-
-                    <span id="delivery">
-                        SAR 0.00
-                    </span>
-
-                </div>
-
-                <div class="summary-total">
-
-                    <span>Total</span>
-
-                    <strong id="total">
-                        SAR 0.00
-                    </strong>
-
-                </div>
-
-            </div>
+    <div class="success-box">
 
 
-            <!-- ==============================
-                 CUSTOMER INFORMATION
-            =============================== -->
-
-            <h2 class="customer-title">
-                Customer Information
-            </h2>
+        <div class="success-icon">
+            ✓
+        </div>
 
 
-            <label for="full-name">
-                Full Name
-            </label>
-
-            <input
-                type="text"
-                id="full-name"
-                name="full-name"
-                placeholder="Enter your name"
-            >
+        <h1>
+            Thank You!
+        </h1>
 
 
-            <label for="phone">
-                Phone Number
-            </label>
-
-            <input
-                type="tel"
-                id="phone"
-                name="phone"
-                placeholder="05xxxxxxxx"
-            >
+        <p id="customer-name"></p>
 
 
-            <label for="email">
-                Email
-            </label>
-
-            <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="example@email.com"
-            >
+        <p class="success-message">
+            Your order has been received successfully.
+        </p>
 
 
-            <label for="address">
-                Delivery Address
-            </label>
+        <div class="order-details">
 
-            <textarea
-                id="address"
-                name="address"
-                placeholder="Your address"
-            ></textarea>
-
-
-            <!-- ==============================
-                 PAYMENT METHOD
-            =============================== -->
 
             <h2>
-                Payment Method
+                Order Details
             </h2>
 
 
-            <label class="payment-option">
-
-                <input
-                    type="radio"
-                    name="payment"
-                    value="Mada"
-                >
-
-                <span>Mada</span>
-
-            </label>
+            <p>
+                Order Number:
+                <strong id="order-number">
+                    BARQ0000
+                </strong>
+            </p>
 
 
-            <label class="payment-option">
-
-                <input
-                    type="radio"
-                    name="payment"
-                    value="Visa / Mastercard"
-                >
-
-                <span>Visa / Mastercard</span>
-
-            </label>
-
-
-            <label class="payment-option">
-
-                <input
-                    type="radio"
-                    name="payment"
-                    value="Apple Pay"
-                >
-
-                <span>Apple Pay</span>
-
-            </label>
-
-<button 
-    type="button" 
-    id="place-order-btn">
-    Place Order
-</button>
-
-<div id="checkout-message"></div>
-        
+            <p>
+                Total:
+                <strong id="order-total">
+                    SAR 0.00
+                </strong>
+            </p>
 
 
         </div>
 
-  
+
+        <a href="index.html" class="continue-btn">
+            Continue Shopping
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+const order =
+    JSON.parse(localStorage.getItem("barqOrder"));
+
+
+if (order) {
+
+    document.getElementById("customer-name").textContent =
+        "Dear " + (order.customerName || "Customer") + ",";
+
+
+    document.getElementById("order-number").textContent =
+        order.orderNumber || "BARQ0000";
+
+
+    document.getElementById("order-total").textContent =
+        "SAR " + Number(order.total || 0).toFixed(2);
+
+}
+
+</script>
+
 
 </body>
 
