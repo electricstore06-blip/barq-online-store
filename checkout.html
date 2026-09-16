@@ -1,308 +1,333 @@
-<!DOCTYPE html>
-<html>
+/* ==============================
+   BARQ CHECKOUT
+============================== */
 
-<head>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
 
-    <meta charset="UTF-8">
+body{
+    background:#f8f8f8;
+    color:#111827;
+}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>BARQ Checkout</title>
+/* ==============================
+   CHECKOUT PAGE
+============================== */
 
-    <link rel="stylesheet" href="checkout.css">
+.checkout-page{
+    min-height:100vh;
+    padding:55px 20px 80px;
+}
 
-</head>
 
+/* ==============================
+   TITLE
+============================== */
 
-<body>
+.checkout-page h1{
+    text-align:center;
+    font-size:42px;
+    margin-bottom:40px;
+    color:#111827;
+}
 
 
-<div class="checkout-page">
+/* ==============================
+   CHECKOUT BOX
+============================== */
 
+.checkout-box{
+    width:100%;
+    max-width:600px;
+    margin:0 auto;
 
-    <h1>
-        BARQ Checkout
-    </h1>
+    background:white;
 
+    padding:40px;
 
-    <div class="checkout-box">
+    border-radius:22px;
 
+    box-shadow:
+        0 10px 35px rgba(0,0,0,0.10);
+}
 
-        <h2>
-            Customer Information
-        </h2>
 
+/* ==============================
+   SECTION HEADINGS
+============================== */
 
-        <label>
-            Full Name
-        </label>
+.checkout-box h2{
+    font-size:25px;
+    margin-top:30px;
+    margin-bottom:18px;
+    color:#111827;
+}
 
-        <input
-            type="text"
-            id="fullName"
-            placeholder="Enter your name"
-            required
-        >
 
+/* ==============================
+   LABELS
+============================== */
 
-        <label>
-            Phone Number
-        </label>
+.checkout-box label{
+    display:block;
 
-        <input
-            type="tel"
-            id="phone"
-            placeholder="05xxxxxxxx"
-            required
-        >
+    margin-top:18px;
 
+    margin-bottom:8px;
 
-        <label>
-            Email
-        </label>
+    font-size:16px;
 
-        <input
-            type="email"
-            id="email"
-            placeholder="example@email.com"
-            required
-        >
+    font-weight:bold;
 
+    color:#111827;
+}
 
-        <label>
-            Delivery Address
-        </label>
 
-        <textarea
-            id="address"
-            placeholder="Your address"
-            required
-        ></textarea>
+/* ==============================
+   TEXT INPUTS
+============================== */
 
+.checkout-box input[type="text"],
+.checkout-box input[type="email"],
+.checkout-box input[type="tel"]{
 
-        <h2>
-            Payment Method
-        </h2>
+    width:100%;
 
+    padding:15px 16px;
 
-        <label>
+    border:1px solid #d7d7d7;
 
-            <input
-                type="radio"
-                name="payment"
-                value="Mada"
-                checked
-            >
+    border-radius:11px;
 
-            Mada
+    font-size:16px;
 
-        </label>
+    background:white;
 
+    outline:none;
 
-        <label>
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
 
-            <input
-                type="radio"
-                name="payment"
-                value="Visa / Mastercard"
-            >
 
-            Visa / Mastercard
+/* ==============================
+   INPUT FOCUS
+============================== */
 
-        </label>
+.checkout-box input[type="text"]:focus,
+.checkout-box input[type="email"]:focus,
+.checkout-box input[type="tel"]:focus{
 
+    border-color:#d81b60;
 
-        <label>
+    box-shadow:
+        0 0 0 3px rgba(216,27,96,0.10);
+}
 
-            <input
-                type="radio"
-                name="payment"
-                value="Apple Pay"
-            >
 
-            Apple Pay
+/* ==============================
+   ADDRESS
+============================== */
 
-        </label>
+.checkout-box textarea{
 
+    width:100%;
 
-        <button
-            type="button"
-            id="placeOrderBtn"
-        >
-            Place Order
-        </button>
+    height:120px;
 
+    padding:15px 16px;
 
-    </div>
+    border:1px solid #d7d7d7;
 
+    border-radius:11px;
 
-</div>
+    font-size:16px;
 
+    resize:vertical;
 
+    outline:none;
+}
 
-<script type="module">
 
-import { db } from "./firebase-config.js";
+.checkout-box textarea:focus{
 
-import {
-    collection,
-    addDoc,
-    serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    border-color:#d81b60;
 
+    box-shadow:
+        0 0 0 3px rgba(216,27,96,0.10);
+}
 
 
-const placeOrderBtn =
-    document.getElementById("placeOrderBtn");
+/* ==============================
+   PAYMENT METHOD
+============================== */
 
+.checkout-box input[type="radio"]{
 
+    width:18px;
+    height:18px;
 
-placeOrderBtn.addEventListener("click", async () => {
+    margin-right:8px;
 
+    accent-color:#d81b60;
 
-    const fullName =
-        document.getElementById("fullName").value.trim();
+    vertical-align:middle;
+}
 
 
-    const phone =
-        document.getElementById("phone").value.trim();
+/* Payment labels */
 
+.checkout-box h2 + label{
 
-    const email =
-        document.getElementById("email").value.trim();
+    display:flex;
 
+    align-items:center;
 
-    const address =
-        document.getElementById("address").value.trim();
+    margin-top:12px;
 
+    padding:14px 15px;
 
-    const payment =
-        document.querySelector(
-            'input[name="payment"]:checked'
-        ).value;
+    border:1px solid #e2e2e2;
 
+    border-radius:10px;
 
+    font-weight:normal;
 
-    if (!fullName || !phone || !email || !address) {
+    cursor:pointer;
 
-        alert("Please complete all customer information.");
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
 
-        return;
+
+.checkout-box h2 + label:hover{
+
+    border-color:#d81b60;
+
+    background:#fff7fa;
+}
+
+
+/* ==============================
+   PLACE ORDER BUTTON
+============================== */
+
+.checkout-box button{
+
+    width:100%;
+
+    margin-top:30px;
+
+    padding:16px;
+
+    background:#d81b60;
+
+    color:white;
+
+    border:none;
+
+    border-radius:11px;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.checkout-box button:hover{
+
+    background:#b91550;
+
+    transform:translateY(-1px);
+}
+
+
+.checkout-box button:active{
+
+    transform:translateY(0);
+}
+
+
+/* ==============================
+   MOBILE
+============================== */
+
+@media(max-width:600px){
+
+    .checkout-page{
+
+        padding:35px 15px 60px;
 
     }
 
 
+    .checkout-page h1{
 
-    const cart =
-        JSON.parse(
-            localStorage.getItem("barqCart")
-        ) || [];
+        font-size:32px;
 
-
-
-    if (cart.length === 0) {
-
-        alert("Your cart is empty.");
-
-        window.location.href = "index.html";
-
-        return;
+        margin-bottom:30px;
 
     }
 
 
+    .checkout-box{
 
-    let total = 0;
+        padding:25px 20px;
 
-
-    cart.forEach((item) => {
-
-        total +=
-            Number(item.price) *
-            Number(item.quantity);
-
-    });
-
-
-
-    placeOrderBtn.disabled = true;
-
-    placeOrderBtn.textContent =
-        "Placing Order...";
-
-
-
-    try {
-
-
-        await addDoc(
-            collection(db, "orders"),
-            {
-
-                customerName: fullName,
-
-                phone: phone,
-
-                email: email,
-
-                address: address,
-
-                paymentMethod: payment,
-
-                products: cart,
-
-                total: total,
-
-                status: "Pending",
-
-                createdAt: serverTimestamp()
-
-            }
-        );
-
-
-
-        localStorage.removeItem("barqCart");
-
-
-
-        alert(
-            "Your order has been placed successfully!"
-        );
-
-
-
-        window.location.href =
-            "index.html";
-
-
-    } catch (error) {
-
-
-        console.error(
-            "Order error:",
-            error
-        );
-
-
-        alert(
-            "Unable to place your order. Please try again."
-        );
-
-
-        placeOrderBtn.disabled = false;
-
-        placeOrderBtn.textContent =
-            "Place Order";
+        border-radius:18px;
 
     }
 
 
-});
+    .checkout-box h2{
 
-</script>
+        font-size:22px;
+
+    }
 
 
-</body>
+    .checkout-box input[type="text"],
+    .checkout-box input[type="email"],
+    .checkout-box input[type="tel"],
+    .checkout-box textarea{
 
-</html>
+        font-size:16px;
+
+    }
+
+}
+
+
+/* ==============================
+   VERY SMALL MOBILE
+============================== */
+
+@media(max-width:400px){
+
+    .checkout-page h1{
+
+        font-size:28px;
+
+    }
+
+
+    .checkout-box{
+
+        padding:22px 16px;
+
+    }
+
+}
