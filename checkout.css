@@ -10,10 +10,6 @@
 }
 
 
-/* ==============================
-   BODY
-============================== */
-
 body{
     background:#f8f8f8;
     color:#111827;
@@ -57,33 +53,42 @@ body{
 
     border-radius:22px;
 
-    box-shadow:0 10px 35px rgba(0,0,0,0.10);
+    box-shadow:
+        0 10px 35px rgba(0,0,0,0.10);
 }
 
 
 /* ==============================
-   CUSTOMER INFORMATION
+   SECTION HEADINGS
 ============================== */
 
 .checkout-box h2{
     font-size:25px;
-    margin-top:30px;
-    margin-bottom:18px;
+    margin-top:0;
+    margin-bottom:20px;
     color:#111827;
 }
 
 
+.checkout-box h2:not(:first-child){
+    margin-top:30px;
+}
+
+
 /* ==============================
-   LABELS
+   NORMAL LABELS
 ============================== */
 
-.checkout-box label{
+.checkout-box > label:not(.payment-option){
+
     display:block;
 
     margin-top:18px;
+
     margin-bottom:8px;
 
     font-size:16px;
+
     font-weight:bold;
 
     color:#111827;
@@ -95,8 +100,8 @@ body{
 ============================== */
 
 .checkout-box input[type="text"],
-.checkout-box input[type="email"],
-.checkout-box input[type="tel"]{
+.checkout-box input[type="tel"],
+.checkout-box input[type="email"]{
 
     width:100%;
 
@@ -123,17 +128,18 @@ body{
 ============================== */
 
 .checkout-box input[type="text"]:focus,
-.checkout-box input[type="email"]:focus,
-.checkout-box input[type="tel"]:focus{
+.checkout-box input[type="tel"]:focus,
+.checkout-box input[type="email"]:focus{
 
     border-color:#d81b60;
 
-    box-shadow:0 0 0 3px rgba(216,27,96,0.10);
+    box-shadow:
+        0 0 0 3px rgba(216,27,96,0.10);
 }
 
 
 /* ==============================
-   DELIVERY ADDRESS
+   ADDRESS
 ============================== */
 
 .checkout-box textarea{
@@ -150,11 +156,11 @@ body{
 
     font-size:16px;
 
-    background:white;
-
     resize:vertical;
 
     outline:none;
+
+    background:white;
 
     transition:
         border-color 0.2s ease,
@@ -166,12 +172,13 @@ body{
 
     border-color:#d81b60;
 
-    box-shadow:0 0 0 3px rgba(216,27,96,0.10);
+    box-shadow:
+        0 0 0 3px rgba(216,27,96,0.10);
 }
 
 
 /* ==============================
-   PAYMENT METHOD
+   PAYMENT OPTIONS
 ============================== */
 
 .payment-option{
@@ -185,6 +192,7 @@ body{
     width:100%;
 
     margin-top:12px !important;
+
     margin-bottom:0 !important;
 
     padding:15px 16px;
@@ -195,16 +203,15 @@ body{
 
     background:white;
 
-    font-size:16px !important;
+    font-size:16px;
 
-    font-weight:bold !important;
+    font-weight:normal !important;
 
     cursor:pointer;
 
     transition:
         border-color 0.2s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
+        background 0.2s ease;
 }
 
 
@@ -216,14 +223,19 @@ body{
 }
 
 
+/* ==============================
+   PAYMENT RADIO BUTTON
+============================== */
+
 .payment-option input[type="radio"]{
 
     width:18px !important;
-    height:18px !important;
 
-    margin:0 !important;
+    height:18px;
 
-    padding:0 !important;
+    margin:0;
+
+    padding:0;
 
     flex-shrink:0;
 
@@ -296,6 +308,7 @@ body{
     .checkout-page{
 
         padding:35px 15px 60px;
+
     }
 
 
@@ -304,6 +317,7 @@ body{
         font-size:32px;
 
         margin-bottom:30px;
+
     }
 
 
@@ -312,21 +326,24 @@ body{
         padding:25px 20px;
 
         border-radius:18px;
+
     }
 
 
     .checkout-box h2{
 
         font-size:22px;
+
     }
 
 
     .checkout-box input[type="text"],
-    .checkout-box input[type="email"],
     .checkout-box input[type="tel"],
+    .checkout-box input[type="email"],
     .checkout-box textarea{
 
         font-size:16px;
+
     }
 
 }
@@ -341,12 +358,14 @@ body{
     .checkout-page h1{
 
         font-size:28px;
+
     }
 
 
     .checkout-box{
 
         padding:22px 16px;
+
     }
 
 }
