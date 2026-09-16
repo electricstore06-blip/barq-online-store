@@ -77,7 +77,9 @@
             </span>
 
         </a>
-
+<a href="#" onclick="openLogin(); return false;">
+    🔐 Login
+</a>
     </nav>
 
 
@@ -250,7 +252,41 @@
 </div>
 
 
+<!-- LOGIN BOX -->
 
+<div id="loginBox" class="login-box">
+
+    <div class="login-content">
+
+        <button class="login-close" onclick="closeLogin()">
+            ×
+        </button>
+
+        <h2>BARQ Login</h2>
+
+        <p>Login to your BARQ account</p>
+
+        <input
+            type="email"
+            id="loginEmail"
+            placeholder="Email"
+        >
+
+        <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+        >
+
+        <button id="loginButton">
+            Login
+        </button>
+
+        <p id="loginMessage"></p>
+
+    </div>
+
+</div>
 
 
 <!-- JAVASCRIPT -->
