@@ -1,33 +1,29 @@
-// ==============================
+// =========================================
 // BARQ CHECKOUT JAVASCRIPT
-// ==============================
+// =========================================
+
+import { db } from "./firebase-config.js";
+
+import {
+    collection,
+    addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 
 document.addEventListener("DOMContentLoaded", function () {
-function showMessage(message, type){
 
-    if(!checkoutMessage) return;
 
-    checkoutMessage.style.display = "block";
-
-    checkoutMessage.textContent = message;
-
-    checkoutMessage.className =
-        type === "success"
-        ? "checkout-success"
-        : "checkout-error";
-
-}
-    // ==============================
+    // =========================================
     // GET CART
-    // ==============================
+    // =========================================
 
     const cart =
         JSON.parse(localStorage.getItem("barqCart")) || [];
 
 
-    // ==============================
+    // =========================================
     // ORDER SUMMARY ELEMENTS
-    // ==============================
+    // =========================================
 
     const orderItems =
         document.getElementById("order-items");
@@ -42,9 +38,58 @@ function showMessage(message, type){
         document.getElementById("total");
 
 
-    // ==============================
+    // =========================================
+    // CUSTOMER ELEMENTS
+    // =========================================
+
+    const orderButton =
+        document.getElementById("place-order-btn");
+
+    const fullName =
+        document.getElementById("full-name");
+
+    const phone =
+        document.getElementById("phone");
+
+    const email =
+        document.getElementById("email");
+
+    const address =
+        document.getElementById("address");
+
+    const paymentMethods =
+        document.querySelectorAll(
+            'input[name="payment"]'
+        );
+
+
+    // =========================================
+    // CALCULATE SUBTOTAL
+    // =========================================
+
+    function calculateSubtotal() {
+
+        return cart.reduce(
+            function (sum, item) {
+
+                const price =
+                    Number(item.price) || 0;
+
+                const quantity =
+                    Number(item.quantity) || 0;
+
+                return sum + (price * quantity);
+
+            },
+            0
+        );
+
+    }
+
+
+    // =========================================
     // DISPLAY ORDER SUMMARY
-    // ==============================
+    // =========================================
 
     function renderOrderSummary() {
 
@@ -57,19 +102,28 @@ function showMessage(message, type){
             return;
         }
 
+
         orderItems.innerHTML = "";
 
-        // Empty cart
+
+        // EMPTY CART
+
         if (cart.length === 0) {
 
-            orderItems.innerHTML =
-                `<p class="empty-order">
+            orderItems.innerHTML = `
+                <p class="empty-order">
                     Your cart is empty.
-                </p>`;
+                </p>
+            `;
 
-            subtotalElement.textContent = "SAR 0.00";
-            deliveryElement.textContent = "SAR 0.00";
-            totalElement.textContent = "SAR 0.00";
+            subtotalElement.textContent =
+                "SAR 0.00";
+
+            deliveryElement.textContent =
+                "SAR 0.00";
+
+            totalElement.textContent =
+                "SAR 0.00";
 
             return;
         }
@@ -78,7 +132,8 @@ function showMessage(message, type){
         let subtotal = 0;
 
 
-        // Display each product
+        // DISPLAY PRODUCTS
+
         cart.forEach(function (item) {
 
             const price =
@@ -126,22 +181,24 @@ function showMessage(message, type){
                 item.name || "BARQ Product";
 
 
-            orderItems.appendChild(itemElement);
+            orderItems.appendChild(
+                itemElement
+            );
 
         });
 
 
-        // ==============================
+        // =========================================
         // DELIVERY
-        // ==============================
+        // =========================================
 
         const delivery =
             subtotal > 0 ? 15 : 0;
 
 
-        // ==============================
+        // =========================================
         // TOTAL
-        // ==============================
+        // =========================================
 
         const total =
             subtotal + delivery;
@@ -159,53 +216,28 @@ function showMessage(message, type){
     }
 
 
-    // ==============================
-    // CUSTOMER INFORMATION
-    // ==============================
-const orderButton =
-    document.getElementById("place-order-btn");
-
-
-const checkoutMessage =
-    document.getElementById("checkout-message");
-
-    const fullName =
-        document.getElementById("full-name");
-
-    const phone =
-        document.getElementById("phone");
-
-    const email =
-        document.getElementById("email");
-
-    const address =
-        document.getElementById("address");
-
-
-    const paymentMethods =
-        document.querySelectorAll(
-            'input[name="payment"]'
-        );
-
-
-    // ==============================
+    // =========================================
     // SHOW ORDER
-    // ==============================
+    // =========================================
 
     renderOrderSummary();
 
 
-    // ==============================
+    // =========================================
     // PLACE ORDER
-    // ==============================
+    // =========================================
 
     if (orderButton) {
 
         orderButton.addEventListener(
             "click",
-            function () {
+            async function () {
 
-                // Check cart
+
+                // =========================================
+                // CHECK CART
+                // =========================================
+
                 if (cart.length === 0) {
 
                     alert(
@@ -215,6 +247,10 @@ const checkoutMessage =
                     return;
                 }
 
+
+                // =========================================
+                // GET CUSTOMER DATA
+                // =========================================
 
                 const name =
                     fullName.value.trim();
@@ -234,14 +270,14 @@ const checkoutMessage =
                     );
 
 
-                // ==============================
+                // =========================================
                 // VALIDATION
-                // ==============================
+                // =========================================
 
                 if (name === "") {
 
                     alert(
-                        "Please enter your full name"
+                        "Please enter your full name."
                     );
 
                     fullName.focus();
@@ -268,7 +304,7 @@ const checkoutMessage =
                 ) {
 
                     alert(
-                        "Please enter a valid email"
+                        "Please enter a valid email."
                     );
 
                     email.focus();
@@ -280,7 +316,7 @@ const checkoutMessage =
                 if (addressValue === "") {
 
                     alert(
-                        "Please enter delivery address"
+                        "Please enter delivery address."
                     );
 
                     address.focus();
@@ -292,33 +328,19 @@ const checkoutMessage =
                 if (!payment) {
 
                     alert(
-                        "Please select payment method"
+                        "Please select a payment method."
                     );
 
                     return;
                 }
 
 
-                // ==============================
+                // =========================================
                 // CALCULATE TOTALS
-                // ==============================
+                // =========================================
 
                 const subtotal =
-                    cart.reduce(
-                        function (sum, item) {
-
-                            const price =
-                                Number(item.price) || 0;
-
-                            const quantity =
-                                Number(item.quantity) || 0;
-
-                            return sum +
-                                (price * quantity);
-
-                        },
-                        0
-                    );
+                    calculateSubtotal();
 
 
                 const delivery =
@@ -329,11 +351,22 @@ const checkoutMessage =
                     subtotal + delivery;
 
 
-                // ==============================
-                // ORDER DATA
-                // ==============================
+                // =========================================
+                // GENERATE ORDER NUMBER
+                // =========================================
+
+                const orderNumber =
+                    "BARQ" +
+                    Date.now().toString().slice(-6);
+
+
+                // =========================================
+                // CREATE ORDER DATA
+                // =========================================
 
                 const orderData = {
+
+                    orderNumber: orderNumber,
 
                     customerName: name,
 
@@ -354,59 +387,113 @@ const checkoutMessage =
 
                     total: total,
 
+                    status: "Pending",
+
                     date:
                         new Date().toISOString()
 
                 };
 
 
-                // Show in browser console
-                console.log(orderData);
+                // =========================================
+                // DISABLE BUTTON
+                // =========================================
 
-// SAVE ORDER DATA
+                orderButton.disabled = true;
 
-orderData.orderNumber =
-    "BARQ" + Math.floor(1000 + Math.random() * 9000);
-
-
-localStorage.setItem(
-    "barqOrder",
-    JSON.stringify(orderData)
-);
+                orderButton.textContent =
+                    "Processing Order...";
 
 
-localStorage.setItem(
-    "barqOrderTotal",
-    total
-);
+                try {
 
 
-// GO TO SUCCESS PAGE
+                    // =========================================
+                    // SAVE ORDER TO FIREBASE
+                    // =========================================
 
-window.location.href =
-    "order-success.html";
-             
-
-                // ==============================
-                // CLEAR FORM
-                // ==============================
-
-                fullName.value = "";
-
-                phone.value = "";
-
-                email.value = "";
-
-                address.value = "";
+                    const orderRef =
+                        await addDoc(
+                            collection(db, "orders"),
+                            orderData
+                        );
 
 
-                paymentMethods.forEach(
-                    function (payment) {
+                    console.log(
+                        "Order saved to Firebase:",
+                        orderRef.id
+                    );
 
-                        payment.checked = false;
 
-                    }
-                );
+                    // =========================================
+                    // SAVE ORDER LOCALLY
+                    // =========================================
+
+                    localStorage.setItem(
+                        "barqOrder",
+                        JSON.stringify(orderData)
+                    );
+
+
+                    localStorage.setItem(
+                        "barqOrderTotal",
+                        total.toFixed(2)
+                    );
+
+
+                    // =========================================
+                    // SAVE FIREBASE DOCUMENT ID
+                    // =========================================
+
+                    localStorage.setItem(
+                        "barqOrderId",
+                        orderRef.id
+                    );
+
+
+                    // =========================================
+                    // CLEAR CART
+                    // =========================================
+
+                    localStorage.removeItem(
+                        "barqCart"
+                    );
+
+
+                    // =========================================
+                    // GO TO SUCCESS PAGE
+                    // =========================================
+
+                    window.location.href =
+                        "order-success.html";
+
+
+                } catch (error) {
+
+
+                    // =========================================
+                    // FIREBASE ERROR
+                    // =========================================
+
+                    console.error(
+                        "Firebase order error:",
+                        error
+                    );
+
+
+                    alert(
+                        "We could not place your order.\n\nPlease check your internet connection and try again."
+                    );
+
+
+                    // ENABLE BUTTON AGAIN
+
+                    orderButton.disabled = false;
+
+                    orderButton.textContent =
+                        "Place Order";
+
+                }
 
             }
         );
