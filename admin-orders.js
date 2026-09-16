@@ -2,7 +2,9 @@ import { db, auth } from "./firebase-config.js";
 
 import {
     collection,
-    getDocs
+    getDocs,
+    doc,
+    getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -29,10 +31,10 @@ const logoutButton =
 
 
 /* =========================================
-   CHECK LOGIN
+   CHECK ADMIN LOGIN
 ========================================= */
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
 
     if (!user) {
 
@@ -43,13 +45,77 @@ onAuthStateChanged(auth, (user) => {
     }
 
 
-    console.log(
-        "Admin page opened by:",
-        user.email
-    );
+    try {
+
+        /*
+         * Check the user's UID inside:
+         *
+         * admins
+         * └── USER_UID
+         *     └── role: "admin"
+         */
+
+        const adminRef =
+            doc(
+                db,
+                "admins",
+                user.uid
+            );
 
 
-    loadOrders();
+        const adminSnapshot =
+            await getDoc(adminRef);
+
+
+        /* User is NOT an admin */
+
+        if (
+            !adminSnapshot.exists() ||
+            adminSnapshot.data().role !== "admin"
+        ) {
+
+            console.warn(
+                "Unauthorized admin page access:",
+                user.email
+            );
+
+            alert(
+                "You are not authorized to access the admin page."
+            );
+
+            await signOut(auth);
+
+            window.location.href =
+                "index.html";
+
+            return;
+        }
+
+
+        /* User IS an admin */
+
+        console.log(
+            "Admin access granted:",
+            user.email
+        );
+
+
+        loadOrders();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Admin authorization error:",
+            error
+        );
+
+
+        adminMessage.textContent =
+            "Unable to verify admin access.";
+
+    }
 
 });
 
@@ -101,10 +167,14 @@ async function loadOrders() {
         orders.sort((a, b) => {
 
             const dateA =
-                new Date(a.date || 0).getTime();
+                new Date(
+                    a.date || 0
+                ).getTime();
 
             const dateB =
-                new Date(b.date || 0).getTime();
+                new Date(
+                    b.date || 0
+                ).getTime();
 
             return dateB - dateA;
 
@@ -198,15 +268,21 @@ function displayOrder(order) {
 
 
     const subtotal =
-        Number(order.subtotal || 0);
+        Number(
+            order.subtotal || 0
+        );
 
 
     const delivery =
-        Number(order.delivery || 0);
+        Number(
+            order.delivery || 0
+        );
 
 
     const total =
-        Number(order.total || 0);
+        Number(
+            order.total || 0
+        );
 
 
     /* =========================================
@@ -249,10 +325,14 @@ function displayOrder(order) {
     ) {
 
         const latitude =
-            Number(order.latitude);
+            Number(
+                order.latitude
+            );
 
         const longitude =
-            Number(order.longitude);
+            Number(
+                order.longitude
+            );
 
 
         if (
@@ -296,7 +376,8 @@ function displayOrder(order) {
         order.items.length > 0
     ) {
 
-        productsHTML = "<ul>";
+        productsHTML =
+            "<ul>";
 
 
         order.items.forEach((item) => {
@@ -307,27 +388,40 @@ function displayOrder(order) {
 
 
             const quantity =
-                Number(item.quantity || 0);
+                Number(
+                    item.quantity || 0
+                );
 
 
             const price =
-                Number(item.price || 0);
+                Number(
+                    item.price || 0
+                );
 
 
             productsHTML += `
                 <li>
-                    <strong>${name}</strong>
+                    <strong>
+                        ${name}
+                    </strong>
+
                     <br>
-                    Quantity: ${quantity}
+
+                    Quantity:
+                    ${quantity}
+
                     <br>
-                    Price: SAR ${price.toFixed(2)}
+
+                    Price:
+                    SAR ${price.toFixed(2)}
                 </li>
             `;
 
         });
 
 
-        productsHTML += "</ul>";
+        productsHTML +=
+            "</ul>";
 
     }
 
@@ -368,25 +462,37 @@ function displayOrder(order) {
 
 
             <p>
-                <strong>Name:</strong>
+                <strong>
+                    Name:
+                </strong>
+
                 ${customerName}
             </p>
 
 
             <p>
-                <strong>Phone:</strong>
+                <strong>
+                    Phone:
+                </strong>
+
                 ${phone}
             </p>
 
 
             <p>
-                <strong>Email:</strong>
+                <strong>
+                    Email:
+                </strong>
+
                 ${email}
             </p>
 
 
             <p>
-                <strong>Address:</strong>
+                <strong>
+                    Address:
+                </strong>
+
                 ${address}
             </p>
 
@@ -425,19 +531,28 @@ function displayOrder(order) {
 
 
             <p>
-                <strong>Method:</strong>
+                <strong>
+                    Method:
+                </strong>
+
                 ${paymentMethod}
             </p>
 
 
             <p>
-                <strong>Subtotal:</strong>
+                <strong>
+                    Subtotal:
+                </strong>
+
                 SAR ${subtotal.toFixed(2)}
             </p>
 
 
             <p>
-                <strong>Delivery:</strong>
+                <strong>
+                    Delivery:
+                </strong>
+
                 SAR ${delivery.toFixed(2)}
             </p>
 
