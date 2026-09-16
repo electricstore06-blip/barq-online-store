@@ -10,7 +10,9 @@
     <title>BARQ Checkout</title>
 
     <link rel="stylesheet" href="checkout.css">
-<script src="checkout.js" defer></script>
+
+    <script src="checkout.js" defer></script>
+
 </head>
 
 <body>
@@ -19,45 +21,60 @@
 
         <h1>BARQ Checkout</h1>
 
-      <div class="checkout-box">
-
-<!-- ==============================
-     ORDER SUMMARY
-============================== -->
-
-<div class="order-summary">
-
-    <h2>Order Summary</h2>
-
-    <div id="order-items"></div>
-
-    <div class="summary-row">
-        <span>Subtotal</span>
-        <span id="subtotal">SAR 0.00</span>
-    </div>
-
-    <div class="summary-row">
-        <span>Delivery</span>
-        <span id="delivery">SAR 0.00</span>
-    </div>
-
-    <div class="summary-total">
-        <span>Total</span>
-        <strong id="total">SAR 0.00</strong>
-    </div>
-
-</div>
-   
+        <div class="checkout-box">
 
 
+            <!-- ==============================
+                 ORDER SUMMARY
+            =============================== -->
 
-    <!-- ==============================
-         CUSTOMER INFORMATION
-    =============================== -->
+            <div class="order-summary">
 
-    <h2 class="customer-title">
-        Customer Information
-    </h2>
+                <h2>Order Summary</h2>
+
+                <div id="order-items"></div>
+
+                <div class="summary-row">
+
+                    <span>Subtotal</span>
+
+                    <span id="subtotal">
+                        SAR 0.00
+                    </span>
+
+                </div>
+
+                <div class="summary-row">
+
+                    <span>Delivery</span>
+
+                    <span id="delivery">
+                        SAR 0.00
+                    </span>
+
+                </div>
+
+                <div class="summary-total">
+
+                    <span>Total</span>
+
+                    <strong id="total">
+                        SAR 0.00
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==============================
+                 CUSTOMER INFORMATION
+            =============================== -->
+
+            <h2 class="customer-title">
+                Customer Information
+            </h2>
+
 
             <label for="full-name">
                 Full Name
@@ -104,52 +121,11 @@
                 name="address"
                 placeholder="Your address"
             ></textarea>
-<!-- ==============================
-     ORDER SUMMARY
-============================== -->
 
-<div class="order-summary">
 
-    <h2>Order Summary</h2>
-
-    <div id="order-items">
-
-        <div class="order-item">
-
-            <div class="order-item-info">
-                <span class="order-item-name">
-                    Sample Product
-                </span>
-
-                <span class="order-item-quantity">
-                    Qty: 1
-                </span>
-            </div>
-
-            <span class="order-item-price">
-                SAR 0.00
-            </span>
-
-        </div>
-
-    </div>
-
-    <div class="order-summary-line">
-        <span>Subtotal</span>
-        <span id="subtotal">SAR 0.00</span>
-    </div>
-
-    <div class="order-summary-line">
-        <span>Delivery</span>
-        <span id="delivery">SAR 0.00</span>
-    </div>
-
-    <div class="order-summary-total">
-        <span>Total</span>
-        <span id="total">SAR 0.00</span>
-    </div>
-
-</div>
+            <!-- ==============================
+                 PAYMENT METHOD
+            =============================== -->
 
             <h2>
                 Payment Method
@@ -199,10 +175,11 @@
                 Place Order
             </button>
 
+
         </div>
 
     </div>
-<script src="checkout.js"></script>
+
 </body>
 
 </html>
