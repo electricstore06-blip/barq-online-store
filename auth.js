@@ -7,42 +7,28 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
-// LOGIN FUNCTION
+// LOGIN
 
 async function login(email, password) {
-
-    return signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-    );
-
+    return signInWithEmailAndPassword(auth, email, password);
 }
 
 
-// REGISTER FUNCTION
+// REGISTER
 
 async function register(email, password) {
-
-    return createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-    );
-
+    return createUserWithEmailAndPassword(auth, email, password);
 }
 
 
-// LOGOUT FUNCTION
+// LOGOUT
 
 async function logout() {
-
     return signOut(auth);
-
 }
 
 
-// LOGIN BOX
+// OPEN LOGIN BOX
 
 function openLogin() {
 
@@ -55,6 +41,8 @@ function openLogin() {
 }
 
 
+// CLOSE LOGIN BOX
+
 function closeLogin() {
 
     const loginBox = document.getElementById("loginBox");
@@ -66,11 +54,27 @@ function closeLogin() {
 }
 
 
-// LOGIN BUTTON
+// MAKE FUNCTIONS AVAILABLE TO HTML
 
-const loginButton = document.getElementById("loginButton");
+window.openLogin = openLogin;
+window.closeLogin = closeLogin;
+window.login = login;
+window.register = register;
+window.logout = logout;
 
-if (loginButton) {
+
+// WAIT UNTIL HTML IS READY
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const loginButton =
+        document.getElementById("loginButton");
+
+    if (!loginButton) {
+        console.error("Login button not found.");
+        return;
+    }
+
 
     loginButton.addEventListener("click", async function () {
 
@@ -103,18 +107,11 @@ if (loginButton) {
             message.textContent =
                 "Login successful!";
 
-
-            /*
-             * STEP 3 WILL DECIDE
-             * WHERE THE USER GOES.
-             *
-             * For now, stay on this page.
-             */
-
+            console.log("Firebase login successful:", email);
 
         } catch (error) {
 
-            console.error("Login error:", error);
+            console.error("Firebase login error:", error);
 
             message.textContent =
                 "Login failed. Please check your email and password.";
@@ -123,15 +120,4 @@ if (loginButton) {
 
     });
 
-}
-
-
-// MAKE FUNCTIONS AVAILABLE TO HTML
-
-window.login = login;
-window.register = register;
-
-window.logout = logout;
-
-window.openLogin = openLogin;
-window.closeLogin = closeLogin;
+});
