@@ -9,7 +9,6 @@
     font-family:Arial, sans-serif;
 }
 
-
 body{
     background:#f8f8f8;
     color:#111827;
@@ -58,7 +57,7 @@ body{
 
 
 /* ==============================
-   HEADINGS
+   SECTION HEADINGS
 ============================== */
 
 .checkout-box h2{
@@ -98,7 +97,7 @@ body{
 
     padding:15px 16px;
 
-    margin-top:8px;
+    margin-top:0;
 
     border:1px solid #d7d7d7;
 
@@ -142,7 +141,7 @@ body{
 
     padding:15px 16px;
 
-    margin-top:8px;
+    margin-top:0;
 
     border:1px solid #d7d7d7;
 
@@ -150,11 +149,11 @@ body{
 
     font-size:16px;
 
-    background:white;
-
     resize:vertical;
 
     outline:none;
+
+    background:white;
 
     transition:
         border-color 0.2s ease,
@@ -174,18 +173,17 @@ body{
    PAYMENT OPTIONS
 ============================== */
 
-.checkout-box h2 ~ label{
+.payment-option{
 
     display:flex;
 
     align-items:center;
 
-    gap:10px;
+    gap:12px;
 
     width:100%;
 
-    margin-top:10px;
-    margin-bottom:10px;
+    margin-top:12px;
 
     padding:14px 15px;
 
@@ -205,7 +203,7 @@ body{
 }
 
 
-.checkout-box h2 ~ label:hover{
+.payment-option:hover{
 
     border-color:#d81b60;
 
@@ -214,12 +212,13 @@ body{
 
 
 /* ==============================
-   RADIO BUTTONS
+   RADIO BUTTON
 ============================== */
 
 .checkout-box input[type="radio"]{
 
-    width:18px !important;
+    width:18px;
+
     height:18px;
 
     margin:0;
@@ -242,7 +241,7 @@ body{
 
     width:100%;
 
-    margin-top:25px;
+    margin-top:30px;
 
     padding:16px;
 
@@ -289,6 +288,7 @@ body{
     .checkout-page{
 
         padding:35px 15px 60px;
+
     }
 
 
@@ -297,6 +297,7 @@ body{
         font-size:32px;
 
         margin-bottom:30px;
+
     }
 
 
@@ -305,12 +306,14 @@ body{
         padding:25px 20px;
 
         border-radius:18px;
+
     }
 
 
     .checkout-box h2{
 
         font-size:22px;
+
     }
 
 
@@ -320,6 +323,7 @@ body{
     .checkout-box textarea{
 
         font-size:16px;
+
     }
 
 }
@@ -334,12 +338,14 @@ body{
     .checkout-page h1{
 
         font-size:28px;
+
     }
 
 
     .checkout-box{
 
         padding:22px 16px;
+
     }
 
 }
