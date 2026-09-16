@@ -14,7 +14,7 @@ let productsData = [];
 
 
 // ==========================================
-// CART
+// BARQ CART
 // ==========================================
 
 let cart = JSON.parse(localStorage.getItem("barqCart")) || [];
@@ -30,7 +30,11 @@ async function loadProducts() {
 
     if (!container) return;
 
-    container.innerHTML = "<p>Loading products...</p>";
+    container.innerHTML = `
+        <p class="loading-products">
+            Loading products...
+        </p>
+    `;
 
     try {
 
@@ -65,6 +69,7 @@ async function loadProducts() {
         `;
 
     }
+
 }
 
 
@@ -91,6 +96,7 @@ function displayProducts(products) {
         `;
 
         return;
+
     }
 
 
@@ -109,27 +115,43 @@ function displayProducts(products) {
                 : "https://images.unsplash.com/photo-1596462502278-27bfdc403348";
 
 
+        const name =
+            product.name ||
+            "BARQ Beauty Product";
+
+
+        const brand =
+            product.brand ||
+            "BARQ";
+
+
+        const price =
+            Number(product.price || 0);
+
+
         card.innerHTML = `
 
             <img
                 class="product-img"
                 src="${image}"
-                alt="${product.name || "BARQ Beauty Product"}"
+                alt="${name}"
             >
 
             <h3>
-                ${product.name || "BARQ Beauty Product"}
+                ${name}
             </h3>
 
             <p class="brand">
-                ${product.brand || "BARQ"}
+                ${brand}
             </p>
 
             <p class="price">
-                ${Number(product.price || 0).toFixed(2)} SAR
+                ${price.toFixed(2)} SAR
             </p>
 
-            <button class="add-btn">
+            <button
+                class="add-btn"
+            >
                 Add To Cart
             </button>
 
@@ -145,10 +167,10 @@ function displayProducts(products) {
             () => {
 
                 addToCart(
-                    product.name ||
-                    "BARQ Beauty Product",
-
-                    Number(product.price || 0)
+                    name,
+                    price,
+                    image,
+                    brand
                 );
 
             }
@@ -163,7 +185,7 @@ function displayProducts(products) {
 
 
 // ==========================================
-// SEARCH
+// SEARCH PRODUCTS
 // ==========================================
 
 const searchInput =
@@ -187,16 +209,21 @@ if (searchInput) {
                     (product) => {
 
                         const name =
-                            (product.name || "")
-                                .toLowerCase();
+                            (
+                                product.name || ""
+                            ).toLowerCase();
+
 
                         const brand =
-                            (product.brand || "")
-                                .toLowerCase();
+                            (
+                                product.brand || ""
+                            ).toLowerCase();
+
 
                         const category =
-                            (product.category || "")
-                                .toLowerCase();
+                            (
+                                product.category || ""
+                            ).toLowerCase();
 
 
                         return (
@@ -235,7 +262,12 @@ function saveCart() {
 // ADD TO CART
 // ==========================================
 
-function addToCart(name, price) {
+function addToCart(
+    name,
+    price,
+    image,
+    brand
+) {
 
     const existingItem =
         cart.find(
@@ -255,6 +287,10 @@ function addToCart(name, price) {
 
             price: Number(price),
 
+            image: image,
+
+            brand: brand,
+
             quantity: 1
 
         });
@@ -268,8 +304,9 @@ function addToCart(name, price) {
 
 
     // Small confirmation
+
     alert(
-        name + " added to your cart."
+        `${name} added to your cart.`
     );
 
 }
@@ -303,6 +340,7 @@ function updateCart() {
 
 
     // EMPTY CART
+
     if (cart.length === 0) {
 
         items.innerHTML = `
@@ -315,82 +353,85 @@ function updateCart() {
 
 
     // CART ITEMS
-    cart.forEach((item, index) => {
 
-        const itemPrice =
-            Number(item.price);
+    cart.forEach(
+        (item, index) => {
 
-        const itemQuantity =
-            Number(item.quantity);
-
-        const itemTotal =
-            itemPrice * itemQuantity;
+            const itemPrice =
+                Number(item.price || 0);
 
 
-        sum += itemTotal;
+            const itemQuantity =
+                Number(item.quantity || 1);
 
-        quantity += itemQuantity;
+
+            const itemTotal =
+                itemPrice * itemQuantity;
 
 
-        items.innerHTML += `
+            sum += itemTotal;
 
-            <div class="cart-item">
+            quantity += itemQuantity;
 
-                <div class="cart-item-info">
 
-                    <b>
-                        ${item.name}
-                    </b>
+            items.innerHTML += `
 
-                    <span>
+                <div class="cart-item">
+
+                    <div class="cart-item-name">
+                        <b>
+                            ${item.name}
+                        </b>
+                    </div>
+
+                    <div class="cart-item-price">
                         ${itemPrice.toFixed(2)} SAR
-                    </span>
+                    </div>
 
-                    <span>
-                        Subtotal:
+
+                    <div class="cart-quantity">
+
+                        <button
+                            class="quantity-btn"
+                            onclick="decreaseQuantity(${index})"
+                        >
+                            −
+                        </button>
+
+                        <span>
+                            ${itemQuantity}
+                        </span>
+
+                        <button
+                            class="quantity-btn"
+                            onclick="increaseQuantity(${index})"
+                        >
+                            +
+                        </button>
+
+                    </div>
+
+
+                    <div class="cart-item-total">
+
                         ${itemTotal.toFixed(2)} SAR
-                    </span>
 
-                </div>
-
-
-                <div class="quantity-controls">
-
-                    <button
-                        class="quantity-btn"
-                        onclick="decreaseQuantity(${index})"
-                    >
-                        −
-                    </button>
-
-
-                    <span class="quantity-number">
-                        ${itemQuantity}
-                    </span>
+                    </div>
 
 
                     <button
-                        class="quantity-btn"
-                        onclick="increaseQuantity(${index})"
+                        class="remove-btn"
+                        onclick="removeCart(${index})"
                     >
-                        +
+                        Remove
                     </button>
 
                 </div>
 
+            `;
 
-                <button
-                    class="remove-btn"
-                    onclick="removeCart(${index})"
-                >
-                    Remove
-                </button>
-
-            </div>
-
-        `;
-
-    });
+        }
+    );
 
 
     if (total) {
@@ -501,7 +542,7 @@ function closeCart() {
 
 
 // ==========================================
-// REMOVE CART ITEM
+// REMOVE ITEM
 // ==========================================
 
 function removeCart(index) {
@@ -555,14 +596,14 @@ window.closeCart =
 window.removeCart =
     removeCart;
 
+window.checkout =
+    checkout;
+
 window.increaseQuantity =
     increaseQuantity;
 
 window.decreaseQuantity =
     decreaseQuantity;
-
-window.checkout =
-    checkout;
 
 
 // ==========================================
