@@ -61,6 +61,10 @@ nav a{
     cursor:pointer;
 }
 
+nav a:hover{
+    color:#d81b60;
+}
+
 
 /* =========================
    HERO
@@ -76,6 +80,8 @@ nav a{
     justify-content:space-between;
 
     padding:50px;
+
+    overflow:hidden;
 }
 
 .hero-text{
@@ -112,9 +118,18 @@ button{
     font-size:16px;
 }
 
+button:hover{
+    background:#b91550;
+}
+
+.hero-image{
+    width:45%;
+}
+
 .hero-image img{
     width:500px;
     max-width:100%;
+    display:block;
     border-radius:25px;
 }
 
@@ -144,6 +159,12 @@ button{
     padding:15px 30px;
     border-radius:30px;
     font-weight:bold;
+    transition:.2s;
+}
+
+.brand-list span:hover{
+    background:#d81b60;
+    color:white;
 }
 
 
@@ -162,12 +183,17 @@ button{
 
 .products-subtitle{
     margin-bottom:30px;
+    color:#555;
 }
 
 
 /* =========================
    SEARCH
 ========================= */
+
+.search-box{
+    margin-bottom:10px;
+}
 
 .search-box input{
     width:500px;
@@ -195,7 +221,6 @@ button{
 ========================= */
 
 .product-container{
-
     display:grid;
 
     grid-template-columns:
@@ -204,7 +229,6 @@ button{
     gap:30px;
 
     align-items:start;
-
 }
 
 
@@ -213,10 +237,7 @@ button{
 ========================= */
 
 .product{
-
     width:100%;
-
-    min-height:0;
 
     background:white;
 
@@ -229,17 +250,15 @@ button{
     text-align:center;
 
     transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-
+        transform .2s ease,
+        box-shadow .2s ease;
 }
 
 .product:hover{
-
     transform:translateY(-5px);
 
-    box-shadow:0 12px 30px rgba(0,0,0,0.15);
-
+    box-shadow:
+        0 12px 30px rgba(0,0,0,0.15);
 }
 
 
@@ -248,9 +267,7 @@ button{
 ========================= */
 
 .product-img{
-
     width:170px;
-
     height:170px;
 
     object-fit:cover;
@@ -260,7 +277,6 @@ button{
     margin:0 auto 15px;
 
     border-radius:15px;
-
 }
 
 
@@ -269,7 +285,6 @@ button{
 ========================= */
 
 .product h3{
-
     font-size:19px;
 
     line-height:1.25;
@@ -277,7 +292,6 @@ button{
     margin:10px 0;
 
     min-height:48px;
-
 }
 
 
@@ -286,13 +300,11 @@ button{
 ========================= */
 
 .brand{
-
     color:#777;
 
     font-size:15px;
 
     margin-bottom:8px;
-
 }
 
 
@@ -301,7 +313,6 @@ button{
 ========================= */
 
 .price{
-
     color:#d81b60;
 
     font-weight:bold;
@@ -309,7 +320,6 @@ button{
     font-size:18px;
 
     margin-bottom:5px;
-
 }
 
 
@@ -317,8 +327,7 @@ button{
    ADD TO CART
 ========================= */
 
-.product button{
-
+.product .add-btn{
     width:100%;
 
     margin-top:18px;
@@ -328,33 +337,32 @@ button{
     border-radius:10px;
 
     font-size:15px;
-
 }
 
-.product button:hover{
-
+.product .add-btn:hover{
     background:#b91550;
-
 }
 
 
 /* =========================
-   CART
+   CART BOX
 ========================= */
 
 .cart-box{
-
     display:none;
 
     position:fixed;
 
     right:30px;
-
     top:100px;
 
     width:320px;
 
     max-width:calc(100% - 40px);
+
+    max-height:75vh;
+
+    overflow-y:auto;
 
     background:white;
 
@@ -362,31 +370,120 @@ button{
 
     border-radius:25px;
 
-    box-shadow:0 10px 40px rgba(0,0,0,.2);
+    box-shadow:
+        0 10px 40px rgba(0,0,0,.20);
 
-    z-index:999;
+    z-index:9999;
 }
 
 .cart-box h2{
-
-    margin-bottom:5px;
-
+    margin-bottom:15px;
+    font-size:25px;
 }
 
-.cart-item{
 
-    padding:12px 0;
+/* =========================
+   CART ITEM
+========================= */
+
+.cart-item{
+    padding:15px 0;
 
     border-bottom:1px solid #eee;
 
+    font-size:15px;
 }
 
-.cart-box button{
+.cart-item b{
+    font-size:16px;
+    color:#111827;
+}
 
+
+/* =========================
+   CART QUANTITY BUTTONS
+========================= */
+
+/* IMPORTANT:
+   Prevent minus and plus
+   from becoming huge buttons.
+*/
+
+.cart-item button{
+    width:auto !important;
+
+    min-width:42px;
+
+    padding:10px 16px;
+
+    margin:8px 4px 0 0;
+
+    border-radius:8px;
+
+    font-size:16px;
+
+    display:inline-block;
+}
+
+
+/* =========================
+   CART REMOVE BUTTON
+========================= */
+
+.cart-item .remove-btn{
+    width:100% !important;
+
+    margin-top:10px;
+
+    padding:10px;
+
+    font-size:14px;
+}
+
+
+/* =========================
+   CART TOTAL
+========================= */
+
+.cart-box h3{
+    margin-top:15px;
+
+    padding-top:10px;
+
+    font-size:19px;
+
+    border-top:1px solid #eee;
+}
+
+
+/* =========================
+   CHECKOUT + CLOSE
+========================= */
+
+.cart-box > button{
     width:100%;
 
     margin-top:10px;
 
+    padding:13px;
+
+    border-radius:10px;
+
+    font-size:16px;
+}
+
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+.cart-box::-webkit-scrollbar{
+    width:6px;
+}
+
+.cart-box::-webkit-scrollbar-thumb{
+    background:#d81b60;
+    border-radius:10px;
 }
 
 
@@ -397,80 +494,58 @@ button{
 @media(max-width:900px){
 
     header{
-
         flex-direction:column;
-
         gap:20px;
-
     }
 
     nav{
-
         flex-wrap:wrap;
-
         justify-content:center;
-
         gap:15px;
-
     }
 
     nav a{
-
         margin-left:0;
-
     }
 
     .hero{
-
         flex-direction:column;
-
         padding:30px;
-
     }
 
     .hero-text{
-
         width:100%;
-
     }
 
     .hero-image{
-
         margin-top:30px;
-
         width:100%;
-
     }
 
     .hero-image img{
-
         width:100%;
-
     }
 
     h1{
-
         font-size:45px;
-
     }
 
     .product-container{
-
         grid-template-columns:
             repeat(2,minmax(150px,1fr));
 
         gap:20px;
-
     }
 
     .product-img{
-
         width:140px;
-
         height:140px;
-
     }
 
+    .cart-box{
+        right:15px;
+        top:80px;
+    }
 }
 
 
@@ -481,59 +556,50 @@ button{
 @media(max-width:550px){
 
     .products{
-
         padding:40px 20px;
-
     }
 
     .brands{
-
         padding:40px 20px;
-
     }
 
     .product-container{
-
         grid-template-columns:1fr 1fr;
-
         gap:15px;
-
     }
 
     .product{
-
         padding:12px;
-
     }
 
     .product-img{
-
         width:120px;
-
         height:120px;
-
     }
 
     .product h3{
-
         font-size:16px;
-
         min-height:40px;
-
     }
 
     .price{
-
         font-size:16px;
-
     }
 
-    .product button{
-
+    .product .add-btn{
         font-size:14px;
-
         padding:12px 5px;
-
     }
 
+    .cart-box{
+        width:calc(100% - 30px);
+        right:15px;
+        top:70px;
+        padding:20px;
+    }
+
+    .cart-item button{
+        min-width:38px;
+        padding:9px 13px;
+    }
 }
