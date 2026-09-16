@@ -1,9 +1,14 @@
-import { db } from "./firebase-config.js";
+import { db, auth } from "./firebase-config.js";
 
 import {
     collection,
     getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
 /* =========================================
@@ -21,6 +26,32 @@ const refreshButton =
 
 const logoutButton =
     document.getElementById("logout-btn");
+
+
+/* =========================================
+   CHECK LOGIN
+========================================= */
+
+onAuthStateChanged(auth, (user) => {
+
+    if (!user) {
+
+        window.location.href =
+            "index.html";
+
+        return;
+    }
+
+
+    console.log(
+        "Admin page opened by:",
+        user.email
+    );
+
+
+    loadOrders();
+
+});
 
 
 /* =========================================
@@ -302,7 +333,7 @@ function displayOrder(order) {
 
 
     /* =========================================
-       ORDER CARD HTML
+       ORDER CARD
     ========================================= */
 
     orderCard.innerHTML = `
@@ -448,26 +479,34 @@ if (refreshButton) {
 
 
 /* =========================================
-   LOGOUT BUTTON
+   LOGOUT
 ========================================= */
 
 if (logoutButton) {
 
     logoutButton.addEventListener(
         "click",
-        function () {
+        async function () {
 
-            window.location.href =
-                "index.html";
+            try {
+
+                await signOut(auth);
+
+                window.location.href =
+                    "index.html";
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Logout error:",
+                    error
+                );
+
+            }
 
         }
     );
 
 }
-
-
-/* =========================================
-   START
-========================================= */
-
-loadOrders();
