@@ -1,16 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>BARQ Order Success</title>
+<title>Order Success - BARQ</title>
 
-    <link rel="stylesheet" href="order-success.css">
+<link rel="stylesheet" href="order-success.css">
 
 </head>
 
@@ -30,13 +29,8 @@
 
 
         <h1>
-            Order Confirmed!
+            Thank You!
         </h1>
-
-
-        <p class="success-message">
-            Thank you for shopping with BARQ.
-        </p>
 
 
         <p>
@@ -47,27 +41,29 @@
         <div class="order-details">
 
 
-            <div>
-                <span>Order Number</span>
+            <h2>
+                Order Details
+            </h2>
+
+
+            <p>
+                Order Number:
                 <strong id="order-number">
-                    #BARQ1001
                 </strong>
-            </div>
+            </p>
 
 
-            <div>
-                <span>Total Amount</span>
+            <p>
+                Total:
                 <strong id="order-total">
-                    SAR 0.00
                 </strong>
-            </div>
+            </p>
 
 
         </div>
 
 
-
-        <a href="index.html" class="home-button">
+        <a href="index.html" class="home-btn">
             Continue Shopping
         </a>
 
@@ -81,26 +77,20 @@
 
 <script>
 
-const total =
-localStorage.getItem("barqOrderTotal");
+const order =
+JSON.parse(localStorage.getItem("barqOrder"));
 
 
-if(total){
-
-    document.getElementById("order-total").textContent =
-    "SAR " + Number(total).toFixed(2);
-
-}
-
-
-
-const orderNumber =
-"BARQ" + Math.floor(1000 + Math.random() * 9000);
-
+if(order){
 
 document.getElementById("order-number").textContent =
-"#" + orderNumber;
+order.orderNumber;
 
+
+document.getElementById("order-total").textContent =
+"SAR " + Number(order.total).toFixed(2);
+
+}
 
 
 </script>
