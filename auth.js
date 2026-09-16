@@ -1,4 +1,4 @@
-import { auth } from "./firebase-config.js";
+import { auth, db } from "./firebase-config.js";
 
 import {
     signInWithEmailAndPassword,
@@ -6,14 +6,16 @@ import {
     signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+import {
+    doc,
+    getDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 
 console.log("BARQ AUTH JS LOADED");
 
 
-// =========================
 // LOGIN
-// =========================
-
 async function login(email, password) {
 
     return signInWithEmailAndPassword(
@@ -25,10 +27,7 @@ async function login(email, password) {
 }
 
 
-// =========================
 // REGISTER
-// =========================
-
 async function register(email, password) {
 
     return createUserWithEmailAndPassword(
@@ -40,10 +39,7 @@ async function register(email, password) {
 }
 
 
-// =========================
 // LOGOUT
-// =========================
-
 async function logout() {
 
     return signOut(auth);
@@ -51,10 +47,7 @@ async function logout() {
 }
 
 
-// =========================
-// OPEN LOGIN BOX
-// =========================
-
+// OPEN LOGIN POPUP
 function openLogin() {
 
     console.log("openLogin() called");
@@ -64,10 +57,11 @@ function openLogin() {
 
     if (!loginBox) {
 
-        console.error("loginBox NOT FOUND");
+        console.error(
+            "loginBox NOT FOUND"
+        );
 
         return;
-
     }
 
     loginBox.style.display = "flex";
@@ -75,10 +69,7 @@ function openLogin() {
 }
 
 
-// =========================
-// CLOSE LOGIN BOX
-// =========================
-
+// CLOSE LOGIN POPUP
 function closeLogin() {
 
     const loginBox =
@@ -93,32 +84,73 @@ function closeLogin() {
 }
 
 
-// =========================
-// MAKE FUNCTIONS AVAILABLE
-// TO HTML
-// =========================
+// CHECK IF USER IS ADMIN
+async function checkAdmin(user) {
 
+    if (!user) {
+
+        return false;
+
+    }
+
+    try {
+
+        const adminRef =
+            doc(
+                db,
+                "admins",
+                user.uid
+            );
+
+        const adminSnap =
+            await getDoc(adminRef);
+
+
+        if (!adminSnap.exists()) {
+
+            return false;
+
+        }
+
+
+        const adminData =
+            adminSnap.data();
+
+
+        return adminData.role === "admin";
+
+
+    } catch (error) {
+
+        console.error(
+            "Admin check error:",
+            error
+        );
+
+        return false;
+
+    }
+
+}
+
+
+// MAKE FUNCTIONS AVAILABLE TO HTML
 window.openLogin = openLogin;
-
 window.closeLogin = closeLogin;
-
 window.login = login;
-
 window.register = register;
-
 window.logout = logout;
 
 
-// =========================
 // LOGIN BUTTON
-// =========================
-
 document.addEventListener(
     "DOMContentLoaded",
     function () {
 
         const loginButton =
-            document.getElementById("loginButton");
+            document.getElementById(
+                "loginButton"
+            );
 
 
         if (!loginButton) {
@@ -138,20 +170,25 @@ document.addEventListener(
 
                 const email =
                     document
-                        .getElementById("loginEmail")
+                        .getElementById(
+                            "loginEmail"
+                        )
                         .value
                         .trim();
 
 
                 const password =
                     document
-                        .getElementById("loginPassword")
+                        .getElementById(
+                            "loginPassword"
+                        )
                         .value;
 
 
                 const message =
-                    document
-                        .getElementById("loginMessage");
+                    document.getElementById(
+                        "loginMessage"
+                    );
 
 
                 if (!email || !password) {
@@ -170,20 +207,63 @@ document.addEventListener(
 
                 try {
 
-                    await login(
-                        email,
-                        password
-                    );
+                    const result =
+                        await login(
+                            email,
+                            password
+                        );
 
 
-                    message.textContent =
-                        "Login successful!";
+                    const user =
+                        result.user;
 
 
                     console.log(
                         "Firebase login successful:",
-                        email
+                        user.email
                     );
+
+
+                    message.textContent =
+                        "Checking account...";
+
+
+                    const admin =
+                        await checkAdmin(user);
+
+
+                    if (admin) {
+
+                        message.textContent =
+                            "Admin login successful!";
+
+
+                        console.log(
+                            "Admin verified. Opening admin orders page."
+                        );
+
+
+                        setTimeout(
+                            function () {
+
+                                window.location.href =
+                                    "admin-orders.html";
+
+                            },
+                            500
+                        );
+
+
+                    } else {
+
+                        message.textContent =
+                            "Login successful!";
+
+                        console.log(
+                            "Regular customer login."
+                        );
+
+                    }
 
 
                 } catch (error) {
