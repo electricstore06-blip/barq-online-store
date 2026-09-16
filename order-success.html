@@ -101,7 +101,20 @@ document.getElementById("order-total").textContent =
 
 
 </script>
+<script>
 
+const order =
+    JSON.parse(localStorage.getItem("barqOrder"));
+
+
+if(order){
+
+    document.getElementById("customer-name").textContent =
+        "Dear " + order.customerName + ",";
+
+}
+
+</script>
 
 </body>
 
