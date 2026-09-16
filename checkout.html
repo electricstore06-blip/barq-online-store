@@ -13,112 +13,114 @@
 
 </head>
 
-
 <body>
 
-<div class="checkout-page">
+    <div class="checkout-page">
 
-    <h1>BARQ Checkout</h1>
+        <h1>BARQ Checkout</h1>
 
+        <div class="checkout-box">
 
-    <div class="checkout-box">
+            <h2 class="customer-title">Customer Information</h2>
 
-        <h2>Customer Information</h2>
-
-
-        <label for="fullname">
-            Full Name
-        </label>
-
-        <input
-            type="text"
-            id="fullname"
-            placeholder="Enter your name"
-        >
-
-
-        <label for="phone">
-            Phone Number
-        </label>
-
-        <input
-            type="tel"
-            id="phone"
-            placeholder="05xxxxxxxx"
-        >
-
-
-        <label for="email">
-            Email
-        </label>
-
-        <input
-            type="email"
-            id="email"
-            placeholder="example@email.com"
-        >
-
-
-        <label for="address">
-            Delivery Address
-        </label>
-
-        <textarea
-            id="address"
-            placeholder="Your address"
-        ></textarea>
-
-
-        <h2>Payment Method</h2>
-
-
-        <label class="payment-option">
+            <label for="full-name">
+                Full Name
+            </label>
 
             <input
-                type="radio"
-                name="payment"
-                value="Mada"
+                type="text"
+                id="full-name"
+                name="full-name"
+                placeholder="Enter your name"
             >
 
-            <span>Mada</span>
 
-        </label>
-
-
-        <label class="payment-option">
+            <label for="phone">
+                Phone Number
+            </label>
 
             <input
-                type="radio"
-                name="payment"
-                value="Visa / Mastercard"
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="05xxxxxxxx"
             >
 
-            <span>Visa / Mastercard</span>
 
-        </label>
-
-
-        <label class="payment-option">
+            <label for="email">
+                Email
+            </label>
 
             <input
-                type="radio"
-                name="payment"
-                value="Apple Pay"
+                type="email"
+                id="email"
+                name="email"
+                placeholder="example@email.com"
             >
 
-            <span>Apple Pay</span>
 
-        </label>
+            <label for="address">
+                Delivery Address
+            </label>
+
+            <textarea
+                id="address"
+                name="address"
+                placeholder="Your address"
+            ></textarea>
 
 
-        <button type="button">
-            Place Order
-        </button>
+            <h2>
+                Payment Method
+            </h2>
 
+
+            <label class="payment-option">
+
+                <input
+                    type="radio"
+                    name="payment"
+                    value="Mada"
+                >
+
+                <span>Mada</span>
+
+            </label>
+
+
+            <label class="payment-option">
+
+                <input
+                    type="radio"
+                    name="payment"
+                    value="Visa / Mastercard"
+                >
+
+                <span>Visa / Mastercard</span>
+
+            </label>
+
+
+            <label class="payment-option">
+
+                <input
+                    type="radio"
+                    name="payment"
+                    value="Apple Pay"
+                >
+
+                <span>Apple Pay</span>
+
+            </label>
+
+
+            <button type="button">
+                Place Order
+            </button>
+
+        </div>
 
     </div>
-
-</div>
 
 </body>
 
