@@ -1,439 +1,147 @@
-/* ==============================
-   BARQ CHECKOUT
-============================== */
+<!DOCTYPE html>
+<html lang="en">
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
-}
+<head>
 
+    <meta charset="UTF-8">
 
-/* ==============================
-   BODY
-============================== */
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-body{
-    background:#f8f8f8;
-    color:#111827;
-}
+    <title>BARQ Checkout</title>
 
+    <link rel="stylesheet" href="checkout.css">
 
-/* ==============================
-   CHECKOUT PAGE
-============================== */
+</head>
 
-.checkout-page{
-    min-height:100vh;
-    padding:55px 20px 80px;
-}
 
+<body>
 
-/* ==============================
-   TITLE
-============================== */
 
-.checkout-page h1{
-    text-align:center;
-    font-size:42px;
-    margin-bottom:40px;
-    color:#111827;
-}
+<div class="checkout-page">
 
 
-/* ==============================
-   CHECKOUT BOX
-============================== */
+    <h1>BARQ Checkout</h1>
 
-.checkout-box{
-    width:100%;
-    max-width:600px;
 
-    margin:0 auto;
+    <div class="checkout-box">
 
-    background:white;
 
-    padding:40px;
+        <!-- CUSTOMER INFORMATION -->
 
-    border-radius:22px;
+        <h2>Customer Information</h2>
 
-    box-shadow:
-        0 10px 35px rgba(0,0,0,0.10);
-}
 
+        <label for="full-name">
+            Full Name
+        </label>
 
-/* ==============================
-   SECTION HEADINGS
-============================== */
+        <input
+            type="text"
+            id="full-name"
+            name="full-name"
+            placeholder="Enter your name"
+            required
+        >
 
-.checkout-box h2{
-    font-size:25px;
 
-    margin-top:30px;
-    margin-bottom:18px;
+        <label for="phone">
+            Phone Number
+        </label>
 
-    color:#111827;
-}
+        <input
+            type="tel"
+            id="phone"
+            name="phone"
+            placeholder="05xxxxxxxx"
+            required
+        >
 
 
-/* First heading */
+        <label for="email">
+            Email
+        </label>
 
-.checkout-box h2:first-child{
-    margin-top:0;
-}
+        <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="example@email.com"
+            required
+        >
 
 
-/* ==============================
-   NORMAL LABELS
-============================== */
+        <label for="address">
+            Delivery Address
+        </label>
 
-.checkout-box > label:not(.payment-option){
+        <textarea
+            id="address"
+            name="address"
+            placeholder="Your address"
+            required
+        ></textarea>
 
-    display:block;
 
-    margin-top:18px;
-    margin-bottom:8px;
 
-    font-size:16px;
+        <!-- PAYMENT METHOD -->
 
-    font-weight:bold;
+        <h2>Payment Method</h2>
 
-    color:#111827;
-}
 
+        <label class="payment-option">
 
-/* ==============================
-   TEXT INPUTS
-============================== */
+            <input
+                type="radio"
+                name="payment"
+                value="Mada"
+                required
+            >
 
-.checkout-box input[type="text"],
-.checkout-box input[type="email"],
-.checkout-box input[type="tel"]{
+            <span>Mada</span>
 
-    width:100%;
+        </label>
 
-    padding:15px 16px;
 
-    border:1px solid #d7d7d7;
+        <label class="payment-option">
 
-    border-radius:11px;
+            <input
+                type="radio"
+                name="payment"
+                value="Visa / Mastercard"
+            >
 
-    font-size:16px;
+            <span>Visa / Mastercard</span>
 
-    background:white;
+        </label>
 
-    color:#111827;
 
-    outline:none;
+        <label class="payment-option">
 
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
+            <input
+                type="radio"
+                name="payment"
+                value="Apple Pay"
+            >
 
+            <span>Apple Pay</span>
 
-/* ==============================
-   INPUT FOCUS
-============================== */
+        </label>
 
-.checkout-box input[type="text"]:focus,
-.checkout-box input[type="email"]:focus,
-.checkout-box input[type="tel"]:focus{
 
-    border-color:#d81b60;
 
-    box-shadow:
-        0 0 0 3px rgba(216,27,96,0.10);
-}
+        <!-- PLACE ORDER -->
 
+        <button type="button">
+            Place Order
+        </button>
 
-/* ==============================
-   PLACEHOLDER
-============================== */
 
-.checkout-box input::placeholder,
-.checkout-box textarea::placeholder{
+    </div>
 
-    color:#777;
-}
 
+</div>
 
-/* ==============================
-   DELIVERY ADDRESS
-============================== */
 
-.checkout-box textarea{
+</body>
 
-    width:100%;
-
-    height:120px;
-
-    padding:15px 16px;
-
-    border:1px solid #d7d7d7;
-
-    border-radius:11px;
-
-    font-size:16px;
-
-    background:white;
-
-    color:#111827;
-
-    resize:vertical;
-
-    outline:none;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-
-/* ==============================
-   TEXTAREA FOCUS
-============================== */
-
-.checkout-box textarea:focus{
-
-    border-color:#d81b60;
-
-    box-shadow:
-        0 0 0 3px rgba(216,27,96,0.10);
-}
-
-
-/* ==============================
-   PAYMENT METHOD
-============================== */
-
-.payment-option{
-
-    display:flex;
-
-    align-items:center;
-
-    width:100%;
-
-    margin-top:12px;
-
-    padding:14px 15px;
-
-    border:1px solid #e2e2e2;
-
-    border-radius:10px;
-
-    background:white;
-
-    font-size:16px;
-
-    font-weight:normal;
-
-    color:#111827;
-
-    cursor:pointer;
-
-    transition:
-        border-color 0.2s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-
-/* ==============================
-   PAYMENT HOVER
-============================== */
-
-.payment-option:hover{
-
-    border-color:#d81b60;
-
-    background:#fff7fa;
-}
-
-
-/* ==============================
-   PAYMENT RADIO
-============================== */
-
-.payment-option input[type="radio"]{
-
-    width:18px;
-
-    height:18px;
-
-    margin:0 12px 0 0;
-
-    accent-color:#d81b60;
-
-    cursor:pointer;
-
-    flex-shrink:0;
-}
-
-
-/* ==============================
-   PAYMENT TEXT
-============================== */
-
-.payment-option span{
-
-    display:block;
-
-    line-height:1.2;
-}
-
-
-/* ==============================
-   SELECTED PAYMENT
-============================== */
-
-.payment-option:has(input[type="radio"]:checked){
-
-    border-color:#d81b60;
-
-    background:#fff7fa;
-
-    box-shadow:
-        0 0 0 2px rgba(216,27,96,0.08);
-}
-
-
-/* ==============================
-   PLACE ORDER BUTTON
-============================== */
-
-.checkout-box button{
-
-    width:100%;
-
-    margin-top:30px;
-
-    padding:16px;
-
-    background:#d81b60;
-
-    color:white;
-
-    border:none;
-
-    border-radius:11px;
-
-    font-size:18px;
-
-    font-weight:bold;
-
-    cursor:pointer;
-
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-
-/* ==============================
-   BUTTON HOVER
-============================== */
-
-.checkout-box button:hover{
-
-    background:#b91550;
-
-    transform:translateY(-1px);
-
-    box-shadow:
-        0 6px 15px rgba(216,27,96,0.20);
-}
-
-
-/* ==============================
-   BUTTON ACTIVE
-============================== */
-
-.checkout-box button:active{
-
-    transform:translateY(0);
-
-    box-shadow:none;
-}
-
-
-/* ==============================
-   MOBILE
-============================== */
-
-@media(max-width:600px){
-
-    .checkout-page{
-
-        padding:35px 15px 60px;
-
-    }
-
-
-    .checkout-page h1{
-
-        font-size:32px;
-
-        margin-bottom:30px;
-
-    }
-
-
-    .checkout-box{
-
-        padding:25px 20px;
-
-        border-radius:18px;
-
-    }
-
-
-    .checkout-box h2{
-
-        font-size:22px;
-
-    }
-
-
-    .checkout-box input[type="text"],
-    .checkout-box input[type="email"],
-    .checkout-box input[type="tel"],
-    .checkout-box textarea{
-
-        font-size:16px;
-
-    }
-
-}
-
-
-/* ==============================
-   VERY SMALL MOBILE
-============================== */
-
-@media(max-width:400px){
-
-    .checkout-page h1{
-
-        font-size:28px;
-
-    }
-
-
-    .checkout-box{
-
-        padding:22px 16px;
-
-    }
-
-
-    .payment-option{
-
-        padding:13px;
-
-    }
-
-}
+</html>
