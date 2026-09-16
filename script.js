@@ -17,7 +17,8 @@ let productsData = [];
 // BARQ CART
 // ==========================================
 
-let cart = JSON.parse(localStorage.getItem("barqCart")) || [];
+let cart =
+    JSON.parse(localStorage.getItem("barqCart")) || [];
 
 
 // ==========================================
@@ -26,7 +27,8 @@ let cart = JSON.parse(localStorage.getItem("barqCart")) || [];
 
 async function loadProducts() {
 
-    const container = document.querySelector(".product-container");
+    const container =
+        document.querySelector(".product-container");
 
     if (!container) return;
 
@@ -38,9 +40,10 @@ async function loadProducts() {
 
     try {
 
-        const snapshot = await getDocs(
-            collection(db, "products")
-        );
+        const snapshot =
+            await getDocs(
+                collection(db, "products")
+            );
 
         productsData = [];
 
@@ -151,6 +154,7 @@ function displayProducts(products) {
 
             <button
                 class="add-btn"
+                type="button"
             >
                 Add To Cart
             </button>
@@ -167,6 +171,7 @@ function displayProducts(products) {
             () => {
 
                 addToCart(
+                    product.id,
                     name,
                     price,
                     image,
@@ -263,6 +268,7 @@ function saveCart() {
 // ==========================================
 
 function addToCart(
+    productId,
     name,
     price,
     image,
@@ -271,7 +277,8 @@ function addToCart(
 
     const existingItem =
         cart.find(
-            (item) => item.name === name
+            (item) =>
+                item.productId === productId
         );
 
 
@@ -282,6 +289,8 @@ function addToCart(
     } else {
 
         cart.push({
+
+            productId: productId,
 
             name: name,
 
@@ -302,8 +311,6 @@ function addToCart(
 
     updateCart();
 
-
-    // Small confirmation
 
     alert(
         `${name} added to your cart.`
@@ -379,13 +386,18 @@ function updateCart() {
                 <div class="cart-item">
 
                     <div class="cart-item-name">
+
                         <b>
                             ${item.name}
                         </b>
+
                     </div>
 
+
                     <div class="cart-item-price">
+
                         ${itemPrice.toFixed(2)} SAR
+
                     </div>
 
 
@@ -393,17 +405,21 @@ function updateCart() {
 
                         <button
                             class="quantity-btn"
+                            type="button"
                             onclick="decreaseQuantity(${index})"
                         >
                             −
                         </button>
 
+
                         <span>
                             ${itemQuantity}
                         </span>
 
+
                         <button
                             class="quantity-btn"
+                            type="button"
                             onclick="increaseQuantity(${index})"
                         >
                             +
@@ -421,6 +437,7 @@ function updateCart() {
 
                     <button
                         class="remove-btn"
+                        type="button"
                         onclick="removeCart(${index})"
                     >
                         Remove
@@ -436,7 +453,7 @@ function updateCart() {
 
     if (total) {
 
-        total.innerHTML =
+        total.textContent =
             sum.toFixed(2);
 
     }
@@ -444,7 +461,7 @@ function updateCart() {
 
     if (count) {
 
-        count.innerHTML =
+        count.textContent =
             quantity;
 
     }
