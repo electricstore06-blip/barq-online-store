@@ -33,9 +33,10 @@
         </h1>
 
 
-        <p>
+        <p class="success-message">
             Your order has been received successfully.
         </p>
+
 
 
         <div class="order-details">
@@ -49,6 +50,7 @@
             <p>
                 Order Number:
                 <strong id="order-number">
+                    BARQ0000
                 </strong>
             </p>
 
@@ -56,6 +58,7 @@
             <p>
                 Total:
                 <strong id="order-total">
+                    SAR 0.00
                 </strong>
             </p>
 
@@ -63,7 +66,8 @@
         </div>
 
 
-        <a href="index.html" class="home-btn">
+
+        <a href="index.html" class="continue-btn">
             Continue Shopping
         </a>
 
@@ -88,7 +92,8 @@ order.orderNumber;
 
 
 document.getElementById("order-total").textContent =
-"SAR " + Number(order.total).toFixed(2);
+"SAR " + order.total.toFixed(2);
+
 
 }
 
