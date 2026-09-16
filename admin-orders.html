@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BARQ Admin Orders</title>
+
+    <link rel="stylesheet" href="admin-orders.css">
+
+</head>
+
+
+<body>
+
+    <div class="admin-page">
+
+
+        <header class="admin-header">
+
+            <div>
+
+                <h1>BARQ Admin</h1>
+
+                <p>Customer Orders</p>
+
+            </div>
+
+
+            <button id="logout-btn">
+                Logout
+            </button>
+
+        </header>
+
+
+        <main class="admin-content">
+
+
+            <div class="orders-header">
+
+                <h2>
+                    Orders
+                </h2>
+
+                <button id="refresh-btn">
+                    🔄 Refresh Orders
+                </button>
+
+            </div>
+
+
+            <div id="admin-message">
+
+                Loading orders...
+
+            </div>
+
+
+            <div id="orders-container">
+
+            </div>
+
+
+        </main>
+
+
+    </div>
+
+
+    <script type="module" src="admin-orders.js"></script>
+
+</body>
+
+</html>
