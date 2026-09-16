@@ -1,103 +1,345 @@
+/* ==============================
+   BARQ CHECKOUT
+============================== */
+
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
 }
 
 
 body{
-
-background:#f8f8f8;
-color:#111827;
-
+    background:#f8f8f8;
+    color:#111827;
 }
 
 
+/* ==============================
+   CHECKOUT PAGE
+============================== */
 
 .checkout-page{
-
-padding:60px 20px;
-
+    min-height:100vh;
+    padding:55px 20px 80px;
 }
 
 
+/* ==============================
+   TITLE
+============================== */
 
 .checkout-page h1{
-
-text-align:center;
-font-size:40px;
-margin-bottom:40px;
-
+    text-align:center;
+    font-size:42px;
+    margin-bottom:40px;
+    color:#111827;
 }
 
 
+/* ==============================
+   CHECKOUT BOX
+============================== */
 
 .checkout-box{
+    width:100%;
+    max-width:600px;
+    margin:0 auto;
 
-max-width:600px;
-margin:auto;
-background:white;
-padding:40px;
-border-radius:20px;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
+    background:white;
 
+    padding:40px;
+
+    border-radius:22px;
+
+    box-shadow:0 10px 35px rgba(0,0,0,0.10);
 }
 
 
-
-.checkout-box label{
-
-display:block;
-margin-top:20px;
-font-weight:bold;
-
-}
-
-
-
-.checkout-box input,
-.checkout-box textarea{
-
-width:100%;
-padding:15px;
-margin-top:8px;
-border:1px solid #ddd;
-border-radius:10px;
-font-size:16px;
-
-}
-
-
-
-.checkout-box textarea{
-
-height:120px;
-resize:none;
-
-}
-
-
+/* ==============================
+   HEADINGS
+============================== */
 
 .checkout-box h2{
-
-margin-top:30px;
-margin-bottom:15px;
-
+    font-size:25px;
+    margin-top:30px;
+    margin-bottom:18px;
+    color:#111827;
 }
 
 
+/* ==============================
+   NORMAL LABELS
+============================== */
+
+.checkout-box > label{
+    display:block;
+
+    margin-top:18px;
+    margin-bottom:8px;
+
+    font-size:16px;
+    font-weight:bold;
+
+    color:#111827;
+}
+
+
+/* ==============================
+   TEXT INPUTS
+============================== */
+
+.checkout-box input[type="text"],
+.checkout-box input[type="email"],
+.checkout-box input[type="tel"]{
+
+    width:100%;
+
+    padding:15px 16px;
+
+    margin-top:8px;
+
+    border:1px solid #d7d7d7;
+
+    border-radius:11px;
+
+    font-size:16px;
+
+    background:white;
+
+    outline:none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* ==============================
+   INPUT FOCUS
+============================== */
+
+.checkout-box input[type="text"]:focus,
+.checkout-box input[type="email"]:focus,
+.checkout-box input[type="tel"]:focus{
+
+    border-color:#d81b60;
+
+    box-shadow:0 0 0 3px rgba(216,27,96,0.10);
+}
+
+
+/* ==============================
+   DELIVERY ADDRESS
+============================== */
+
+.checkout-box textarea{
+
+    width:100%;
+
+    height:120px;
+
+    padding:15px 16px;
+
+    margin-top:8px;
+
+    border:1px solid #d7d7d7;
+
+    border-radius:11px;
+
+    font-size:16px;
+
+    background:white;
+
+    resize:vertical;
+
+    outline:none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.checkout-box textarea:focus{
+
+    border-color:#d81b60;
+
+    box-shadow:0 0 0 3px rgba(216,27,96,0.10);
+}
+
+
+/* ==============================
+   PAYMENT OPTIONS
+============================== */
+
+.checkout-box h2 ~ label{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    width:100%;
+
+    margin-top:10px;
+    margin-bottom:10px;
+
+    padding:14px 15px;
+
+    border:1px solid #e2e2e2;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.checkout-box h2 ~ label:hover{
+
+    border-color:#d81b60;
+
+    background:#fff7fa;
+}
+
+
+/* ==============================
+   RADIO BUTTONS
+============================== */
+
+.checkout-box input[type="radio"]{
+
+    width:18px !important;
+    height:18px;
+
+    margin:0;
+
+    padding:0;
+
+    flex-shrink:0;
+
+    accent-color:#d81b60;
+
+    cursor:pointer;
+}
+
+
+/* ==============================
+   PLACE ORDER BUTTON
+============================== */
 
 .checkout-box button{
 
-margin-top:30px;
-width:100%;
-padding:15px;
-background:#d81b60;
-color:white;
-border:none;
-border-radius:10px;
-font-size:18px;
-cursor:pointer;
+    width:100%;
+
+    margin-top:25px;
+
+    padding:16px;
+
+    background:#d81b60;
+
+    color:white;
+
+    border:none;
+
+    border-radius:11px;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.checkout-box button:hover{
+
+    background:#b91550;
+
+    transform:translateY(-1px);
+}
+
+
+.checkout-box button:active{
+
+    transform:translateY(0);
+}
+
+
+/* ==============================
+   MOBILE
+============================== */
+
+@media(max-width:600px){
+
+    .checkout-page{
+
+        padding:35px 15px 60px;
+    }
+
+
+    .checkout-page h1{
+
+        font-size:32px;
+
+        margin-bottom:30px;
+    }
+
+
+    .checkout-box{
+
+        padding:25px 20px;
+
+        border-radius:18px;
+    }
+
+
+    .checkout-box h2{
+
+        font-size:22px;
+    }
+
+
+    .checkout-box input[type="text"],
+    .checkout-box input[type="email"],
+    .checkout-box input[type="tel"],
+    .checkout-box textarea{
+
+        font-size:16px;
+    }
+
+}
+
+
+/* ==============================
+   VERY SMALL MOBILE
+============================== */
+
+@media(max-width:400px){
+
+    .checkout-page h1{
+
+        font-size:28px;
+    }
+
+
+    .checkout-box{
+
+        padding:22px 16px;
+    }
 
 }
