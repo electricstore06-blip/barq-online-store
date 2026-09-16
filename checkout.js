@@ -3,7 +3,20 @@
 // ==============================
 
 document.addEventListener("DOMContentLoaded", function () {
+function showMessage(message, type){
 
+    if(!checkoutMessage) return;
+
+    checkoutMessage.style.display = "block";
+
+    checkoutMessage.textContent = message;
+
+    checkoutMessage.className =
+        type === "success"
+        ? "checkout-success"
+        : "checkout-error";
+
+}
     // ==============================
     // GET CART
     // ==============================
