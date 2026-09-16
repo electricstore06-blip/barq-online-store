@@ -28,6 +28,11 @@
     <div class="checkout-box">
 
 
+        <h2>
+            Customer Information
+        </h2>
+
+
         <label>
             Full Name
         </label>
@@ -36,6 +41,7 @@
             type="text"
             id="fullName"
             placeholder="Enter your name"
+            required
         >
 
 
@@ -47,6 +53,7 @@
             type="tel"
             id="phone"
             placeholder="05xxxxxxxx"
+            required
         >
 
 
@@ -58,6 +65,7 @@
             type="email"
             id="email"
             placeholder="example@email.com"
+            required
         >
 
 
@@ -68,6 +76,7 @@
         <textarea
             id="address"
             placeholder="Your address"
+            required
         ></textarea>
 
 
@@ -82,6 +91,7 @@
                 type="radio"
                 name="payment"
                 value="Mada"
+                checked
             >
 
             Mada
@@ -116,8 +126,8 @@
 
 
         <button
-            id="placeOrderBtn"
             type="button"
+            id="placeOrderBtn"
         >
             Place Order
         </button>
@@ -129,10 +139,168 @@
 </div>
 
 
-<script
-    type="module"
-    src="checkout.js"
-></script>
+
+<script type="module">
+
+import { db } from "./firebase-config.js";
+
+import {
+    collection,
+    addDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+
+const placeOrderBtn =
+    document.getElementById("placeOrderBtn");
+
+
+
+placeOrderBtn.addEventListener("click", async () => {
+
+
+    const fullName =
+        document.getElementById("fullName").value.trim();
+
+
+    const phone =
+        document.getElementById("phone").value.trim();
+
+
+    const email =
+        document.getElementById("email").value.trim();
+
+
+    const address =
+        document.getElementById("address").value.trim();
+
+
+    const payment =
+        document.querySelector(
+            'input[name="payment"]:checked'
+        ).value;
+
+
+
+    if (!fullName || !phone || !email || !address) {
+
+        alert("Please complete all customer information.");
+
+        return;
+
+    }
+
+
+
+    const cart =
+        JSON.parse(
+            localStorage.getItem("barqCart")
+        ) || [];
+
+
+
+    if (cart.length === 0) {
+
+        alert("Your cart is empty.");
+
+        window.location.href = "index.html";
+
+        return;
+
+    }
+
+
+
+    let total = 0;
+
+
+    cart.forEach((item) => {
+
+        total +=
+            Number(item.price) *
+            Number(item.quantity);
+
+    });
+
+
+
+    placeOrderBtn.disabled = true;
+
+    placeOrderBtn.textContent =
+        "Placing Order...";
+
+
+
+    try {
+
+
+        await addDoc(
+            collection(db, "orders"),
+            {
+
+                customerName: fullName,
+
+                phone: phone,
+
+                email: email,
+
+                address: address,
+
+                paymentMethod: payment,
+
+                products: cart,
+
+                total: total,
+
+                status: "Pending",
+
+                createdAt: serverTimestamp()
+
+            }
+        );
+
+
+
+        localStorage.removeItem("barqCart");
+
+
+
+        alert(
+            "Your order has been placed successfully!"
+        );
+
+
+
+        window.location.href =
+            "index.html";
+
+
+    } catch (error) {
+
+
+        console.error(
+            "Order error:",
+            error
+        );
+
+
+        alert(
+            "Unable to place your order. Please try again."
+        );
+
+
+        placeOrderBtn.disabled = false;
+
+        placeOrderBtn.textContent =
+            "Place Order";
+
+    }
+
+
+});
+
+</script>
 
 
 </body>
