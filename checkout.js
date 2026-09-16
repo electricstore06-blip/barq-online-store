@@ -2,376 +2,150 @@
    BARQ CHECKOUT JAVASCRIPT
 ============================== */
 
-
-/* ==============================
-   GET ELEMENTS
-============================== */
-
-const fullName = document.getElementById("full-name");
-const phone = document.getElementById("phone");
-const email = document.getElementById("email");
-const address = document.getElementById("address");
-
-const paymentOptions = document.querySelectorAll(
-    'input[name="payment"]'
-);
-
-const placeOrderButton = document.querySelector(
-    ".checkout-box button"
-);
-
-
-/* ==============================
-   PLACE ORDER
-============================== */
-
-placeOrderButton.addEventListener("click", function () {
-
-    /* Remove previous error messages */
-
-    clearErrors();
-
-
-    /* Get values */
-
-    const nameValue = fullName.value.trim();
-    const phoneValue = phone.value.trim();
-    const emailValue = email.value.trim();
-    const addressValue = address.value.trim();
-
-
-    /* ==============================
-       VALIDATION
-    ============================== */
-
-    let hasError = false;
-
-
-    /* Full Name */
-
-    if (nameValue === "") {
-
-        showError(
-            fullName,
-            "Please enter your full name."
-        );
-
-        hasError = true;
-
-    }
-
-
-    /* Phone Number */
-
-    else if (!/^05\d{8}$/.test(phoneValue)) {
-
-        showError(
-            phone,
-            "Please enter a valid Saudi phone number (05xxxxxxxx)."
-        );
-
-        hasError = true;
-
-    }
-
-
-    /* Email */
-
-    if (emailValue === "") {
-
-        showError(
-            email,
-            "Please enter your email address."
-        );
-
-        hasError = true;
-
-    }
-
-    else if (!isValidEmail(emailValue)) {
-
-        showError(
-            email,
-            "Please enter a valid email address."
-        );
-
-        hasError = true;
-
-    }
-
-
-    /* Delivery Address */
-
-    if (addressValue === "") {
-
-        showError(
-            address,
-            "Please enter your delivery address."
-        );
-
-        hasError = true;
-
-    }
-
-
-    /* Payment Method */
-
-    let selectedPayment = "";
-
-    paymentOptions.forEach(function (option) {
-
-        if (option.checked) {
-
-            selectedPayment = option.value;
-
-        }
-
-    });
-
-
-    if (selectedPayment === "") {
-
-        showPaymentError();
-
-        hasError = true;
-
-    }
-
-
-    /* Stop if there is an error */
-
-    if (hasError) {
-
-        return;
-
-    }
-
-
-    /* ==============================
-       CREATE ORDER
-    ============================== */
-
-    const order = {
-
-        customerName: nameValue,
-
-        phone: phoneValue,
-
-        email: emailValue,
-
-        address: addressValue,
-
-        payment: selectedPayment,
-
-        date: new Date().toISOString()
-
-    };
-
-
-    /* Save order */
-
-    localStorage.setItem(
-        "barqOrder",
-        JSON.stringify(order)
+document.addEventListener("DOMContentLoaded", function () {
+
+    const fullName = document.getElementById("full-name");
+    const phone = document.getElementById("phone");
+    const email = document.getElementById("email");
+    const address = document.getElementById("address");
+
+    const paymentMethods = document.querySelectorAll(
+        'input[name="payment"]'
+    );
+
+    const placeOrderButton = document.querySelector(
+        '.checkout-box button'
     );
 
 
     /* ==============================
-       SUCCESS MESSAGE
+       PLACE ORDER
     ============================== */
 
-    showSuccessMessage();
+    placeOrderButton.addEventListener("click", function () {
+
+        const nameValue = fullName.value.trim();
+        const phoneValue = phone.value.trim();
+        const emailValue = email.value.trim();
+        const addressValue = address.value.trim();
+
+        let selectedPayment = "";
+
+        paymentMethods.forEach(function (payment) {
+
+            if (payment.checked) {
+                selectedPayment = payment.value;
+            }
+
+        });
+
+
+        /* ==============================
+           VALIDATION
+        ============================== */
+
+        if (nameValue === "") {
+
+            alert("Please enter your full name.");
+            fullName.focus();
+            return;
+
+        }
+
+
+        if (phoneValue === "") {
+
+            alert("Please enter your phone number.");
+            phone.focus();
+            return;
+
+        }
+
+
+        /* Saudi phone number validation */
+
+        const phonePattern = /^05\d{8}$/;
+
+        if (!phonePattern.test(phoneValue)) {
+
+            alert(
+                "Please enter a valid Saudi phone number.\nExample: 05xxxxxxxx"
+            );
+
+            phone.focus();
+            return;
+
+        }
+
+
+        if (emailValue === "") {
+
+            alert("Please enter your email address.");
+            email.focus();
+            return;
+
+        }
+
+
+        /* Email validation */
+
+        const emailPattern =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailPattern.test(emailValue)) {
+
+            alert("Please enter a valid email address.");
+            email.focus();
+            return;
+
+        }
+
+
+        if (addressValue === "") {
+
+            alert("Please enter your delivery address.");
+            address.focus();
+            return;
+
+        }
+
+
+        if (selectedPayment === "") {
+
+            alert("Please select a payment method.");
+
+            return;
+
+        }
+
+
+        /* ==============================
+           ORDER SUCCESS
+        ============================== */
+
+        alert(
+            "Order placed successfully!\n\n" +
+            "Thank you, " + nameValue + "!\n" +
+            "Payment Method: " + selectedPayment
+        );
+
+
+        /* ==============================
+           CLEAR FORM
+        ============================== */
+
+        fullName.value = "";
+        phone.value = "";
+        email.value = "";
+        address.value = "";
+
+
+        paymentMethods.forEach(function (payment) {
+
+            payment.checked = false;
+
+        });
+
+    });
 
 });
-
-
-/* ==============================
-   EMAIL VALIDATION
-============================== */
-
-function isValidEmail(email) {
-
-    const emailPattern =
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    return emailPattern.test(email);
-
-}
-
-
-/* ==============================
-   SHOW INPUT ERROR
-============================== */
-
-function showError(input, message) {
-
-    input.style.borderColor = "#d81b60";
-
-    input.style.boxShadow =
-        "0 0 0 3px rgba(216,27,96,0.10)";
-
-
-    const error = document.createElement("div");
-
-    error.className = "checkout-error";
-
-    error.textContent = message;
-
-    error.style.color = "#d81b60";
-
-    error.style.fontSize = "14px";
-
-    error.style.marginTop = "6px";
-
-    error.style.fontWeight = "normal";
-
-
-    input.insertAdjacentElement(
-        "afterend",
-        error
-    );
-
-}
-
-
-/* ==============================
-   PAYMENT ERROR
-============================== */
-
-function showPaymentError() {
-
-    const paymentHeading =
-        document.querySelector(
-            ".checkout-box h2:not(.customer-title)"
-        );
-
-
-    if (!paymentHeading) {
-        return;
-    }
-
-
-    const error = document.createElement("div");
-
-    error.className = "checkout-error";
-
-    error.textContent =
-        "Please select a payment method.";
-
-    error.style.color = "#d81b60";
-
-    error.style.fontSize = "14px";
-
-    error.style.marginTop = "8px";
-
-    error.style.fontWeight = "normal";
-
-
-    paymentHeading.insertAdjacentElement(
-        "afterend",
-        error
-    );
-
-}
-
-
-/* ==============================
-   CLEAR ERRORS
-============================== */
-
-function clearErrors() {
-
-    const errors =
-        document.querySelectorAll(
-            ".checkout-error"
-        );
-
-
-    errors.forEach(function (error) {
-
-        error.remove();
-
-    });
-
-
-    const inputs =
-        document.querySelectorAll(
-            ".checkout-box input[type='text'], " +
-            ".checkout-box input[type='tel'], " +
-            ".checkout-box input[type='email'], " +
-            ".checkout-box textarea"
-        );
-
-
-    inputs.forEach(function (input) {
-
-        input.style.borderColor = "#d7d7d7";
-
-        input.style.boxShadow = "none";
-
-    });
-
-}
-
-
-/* ==============================
-   SUCCESS MESSAGE
-============================== */
-
-function showSuccessMessage() {
-
-    const checkoutBox =
-        document.querySelector(".checkout-box");
-
-
-    checkoutBox.innerHTML = `
-
-        <div class="order-success">
-
-            <div class="success-icon">
-                ✓
-            </div>
-
-            <h2>
-                Order Placed Successfully!
-            </h2>
-
-            <p>
-                Thank you for shopping with BARQ.
-            </p>
-
-            <p>
-                Your order information has been saved.
-            </p>
-
-            <button
-                type="button"
-                id="back-to-store"
-            >
-                Back to Store
-            </button>
-
-        </div>
-
-    `;
-
-
-    /* Back to store button */
-
-    const backButton =
-        document.getElementById(
-            "back-to-store"
-        );
-
-
-    backButton.addEventListener(
-        "click",
-        function () {
-
-            window.location.href =
-                "index.html";
-
-        }
-    );
-
-}
