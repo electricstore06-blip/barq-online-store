@@ -155,6 +155,8 @@ body{
 }
 
 
+    Place Order
+</button>
 .checkout-box textarea:focus{
 
     border-color:#d81b60;
@@ -163,22 +165,28 @@ body{
         0 0 0 3px rgba(216,27,96,0.10);
 }
 
+<h2>
+Payment Method
+</h2>
 
-/* ==============================
-   PAYMENT METHOD
-============================== */
+<label class="payment-option">
+    <input type="radio" name="payment" value="Mada">
+    <span>Mada</span>
+</label>
 
-.checkout-box input[type="radio"]{
+<label class="payment-option">
+    <input type="radio" name="payment" value="Visa / Mastercard">
+    <span>Visa / Mastercard</span>
+</label>
 
-    width:18px;
-    height:18px;
+<label class="payment-option">
+    <input type="radio" name="payment" value="Apple Pay">
+    <span>Apple Pay</span>
+</label>
 
-    margin-right:8px;
-
-    accent-color:#d81b60;
-
-    vertical-align:middle;
-}
+<button>
+    Place Order
+</button>
 
 
 /* Payment labels */
