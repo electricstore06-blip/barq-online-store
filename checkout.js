@@ -363,20 +363,29 @@ const checkoutMessage =
                 // Show in browser console
                 console.log(orderData);
 
+// SAVE ORDER DATA
 
-                // ==============================
-                // SUCCESS
-                // ==============================
+orderData.orderNumber =
+    "BARQ" + Math.floor(1000 + Math.random() * 9000);
 
-                alert(
-                    "Thank you " +
-                    name +
-                    "!\n\n" +
-                    "Your order has been received!" +
-                    "\n\nTotal: SAR " +
-                    total.toFixed(2)
-                );
 
+localStorage.setItem(
+    "barqOrder",
+    JSON.stringify(orderData)
+);
+
+
+localStorage.setItem(
+    "barqOrderTotal",
+    total
+);
+
+
+// GO TO SUCCESS PAGE
+
+window.location.href =
+    "order-success.html";
+             
 
                 // ==============================
                 // CLEAR FORM
