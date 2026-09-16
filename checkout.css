@@ -1,6 +1,6 @@
-/* ==============================
-   BARQ CHECKOUT
-============================== */
+/* =========================================
+   BARQ CHECKOUT PAGE
+========================================= */
 
 * {
     margin: 0;
@@ -10,9 +10,9 @@
 }
 
 
-/* ==============================
+/* =========================================
    BODY
-============================== */
+========================================= */
 
 body {
     background: #f8f8f8;
@@ -20,9 +20,9 @@ body {
 }
 
 
-/* ==============================
+/* =========================================
    CHECKOUT PAGE
-============================== */
+========================================= */
 
 .checkout-page {
     min-height: 100vh;
@@ -30,21 +30,22 @@ body {
 }
 
 
-/* ==============================
+/* =========================================
    MAIN TITLE
-============================== */
+========================================= */
 
 .checkout-page h1 {
     text-align: center;
     font-size: 42px;
+    font-weight: 700;
     margin-bottom: 40px;
     color: #111827;
 }
 
 
-/* ==============================
+/* =========================================
    CHECKOUT BOX
-============================== */
+========================================= */
 
 .checkout-box {
     width: 100%;
@@ -61,14 +62,13 @@ body {
 }
 
 
-/* ==============================
+/* =========================================
    SECTION HEADINGS
-============================== */
+========================================= */
 
 .checkout-box h2 {
     font-size: 25px;
-    margin-top: 30px;
-    margin-bottom: 18px;
+    font-weight: 700;
     color: #111827;
 }
 
@@ -76,49 +76,59 @@ body {
 /* Customer Information heading */
 
 .checkout-box .customer-title {
-    margin-top: 0;
+    margin-bottom: 22px;
 }
 
 
-/* ==============================
-   LABELS
-============================== */
+/* Payment Method heading */
 
-.checkout-box > label {
+.checkout-box h2:not(.customer-title) {
+    margin-top: 30px;
+    margin-bottom: 18px;
+}
+
+
+/* =========================================
+   NORMAL LABELS
+========================================= */
+
+.checkout-box > label:not(.payment-option) {
     display: block;
 
     margin-top: 18px;
     margin-bottom: 8px;
 
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 700;
 
     color: #111827;
 }
 
 
-/* ==============================
+/* =========================================
    TEXT INPUTS
-============================== */
+========================================= */
 
 .checkout-box input[type="text"],
-.checkout-box input[type="email"],
-.checkout-box input[type="tel"] {
+.checkout-box input[type="tel"],
+.checkout-box input[type="email"] {
     display: block;
 
     width: 100%;
 
-    padding: 15px 16px;
+    height: 50px;
+
+    padding: 0 16px;
 
     border: 1px solid #d7d7d7;
 
     border-radius: 11px;
 
-    font-size: 16px;
-
     background: #ffffff;
 
     color: #111827;
+
+    font-size: 16px;
 
     outline: none;
 
@@ -128,13 +138,23 @@ body {
 }
 
 
-/* ==============================
+/* =========================================
+   INPUT PLACEHOLDER
+========================================= */
+
+.checkout-box input::placeholder,
+.checkout-box textarea::placeholder {
+    color: #777777;
+}
+
+
+/* =========================================
    INPUT FOCUS
-============================== */
+========================================= */
 
 .checkout-box input[type="text"]:focus,
-.checkout-box input[type="email"]:focus,
-.checkout-box input[type="tel"]:focus {
+.checkout-box input[type="tel"]:focus,
+.checkout-box input[type="email"]:focus {
     border-color: #d81b60;
 
     box-shadow:
@@ -142,9 +162,9 @@ body {
 }
 
 
-/* ==============================
-   ADDRESS
-============================== */
+/* =========================================
+   DELIVERY ADDRESS
+========================================= */
 
 .checkout-box textarea {
     display: block;
@@ -159,13 +179,11 @@ body {
 
     border-radius: 11px;
 
-    font-size: 16px;
-
-    font-family: Arial, sans-serif;
-
     background: #ffffff;
 
     color: #111827;
+
+    font-size: 16px;
 
     resize: vertical;
 
@@ -177,9 +195,9 @@ body {
 }
 
 
-/* ==============================
+/* =========================================
    TEXTAREA FOCUS
-============================== */
+========================================= */
 
 .checkout-box textarea:focus {
     border-color: #d81b60;
@@ -189,9 +207,9 @@ body {
 }
 
 
-/* ==============================
+/* =========================================
    PAYMENT OPTIONS
-============================== */
+========================================= */
 
 .checkout-box .payment-option {
     display: flex;
@@ -200,20 +218,23 @@ body {
 
     width: 100%;
 
+    min-height: 50px;
+
     margin-top: 12px;
-    margin-bottom: 0;
 
-    padding: 14px 15px;
+    padding: 14px 16px;
 
-    border: 1px solid #e2e2e2;
+    border: 1px solid #e0e0e0;
 
-    border-radius: 10px;
+    border-radius: 11px;
+
+    background: #ffffff;
+
+    color: #111827;
 
     font-size: 16px;
 
     font-weight: normal;
-
-    color: #111827;
 
     cursor: pointer;
 
@@ -223,9 +244,9 @@ body {
 }
 
 
-/* ==============================
+/* =========================================
    PAYMENT OPTION HOVER
-============================== */
+========================================= */
 
 .checkout-box .payment-option:hover {
     border-color: #d81b60;
@@ -234,17 +255,15 @@ body {
 }
 
 
-/* ==============================
+/* =========================================
    RADIO BUTTON
-============================== */
+========================================= */
 
 .checkout-box .payment-option input[type="radio"] {
     width: 18px;
     height: 18px;
 
-    margin: 0 12px 0 0;
-
-    padding: 0;
+    margin: 0 10px 0 0;
 
     accent-color: #d81b60;
 
@@ -254,31 +273,33 @@ body {
 }
 
 
-/* ==============================
+/* =========================================
    PAYMENT TEXT
-============================== */
+========================================= */
 
 .checkout-box .payment-option span {
     font-size: 16px;
 
-    font-weight: normal;
+    font-weight: 400;
 
     color: #111827;
 }
 
 
-/* ==============================
+/* =========================================
    PLACE ORDER BUTTON
-============================== */
+========================================= */
 
 .checkout-box button {
     display: block;
 
     width: 100%;
 
+    height: 52px;
+
     margin-top: 30px;
 
-    padding: 16px;
+    padding: 0 16px;
 
     background: #d81b60;
 
@@ -290,7 +311,7 @@ body {
 
     font-size: 18px;
 
-    font-weight: bold;
+    font-weight: 700;
 
     cursor: pointer;
 
@@ -300,9 +321,9 @@ body {
 }
 
 
-/* ==============================
+/* =========================================
    BUTTON HOVER
-============================== */
+========================================= */
 
 .checkout-box button:hover {
     background: #b91550;
@@ -311,18 +332,18 @@ body {
 }
 
 
-/* ==============================
+/* =========================================
    BUTTON ACTIVE
-============================== */
+========================================= */
 
 .checkout-box button:active {
     transform: translateY(0);
 }
 
 
-/* ==============================
+/* =========================================
    MOBILE
-============================== */
+========================================= */
 
 @media (max-width: 600px) {
 
@@ -351,18 +372,23 @@ body {
 
 
     .checkout-box input[type="text"],
-    .checkout-box input[type="email"],
     .checkout-box input[type="tel"],
+    .checkout-box input[type="email"],
     .checkout-box textarea {
         font-size: 16px;
+    }
+
+
+    .checkout-box button {
+        font-size: 17px;
     }
 
 }
 
 
-/* ==============================
+/* =========================================
    VERY SMALL MOBILE
-============================== */
+========================================= */
 
 @media (max-width: 400px) {
 
@@ -373,6 +399,11 @@ body {
 
     .checkout-box {
         padding: 22px 16px;
+    }
+
+
+    .checkout-box .payment-option {
+        padding: 13px 14px;
     }
 
 }
