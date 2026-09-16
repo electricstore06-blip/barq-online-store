@@ -1,151 +1,113 @@
-/* ==============================
-   BARQ CHECKOUT JAVASCRIPT
-============================== */
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const fullName = document.getElementById("full-name");
-    const phone = document.getElementById("phone");
-    const email = document.getElementById("email");
-    const address = document.getElementById("address");
-
-    const paymentMethods = document.querySelectorAll(
-        'input[name="payment"]'
-    );
-
-    const placeOrderButton = document.querySelector(
-        '.checkout-box button'
-    );
+// ==============================
+// BARQ CHECKOUT JAVASCRIPT
+// ==============================
 
 
-    /* ==============================
-       PLACE ORDER
-    ============================== */
-
-    placeOrderButton.addEventListener("click", function () {
-
-        const nameValue = fullName.value.trim();
-        const phoneValue = phone.value.trim();
-        const emailValue = email.value.trim();
-        const addressValue = address.value.trim();
-
-        let selectedPayment = "";
-
-        paymentMethods.forEach(function (payment) {
-
-            if (payment.checked) {
-                selectedPayment = payment.value;
-            }
-
-        });
+document.addEventListener("DOMContentLoaded", function(){
 
 
-        /* ==============================
-           VALIDATION
-        ============================== */
-
-        if (nameValue === "") {
-
-            alert("Please enter your full name.");
-            fullName.focus();
-            return;
-
-        }
+const orderButton = document.querySelector(".checkout-box button");
 
 
-        if (phoneValue === "") {
-
-            alert("Please enter your phone number.");
-            phone.focus();
-            return;
-
-        }
+orderButton.addEventListener("click", function(){
 
 
-        /* Saudi phone number validation */
-
-        const phonePattern = /^05\d{8}$/;
-
-        if (!phonePattern.test(phoneValue)) {
-
-            alert(
-                "Please enter a valid Saudi phone number.\nExample: 05xxxxxxxx"
-            );
-
-            phone.focus();
-            return;
-
-        }
+const name =
+document.getElementById("full-name").value.trim();
 
 
-        if (emailValue === "") {
-
-            alert("Please enter your email address.");
-            email.focus();
-            return;
-
-        }
+const phone =
+document.getElementById("phone").value.trim();
 
 
-        /* Email validation */
-
-        const emailPattern =
-            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailPattern.test(emailValue)) {
-
-            alert("Please enter a valid email address.");
-            email.focus();
-            return;
-
-        }
+const email =
+document.getElementById("email").value.trim();
 
 
-        if (addressValue === "") {
-
-            alert("Please enter your delivery address.");
-            address.focus();
-            return;
-
-        }
+const address =
+document.getElementById("address").value.trim();
 
 
-        if (selectedPayment === "") {
-
-            alert("Please select a payment method.");
-
-            return;
-
-        }
+const payment =
+document.querySelector(
+'input[name="payment"]:checked'
+);
 
 
-        /* ==============================
-           ORDER SUCCESS
-        ============================== */
 
-        alert(
-            "Order placed successfully!\n\n" +
-            "Thank you, " + nameValue + "!\n" +
-            "Payment Method: " + selectedPayment
-        );
+if(name === ""){
+
+alert("Please enter your full name");
+return;
+
+}
 
 
-        /* ==============================
-           CLEAR FORM
-        ============================== */
+if(phone === ""){
 
-        fullName.value = "";
-        phone.value = "";
-        email.value = "";
-        address.value = "";
+alert("Please enter your phone number");
+return;
+
+}
 
 
-        paymentMethods.forEach(function (payment) {
+if(email === ""){
 
-            payment.checked = false;
+alert("Please enter your email");
+return;
 
-        });
+}
 
-    });
+
+if(address === ""){
+
+alert("Please enter delivery address");
+return;
+
+}
+
+
+if(!payment){
+
+alert("Please select payment method");
+return;
+
+}
+
+
+
+const orderData = {
+
+
+customerName:name,
+
+phone:phone,
+
+email:email,
+
+address:address,
+
+paymentMethod:payment.value,
+
+date:new Date().toLocaleString()
+
+
+};
+
+
+
+console.log(orderData);
+
+
+
+alert(
+"Thank you " + name +
+"\nYour order has been received!"
+);
+
+
+
+});
+
 
 });
