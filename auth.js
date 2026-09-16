@@ -1,3 +1,5 @@
+console.log("BARQ AUTH JS LOADED");
+
 import { auth } from "./firebase-config.js";
 
 import {
