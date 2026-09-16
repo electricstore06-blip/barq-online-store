@@ -2,16 +2,21 @@
    BARQ CHECKOUT
 ============================== */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
 }
 
-body {
-    background: #f8f8f8;
-    color: #111827;
+
+/* ==============================
+   BODY
+============================== */
+
+body{
+    background:#f8f8f8;
+    color:#111827;
 }
 
 
@@ -19,9 +24,9 @@ body {
    CHECKOUT PAGE
 ============================== */
 
-.checkout-page {
-    min-height: 100vh;
-    padding: 55px 20px 80px;
+.checkout-page{
+    min-height:100vh;
+    padding:55px 20px 80px;
 }
 
 
@@ -29,11 +34,11 @@ body {
    TITLE
 ============================== */
 
-.checkout-page h1 {
-    text-align: center;
-    font-size: 42px;
-    margin-bottom: 40px;
-    color: #111827;
+.checkout-page h1{
+    text-align:center;
+    font-size:42px;
+    margin-bottom:40px;
+    color:#111827;
 }
 
 
@@ -41,18 +46,20 @@ body {
    CHECKOUT BOX
 ============================== */
 
-.checkout-box {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
+.checkout-box{
+    width:100%;
+    max-width:600px;
 
-    background: white;
+    margin:0 auto;
 
-    padding: 40px;
+    background:white;
 
-    border-radius: 22px;
+    padding:40px;
 
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.10);
+    border-radius:22px;
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,0.10);
 }
 
 
@@ -60,11 +67,20 @@ body {
    SECTION HEADINGS
 ============================== */
 
-.checkout-box h2 {
-    font-size: 25px;
-    margin-top: 30px;
-    margin-bottom: 18px;
-    color: #111827;
+.checkout-box h2{
+    font-size:25px;
+
+    margin-top:30px;
+    margin-bottom:18px;
+
+    color:#111827;
+}
+
+
+/* First heading */
+
+.checkout-box h2:first-child{
+    margin-top:0;
 }
 
 
@@ -72,16 +88,18 @@ body {
    NORMAL LABELS
 ============================== */
 
-.checkout-box label {
-    display: block;
+.checkout-box > label:not(.payment-option){
 
-    margin-top: 18px;
-    margin-bottom: 8px;
+    display:block;
 
-    font-size: 16px;
-    font-weight: bold;
+    margin-top:18px;
+    margin-bottom:8px;
 
-    color: #111827;
+    font-size:16px;
+
+    font-weight:bold;
+
+    color:#111827;
 }
 
 
@@ -91,20 +109,23 @@ body {
 
 .checkout-box input[type="text"],
 .checkout-box input[type="email"],
-.checkout-box input[type="tel"] {
-    width: 100%;
+.checkout-box input[type="tel"]{
 
-    padding: 15px 16px;
+    width:100%;
 
-    border: 1px solid #d7d7d7;
+    padding:15px 16px;
 
-    border-radius: 11px;
+    border:1px solid #d7d7d7;
 
-    font-size: 16px;
+    border-radius:11px;
 
-    background: white;
+    font-size:16px;
 
-    outline: none;
+    background:white;
+
+    color:#111827;
+
+    outline:none;
 
     transition:
         border-color 0.2s ease,
@@ -118,10 +139,23 @@ body {
 
 .checkout-box input[type="text"]:focus,
 .checkout-box input[type="email"]:focus,
-.checkout-box input[type="tel"]:focus {
-    border-color: #d81b60;
+.checkout-box input[type="tel"]:focus{
 
-    box-shadow: 0 0 0 3px rgba(216, 27, 96, 0.10);
+    border-color:#d81b60;
+
+    box-shadow:
+        0 0 0 3px rgba(216,27,96,0.10);
+}
+
+
+/* ==============================
+   PLACEHOLDER
+============================== */
+
+.checkout-box input::placeholder,
+.checkout-box textarea::placeholder{
+
+    color:#777;
 }
 
 
@@ -129,24 +163,27 @@ body {
    DELIVERY ADDRESS
 ============================== */
 
-.checkout-box textarea {
-    width: 100%;
+.checkout-box textarea{
 
-    height: 120px;
+    width:100%;
 
-    padding: 15px 16px;
+    height:120px;
 
-    border: 1px solid #d7d7d7;
+    padding:15px 16px;
 
-    border-radius: 11px;
+    border:1px solid #d7d7d7;
 
-    font-size: 16px;
+    border-radius:11px;
 
-    resize: vertical;
+    font-size:16px;
 
-    outline: none;
+    background:white;
 
-    background: white;
+    color:#111827;
+
+    resize:vertical;
+
+    outline:none;
 
     transition:
         border-color 0.2s ease,
@@ -154,64 +191,85 @@ body {
 }
 
 
-.checkout-box textarea:focus {
-    border-color: #d81b60;
+/* ==============================
+   TEXTAREA FOCUS
+============================== */
 
-    box-shadow: 0 0 0 3px rgba(216, 27, 96, 0.10);
+.checkout-box textarea:focus{
+
+    border-color:#d81b60;
+
+    box-shadow:
+        0 0 0 3px rgba(216,27,96,0.10);
 }
 
 
 /* ==============================
-   PAYMENT OPTIONS
+   PAYMENT METHOD
 ============================== */
 
-.checkout-box .payment-option {
-    display: flex;
+.payment-option{
 
-    align-items: center;
+    display:flex;
 
-    width: 100%;
+    align-items:center;
 
-    margin-top: 12px;
+    width:100%;
 
-    margin-bottom: 0;
+    margin-top:12px;
 
-    padding: 14px 15px;
+    padding:14px 15px;
 
-    border: 1px solid #e2e2e2;
+    border:1px solid #e2e2e2;
 
-    border-radius: 10px;
+    border-radius:10px;
 
-    font-weight: normal;
+    background:white;
 
-    cursor: pointer;
+    font-size:16px;
+
+    font-weight:normal;
+
+    color:#111827;
+
+    cursor:pointer;
 
     transition:
         border-color 0.2s ease,
-        background 0.2s ease;
-}
-
-
-.checkout-box .payment-option:hover {
-    border-color: #d81b60;
-
-    background: #fff7fa;
+        background 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 
 /* ==============================
-   PAYMENT RADIO BUTTON
+   PAYMENT HOVER
 ============================== */
 
-.checkout-box .payment-option input[type="radio"] {
-    width: 18px;
-    height: 18px;
+.payment-option:hover{
 
-    margin: 0 10px 0 0;
+    border-color:#d81b60;
 
-    accent-color: #d81b60;
+    background:#fff7fa;
+}
 
-    cursor: pointer;
+
+/* ==============================
+   PAYMENT RADIO
+============================== */
+
+.payment-option input[type="radio"]{
+
+    width:18px;
+
+    height:18px;
+
+    margin:0 12px 0 0;
+
+    accent-color:#d81b60;
+
+    cursor:pointer;
+
+    flex-shrink:0;
 }
 
 
@@ -219,10 +277,26 @@ body {
    PAYMENT TEXT
 ============================== */
 
-.checkout-box .payment-option span {
-    font-size: 16px;
+.payment-option span{
 
-    color: #111827;
+    display:block;
+
+    line-height:1.2;
+}
+
+
+/* ==============================
+   SELECTED PAYMENT
+============================== */
+
+.payment-option:has(input[type="radio"]:checked){
+
+    border-color:#d81b60;
+
+    background:#fff7fa;
+
+    box-shadow:
+        0 0 0 2px rgba(216,27,96,0.08);
 }
 
 
@@ -230,42 +304,59 @@ body {
    PLACE ORDER BUTTON
 ============================== */
 
-.checkout-box button {
-    width: 100%;
+.checkout-box button{
 
-    margin-top: 30px;
+    width:100%;
 
-    padding: 16px;
+    margin-top:30px;
 
-    background: #d81b60;
+    padding:16px;
 
-    color: white;
+    background:#d81b60;
 
-    border: none;
+    color:white;
 
-    border-radius: 11px;
+    border:none;
 
-    font-size: 18px;
+    border-radius:11px;
 
-    font-weight: bold;
+    font-size:18px;
 
-    cursor: pointer;
+    font-weight:bold;
+
+    cursor:pointer;
 
     transition:
         background 0.2s ease,
-        transform 0.2s ease;
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 
-.checkout-box button:hover {
-    background: #b91550;
+/* ==============================
+   BUTTON HOVER
+============================== */
 
-    transform: translateY(-1px);
+.checkout-box button:hover{
+
+    background:#b91550;
+
+    transform:translateY(-1px);
+
+    box-shadow:
+        0 6px 15px rgba(216,27,96,0.20);
 }
 
 
-.checkout-box button:active {
-    transform: translateY(0);
+/* ==============================
+   BUTTON ACTIVE
+============================== */
+
+.checkout-box button:active{
+
+    transform:translateY(0);
+
+    box-shadow:none;
 }
 
 
@@ -273,31 +364,47 @@ body {
    MOBILE
 ============================== */
 
-@media (max-width: 600px) {
+@media(max-width:600px){
 
-    .checkout-page {
-        padding: 35px 15px 60px;
+    .checkout-page{
+
+        padding:35px 15px 60px;
+
     }
 
-    .checkout-page h1 {
-        font-size: 32px;
-        margin-bottom: 30px;
+
+    .checkout-page h1{
+
+        font-size:32px;
+
+        margin-bottom:30px;
+
     }
 
-    .checkout-box {
-        padding: 25px 20px;
-        border-radius: 18px;
+
+    .checkout-box{
+
+        padding:25px 20px;
+
+        border-radius:18px;
+
     }
 
-    .checkout-box h2 {
-        font-size: 22px;
+
+    .checkout-box h2{
+
+        font-size:22px;
+
     }
+
 
     .checkout-box input[type="text"],
     .checkout-box input[type="email"],
     .checkout-box input[type="tel"],
-    .checkout-box textarea {
-        font-size: 16px;
+    .checkout-box textarea{
+
+        font-size:16px;
+
     }
 
 }
@@ -307,14 +414,26 @@ body {
    VERY SMALL MOBILE
 ============================== */
 
-@media (max-width: 400px) {
+@media(max-width:400px){
 
-    .checkout-page h1 {
-        font-size: 28px;
+    .checkout-page h1{
+
+        font-size:28px;
+
     }
 
-    .checkout-box {
-        padding: 22px 16px;
+
+    .checkout-box{
+
+        padding:22px 16px;
+
+    }
+
+
+    .payment-option{
+
+        padding:13px;
+
     }
 
 }
