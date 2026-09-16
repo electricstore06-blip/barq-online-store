@@ -3,11 +3,13 @@
 
 <head>
 
-<title>
-BARQ Checkout
-</title>
+    <meta charset="UTF-8">
 
-<link rel="stylesheet" href="checkout.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BARQ Checkout</title>
+
+    <link rel="stylesheet" href="checkout.css">
 
 </head>
 
@@ -18,102 +20,121 @@ BARQ Checkout
 <div class="checkout-page">
 
 
-<h1>
-BARQ Checkout
-</h1>
+    <h1>
+        BARQ Checkout
+    </h1>
 
 
-
-<div class="checkout-box">
-
+    <div class="checkout-box">
 
 
-<label>
-Full Name
-</label>
+        <label>
+            Full Name
+        </label>
 
-<input type="text" placeholder="Enter your name">
-
-
-
-<label>
-Phone Number
-</label>
-
-<input type="text" placeholder="05xxxxxxxx">
+        <input
+            type="text"
+            id="fullName"
+            placeholder="Enter your name"
+        >
 
 
+        <label>
+            Phone Number
+        </label>
 
-<label>
-Email
-</label>
-
-<input type="email" placeholder="example@email.com">
-
-
-
-<label>
-Delivery Address
-</label>
-
-<textarea placeholder="Your address"></textarea>
+        <input
+            type="tel"
+            id="phone"
+            placeholder="05xxxxxxxx"
+        >
 
 
+        <label>
+            Email
+        </label>
+
+        <input
+            type="email"
+            id="email"
+            placeholder="example@email.com"
+        >
 
 
+        <label>
+            Delivery Address
+        </label>
 
-<h2>
-Payment Method
-</h2>
-
-
-
-<label>
-
-<input type="radio" name="payment">
-
-Mada
-
-</label>
+        <textarea
+            id="address"
+            placeholder="Your address"
+        ></textarea>
 
 
-
-<label>
-
-<input type="radio" name="payment">
-
-Visa / Mastercard
-
-</label>
+        <h2>
+            Payment Method
+        </h2>
 
 
+        <label>
 
-<label>
+            <input
+                type="radio"
+                name="payment"
+                value="Mada"
+            >
 
-<input type="radio" name="payment">
+            Mada
 
-Apple Pay
-
-</label>
+        </label>
 
 
+        <label>
+
+            <input
+                type="radio"
+                name="payment"
+                value="Visa / Mastercard"
+            >
+
+            Visa / Mastercard
+
+        </label>
 
 
+        <label>
 
-<button>
-Place Order
-</button>
+            <input
+                type="radio"
+                name="payment"
+                value="Apple Pay"
+            >
 
+            Apple Pay
+
+        </label>
+
+
+        <button
+            id="placeOrderBtn"
+            type="button"
+        >
+            Place Order
+        </button>
+
+
+    </div>
 
 
 </div>
 
 
-</div>
-
+<script
+    type="module"
+    src="checkout.js"
+></script>
 
 
 </body>
-
 
 </html>
