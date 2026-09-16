@@ -149,9 +149,12 @@ document.addEventListener("DOMContentLoaded", function () {
     // ==============================
     // CUSTOMER INFORMATION
     // ==============================
+const orderButton =
+    document.getElementById("place-order-btn");
 
-    const orderButton =
-       document.getElementById("place-order-btn")
+
+const checkoutMessage =
+    document.getElementById("checkout-message");
 
     const fullName =
         document.getElementById("full-name");
