@@ -284,3 +284,10 @@ document.addEventListener(
 
     }
 );
+window.openLogin = openLogin;
+window.closeLogin = closeLogin;
+window.login = login;
+window.register = register;
+window.logout = logout;
+
+console.log("BARQ AUTH FUNCTIONS READY");
