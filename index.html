@@ -76,18 +76,62 @@
             <span id="cartCount">
                 0
             </span>
+<!-- MOBILE MENU BUTTON -->
 
-        </a>
+<button class="menu-toggle" onclick="toggleMenu()">
+
+    ☰
+
+</button>
 
 
-        <!-- LOGIN LINK -->
 
-        <a href="#" onclick="openLogin(); return false;">
+<nav id="mainNav">
 
-            🔐 Login
+    <a href="#">
+        Home
+    </a>
 
-        </a>
+    <a href="#products">
+        Shop
+    </a>
 
+    <a href="#brands">
+        Categories
+    </a>
+
+    <a href="#products">
+        Deals
+    </a>
+
+    <a href="#">
+        Contact
+    </a>
+
+
+    <!-- CART LINK -->
+
+    <a href="#" onclick="openCart(); return false;">
+
+        🛒 Cart
+
+        <span id="cartCount">
+            0
+        </span>
+
+    </a>
+
+
+    <!-- LOGIN LINK -->
+
+    <a href="#" onclick="openLogin(); return false;">
+
+        🔐 Login
+
+    </a>
+
+</nav>
+       
     </nav>
 
 </header>
