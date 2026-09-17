@@ -922,4 +922,57 @@ nav#mainNav.active{
         padding:25px;
     }
 
+/* =========================
+   MOBILE MENU FIX
+========================= */
+
+@media(max-width:550px){
+
+    nav#mainNav.active{
+
+        display:flex;
+
+        position:absolute;
+
+        top:70px;
+
+        left:0;
+
+        width:100%;
+
+        background:white;
+
+        z-index:10001;
+
+        box-shadow:0 10px 30px rgba(0,0,0,.15);
+
+    }
+
+
+    nav#mainNav a{
+
+        padding:12px;
+
+        border-bottom:1px solid #eee;
+
+    }
+
+
+    /* keep cart behind menu */
+
+    .cart-box{
+
+        z-index:9000;
+
+    }
+
+
+    /* keep login above everything */
+
+    .login-box{
+
+        z-index:11000;
+
+    }
+
 }
