@@ -4,7 +4,8 @@ import {
     collection,
     getDocs,
     doc,
-    getDoc
+    getDoc,
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -53,37 +54,32 @@ onAuthStateChanged(auth, async (user) => {
 
     try {
 
-        /* Check this user's admin document */
-
         const adminRef =
             doc(db, "admins", user.uid);
+
 
         const adminSnap =
             await getDoc(adminRef);
 
 
-        /* Admin document does not exist */
-
         if (!adminSnap.exists()) {
-
-            console.error(
-                "User is not an admin."
-            );
 
             alert(
                 "Access denied. You are not an administrator."
             );
 
+
             await signOut(auth);
+
 
             window.location.href =
                 "index.html";
 
+
             return;
+
         }
 
-
-        /* Check admin role */
 
         const adminData =
             adminSnap.data();
@@ -91,20 +87,20 @@ onAuthStateChanged(auth, async (user) => {
 
         if (adminData.role !== "admin") {
 
-            console.error(
-                "User does not have admin role."
-            );
-
             alert(
                 "Access denied. You are not an administrator."
             );
 
+
             await signOut(auth);
+
 
             window.location.href =
                 "index.html";
 
+
             return;
+
         }
 
 
@@ -114,14 +110,13 @@ onAuthStateChanged(auth, async (user) => {
         );
 
 
-        /* Only now load orders */
-
         loadOrders();
+
 
     }
 
 
-    catch (error) {
+    catch(error) {
 
         console.error(
             "Admin verification error:",
@@ -137,6 +132,7 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 
+
 /* =========================================
    LOAD ORDERS
 ========================================= */
@@ -145,53 +141,56 @@ async function loadOrders() {
 
     ordersContainer.innerHTML = "";
 
+
     adminMessage.textContent =
         "Loading orders...";
 
 
     try {
 
+
         const snapshot =
             await getDocs(
-                collection(db, "orders")
+                collection(db,"orders")
             );
 
 
-        if (snapshot.empty) {
+        if(snapshot.empty){
 
             adminMessage.textContent =
                 "No orders found.";
 
             return;
+
         }
+
 
 
         const orders = [];
 
 
-        snapshot.forEach((doc) => {
+        snapshot.forEach((doc)=>{
 
             orders.push({
-                id: doc.id,
+
+                id:doc.id,
+
                 ...doc.data()
+
             });
 
         });
 
 
-        /* Newest orders first */
 
-        orders.sort((a, b) => {
+        orders.sort((a,b)=>{
 
-            const dateA =
-                new Date(a.date || 0).getTime();
-
-            const dateB =
-                new Date(b.date || 0).getTime();
-
-            return dateB - dateA;
+            return new Date(b.date || 0)
+            -
+            new Date(a.date || 0);
 
         });
+
 
 
         adminMessage.textContent =
@@ -199,16 +198,18 @@ async function loadOrders() {
             " order(s) found.";
 
 
-        orders.forEach((order) => {
+
+        orders.forEach((order)=>{
 
             displayOrder(order);
 
         });
 
+
     }
 
 
-    catch (error) {
+    catch(error){
 
         console.error(
             "Error loading orders:",
@@ -224,22 +225,21 @@ async function loadOrders() {
 }
 
 
+
 /* =========================================
    DISPLAY ONE ORDER
 ========================================= */
 
-function displayOrder(order) {
+function displayOrder(order){
+
 
     const orderCard =
         document.createElement("div");
 
+
     orderCard.className =
         "order-card";
 
-
-    /* =========================================
-       CUSTOMER INFORMATION
-    ========================================= */
 
     const customerName =
         order.customerName ||
@@ -260,10 +260,6 @@ function displayOrder(order) {
         order.address ||
         "Not provided";
 
-
-    /* =========================================
-       ORDER INFORMATION
-    ========================================= */
 
     const orderNumber =
         order.orderNumber ||
@@ -292,31 +288,25 @@ function displayOrder(order) {
         Number(order.total || 0);
 
 
-    /* =========================================
-       DATE
-    ========================================= */
 
     let orderDate =
         "Date not available";
 
 
-    if (order.date) {
+    if(order.date){
 
         const date =
             new Date(order.date);
 
 
-        if (!isNaN(date.getTime())) {
+        if(!isNaN(date.getTime())){
 
             orderDate =
                 date.toLocaleString();
 
         }
 
-    }
-
-
-    /* =========================================
+    }    /* =========================================
        LOCATION
     ========================================= */
 
@@ -326,44 +316,32 @@ function displayOrder(order) {
         </span>`;
 
 
-    if (
+    if(
         order.latitude !== undefined &&
         order.longitude !== undefined
-    ) {
+    ){
 
-        const latitude =
-            Number(order.latitude);
-
-        const longitude =
-            Number(order.longitude);
-
-
-        if (
-            !isNaN(latitude) &&
-            !isNaN(longitude)
-        ) {
-
-            const mapURL =
-                "https://www.google.com/maps?q=" +
-                latitude +
-                "," +
-                longitude;
+        const mapURL =
+            "https://www.google.com/maps?q=" +
+            order.latitude +
+            "," +
+            order.longitude;
 
 
-            locationHTML = `
-                <a
-                    href="${mapURL}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="location-link"
-                >
-                    📍 Open Customer Location
-                </a>
-            `;
+        locationHTML = `
 
-        }
+            <a
+                href="${mapURL}"
+                target="_blank"
+                class="location-link"
+            >
+                📍 Open Customer Location
+            </a>
+
+        `;
 
     }
+
 
 
     /* =========================================
@@ -374,60 +352,106 @@ function displayOrder(order) {
         "<p>No products found.</p>";
 
 
-    if (
+
+    if(
         Array.isArray(order.items) &&
         order.items.length > 0
-    ) {
+    ){
 
-        productsHTML = "<ul>";
-
-
-        order.items.forEach((item) => {
-
-            const name =
-                item.name ||
-                "Product";
+        productsHTML =
+            "<ul>";
 
 
-            const quantity =
-                Number(item.quantity || 0);
-
-
-            const price =
-                Number(item.price || 0);
+        order.items.forEach((item)=>{
 
 
             productsHTML += `
+
                 <li>
-                    <strong>${name}</strong>
+
+                    <strong>
+                        ${item.name}
+                    </strong>
+
                     <br>
-                    Quantity: ${quantity}
+
+                    Quantity:
+                    ${item.quantity}
+
                     <br>
-                    Price: SAR ${price.toFixed(2)}
+
+                    Price:
+                    SAR ${Number(item.price).toFixed(2)}
+
                 </li>
+
             `;
+
 
         });
 
 
-        productsHTML += "</ul>";
+        productsHTML +=
+            "</ul>";
 
     }
 
 
+
     /* =========================================
-       ORDER CARD
+       STATUS DROPDOWN
     ========================================= */
+
+    const statusHTML = `
+
+        <select
+            class="status-select"
+            data-order-id="${order.id}"
+        >
+
+            <option ${status==="Pending"?"selected":""}>
+                Pending
+            </option>
+
+
+            <option ${status==="Processing"?"selected":""}>
+                Processing
+            </option>
+
+
+            <option ${status==="Shipped"?"selected":""}>
+                Shipped
+            </option>
+
+
+            <option ${status==="Delivered"?"selected":""}>
+                Delivered
+            </option>
+
+
+            <option ${status==="Cancelled"?"selected":""}>
+                Cancelled
+            </option>
+
+
+        </select>
+
+    `;
+
+
 
     orderCard.innerHTML = `
 
+
         <div class="order-card-header">
+
 
             <div>
 
                 <h3>
                     ${orderNumber}
                 </h3>
+
 
                 <p>
                     ${orderDate}
@@ -436,11 +460,12 @@ function displayOrder(order) {
             </div>
 
 
-            <span class="status">
-                ${status}
-            </span>
+            ${statusHTML}
+
 
         </div>
+
+
 
 
         <div class="customer-section">
@@ -474,6 +499,7 @@ function displayOrder(order) {
             </p>
 
 
+
             <div class="location-box">
 
                 <strong>
@@ -486,21 +512,31 @@ function displayOrder(order) {
 
             </div>
 
+
         </div>
 
 
+
+
         <div class="products-section">
+
 
             <h4>
                 Products
             </h4>
 
+
             ${productsHTML}
+
 
         </div>
 
 
+
+
+
         <div class="payment-section">
+
 
             <h4>
                 Payment
@@ -535,61 +571,166 @@ function displayOrder(order) {
 
             </p>
 
+
         </div>
+
 
     `;
 
 
-    ordersContainer.appendChild(
-        orderCard
-    );
+
+    ordersContainer.appendChild(orderCard);
+
 
 }
+
+
+
+
+
+/* =========================================
+   UPDATE STATUS
+========================================= */
+
+
+document.addEventListener(
+"change",
+async function(event){
+
+
+    if(
+        event.target.classList.contains(
+            "status-select"
+        )
+    ){
+
+
+        const orderId =
+            event.target.dataset.orderId;
+
+
+        const newStatus =
+            event.target.value;
+
+
+
+        try{
+
+
+            await updateDoc(
+
+                doc(
+                    db,
+                    "orders",
+                    orderId
+                ),
+
+                {
+
+                    status:newStatus
+
+                }
+
+            );
+
+
+            console.log(
+                "Status updated:",
+                newStatus
+            );
+
+
+        }
+
+
+        catch(error){
+
+
+            console.error(
+                "Status update error:",
+                error
+            );
+
+
+            alert(
+                "Unable to update status."
+            );
+
+
+        }
+
+
+    }
+
+
+});
+
+
+
 
 
 /* =========================================
    REFRESH
 ========================================= */
 
-if (refreshButton) {
+
+if(refreshButton){
+
 
     refreshButton.addEventListener(
         "click",
         loadOrders
     );
 
+
 }
+
+
+
+
 
 
 /* =========================================
    LOGOUT
 ========================================= */
 
-if (logoutButton) {
+
+if(logoutButton){
+
 
     logoutButton.addEventListener(
         "click",
-        async function () {
+        async function(){
 
-            try {
+
+            try{
+
 
                 await signOut(auth);
+
+
 
                 window.location.href =
                     "index.html";
 
+
             }
 
-            catch (error) {
+
+            catch(error){
+
 
                 console.error(
                     "Logout error:",
                     error
                 );
 
+
             }
+
 
         }
     );
+
 
 }
