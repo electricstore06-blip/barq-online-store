@@ -666,3 +666,23 @@ h1{
 
 
 }
+/* =========================
+   FINAL LAYER FIX
+========================= */
+
+/* mobile menu */
+nav#mainNav{
+    z-index:10000;
+}
+
+
+/* login must always be top */
+.login-box{
+    z-index:50000 !important;
+}
+
+
+/* login content above overlay */
+.login-content{
+    z-index:50001;
+}
