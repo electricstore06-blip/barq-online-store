@@ -64,7 +64,11 @@ function openLogin() {
         return;
     }
 
-    loginBox.style.display = "flex";
+    loginBox.style.setProperty(
+    "display",
+    "flex",
+    "important"
+);
 
 }
 
