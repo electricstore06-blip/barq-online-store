@@ -672,7 +672,28 @@ button:hover{
         font-size:14px;
         margin:5px;
     }
+nav#mainNav{
 
+    display:none;
+
+}
+
+
+nav#mainNav.active{
+
+    display:flex;
+
+    position:absolute;
+
+    top:80px;
+
+    left:20px;
+
+    width:calc(100% - 40px);
+
+    z-index:10001;
+
+}
 
     .hero{
         margin:15px;
