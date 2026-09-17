@@ -1,3 +1,7 @@
+// ==========================================
+// BARQ AUTH SYSTEM
+// ==========================================
+
 import { auth, db } from "./firebase-config.js";
 
 import {
@@ -13,17 +17,18 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
+
 console.log("BARQ AUTH JS LOADED");
 
 
 
-// ===============================
+// ==========================================
 // LOGIN
-// ===============================
+// ==========================================
 
 async function login(email, password){
 
-    return signInWithEmailAndPassword(
+    return await signInWithEmailAndPassword(
         auth,
         email,
         password
@@ -33,13 +38,13 @@ async function login(email, password){
 
 
 
-// ===============================
+// ==========================================
 // REGISTER
-// ===============================
+// ==========================================
 
 async function register(email,password){
 
-    return createUserWithEmailAndPassword(
+    return await createUserWithEmailAndPassword(
         auth,
         email,
         password
@@ -49,22 +54,21 @@ async function register(email,password){
 
 
 
-// ===============================
+// ==========================================
 // LOGOUT
-// ===============================
+// ==========================================
 
 async function logout(){
 
-    return signOut(auth);
+    return await signOut(auth);
 
 }
 
 
 
-
-// ===============================
-// OPEN LOGIN
-// ===============================
+// ==========================================
+// OPEN LOGIN POPUP
+// ==========================================
 
 function openLogin(){
 
@@ -85,6 +89,8 @@ function openLogin(){
 
 
 
+    // open login box
+
     const loginBox =
         document.getElementById("loginBox");
 
@@ -100,17 +106,16 @@ function openLogin(){
     }
 
 
-    loginBox.style.display="flex";
+    loginBox.style.display = "flex";
 
 
 }
 
 
 
-
-// ===============================
-// CLOSE LOGIN
-// ===============================
+// ==========================================
+// CLOSE LOGIN POPUP
+// ==========================================
 
 function closeLogin(){
 
@@ -120,7 +125,7 @@ function closeLogin(){
 
     if(loginBox){
 
-        loginBox.style.display="none";
+        loginBox.style.display = "none";
 
     }
 
@@ -128,56 +133,55 @@ function closeLogin(){
 
 
 
-// close when clicking outside
+// ==========================================
+// CLOSE LOGIN BY CLICK OUTSIDE
+// ==========================================
 
 document.addEventListener(
-"click",
-function(e){
+    "click",
+    function(event){
 
-    const loginBox =
-        document.getElementById("loginBox");
-
-
-    const content =
-        document.querySelector(".login-content");
+        const loginBox =
+            document.getElementById("loginBox");
 
 
-    if(
-        loginBox &&
-        loginBox.style.display==="flex" &&
-        e.target===loginBox
-    ){
+        if(
+            loginBox &&
+            loginBox.style.display === "flex" &&
+            event.target === loginBox
+        ){
 
-        closeLogin();
+            closeLogin();
+
+        }
 
     }
-
-
-});
+);
 
 
 
-// close with ESC
+// ==========================================
+// CLOSE LOGIN WITH ESC
+// ==========================================
 
 document.addEventListener(
-"keydown",
-function(e){
+    "keydown",
+    function(event){
 
-    if(e.key==="Escape"){
+        if(event.key === "Escape"){
 
-        closeLogin();
+            closeLogin();
+
+        }
 
     }
-
-});
-
+);
 
 
 
-
-// ===============================
+// ==========================================
 // CHECK ADMIN
-// ===============================
+// ==========================================
 
 async function checkAdmin(user){
 
@@ -212,13 +216,17 @@ async function checkAdmin(user){
 
 
 
-        return (
-            adminSnap.data().role==="admin"
-        );
+        const data =
+            adminSnap.data();
+
+
+
+        return data.role === "admin";
 
 
     }
     catch(error){
+
 
         console.error(
             "Admin check error:",
@@ -235,206 +243,205 @@ async function checkAdmin(user){
 
 
 
-
-
-// ===============================
+// ==========================================
 // LOGIN BUTTON
-// ===============================
+// ==========================================
 
 document.addEventListener(
 "DOMContentLoaded",
 function(){
 
 
-const button =
-document.getElementById(
-"loginButton"
-);
+    const loginButton =
+        document.getElementById(
+            "loginButton"
+        );
 
 
 
-if(!button){
+    if(!loginButton){
 
-console.error(
-"loginButton NOT FOUND"
-);
+        console.error(
+            "loginButton NOT FOUND"
+        );
 
-return;
+        return;
 
-}
+    }
 
 
 
-button.addEventListener(
-"click",
-async function(){
+    loginButton.addEventListener(
+    "click",
+    async function(){
 
 
-const email =
-document
-.getElementById("loginEmail")
- .value
- .trim();
+        const email =
+            document
+            .getElementById("loginEmail")
+            .value
+            .trim();
 
 
 
-const password =
-document
- .getElementById("loginPassword")
- .value;
+        const password =
+            document
+            .getElementById("loginPassword")
+            .value;
 
 
 
-const message =
-document.getElementById(
-"loginMessage"
-);
+        const message =
+            document.getElementById(
+                "loginMessage"
+            );
 
 
 
-if(!email || !password){
+        if(!email || !password){
 
-message.textContent =
-"Please enter email and password.";
+            message.textContent =
+            "Please enter email and password.";
 
-return;
+            return;
 
-}
+        }
 
 
 
-message.textContent =
-"Logging in...";
+        message.textContent =
+        "Logging in...";
 
 
 
-try{
+        try{
 
 
-const result =
-await login(
-email,
-password
-);
+            const result =
+                await login(
+                    email,
+                    password
+                );
 
 
 
-const user =
-result.user;
+            const user =
+                result.user;
 
 
 
-console.log(
-"Login successful:",
-user.email
-);
+            console.log(
+                "Login successful:",
+                user.email
+            );
 
 
 
-const admin =
-await checkAdmin(user);
+            const admin =
+                await checkAdmin(user);
 
 
 
-if(admin){
+            if(admin){
 
 
-message.textContent =
-"Admin login successful";
+                message.textContent =
+                "Admin login successful";
 
 
-setTimeout(()=>{
+                setTimeout(
+                function(){
 
-window.location.href =
-"admin-orders.html";
 
+                    window.location.href =
+                    "admin-orders.html";
 
-},500);
 
+                },
+                500
+                );
 
 
-}
-else{
+            }
+            else{
 
 
-message.textContent =
-"Login successful";
+                message.textContent =
+                "Login successful";
 
 
-}
+            }
 
 
 
-}
-catch(error){
+        }
+        catch(error){
 
 
-console.error(
-"Firebase login error:",
-error
-);
+            console.error(
+                "Firebase login error:",
+                error
+            );
 
 
-message.textContent =
-"Login failed. Check email and password.";
+            message.textContent =
+            "Login failed. Check email and password.";
 
 
-}
+        }
 
+
+    });
 
 
 });
 
-});
 
 
-
-
-
-
-// ===============================
-// AUTH STATUS
-// ===============================
+// ==========================================
+// AUTH STATUS LISTENER
+// ==========================================
 
 onAuthStateChanged(
 auth,
-(user)=>{
+function(user){
 
 
-if(user){
+    if(user){
 
-console.log(
-"Current user:",
-user.email
-);
+        console.log(
+            "Current user:",
+            user.email
+        );
 
+    }
+    else{
 
-}
-else{
+        console.log(
+            "No user logged in"
+        );
 
-
-console.log(
-"No user logged in"
-);
-
-
-}
+    }
 
 
 });
 
 
 
+// ==========================================
+// MAKE FUNCTIONS AVAILABLE TO HTML
+// ==========================================
 
-// ===============================
-// EXPORT TO HTML
-// ===============================
+window.openLogin = openLogin;
 
-window.openLogin=openLogin;
-window.closeLogin=closeLogin;
-window.login=login;
-window.register=register;
-window.logout=logout;
+window.closeLogin = closeLogin;
+
+window.login = login;
+
+window.register = register;
+
+window.logout = logout;
+
 
 
 console.log(
