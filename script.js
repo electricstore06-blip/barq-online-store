@@ -621,7 +621,20 @@ window.increaseQuantity =
 
 window.decreaseQuantity =
     decreaseQuantity;
+// ==========================================
+// MOBILE MENU
+// ==========================================
 
+function toggleMenu(){
+
+    const menu =
+        document.getElementById("mainNav");
+
+    if(!menu) return;
+
+    menu.classList.toggle("active");
+
+}
 
 // ==========================================
 // START BARQ STORE
