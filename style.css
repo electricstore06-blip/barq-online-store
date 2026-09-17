@@ -65,7 +65,98 @@ nav a:hover{
     color:#d81b60;
 }
 
+/* =========================
+   MOBILE MENU BUTTON
+========================= */
 
+.menu-toggle{
+
+    display:none;
+
+    background:#d81b60;
+
+    color:white;
+
+    border:none;
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:10px;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+}
+
+
+/* =========================
+   MOBILE NAVIGATION
+========================= */
+
+@media(max-width:550px){
+
+    header{
+
+        position:relative;
+
+    }
+
+
+    .menu-toggle{
+
+        display:block;
+
+        position:absolute;
+
+        right:20px;
+
+        top:20px;
+
+    }
+
+
+    nav#mainNav{
+
+        display:none;
+
+        flex-direction:column;
+
+        width:100%;
+
+        margin-top:20px;
+
+        background:white;
+
+        padding:20px;
+
+        border-radius:15px;
+
+        box-shadow:0 10px 30px rgba(0,0,0,.15);
+
+    }
+
+
+    nav#mainNav.active{
+
+        display:flex;
+
+    }
+
+
+    nav#mainNav a{
+
+        margin:10px 0;
+
+        text-align:center;
+
+        width:100%;
+
+    }
+
+}
 /* =========================
    HERO
 ========================= */
