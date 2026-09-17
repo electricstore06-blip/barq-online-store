@@ -118,16 +118,21 @@ nav a:hover{
 
 }
     
+@media(max-width:550px){
 
     nav#mainNav{
 
         display:none;
 
+        position:fixed;
+
+        top:80px;
+
+        left:10px;
+
+        right:10px;
+
         flex-direction:column;
-
-        width:100%;
-
-        margin-top:20px;
 
         background:white;
 
@@ -135,13 +140,49 @@ nav a:hover{
 
         border-radius:15px;
 
-        box-shadow:0 10px 30px rgba(0,0,0,.15);
+        box-shadow:0 15px 40px rgba(0,0,0,.25);
+
+        z-index:10001;
 
     }
 
-nav#mainNav.active{
 
-    display:flex;
+    nav#mainNav.active{
+
+        display:flex;
+
+    }
+
+
+    nav#mainNav a{
+
+        padding:14px;
+
+        margin:5px 0;
+
+        text-align:center;
+
+        border-bottom:1px solid #eee;
+
+    }
+
+
+    .cart-box{
+
+        z-index:9000;
+
+    }
+
+
+    .menu-toggle{
+
+        position:relative;
+
+        z-index:10002;
+
+    }
+
+}
 
     position:relative;
 
