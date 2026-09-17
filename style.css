@@ -976,3 +976,6 @@ nav#mainNav.active{
     }
 
 }
+.menu-toggle{
+    z-index:10002;
+}
