@@ -614,25 +614,44 @@ window.location.href=
 // ==========================================
 // MOBILE MENU
 // ==========================================
-
-
 function toggleMenu(){
 
+    const menu = document.getElementById("mainNav");
 
-const menu =
-document.getElementById("mainNav");
+    if(!menu) return;
 
-
-if(!menu) return;
-
-
-
-menu.classList.toggle("active");
-
-
+    menu.classList.toggle("active");
 
 }
 
+
+// CLOSE MOBILE MENU AFTER CLICK
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+    const menuLinks =
+        document.querySelectorAll("#mainNav a");
+
+
+    menuLinks.forEach(link=>{
+
+        link.addEventListener("click",()=>{
+
+            const menu =
+                document.getElementById("mainNav");
+
+
+            if(menu){
+
+                menu.classList.remove("active");
+
+            }
+
+        });
+
+    });
+
+});
 
 
 
