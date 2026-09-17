@@ -52,8 +52,26 @@ function openLogin() {
 
     console.log("openLogin() called");
 
+
+    // CLOSE MOBILE MENU FIRST
+
+    const menu =
+        document.getElementById("mainNav");
+
+
+    if(menu){
+
+        menu.classList.remove("active");
+
+    }
+
+
+
+    // OPEN LOGIN POPUP
+
     const loginBox =
         document.getElementById("loginBox");
+
 
     if (!loginBox) {
 
@@ -62,13 +80,12 @@ function openLogin() {
         );
 
         return;
+
     }
 
-    loginBox.style.setProperty(
-    "display",
-    "flex",
-    "important"
-);
+
+    loginBox.style.display = "flex";
+
 
 }
 
