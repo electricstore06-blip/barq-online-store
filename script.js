@@ -616,15 +616,17 @@ window.location.href=
 // ==========================================
 function toggleMenu(){
 
-    const menu = document.getElementById("mainNav");
+    const menu =
+        document.getElementById("mainNav");
+
 
     if(!menu) return;
 
+
     menu.classList.toggle("active");
 
+
 }
-
-
 // CLOSE MOBILE MENU AFTER CLICK
 
 document.addEventListener("DOMContentLoaded",()=>{
