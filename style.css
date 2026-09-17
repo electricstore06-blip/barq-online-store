@@ -890,15 +890,11 @@ button:hover{
 
 }
 
-
-
 /* =========================
-   TABLET
+TABLET
 ========================= */
 
-
 @media(max-width:900px){
-
 
 header{
 
@@ -947,14 +943,12 @@ nav a{
 
 }
 
-
-
 }
 
 
 
 /* =========================
-   MOBILE FINAL
+FINAL MOBILE SYSTEM
 ========================= */
 
 
@@ -963,9 +957,22 @@ nav a{
 
 header{
 
+    height:80px;
+
+    padding:20px;
+
     flex-direction:row;
 
+    justify-content:space-between;
+
+    align-items:center;
+
+    position:relative;
+
+    z-index:15000;
+
 }
+
 
 
 .logo{
@@ -980,6 +987,89 @@ header{
     font-size:9px;
 
 }
+
+
+
+.menu-toggle{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    position:absolute;
+
+    right:20px;
+
+    top:18px;
+
+    width:45px;
+
+    height:45px;
+
+    z-index:25000;
+
+}
+
+
+
+nav#mainNav{
+
+
+    display:none;
+
+    position:fixed;
+
+    top:90px;
+
+    left:15px;
+
+    width:calc(100% - 30px);
+
+    background:white;
+
+    flex-direction:column;
+
+    padding:20px;
+
+    border-radius:20px;
+
+    box-shadow:
+
+    0 15px 40px rgba(0,0,0,.25);
+
+    z-index:20000;
+
+}
+
+
+
+nav#mainNav.active{
+
+    display:flex;
+
+}
+
+
+
+nav#mainNav a{
+
+    width:100%;
+
+    text-align:center;
+
+    padding:15px 0;
+
+    margin:0;
+
+    border-bottom:1px solid #eee;
+
+}
+
+
+
+/* HERO */
 
 
 .hero{
@@ -1016,6 +1106,8 @@ h1{
 }
 
 
+/* SECTIONS */
+
 
 .brands{
 
@@ -1039,6 +1131,9 @@ h1{
 
 }
 
+
+
+/* PRODUCTS */
 
 
 .product-container{
@@ -1088,7 +1183,6 @@ h1{
 }
 
 
-
 .product .add-btn{
 
     font-size:13px;
@@ -1099,7 +1193,7 @@ h1{
 
 
 
-/* CART MOBILE */
+/* CART */
 
 
 .cart-box{
@@ -1110,15 +1204,21 @@ h1{
 
     top:70px;
 
-    padding:18px;
-
-    z-index:9000;
+    z-index:10000;
 
 }
 
 
 
-/* LOGIN MOBILE */
+/* LOGIN */
+
+
+.login-box{
+
+    z-index:30000;
+
+}
+
 
 
 .login-content{
@@ -1129,50 +1229,26 @@ h1{
 
 }
 
+
 }
+
+
 
 /* =========================
-   FINAL MOBILE LAYER FIX
+FINAL LAYER CONTROL
 ========================= */
 
-@media(max-width:550px){
 
-    header{
+.cart-box{
 
-        position:relative;
-
-        z-index:10000;
-
-    }
-
-
-    .menu-toggle{
-
-        display:block;
-
-        z-index:12000;
-
-    }
-
-
-    nav#mainNav{
-
-        z-index:11000;
-
-    }
-
-
-    .cart-box{
-
-        z-index:9000;
-
-    }
-
-
-    .login-box{
-
-        z-index:13000;
-
-    }
+    z-index:10000;
 
 }
+
+
+.login-box{
+
+    z-index:30000;
+
+}
+
