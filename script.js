@@ -603,7 +603,8 @@ function checkout() {
 // ==========================================
 // MAKE FUNCTIONS AVAILABLE TO HTML
 // ==========================================
-
+window.toggleMenu =
+    toggleMenu;
 window.openCart =
     openCart;
 
