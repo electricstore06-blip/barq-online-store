@@ -35,9 +35,7 @@ body{
 header{
 
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
 
     padding:25px 8%;
@@ -45,16 +43,15 @@ header{
     background:white;
 
     position:relative;
-
+    z-index:5000;
 }
+
 
 
 .logo{
 
     font-size:32px;
-
     font-weight:bold;
-
     color:#111827;
 
 }
@@ -76,10 +73,10 @@ header{
    NAVIGATION
 ========================= */
 
+
 nav{
 
     display:flex;
-
     align-items:center;
 
 }
@@ -107,8 +104,9 @@ nav a:hover{
 }
 
 
+
 /* =========================
-   HAMBURGER BUTTON
+   MENU BUTTON
 ========================= */
 
 
@@ -132,109 +130,19 @@ nav a:hover{
 
     cursor:pointer;
 
-    position:relative;
+    outline:none;
 
-z-index:9000;
-
-}
-
-
-
-/* =========================
-   MOBILE MENU
-========================= */
-
-
-@media(max-width:550px){
-
-
-header{
-
-    padding:20px;
+    -webkit-tap-highlight-color:transparent;
 
 }
 
 
+.menu-toggle:focus,
+.menu-toggle:active{
 
-.menu-toggle{
+    outline:none;
 
-    display:block;
-
-    position:absolute;
-
-    right:20px;
-
-    top:18px;
-
-    z-index:10002;
-
-}
-
-
-
-nav#mainNav{
-
-
-    display:none;
-
-
-    position:fixed;
-
-
-  top:70px;
-
-
-    left:15px;
-
-
-    right:15px;
-
-
-    flex-direction:column;
-
-
-    background:white;
-
-
-  padding:10px;
-
-
-    border-radius:20px;
-
-
-    box-shadow:0 15px 40px rgba(0,0,0,.25);
-
-
-    z-index:10001;
-
-
-}
-
-
-
-nav#mainNav.active{
-
-    display:flex;
-
-}
-
-
-
-nav#mainNav a{
-
-    width:100%;
-
-    text-align:center;
-
-    padding:15px;
-
-    margin:0;
-
-    border-bottom:1px solid #eee;
-
-}
-
-
+    box-shadow:none;
 
 }
 
@@ -274,7 +182,6 @@ nav#mainNav a{
 }
 
 
-
 .small{
 
     color:#d81b60;
@@ -286,7 +193,6 @@ nav#mainNav a{
 }
 
 
-
 h1{
 
     font-size:60px;
@@ -296,13 +202,11 @@ h1{
 }
 
 
-
 h1 span{
 
     color:#d81b60;
 
 }
-
 
 
 .hero p{
@@ -312,7 +216,6 @@ h1 span{
     margin:25px 0;
 
 }
-
 
 
 button{
@@ -331,10 +234,7 @@ button{
 
     font-size:16px;
 
-    transition:.2s;
-
 }
-
 
 
 button:hover{
@@ -344,13 +244,11 @@ button:hover{
 }
 
 
-
 .hero-image{
 
     width:45%;
 
 }
-
 
 
 .hero-image img{
@@ -359,14 +257,16 @@ button:hover{
 
     max-width:100%;
 
-    display:block;
-
     border-radius:25px;
 
 }
+
+
+
 /* =========================
    BRANDS
 ========================= */
+
 
 .brands{
 
@@ -384,7 +284,6 @@ button:hover{
 }
 
 
-
 .brand-list{
 
     display:flex;
@@ -394,7 +293,6 @@ button:hover{
     flex-wrap:wrap;
 
 }
-
 
 
 .brand-list span{
@@ -408,18 +306,6 @@ button:hover{
     border-radius:30px;
 
     font-weight:bold;
-
-    transition:.2s;
-
-}
-
-
-
-.brand-list span:hover{
-
-    background:#d81b60;
-
-    color:white;
 
 }
 
@@ -437,32 +323,18 @@ button:hover{
 }
 
 
-
 .products h2{
 
     font-size:38px;
 
-    margin-bottom:10px;
-
 }
-
 
 
 .products-subtitle{
 
-    margin-bottom:30px;
+    margin:15px 0 30px;
 
     color:#555;
-
-}
-
-
-
-/* SEARCH */
-
-.search-box{
-
-    margin-bottom:20px;
 
 }
 
@@ -482,8 +354,6 @@ button:hover{
 
     font-size:16px;
 
-    outline:none;
-
 }
 
 
@@ -492,13 +362,13 @@ button:hover{
 
     border-color:#d81b60;
 
+    outline:none;
+
 }
 
 
 
-/* =========================
-   PRODUCT GRID
-========================= */
+/* PRODUCT GRID */
 
 
 .product-container{
@@ -506,23 +376,17 @@ button:hover{
     display:grid;
 
     grid-template-columns:
-
     repeat(auto-fit,minmax(220px,250px));
 
     gap:30px;
 
-    align-items:start;
+    margin-top:30px;
 
 }
 
 
 
-/* PRODUCT CARD */
-
-
 .product{
-
-    width:100%;
 
     background:white;
 
@@ -530,27 +394,13 @@ button:hover{
 
     border-radius:20px;
 
-    box-shadow:0 8px 25px rgba(0,0,0,.10);
+    box-shadow:
+    0 8px 25px rgba(0,0,0,.10);
 
     text-align:center;
 
-    transition:.2s;
-
 }
 
-
-
-.product:hover{
-
-    transform:translateY(-5px);
-
-    box-shadow:0 12px 30px rgba(0,0,0,.15);
-
-}
-
-
-
-/* IMAGE */
 
 
 .product-img{
@@ -561,24 +411,13 @@ button:hover{
 
     object-fit:cover;
 
-    display:block;
-
-    margin:auto;
-
     border-radius:15px;
 
 }
 
 
 
-/* NAME */
-
-
 .product h3{
-
-    font-size:19px;
-
-    line-height:1.25;
 
     margin:15px 0;
 
@@ -587,21 +426,11 @@ button:hover{
 }
 
 
-
-/* BRAND */
-
-
 .brand{
 
     color:#777;
 
-    font-size:15px;
-
 }
-
-
-
-/* PRICE */
 
 
 .price{
@@ -612,13 +441,7 @@ button:hover{
 
     font-size:18px;
 
-    margin:10px 0;
-
 }
-
-
-
-/* ADD BUTTON */
 
 
 .product .add-btn{
@@ -626,8 +449,6 @@ button:hover{
     width:100%;
 
     margin-top:15px;
-
-    padding:13px;
 
 }
 
@@ -638,35 +459,34 @@ button:hover{
 ========================= */
 
 
-.login-box{
+.cart-box{
 
     display:none;
 
     position:fixed;
 
-    top:0;
-    left:0;
+    right:20px;
 
-    width:100%;
-    height:100%;
+    top:90px;
 
-    background:rgba(0,0,0,.55);
+    width:350px;
 
-    align-items:center;
-    justify-content:center;
+    max-height:80vh;
 
-    z-index:20000;
+    overflow:auto;
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:20px;
+
+    box-shadow:
+    0 15px 40px rgba(0,0,0,.25);
+
+    z-index:10000;
 
 }
-
-
-
-.cart-box h2{
-
-    margin-bottom:15px;
-
-}
-
 
 
 .cart-item{
@@ -676,45 +496,6 @@ button:hover{
     border-bottom:1px solid #eee;
 
 }
-
-
-
-.cart-item button{
-
-    width:auto !important;
-
-    padding:10px 15px;
-
-    margin:5px;
-
-}
-
-
-
-.cart-item .remove-btn{
-
-    width:100% !important;
-
-}
-
-
-
-/* TOTAL */
-
-
-.cart-box h3{
-
-    margin-top:15px;
-
-    border-top:1px solid #eee;
-
-    padding-top:15px;
-
-}
-
-
-
-/* CART BUTTONS */
 
 
 .cart-box > button{
@@ -727,25 +508,8 @@ button:hover{
 
 
 
-/* SCROLL */
-
-
-.cart-box::-webkit-scrollbar{
-
-    width:6px;
-
-}
-
-
-.cart-box::-webkit-scrollbar-thumb{
-
-    background:#d81b60;
-
-    border-radius:10px;
-
-}
 /* =========================
-   LOGIN BOX
+   LOGIN
 ========================= */
 
 
@@ -755,13 +519,7 @@ button:hover{
 
     position:fixed;
 
-    top:0;
-
-    left:0;
-
-    width:100%;
-
-    height:100%;
+    inset:0;
 
     background:rgba(0,0,0,.55);
 
@@ -769,7 +527,7 @@ button:hover{
 
     justify-content:center;
 
-    z-index:11000;
+    z-index:30000;
 
 }
 
@@ -789,9 +547,10 @@ button:hover{
 
     border-radius:20px;
 
-    box-shadow:0 15px 50px rgba(0,0,0,.3);
-
     text-align:center;
+
+    box-shadow:
+    0 15px 50px rgba(0,0,0,.3);
 
 }
 
@@ -804,7 +563,6 @@ button:hover{
     margin-bottom:10px;
 
 }
-
 
 
 .login-content p{
@@ -829,8 +587,6 @@ button:hover{
 
     border-radius:10px;
 
-    font-size:16px;
-
 }
 
 
@@ -845,7 +601,7 @@ button:hover{
 
 
 
-.login-content #loginButton{
+#loginButton{
 
     width:100%;
 
@@ -859,9 +615,9 @@ button:hover{
 
     top:10px;
 
-    right:12px;
+    right:15px;
 
-    background:transparent;
+    background:none;
 
     color:#111;
 
@@ -877,53 +633,31 @@ button:hover{
 
     margin-top:15px;
 
-    font-size:14px;
-
 }
+
+
 
 /* =========================
-TABLET
+   TABLET
 ========================= */
 
+
 @media(max-width:900px){
-
-header{
-
-    flex-direction:column;
-
-    gap:20px;
-
-}
-
-
-nav a{
-
-    margin-left:15px;
-
-}
 
 
 .hero{
 
     flex-direction:column;
 
-    padding:30px;
+    text-align:center;
 
 }
 
 
-.hero-text{
-
-    width:100%;
-
-}
-
-
+.hero-text,
 .hero-image{
 
     width:100%;
-
-    margin-top:30px;
 
 }
 
@@ -934,12 +668,13 @@ nav a{
 
 }
 
+
 }
 
 
 
 /* =========================
-FINAL MOBILE SYSTEM
+   MOBILE
 ========================= */
 
 
@@ -952,30 +687,12 @@ header{
 
     padding:20px;
 
-    flex-direction:row;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    position:relative;
-
-    z-index:15000;
-
 }
-
 
 
 .logo{
 
     font-size:26px;
-
-}
-
-
-.logo span{
-
-    font-size:9px;
 
 }
 
@@ -995,18 +712,11 @@ header{
 
     top:18px;
 
-    width:45px;
-
-    height:45px;
-
-    z-index:25000;
-
 }
 
 
 
 nav#mainNav{
-
 
     display:none;
 
@@ -1027,7 +737,6 @@ nav#mainNav{
     border-radius:20px;
 
     box-shadow:
-
     0 15px 40px rgba(0,0,0,.25);
 
     z-index:20000;
@@ -1048,19 +757,16 @@ nav#mainNav a{
 
     width:100%;
 
-    text-align:center;
-
-    padding:15px 0;
-
     margin:0;
+
+    padding:15px;
+
+    text-align:center;
 
     border-bottom:1px solid #eee;
 
 }
 
-
-
-/* HERO */
 
 
 .hero{
@@ -1069,11 +775,8 @@ nav#mainNav a{
 
     padding:25px;
 
-    text-align:center;
-
-    border-radius:20px;
-
 }
+
 
 
 h1{
@@ -1090,6 +793,7 @@ h1{
 }
 
 
+
 .hero button{
 
     width:100%;
@@ -1097,34 +801,14 @@ h1{
 }
 
 
-/* SECTIONS */
 
-
-.brands{
-
-    padding:30px 15px;
-
-}
-
-
-
+.brands,
 .products{
 
     padding:30px 15px;
 
 }
 
-
-
-.products h2{
-
-    font-size:28px;
-
-}
-
-
-
-/* PRODUCTS */
 
 
 .product-container{
@@ -1140,8 +824,6 @@ h1{
 .product{
 
     padding:10px;
-
-    border-radius:15px;
 
 }
 
@@ -1161,30 +843,7 @@ h1{
 
     font-size:15px;
 
-    min-height:40px;
-
 }
-
-
-
-.price{
-
-    font-size:15px;
-
-}
-
-
-.product .add-btn{
-
-    font-size:13px;
-
-    padding:11px 5px;
-
-}
-
-
-
-/* CART */
 
 
 .cart-box{
@@ -1192,21 +851,6 @@ h1{
     width:calc(100% - 20px);
 
     right:10px;
-
-    top:70px;
-
-    z-index:10000;
-
-}
-
-
-
-/* LOGIN */
-
-
-.login-box{
-
-    z-index:30000;
 
 }
 
@@ -1221,25 +865,5 @@ h1{
 }
 
 
-}
-
-
-
-/* =========================
-FINAL LAYER CONTROL
-========================= */
-
-
-.cart-box{
-
-    z-index:10000;
 
 }
-
-
-.login-box{
-
-    z-index:30000;
-
-}
-
