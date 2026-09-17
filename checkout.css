@@ -387,40 +387,6 @@ body{
 
 }
 
-
-
-/* =========================================
-   MOBILE
-========================================= */
-
-@media(max-width:600px){
-
-    .checkout-page{
-
-        padding:35px 15px;
-
-    }
-
-
-    .checkout-page h1{
-
-        font-size:32px;
-
-    }
-
-
-    .checkout-box{
-
-        padding:25px 20px;
-
-    }
-
-
-    .order-summary h2{
-
-        font-size:22px;
-
-    }
 /* =========================================
    CHECKOUT MESSAGE
 ========================================= */
@@ -464,3 +430,37 @@ body{
     border:1px solid #fca5a5;
 
 }
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:600px){
+
+    .checkout-page{
+
+        padding:35px 15px;
+
+    }
+
+
+    .checkout-page h1{
+
+        font-size:32px;
+
+    }
+
+
+    .checkout-box{
+
+        padding:25px 20px;
+
+    }
+
+
+    .order-summary h2{
+
+        font-size:22px;
+
+    }
+
