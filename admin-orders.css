@@ -193,17 +193,17 @@ body {
     font-size: 14px;
 }
 
-
 /* =========================================
    STATUS
 ========================================= */
 
-.status {
-    display: inline-block;
+.status-select {
 
-    padding: 8px 14px;
+    padding: 9px 35px 9px 14px;
 
     border-radius: 20px;
+
+    border: 1px solid #e5e7eb;
 
     background: #fff7ed;
 
@@ -212,7 +212,29 @@ body {
     font-size: 14px;
 
     font-weight: bold;
+
+    cursor: pointer;
+
+    outline: none;
+
 }
+
+
+.status-select:focus {
+
+    border-color: #111827;
+
+}
+
+
+.status-select:disabled {
+
+    opacity: 0.6;
+
+    cursor: wait;
+
+}
+
 
 
 /* =========================================
