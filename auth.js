@@ -3,7 +3,8 @@ import { auth, db } from "./firebase-config.js";
 import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
-    signOut
+    signOut,
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
@@ -15,8 +16,12 @@ import {
 console.log("BARQ AUTH JS LOADED");
 
 
+
+// ===============================
 // LOGIN
-async function login(email, password) {
+// ===============================
+
+async function login(email, password){
 
     return signInWithEmailAndPassword(
         auth,
@@ -27,8 +32,12 @@ async function login(email, password) {
 }
 
 
+
+// ===============================
 // REGISTER
-async function register(email, password) {
+// ===============================
+
+async function register(email,password){
 
     return createUserWithEmailAndPassword(
         auth,
@@ -39,21 +48,30 @@ async function register(email, password) {
 }
 
 
+
+// ===============================
 // LOGOUT
-async function logout() {
+// ===============================
+
+async function logout(){
 
     return signOut(auth);
 
 }
 
 
-// OPEN LOGIN POPUP
-function openLogin() {
+
+
+// ===============================
+// OPEN LOGIN
+// ===============================
+
+function openLogin(){
 
     console.log("openLogin() called");
 
 
-    // CLOSE MOBILE MENU FIRST
+    // close mobile menu
 
     const menu =
         document.getElementById("mainNav");
@@ -67,13 +85,11 @@ function openLogin() {
 
 
 
-    // OPEN LOGIN POPUP
-
     const loginBox =
         document.getElementById("loginBox");
 
 
-    if (!loginBox) {
+    if(!loginBox){
 
         console.error(
             "loginBox NOT FOUND"
@@ -84,37 +100,96 @@ function openLogin() {
     }
 
 
-    loginBox.style.display = "flex";
+    loginBox.style.display="flex";
 
 
 }
 
 
-// CLOSE LOGIN POPUP
-function closeLogin() {
+
+
+// ===============================
+// CLOSE LOGIN
+// ===============================
+
+function closeLogin(){
 
     const loginBox =
         document.getElementById("loginBox");
 
-    if (loginBox) {
 
-        loginBox.style.display = "none";
+    if(loginBox){
+
+        loginBox.style.display="none";
 
     }
 
 }
 
 
-// CHECK IF USER IS ADMIN
-async function checkAdmin(user) {
 
-    if (!user) {
+// close when clicking outside
+
+document.addEventListener(
+"click",
+function(e){
+
+    const loginBox =
+        document.getElementById("loginBox");
+
+
+    const content =
+        document.querySelector(".login-content");
+
+
+    if(
+        loginBox &&
+        loginBox.style.display==="flex" &&
+        e.target===loginBox
+    ){
+
+        closeLogin();
+
+    }
+
+
+});
+
+
+
+// close with ESC
+
+document.addEventListener(
+"keydown",
+function(e){
+
+    if(e.key==="Escape"){
+
+        closeLogin();
+
+    }
+
+});
+
+
+
+
+
+// ===============================
+// CHECK ADMIN
+// ===============================
+
+async function checkAdmin(user){
+
+    if(!user){
 
         return false;
 
     }
 
-    try {
+
+    try{
+
 
         const adminRef =
             doc(
@@ -123,192 +198,245 @@ async function checkAdmin(user) {
                 user.uid
             );
 
+
         const adminSnap =
             await getDoc(adminRef);
 
 
-        if (!adminSnap.exists()) {
+
+        if(!adminSnap.exists()){
 
             return false;
 
         }
 
 
-        const adminData =
-            adminSnap.data();
+
+        return (
+            adminSnap.data().role==="admin"
+        );
 
 
-        return adminData.role === "admin";
-
-
-    } catch (error) {
+    }
+    catch(error){
 
         console.error(
             "Admin check error:",
             error
         );
 
+
         return false;
 
     }
 
+
 }
 
 
-// MAKE FUNCTIONS AVAILABLE TO HTML
-window.openLogin = openLogin;
-window.closeLogin = closeLogin;
-window.login = login;
-window.register = register;
-window.logout = logout;
 
 
+
+// ===============================
 // LOGIN BUTTON
+// ===============================
+
 document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        const loginButton =
-            document.getElementById(
-                "loginButton"
-            );
+"DOMContentLoaded",
+function(){
 
 
-        if (!loginButton) {
-
-            console.error(
-                "loginButton NOT FOUND"
-            );
-
-            return;
-
-        }
-
-
-        loginButton.addEventListener(
-            "click",
-            async function () {
-
-                const email =
-                    document
-                        .getElementById(
-                            "loginEmail"
-                        )
-                        .value
-                        .trim();
-
-
-                const password =
-                    document
-                        .getElementById(
-                            "loginPassword"
-                        )
-                        .value;
-
-
-                const message =
-                    document.getElementById(
-                        "loginMessage"
-                    );
-
-
-                if (!email || !password) {
-
-                    message.textContent =
-                        "Please enter your email and password.";
-
-                    return;
-
-                }
-
-
-                message.textContent =
-                    "Logging in...";
-
-
-                try {
-
-                    const result =
-                        await login(
-                            email,
-                            password
-                        );
-
-
-                    const user =
-                        result.user;
-
-
-                    console.log(
-                        "Firebase login successful:",
-                        user.email
-                    );
-
-
-                    message.textContent =
-                        "Checking account...";
-
-
-                    const admin =
-                        await checkAdmin(user);
-
-
-                    if (admin) {
-
-                        message.textContent =
-                            "Admin login successful!";
-
-
-                        console.log(
-                            "Admin verified. Opening admin orders page."
-                        );
-
-
-                        setTimeout(
-                            function () {
-
-                                window.location.href =
-                                    "admin-orders.html";
-
-                            },
-                            500
-                        );
-
-
-                    } else {
-
-                        message.textContent =
-                            "Login successful!";
-
-                        console.log(
-                            "Regular customer login."
-                        );
-
-                    }
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Firebase login error:",
-                        error
-                    );
-
-
-                    message.textContent =
-                        "Login failed. Please check your email and password.";
-
-                }
-
-            }
-        );
-
-    }
+const button =
+document.getElementById(
+"loginButton"
 );
-window.openLogin = openLogin;
-window.closeLogin = closeLogin;
-window.login = login;
-window.register = register;
-window.logout = logout;
 
-console.log("BARQ AUTH FUNCTIONS READY");
+
+
+if(!button){
+
+console.error(
+"loginButton NOT FOUND"
+);
+
+return;
+
+}
+
+
+
+button.addEventListener(
+"click",
+async function(){
+
+
+const email =
+document
+.getElementById("loginEmail")
+ .value
+ .trim();
+
+
+
+const password =
+document
+ .getElementById("loginPassword")
+ .value;
+
+
+
+const message =
+document.getElementById(
+"loginMessage"
+);
+
+
+
+if(!email || !password){
+
+message.textContent =
+"Please enter email and password.";
+
+return;
+
+}
+
+
+
+message.textContent =
+"Logging in...";
+
+
+
+try{
+
+
+const result =
+await login(
+email,
+password
+);
+
+
+
+const user =
+result.user;
+
+
+
+console.log(
+"Login successful:",
+user.email
+);
+
+
+
+const admin =
+await checkAdmin(user);
+
+
+
+if(admin){
+
+
+message.textContent =
+"Admin login successful";
+
+
+setTimeout(()=>{
+
+window.location.href =
+"admin-orders.html";
+
+
+},500);
+
+
+
+}
+else{
+
+
+message.textContent =
+"Login successful";
+
+
+}
+
+
+
+}
+catch(error){
+
+
+console.error(
+"Firebase login error:",
+error
+);
+
+
+message.textContent =
+"Login failed. Check email and password.";
+
+
+}
+
+
+
+});
+
+});
+
+
+
+
+
+
+// ===============================
+// AUTH STATUS
+// ===============================
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+
+if(user){
+
+console.log(
+"Current user:",
+user.email
+);
+
+
+}
+else{
+
+
+console.log(
+"No user logged in"
+);
+
+
+}
+
+
+});
+
+
+
+
+// ===============================
+// EXPORT TO HTML
+// ===============================
+
+window.openLogin=openLogin;
+window.closeLogin=closeLogin;
+window.login=login;
+window.register=register;
+window.logout=logout;
+
+
+console.log(
+"BARQ AUTH FUNCTIONS READY"
+);
