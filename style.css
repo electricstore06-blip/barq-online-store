@@ -104,19 +104,20 @@ nav a:hover{
 
     }
 
+.menu-toggle{
 
-    .menu-toggle{
+    display:block;
 
-        display:block;
+    position:absolute;
 
-        position:absolute;
+    right:20px;
 
-        right:20px;
+    top:20px;
 
-        top:20px;
+    z-index:10002;
 
-    }
-
+}
+    
 
     nav#mainNav{
 
@@ -138,12 +139,16 @@ nav a:hover{
 
     }
 
+nav#mainNav.active{
 
-    nav#mainNav.active{
+    display:flex;
 
-        display:flex;
+    position:relative;
 
-    }
+    z-index:10001;
+
+}
+  
 
 
     nav#mainNav a{
