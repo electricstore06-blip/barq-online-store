@@ -28,10 +28,10 @@
 </div>
 
 
-
 <!-- HEADER -->
 
 <header>
+
 
     <div class="logo">
 
@@ -44,30 +44,51 @@
     </div>
 
 
-    <nav>
+
+    <!-- MOBILE BUTTON -->
+
+    <button 
+        class="menu-toggle"
+        onclick="toggleMenu()"
+    >
+
+        ☰
+
+    </button>
+
+
+
+
+    <!-- ONE NAV ONLY -->
+
+    <nav id="mainNav">
+
 
         <a href="#">
             Home
         </a>
 
+
         <a href="#products">
             Shop
         </a>
+
 
         <a href="#brands">
             Categories
         </a>
 
+
         <a href="#products">
             Deals
         </a>
+
 
         <a href="#">
             Contact
         </a>
 
 
-        <!-- CART LINK -->
 
         <a href="#" onclick="openCart(); return false;">
 
@@ -76,63 +97,20 @@
             <span id="cartCount">
                 0
             </span>
-<!-- MOBILE MENU BUTTON -->
 
-<button class="menu-toggle" onclick="toggleMenu()">
-
-    ☰
-
-</button>
+        </a>
 
 
 
-<nav id="mainNav">
+        <a href="#" onclick="openLogin(); return false;">
 
-    <a href="#">
-        Home
-    </a>
+            🔐 Login
 
-    <a href="#products">
-        Shop
-    </a>
-
-    <a href="#brands">
-        Categories
-    </a>
-
-    <a href="#products">
-        Deals
-    </a>
-
-    <a href="#">
-        Contact
-    </a>
+        </a>
 
 
-    <!-- CART LINK -->
-
-    <a href="#" onclick="openCart(); return false;">
-
-        🛒 Cart
-
-        <span id="cartCount">
-            0
-        </span>
-
-    </a>
-
-
-    <!-- LOGIN LINK -->
-
-    <a href="#" onclick="openLogin(); return false;">
-
-        🔐 Login
-
-    </a>
-
-</nav>
-       
     </nav>
+
 
 </header>
 
