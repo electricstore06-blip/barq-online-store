@@ -552,56 +552,106 @@ button:hover{
 /* =========================
    SMALL MOBILE
 ========================= */
-
 @media(max-width:550px){
 
-    .products{
-        padding:40px 20px;
-    }
-
-    .brands{
-        padding:40px 20px;
-    }
-
-    .product-container{
-        grid-template-columns:1fr 1fr;
-        gap:15px;
-    }
-
-    .product{
-        padding:12px;
-    }
-
-    .product-img{
-        width:120px;
-        height:120px;
-    }
-
-    .product h3{
-        font-size:16px;
-        min-height:40px;
-    }
-
-    .price{
-        font-size:16px;
-    }
-
-    .product .add-btn{
-        font-size:14px;
-        padding:12px 5px;
-    }
-
-    .cart-box{
-        width:calc(100% - 30px);
-        right:15px;
-        top:70px;
+    header{
         padding:20px;
     }
 
-    .cart-item button{
-        min-width:38px;
-        padding:9px 13px;
+    .logo{
+        font-size:26px;
     }
+
+    .logo span{
+        font-size:9px;
+        letter-spacing:3px;
+    }
+
+    nav{
+        width:100%;
+        justify-content:center;
+    }
+
+    nav a{
+        font-size:14px;
+        margin:5px;
+    }
+
+
+    .hero{
+        margin:15px;
+        padding:25px;
+        border-radius:20px;
+        text-align:center;
+    }
+
+    h1{
+        font-size:36px;
+    }
+
+    .hero p{
+        font-size:16px;
+    }
+
+    .hero button{
+        width:100%;
+    }
+
+
+    .products{
+        padding:30px 15px;
+    }
+
+
+    .brands{
+        padding:30px 15px;
+    }
+
+
+    .product-container{
+        grid-template-columns:1fr 1fr;
+        gap:12px;
+    }
+
+
+    .product{
+        padding:10px;
+        border-radius:15px;
+    }
+
+
+    .product-img{
+        width:110px;
+        height:110px;
+    }
+
+
+    .product h3{
+        font-size:15px;
+        min-height:38px;
+    }
+
+
+    .price{
+        font-size:15px;
+    }
+
+
+    .product .add-btn{
+        font-size:13px;
+        padding:11px 5px;
+    }
+
+
+    .cart-box{
+        width:calc(100% - 20px);
+        right:10px;
+        top:70px;
+        padding:18px;
+    }
+
+}
+
 }
 /* =========================
    LOGIN BOX
