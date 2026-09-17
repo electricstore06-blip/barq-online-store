@@ -132,6 +132,10 @@ nav a:hover{
 
     cursor:pointer;
 
+    position:relative;
+
+z-index:9000;
+
 }
 
 
@@ -1125,5 +1129,49 @@ h1{
 
 }
 
+
+/* =========================
+   FINAL MOBILE LAYER FIX
+========================= */
+
+@media(max-width:550px){
+
+    header{
+
+        position:relative;
+
+        z-index:10000;
+
+    }
+
+
+    .menu-toggle{
+
+        display:block;
+
+        z-index:12000;
+
+    }
+
+
+    nav#mainNav{
+
+        z-index:11000;
+
+    }
+
+
+    .cart-box{
+
+        z-index:9000;
+
+    }
+
+
+    .login-box{
+
+        z-index:13000;
+
+    }
 
 }
