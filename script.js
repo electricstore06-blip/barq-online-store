@@ -35,7 +35,7 @@ JSON.parse(localStorage.getItem("barqCart")) || [];
 
 
 async function loadProducts(){
-
+console.log("LOAD PRODUCTS STARTED");
 
 const container =
 document.querySelector(".product-container");
