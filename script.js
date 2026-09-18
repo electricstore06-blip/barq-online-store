@@ -156,40 +156,45 @@ function displayProducts(products){
 
 
 
-        card.innerHTML = `
+    card.innerHTML = `
 
 
-        <img 
-        class="product-img"
-        src="${image}"
-        >
+<a class="product-link" href="product-details.html?id=${product.id}">
 
 
-        <h3>
-        ${name}
-        </h3>
+<img 
+class="product-img"
+src="${image}"
+>
 
 
-        <p class="brand">
-        ${brand}
-        </p>
+<h3>
+${name}
+</h3>
 
 
-        <p class="price">
-        ${price.toFixed(2)} SAR
-        </p>
+<p class="brand">
+${brand}
+</p>
 
 
-        <button 
-        class="add-btn">
-
-        Add To Cart
-
-        </button>
+<p class="price">
+${price.toFixed(2)} SAR
+</p>
 
 
-        `;
+</a>
 
+
+<button 
+class="add-btn">
+
+Add To Cart
+
+</button>
+
+
+`;
 
 
         card
