@@ -1,326 +1,115 @@
-<!DOCTYPE html>
-<html lang="en">
+import { db } from "./firebase-config.js";
 
-<head>
+import {
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-<meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+const params = new URLSearchParams(
+window.location.search
+);
 
-<title>BARQ Product Details</title>
 
-<link rel="stylesheet" href="style.css">
+const productId = params.get("id");
 
-</head>
 
+console.log("Product ID:", productId);
 
-<body>
 
 
-<!-- TOP BAR -->
+async function loadProduct(){
 
-<div class="top-bar">
 
-🚚 Free shipping | ❤️ Authentic products | 🔒 Secure payment
+if(!productId){
 
-</div>
+console.error("No product ID");
 
+return;
 
+}
 
-<!-- HEADER -->
 
-<header>
 
+const ref = doc(
+db,
+"products",
+productId
+);
 
-<div class="logo">
 
-⚡ BARQ
 
-<span>
-ONLINE STORE
-</span>
+const snap =
+await getDoc(ref);
 
-</div>
 
 
+if(!snap.exists()){
 
-<button 
-class="menu-toggle"
-onclick="toggleMenu()">
+console.log("Product not found");
 
-☰
+document.getElementById("productDetails").innerHTML =
+"<h2>Product not found</h2>";
 
-</button>
+return;
 
+}
 
 
-<nav id="mainNav">
 
+const product = snap.data();
 
-<a href="index.html">
 
-Home
 
-</a>
-
-
-
-<a href="index.html#products">
-
-Shop
-
-</a>
-
-
-
-<a href="index.html#brands">
-
-Categories
-
-</a>
-
-
-
-<a href="index.html#products">
-
-Deals
-
-</a>
-
-
-
-<a href="#">
-
-Contact
-
-</a>
-
-
-
-<a href="#" onclick="openCart(); return false;">
-
-🛒 Cart
-
-<span id="cartCount">
-0
-</span>
-
-</a>
-
-
-
-<a href="#" onclick="openLogin(); return false;">
-
-🔐 Login
-
-</a>
-
-
-
-</nav>
-
-
-</header>
-
-
-
-
-
-<!-- PRODUCT DETAILS -->
-
-<section class="product-details">
-
-
-<div class="product-details-image">
+document.getElementById("productDetails").innerHTML = `
 
 
 <img 
-id="detailsImage"
-src=""
-alt="Product">
+src="${product.image}"
+class="details-image"
+>
 
 
-</div>
-
-
-
-
-<div class="product-details-info">
-
-
-<h1 id="detailsName">
-
-Loading...
-
+<h1>
+${product.name}
 </h1>
 
 
-
-<p class="brand" id="detailsBrand">
-
+<p>
+Brand: ${product.brand}
 </p>
-
-
-
-
-<p class="price" id="detailsPrice">
-
-</p>
-
-
-
-
-<p id="detailsDescription">
-
-</p>
-
-
-
-
-<button 
-id="detailsAddButton">
-
-Add To Cart
-
-</button>
-
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-<!-- CART BOX -->
-
-<div id="cartBox" class="cart-box">
 
 
 <h2>
-Your Cart
+${product.price} SAR
 </h2>
-
-
-
-<div id="cartItems">
-
-</div>
-
-
-
-<h3>
-
-Total:
-
-<span id="cartTotal">
-0
-</span>
-
-SAR
-
-</h3>
-
-
-
-<button onclick="checkout()">
-
-Checkout
-
-</button>
-
-
-
-<button onclick="closeCart()">
-
-Close
-
-</button>
-
-
-</div>
-
-
-
-
-
-<!-- LOGIN BOX -->
-
-<div id="loginBox" class="login-box">
-
-
-<div class="login-content">
-
-
-<button 
-class="login-close"
-onclick="closeLogin()">
-
-×
-
-</button>
-
-
-
-<h2>
-
-BARQ Login
-
-</h2>
-
 
 
 <p>
-
-Login to your BARQ account
-
+${product.category}
 </p>
 
 
-
-<input 
-type="email"
-id="loginEmail"
-placeholder="Email">
-
-
-
-<input 
-type="password"
-id="loginPassword"
-placeholder="Password">
-
-
-
-<button id="loginButton">
-
-Login
-
+<button onclick="
+addToCart(
+'${snap.id}',
+'${product.name}',
+${product.price},
+'${product.image}',
+'${product.brand}'
+)
+">
+Add To Cart
 </button>
 
 
-
-<p id="loginMessage"></p>
-
-
-</div>
-
-
-</div>
+`;
 
 
 
+}
 
 
 
-<script type="module" src="product-details.js"></script>
-
-<script type="module" src="auth.js"></script>
-
-
-</body>
-
-</html>
+loadProduct();
