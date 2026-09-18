@@ -201,41 +201,74 @@ header{
 
 }
 
-
-
-/* MOBILE */
+/* MOBILE NOON STYLE */
 
 @media(max-width:700px){
 
 
 header{
 
-    padding:15px;
+    padding:12px 15px;
+    position:relative;
+    height:70px;
 
 }
+
+
+
+.logo{
+
+    font-size:22px;
+
+}
+
+
+
+.logo span{
+
+    font-size:8px;
+    letter-spacing:3px;
+
+}
+
 
 
 .menu-toggle{
 
     display:block;
+    font-size:22px;
+    background:#d4145a;
+    padding:8px 12px;
 
 }
+
+
 
 
 #mainNav{
 
     position:absolute;
-    top:80px;
+    top:70px;
     left:0;
+
     width:100%;
+
     background:white;
 
     display:none;
+
     flex-direction:column;
-    text-align:center;
+
     padding:20px;
 
+    gap:18px;
+
+    z-index:1000;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+
 }
+
 
 
 #mainNav.active{
@@ -246,11 +279,30 @@ header{
 
 
 
+#mainNav a{
+
+    font-size:17px;
+
+    border-bottom:1px solid #eee;
+
+    padding-bottom:10px;
+
+}
+
+
+
+
 .hero{
 
+    width:94%;
+
+    margin:20px auto;
+
+    padding:25px 15px;
+
+    border-radius:20px;
+
     flex-direction:column;
-    text-align:center;
-    padding:30px;
 
 }
 
@@ -260,20 +312,45 @@ header{
 
     width:100%;
 
+    text-align:center;
+
 }
+
 
 
 .hero h1{
 
     font-size:38px;
 
+    line-height:1.1;
+
 }
+
+
+
+.hero-text p{
+
+    font-size:16px;
+
+}
+
 
 
 .hero-image img{
 
     width:100%;
+
     margin-top:20px;
+
+}
+
+
+
+
+.products,
+.brands{
+
+    width:94%;
 
 }
 
@@ -283,7 +360,27 @@ header{
 
     grid-template-columns:repeat(2,1fr);
 
+    gap:12px;
+
+}
+
+
+
+.product{
+
+    padding:10px;
+
+}
+
+
+
+.product h3{
+
+    font-size:14px;
+
 }
 
 
 }
+
+
