@@ -402,7 +402,10 @@ function displayOrder(order){
        STATUS DROPDOWN
     ========================================= */
 
- <option ${status==="Pending"?"selected":""}>
+ const statusHTML = `
+<select class="status-select" data-order-id="${order.id}">
+
+<option ${status==="Pending"?"selected":""}>
 Pending
 </option>
 
@@ -436,7 +439,10 @@ Replacement Approved
 
 <option ${status==="Cancelled"?"selected":""}>
 Cancelled
-</option>  
+</option>
+
+</select>
+`;  
 
 
         <div class="order-card-header">
