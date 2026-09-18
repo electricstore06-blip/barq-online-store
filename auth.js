@@ -384,8 +384,8 @@ function(){
             );
 
 
-            message.textContent =
-            "Login failed. Check email and password.";
+        message.textContent =
+error.code; 
 
 
         }
