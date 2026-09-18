@@ -2,39 +2,76 @@
 // BARQ AUTH SYSTEM
 // ==========================================
 
+
 import { auth, db } from "./firebase-config.js";
 
-import {
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-    doc,
-    getDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+signInWithEmailAndPassword,
 
+createUserWithEmailAndPassword,
 
-console.log("BARQ AUTH JS LOADED");
+signOut,
 
-
-
-// ==========================================
-// LOGIN
-// ==========================================
-
-async function login(email, password){
-
-    return await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-    );
+onAuthStateChanged
 
 }
+
+from 
+
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+
+import {
+
+doc,
+
+getDoc
+
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+
+
+
+console.log("BARQ AUTH LOADED");
+
+
+
+
+
+
+
+// ==========================================
+// LOGIN FUNCTION
+// ==========================================
+
+
+async function login(email,password){
+
+
+return await signInWithEmailAndPassword(
+
+auth,
+
+email,
+
+password
+
+);
+
+
+}
+
+
+
+
 
 
 
@@ -42,15 +79,26 @@ async function login(email, password){
 // REGISTER
 // ==========================================
 
+
 async function register(email,password){
 
-    return await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-    );
+
+return await createUserWithEmailAndPassword(
+
+auth,
+
+email,
+
+password
+
+);
+
 
 }
+
+
+
+
 
 
 
@@ -58,188 +106,242 @@ async function register(email,password){
 // LOGOUT
 // ==========================================
 
+
 async function logout(){
 
-    return await signOut(auth);
+
+await signOut(auth);
+
+
+location.reload();
+
 
 }
 
 
 
+
+
+
+
 // ==========================================
-// OPEN LOGIN POPUP
+// OPEN LOGIN
 // ==========================================
+
 
 function openLogin(){
 
-    console.log("openLogin() called");
 
 
-    // close mobile menu
-
-    const menu =
-        document.getElementById("mainNav");
-
-
-    if(menu){
-
-        menu.classList.remove("active");
-
-    }
+const menu =
+document.getElementById("mainNav");
 
 
 
-    // open login box
+if(menu){
 
-    const loginBox =
-        document.getElementById("loginBox");
+menu.classList.remove("active");
 
-
-    if(!loginBox){
-
-        console.error(
-            "loginBox NOT FOUND"
-        );
-
-        return;
-
-    }
+}
 
 
-    loginBox.style.display = "flex";
+
+
+const box =
+document.getElementById("loginBox");
+
+
+
+if(box){
+
+box.style.display="flex";
+
+}
+
 
 
 }
 
 
 
+
+
+
+
+
 // ==========================================
-// CLOSE LOGIN POPUP
+// CLOSE LOGIN
 // ==========================================
+
 
 function closeLogin(){
 
-    const loginBox =
-        document.getElementById("loginBox");
+
+const box =
+document.getElementById("loginBox");
 
 
-    if(loginBox){
 
-        loginBox.style.display = "none";
+if(box){
 
-    }
+box.style.display="none";
 
 }
 
 
 
-// ==========================================
-// CLOSE LOGIN BY CLICK OUTSIDE
-// ==========================================
-
-document.addEventListener(
-    "click",
-    function(event){
-
-        const loginBox =
-            document.getElementById("loginBox");
+}
 
 
-        if(
-            loginBox &&
-            loginBox.style.display === "flex" &&
-            event.target === loginBox
-        ){
 
-            closeLogin();
 
-        }
 
-    }
-);
 
 
 
 // ==========================================
-// CLOSE LOGIN WITH ESC
+// CLICK OUTSIDE CLOSE
 // ==========================================
 
-document.addEventListener(
-    "keydown",
-    function(event){
 
-        if(event.key === "Escape"){
+window.addEventListener(
+"click",
+(e)=>{
 
-            closeLogin();
 
-        }
+const box =
+document.getElementById("loginBox");
 
-    }
-);
+
+
+if(
+box &&
+e.target === box
+){
+
+closeLogin();
+
+}
+
+
+
+});
+
+
+
+
+
 
 
 
 // ==========================================
-// CHECK ADMIN
+// ESC CLOSE
 // ==========================================
+
+
+window.addEventListener(
+"keydown",
+(e)=>{
+
+
+if(e.key==="Escape"){
+
+closeLogin();
+
+}
+
+
+});
+
+
+
+
+
+
+
+
+// ==========================================
+// ADMIN CHECK
+// ==========================================
+
 
 async function checkAdmin(user){
 
-    if(!user){
 
-        return false;
+if(!user){
 
-    }
+return false;
 
-
-    try{
-
-
-        const adminRef =
-            doc(
-                db,
-                "admins",
-                user.uid
-            );
-
-
-        const adminSnap =
-            await getDoc(adminRef);
+}
 
 
 
-        if(!adminSnap.exists()){
-
-            return false;
-
-        }
+try{
 
 
+const adminRef =
+doc(
 
-        const data =
-            adminSnap.data();
+db,
 
+"admins",
 
+user.uid
 
-        return data.role === "admin";
-
-
-    }
-    catch(error){
-
-
-        console.error(
-            "Admin check error:",
-            error
-        );
+);
 
 
-        return false;
 
-    }
+const snap =
+await getDoc(adminRef);
+
+
+
+
+if(!snap.exists()){
+
+return false;
+
+}
+
+
+
+
+const data =
+snap.data();
+
+
+
+return data.role==="admin";
+
 
 
 }
+
+catch(error){
+
+
+console.error(
+"Admin check error",
+error
+);
+
+
+
+return false;
+
+
+}
+
+
+
+}
+
+
+
+
+
+
 
 
 
@@ -247,203 +349,306 @@ async function checkAdmin(user){
 // LOGIN BUTTON
 // ==========================================
 
-document.addEventListener(
-"DOMContentLoaded",
-function(){
 
+const loginButton =
+document.getElementById("loginButton");
 
-    const loginButton =
-        document.getElementById(
-            "loginButton"
-        );
 
 
+if(loginButton){
 
-    if(!loginButton){
 
-        console.error(
-            "loginButton NOT FOUND"
-        );
+loginButton.addEventListener(
+"click",
+async ()=>{
 
-        return;
 
-    }
 
+const email =
+document
+.getElementById("loginEmail")
+.value
+.trim();
 
 
-    loginButton.addEventListener(
-    "click",
-    async function(){
 
 
-        const email =
-            document
-            .getElementById("loginEmail")
-            .value
-            .trim();
+const password =
+document
+.getElementById("loginPassword")
+.value;
 
 
 
-        const password =
-            document
-            .getElementById("loginPassword")
-            .value;
 
+const message =
+document.getElementById("loginMessage");
 
 
-        const message =
-            document.getElementById(
-                "loginMessage"
-            );
 
 
+if(!email || !password){
 
-        if(!email || !password){
 
-            message.textContent =
-            "Please enter email and password.";
+message.textContent =
+"Enter email and password";
 
-            return;
 
-        }
+return;
 
 
+}
 
-        message.textContent =
-        "Logging in...";
 
 
 
-        try{
+message.textContent =
+"Logging in...";
 
 
-            const result =
-                await login(
-                    email,
-                    password
-                );
 
 
+try{
 
-            const user =
-                result.user;
 
+const result =
+await login(
+email,
+password
+);
 
 
-            console.log(
-                "Login successful:",
-                user.email
-            );
 
+const user =
+result.user;
 
-
-            const admin =
-                await checkAdmin(user);
-
-
-
-            if(admin){
-
-
-                message.textContent =
-                "Admin login successful";
-
-
-                setTimeout(
-                function(){
-
-
-                    window.location.href =
-                    "admin-orders.html";
-
-
-                },
-                500
-                );
-
-
-            }
-            else{
-
-
-                message.textContent =
-                "Login successful";
-
-
-            }
-
-
-
-        }
-        catch(error){
-
-
-            console.error(
-                "Firebase login error:",
-                error
-            );
-
-
-        message.textContent =
-error.code; 
-
-
-        }
-
-
-    });
-
-
-});
-
-
-
-// ==========================================
-// AUTH STATUS LISTENER
-// ==========================================
-
-onAuthStateChanged(
-auth,
-function(user){
-
-
-    if(user){
-
-        console.log(
-            "Current user:",
-            user.email
-        );
-
-    }
-    else{
-
-        console.log(
-            "No user logged in"
-        );
-
-    }
-
-
-});
-
-
-
-// ==========================================
-// MAKE FUNCTIONS AVAILABLE TO HTML
-// ==========================================
-
-window.openLogin = openLogin;
-
-window.closeLogin = closeLogin;
-
-window.login = login;
-
-window.register = register;
-
-window.logout = logout;
 
 
 
 console.log(
-"BARQ AUTH FUNCTIONS READY"
+"LOGIN:",
+user.email
+);
+
+
+
+
+const admin =
+await checkAdmin(user);
+
+
+
+
+
+if(admin){
+
+
+
+message.textContent =
+"Admin login successful";
+
+
+
+setTimeout(()=>{
+
+
+window.location.href =
+"admin-orders.html";
+
+
+},800);
+
+
+
+}
+
+else{
+
+
+message.textContent =
+"Login successful";
+
+
+
+setTimeout(()=>{
+
+
+closeLogin();
+
+
+},1000);
+
+
+
+}
+
+
+
+}
+
+
+catch(error){
+
+
+
+console.error(
+error
+);
+
+
+
+switch(error.code){
+
+
+case "auth/invalid-email":
+
+message.textContent =
+"Invalid email address";
+
+break;
+
+
+
+case "auth/user-not-found":
+
+message.textContent =
+"User not found";
+
+break;
+
+
+
+case "auth/wrong-password":
+
+message.textContent =
+"Wrong password";
+
+break;
+
+
+
+case "auth/invalid-credential":
+
+message.textContent =
+"Email or password incorrect";
+
+break;
+
+
+
+default:
+
+message.textContent =
+"Login failed";
+
+}
+
+
+
+}
+
+
+
+});
+
+
+
+}
+
+else{
+
+
+console.log(
+"loginButton not found"
+);
+
+
+}
+
+
+
+
+
+
+
+
+
+// ==========================================
+// USER STATUS
+// ==========================================
+
+
+onAuthStateChanged(
+
+auth,
+
+(user)=>{
+
+
+if(user){
+
+
+console.log(
+
+"Current user:",
+
+user.email
+
+);
+
+
+}
+
+else{
+
+
+console.log(
+"No user"
+);
+
+
+}
+
+
+
+}
+
+);
+
+
+
+
+
+
+
+
+
+// ==========================================
+// EXPORT
+// ==========================================
+
+
+window.openLogin =
+openLogin;
+
+
+window.closeLogin =
+closeLogin;
+
+
+window.login =
+login;
+
+
+window.register =
+register;
+
+
+window.logout =
+logout;
+
+
+
+console.log(
+"BARQ AUTH READY"
 );
