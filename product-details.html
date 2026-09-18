@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BARQ Product Details</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<!-- TOP BAR -->
+
+<div class="top-bar">
+
+🚚 Free shipping | ❤️ Authentic products | 🔒 Secure payment
+
+</div>
+
+
+
+<!-- HEADER -->
+
+<header>
+
+
+<div class="logo">
+
+⚡ BARQ
+
+<span>
+ONLINE STORE
+</span>
+
+</div>
+
+
+
+<button 
+class="menu-toggle"
+onclick="toggleMenu()">
+
+☰
+
+</button>
+
+
+
+<nav id="mainNav">
+
+
+<a href="index.html">
+
+Home
+
+</a>
+
+
+
+<a href="index.html#products">
+
+Shop
+
+</a>
+
+
+
+<a href="index.html#brands">
+
+Categories
+
+</a>
+
+
+
+<a href="index.html#products">
+
+Deals
+
+</a>
+
+
+
+<a href="#">
+
+Contact
+
+</a>
+
+
+
+<a href="#" onclick="openCart(); return false;">
+
+🛒 Cart
+
+<span id="cartCount">
+0
+</span>
+
+</a>
+
+
+
+<a href="#" onclick="openLogin(); return false;">
+
+🔐 Login
+
+</a>
+
+
+
+</nav>
+
+
+</header>
+
+
+
+
+
+<!-- PRODUCT DETAILS -->
+
+<section class="product-details">
+
+
+<div class="product-details-image">
+
+
+<img 
+id="detailsImage"
+src=""
+alt="Product">
+
+
+</div>
+
+
+
+
+<div class="product-details-info">
+
+
+<h1 id="detailsName">
+
+Loading...
+
+</h1>
+
+
+
+<p class="brand" id="detailsBrand">
+
+</p>
+
+
+
+
+<p class="price" id="detailsPrice">
+
+</p>
+
+
+
+
+<p id="detailsDescription">
+
+</p>
+
+
+
+
+<button 
+id="detailsAddButton">
+
+Add To Cart
+
+</button>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+<!-- CART BOX -->
+
+<div id="cartBox" class="cart-box">
+
+
+<h2>
+Your Cart
+</h2>
+
+
+
+<div id="cartItems">
+
+</div>
+
+
+
+<h3>
+
+Total:
+
+<span id="cartTotal">
+0
+</span>
+
+SAR
+
+</h3>
+
+
+
+<button onclick="checkout()">
+
+Checkout
+
+</button>
+
+
+
+<button onclick="closeCart()">
+
+Close
+
+</button>
+
+
+</div>
+
+
+
+
+
+<!-- LOGIN BOX -->
+
+<div id="loginBox" class="login-box">
+
+
+<div class="login-content">
+
+
+<button 
+class="login-close"
+onclick="closeLogin()">
+
+×
+
+</button>
+
+
+
+<h2>
+
+BARQ Login
+
+</h2>
+
+
+
+<p>
+
+Login to your BARQ account
+
+</p>
+
+
+
+<input 
+type="email"
+id="loginEmail"
+placeholder="Email">
+
+
+
+<input 
+type="password"
+id="loginPassword"
+placeholder="Password">
+
+
+
+<button id="loginButton">
+
+Login
+
+</button>
+
+
+
+<p id="loginMessage"></p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<script type="module" src="product-details.js"></script>
+
+<script type="module" src="auth.js"></script>
+
+
+</body>
+
+</html>
