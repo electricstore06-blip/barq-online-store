@@ -1,885 +1,633 @@
-/* =========================
-   RESET
-========================= */
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
-
-body{
-    background:white;
-    color:#111827;
-}
-
-
-/* =========================
-   TOP BAR
-========================= */
-
-.top-bar{
-    background:#111;
-    color:white;
-    padding:12px;
-    text-align:center;
-    font-size:14px;
-}
-
-
-/* =========================
-   HEADER
-========================= */
-
 header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:25px 8%;
-    background:white;
-    position:relative;
-    z-index:1000;
+display:flex;
+...
 }
-
-
-.logo{
-    font-size:32px;
-    font-weight:bold;
-    color:#111827;
-}
-
-
-.logo span{
-    display:block;
-    font-size:10px;
-    letter-spacing:4px;
-}
-
-
-
-/* =========================
-   NAV
-========================= */
 
 nav{
-    display:flex;
-    align-items:center;
-}
-
-
-nav a{
-    margin-left:30px;
-    text-decoration:none;
-    color:#111;
-    cursor:pointer;
-}
-
-
-nav a:hover{
-    color:#d81b60;
-}
-
-
-
-/* =========================
-   HAMBURGER
-========================= */
-
-.menu-toggle{
-
-    display:none;
-
-    width:45px;
-    height:45px;
-
-    background:#d81b60;
-    color:white;
-
-    border:none;
-    border-radius:10px;
-
-    font-size:24px;
-
-    cursor:pointer;
-
-    outline:none;
-}
-
-
-/* remove blue focus */
-
-.menu-toggle:focus{
-    outline:none;
-    box-shadow:none;
-}
-
-
-
-/* =========================
-   MOBILE MENU
-========================= */
-
-
-@media(max-width:550px){
-
-
-header{
-
-    height:80px;
-    padding:20px;
-
-}
-
-
-.logo{
-    font-size:26px;
-}
-
-
-.menu-toggle{
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-}
-
-
-nav#mainNav{
-
-    display:none;
-
-    position:fixed;
-
-    top:90px;
-
-    left:15px;
-
-    width:calc(100% - 30px);
-
-    background:white;
-
-    flex-direction:column;
-
-    padding:20px;
-
-    border-radius:20px;
-
-    box-shadow:0 15px 40px rgba(0,0,0,.25);
-
-    z-index:5000;
-
-}
-
-
-nav#mainNav.active{
-
-    display:flex;
-
-}
-
-
-nav#mainNav a{
-
-    width:100%;
-
-    text-align:center;
-
-    padding:15px 0;
-
-    margin:0;
-
-    border-bottom:1px solid #eee;
-
-}
-
-
-}
-
-
-
-
-/* =========================
-   HERO
-========================= */
-
-
-.hero{
-
-    margin:20px 5%;
-
-    padding:50px;
-
-    background:#f9dce5;
-
-    border-radius:30px;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-}
-
-
-.hero-text{
-
-    width:50%;
-
-}
-
-
-.small{
-
-    color:#d81b60;
-
-    font-weight:bold;
-
-}
-
-
-h1{
-
-    font-size:60px;
-
-}
-
-
-h1 span{
-
-    color:#d81b60;
-
-}
-
-
-.hero p{
-
-    margin:25px 0;
-
-    font-size:20px;
-
-}
-
-
-button{
-
-    background:#d81b60;
-
-    color:white;
-
-    border:none;
-
-    padding:15px 30px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-}
-
-
-button:hover{
-
-    background:#b91550;
-
-}
-
-
-.hero-image{
-
-    width:45%;
-
-}
-
-
-.hero-image img{
-
-    width:100%;
-
-    border-radius:25px;
-
-}
-
-
-
-/* =========================
-   BRANDS
-========================= */
-
-
-.brands,
-.products{
-
-    padding:50px 8%;
-
-}
-
-
-.brand-list{
-
-    display:flex;
-
-    gap:20px;
-
-    flex-wrap:wrap;
-
-}
-
-
-.brand-list span{
-
-    background:#fce7ef;
-
-    color:#d81b60;
-
-    padding:15px 30px;
-
-    border-radius:30px;
-
-}
-
-
-
-/* =========================
-   PRODUCTS
-========================= */
-
-
-.product-container{
-
-    display:grid;
-
-    grid-template-columns:
-    repeat(auto-fit,minmax(220px,250px));
-
-    gap:30px;
-
-}
-
-
-.product{
-
-    background:white;
-
-    padding:18px;
-
-    border-radius:20px;
-
-    box-shadow:0 8px 25px rgba(0,0,0,.10);
-
-    text-align:center;
-
-}
-
-
-.product-img{
-
-    width:170px;
-
-    height:170px;
-
-    object-fit:cover;
-
-    border-radius:15px;
-
-}
-
-
-.product h3{
-
-    margin:15px 0;
-
-}
-
-
-.price{
-
-    color:#d81b60;
-
-    font-weight:bold;
-
-}
-
-
-
-.add-btn{
-
-    width:100%;
-
-}
-
-
-
-/* =========================
-   CART
-========================= */
-
-
-.cart-box{
-
-    z-index:10000;
-
-}
-
-
-
-/* =========================
-   LOGIN POPUP
-========================= */
-
-
-.login-box{
-
-    display:none;
-
-    position:fixed;
-
-    inset:0;
-
-    background:rgba(0,0,0,.55);
-
-    align-items:center;
-
-    justify-content:center;
-
-    z-index:30000;
-
-}
-
-
-
-.login-content{
-
-    position:relative;
-
-    width:400px;
-
-    max-width:90%;
-
-    background:white;
-
-    padding:30px;
-
-    border-radius:20px;
-
-    text-align:center;
-
-    box-shadow:0 15px 50px rgba(0,0,0,.3);
-
-}
-
-
-.login-content h2{
-
-    font-size:28px;
-
-    margin-bottom:10px;
-
-}
-
-
-.login-content p{
-
-    color:#666;
-
-    margin-bottom:20px;
-
-}
-
-
-
-.login-content input{
-
-    width:100%;
-
-    padding:14px;
-
-    margin-bottom:15px;
-
-    border:1px solid #ccc;
-
-    border-radius:10px;
-
-}
-
-
-
-#loginButton{
-
-    width:100%;
-
-}
-
-
-.login-close{
-
-    position:absolute;
-
-    right:15px;
-
-    top:10px;
-
-    background:none;
-
-    color:#111;
-
-    font-size:30px;
-
-    padding:0;
-
-}
-
-
-
-#loginMessage{
-
-    margin-top:15px;
-
-}
-
-
-
-/* =========================
-   TABLET
-========================= */
-
-
-@media(max-width:900px){
-
-
-.hero{
-
-    flex-direction:column;
-
-}
-
-
-.hero-text,
-.hero-image{
-
-    width:100%;
-
-}
-
-
-h1{
-
-    font-size:40px;
-
-}
-
-
-.product-container{
-
-    grid-template-columns:repeat(2,1fr);
-
-}
-
-
-}
-
-
-
-/* =========================
-   MOBILE
-========================= */
-
-
-@media(max-width:550px){
-
-
-.hero{
-
-    margin:15px;
-
-    padding:25px;
-
-    text-align:center;
-
-}
-
-
-h1{
-
-    font-size:36px;
-
-}
-
-
-.hero button{
-
-    width:100%;
-
-}
-
-
-.brands,
-.products{
-
-    padding:30px 15px;
-
-}
-
-
-.product-container{
-
-    grid-template-columns:1fr 1fr;
-
-    gap:12px;
-
-}
-
-
-.product{
-
-    padding:10px;
-
-}
-
-
-.product-img{
-
-    width:110px;
-
-    height:110px;
-
-}
-
-
-.product h3{
-
-    font-size:15px;
-
-}
-
-
-.login-content{
-
-    width:calc(100% - 30px);
-
-    padding:25px;
-
-}
-
-
-}
-/* =========================
-   FINAL LAYER FIX
-========================= */
-
-/* mobile menu */
-nav#mainNav{
-    z-index:10000;
-}
-
-
-/* login must always be top */
-.login-box{
-    z-index:50000 !important;
-}
-
-
-/* login content above overlay */
-.login-content{
-    z-index:50001;
-}
-/* PRODUCT DETAILS LINK */
-
-.product-link{
-
-    text-decoration:none;
-    color:inherit;
-
-}
-
-
-.product-link:hover{
-
-    color:inherit;
-
-}
-/* =========================
-   NOON STYLE HEADER
-========================= */
-
-
-.noon-header{
-
 display:flex;
+...
+}<!DOCTYPE html>
+<html lang="en">
 
-align-items:center;
+<head>
 
-gap:30px;
+<meta charset="UTF-8">
 
-padding:20px 5%;
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-background:white;
+<title>BARQ Online Store</title>
 
-}
+<link rel="icon" type="image/x-icon" href="favicon.ico">
 
+<link rel="stylesheet" href="style.css">
 
-.noon-header .logo{
+</head>
 
-min-width:150px;
 
-}
+<body>
 
 
+<!-- TOP BAR -->
 
+<div class="top-bar">
 
-.header-search{
+🚚 Free shipping | ❤️ Authentic products | 🔒 Secure payment
 
-flex:1;
+</div>
 
-}
 
 
 
-.header-search input{
 
-width:100%;
+<!-- NOON STYLE HEADER -->
 
-padding:15px 20px;
+<header class="noon-header">
 
-border-radius:25px;
 
-border:1px solid #ccc;
 
-font-size:16px;
+<div class="logo">
 
-outline:none;
+⚡ BARQ
 
-}
+<span>
+ONLINE STORE
+</span>
 
+</div>
 
 
-.header-search input:focus{
 
-border-color:#d81b60;
 
-}
 
+<div class="header-search">
 
+<input
 
-.header-actions{
+type="text"
 
-display:flex;
+placeholder="Search products, brands and categories">
 
-gap:25px;
 
-align-items:center;
+</div>
 
-}
 
 
 
-.header-actions a{
 
-text-decoration:none;
+<div class="header-actions">
 
-color:#111;
 
-font-size:16px;
+<a href="#" onclick="openCart(); return false;">
 
-}
+🛒 Cart
 
+<span id="cartCount">
+0
+</span>
 
+</a>
 
-.category-bar{
 
-display:flex;
 
-gap:30px;
 
-padding:15px 5%;
+<a href="#" onclick="openLogin(); return false;">
 
-background:#111;
+🔐 Login
 
-overflow-x:auto;
+</a>
 
-}
 
+</div>
 
 
-.category-bar a{
 
-color:white;
 
-text-decoration:none;
 
-white-space:nowrap;
 
-font-weight:bold;
+<button
 
-}
+class="menu-toggle"
 
+onclick="toggleMenu()">
 
+☰
 
+</button>
 
-/* MOBILE */
 
 
-@media(max-width:550px){
+</header>
 
 
-.noon-header{
 
-padding:15px;
 
-gap:10px;
 
-}
 
 
+<!-- CATEGORY BAR -->
 
-.noon-header .logo{
 
-font-size:22px;
+<div class="category-bar">
 
-}
 
+<a href="index.html#products">
+Bras
+</a>
 
 
-.header-actions{
+<a href="index.html#products">
+Panties
+</a>
 
-display:none;
 
-}
+<a href="index.html#products">
+Sets
+</a>
 
 
+<a href="index.html#products">
+Sleepwear
+</a>
 
-.header-search{
 
-position:absolute;
+<a href="index.html#products">
+Beauty
+</a>
 
-top:85px;
 
-left:15px;
+<a href="index.html#products">
+Offers
+</a>
 
-right:15px;
 
-}
+</div>
 
 
 
-.category-bar{
 
-margin-top:60px;
 
-gap:20px;
 
-}
 
 
+<!-- MOBILE MENU -->
 
-.menu-toggle{
 
-display:flex;
+<nav id="mainNav">
 
-}
 
+<a href="index.html">
 
-}
+Home
+
+</a>
+
+
+<a href="index.html#products">
+
+Shop
+
+</a>
+
+
+<a href="index.html#brands">
+
+Categories
+
+</a>
+
+
+<a href="index.html#products">
+
+Deals
+
+</a>
+
+
+<a href="#contact">
+
+Contact
+
+</a>
+
+
+<a href="#" onclick="openCart(); return false;">
+
+🛒 Cart
+
+</a>
+
+
+<a href="#" onclick="openLogin(); return false;">
+
+🔐 Login
+
+</a>
+
+
+</nav>
+
+
+
+
+
+
+
+
+<!-- HERO -->
+
+
+<section class="hero">
+
+
+
+<div class="hero-text">
+
+
+<p class="small">
+
+BEAUTY & LINGERIE
+
+</p>
+
+
+
+
+<h1>
+
+Look Good,
+
+<br>
+
+<span>
+
+Feel Confident
+
+</span>
+
+</h1>
+
+
+
+
+<p>
+
+Premium beauty, lingerie and lifestyle essentials from BARQ.
+
+</p>
+
+
+
+
+<button
+
+onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+
+Shop Now →
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+<div class="hero-image">
+
+
+<img
+
+src="https://images.unsplash.com/photo-1596462502278-27bfdc403348"
+
+alt="BARQ products">
+
+
+</div>
+
+
+
+</section>
+ <!-- BRANDS -->
+
+<section id="brands" class="brands">
+
+
+<h2>
+Popular Brands
+</h2>
+
+
+<div class="brand-list">
+
+
+<span>
+Babaero
+</span>
+
+
+<span>
+BARQ Beauty
+</span>
+
+
+<span>
+Premium Care
+</span>
+
+
+<span>
+Luxury Collection
+</span>
+
+
+<span>
+New Arrivals
+</span>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- PRODUCTS -->
+
+
+<section id="products" class="products">
+
+
+
+<h2>
+
+Featured Products
+
+</h2>
+
+
+
+<p class="products-subtitle">
+
+Discover your next favorite
+
+</p>
+
+
+
+
+
+<!-- SEARCH -->
+
+
+<div class="search-box">
+
+
+<input
+
+type="text"
+
+id="searchInput"
+
+placeholder="Search products, brands and categories">
+
+
+</div>
+
+
+
+
+
+
+
+<!-- FIREBASE PRODUCTS LOAD HERE -->
+
+
+<div class="product-container">
+
+
+</div>
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- CONTACT -->
+
+
+<section id="contact">
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- CART -->
+
+
+<div id="cartBox" class="cart-box">
+
+
+
+<h2>
+
+Your Cart
+
+</h2>
+
+
+
+
+<div id="cartItems">
+
+</div>
+
+
+
+
+
+<h3>
+
+Total:
+
+<span id="cartTotal">
+
+0
+
+</span>
+
+SAR
+
+</h3>
+
+
+
+
+<button onclick="checkout()">
+
+Checkout
+
+</button>
+
+
+
+
+<button onclick="closeCart()">
+
+Close
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- LOGIN -->
+
+
+<div id="loginBox" class="login-box">
+
+
+
+<div class="login-content">
+
+
+
+<button
+
+class="login-close"
+
+onclick="closeLogin()">
+
+×
+
+</button>
+
+
+
+
+
+<h2>
+
+BARQ Login
+
+</h2>
+
+
+
+
+<p>
+
+Login to your BARQ account
+
+</p>
+
+
+
+
+
+
+<input
+
+type="email"
+
+id="loginEmail"
+
+placeholder="Email">
+
+
+
+
+
+
+
+<input
+
+type="password"
+
+id="loginPassword"
+
+placeholder="Password">
+
+
+
+
+
+
+
+<button id="loginButton">
+
+Login
+
+</button>
+
+
+
+
+
+<p id="loginMessage">
+
+</p>
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- JAVASCRIPT -->
+
+
+<script type="module" src="script.js"></script>
+
+
+<script type="module" src="auth.js"></script>
+
+
+
+</body>
+
+
+</html>  
