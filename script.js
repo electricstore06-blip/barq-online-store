@@ -1,5 +1,5 @@
 // ==========================================
-// BARQ STORE SCRIPT
+// BARQ STORE MAIN SCRIPT
 // ==========================================
 
 
@@ -9,7 +9,8 @@ import { db } from "./firebase-config.js";
 import {
     collection,
     getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
 
@@ -17,7 +18,9 @@ import {
 // VARIABLES
 // ==========================================
 
+
 let productsData = [];
+
 
 let cart =
 JSON.parse(localStorage.getItem("barqCart")) || [];
@@ -25,80 +28,88 @@ JSON.parse(localStorage.getItem("barqCart")) || [];
 
 
 
+
 // ==========================================
-// LOAD PRODUCTS
+// LOAD PRODUCTS FROM FIREBASE
 // ==========================================
 
 
 async function loadProducts(){
 
 
-    const container =
-    document.querySelector(".product-container");
-
-
-    if(!container) return;
+const container =
+document.querySelector(".product-container");
 
 
 
-    container.innerHTML =
-    "<p>Loading products...</p>";
+if(!container) return;
 
 
 
-    try{
-
-
-        const snapshot =
-        await getDocs(
-            collection(db,"products")
-        );
+container.innerHTML =
+"<p>Loading products...</p>";
 
 
 
-        productsData = [];
+try{
+
+
+const snapshot =
+await getDocs(
+collection(db,"products")
+);
 
 
 
-        snapshot.forEach((doc)=>{
-
-
-            productsData.push({
-
-                id:doc.id,
-
-                ...doc.data()
-
-            });
-
-
-        });
+productsData = [];
 
 
 
-        displayProducts(productsData);
+snapshot.forEach((doc)=>{
+
+
+productsData.push({
+
+id:doc.id,
+
+...doc.data()
+
+});
+
+
+});
 
 
 
-    }
+displayProducts(productsData);
 
-    catch(error){
-
-
-        console.error(
-            "Firebase error:",
-            error
-        );
-
-
-        container.innerHTML =
-        "<p>Unable to load products</p>";
-
-
-    }
 
 
 }
+
+
+catch(error){
+
+
+console.error(
+"Firebase Products Error:",
+error
+);
+
+
+
+container.innerHTML =
+"<p>Unable to load products</p>";
+
+
+}
+
+
+
+}
+
+
+
 
 
 
@@ -111,60 +122,83 @@ async function loadProducts(){
 function displayProducts(products){
 
 
-    const container =
-    document.querySelector(".product-container");
-
-
-    if(!container) return;
+const container =
+document.querySelector(".product-container");
 
 
 
-    container.innerHTML="";
+if(!container) return;
 
 
 
-    products.forEach((product)=>{
-
-
-        const card =
-        document.createElement("div");
-
-        card.className="product";
+container.innerHTML = "";
 
 
 
-        let image =
-        product.image ||
-        "https://images.unsplash.com/photo-1596462502278-27bfdc403348";
+if(products.length===0){
+
+
+container.innerHTML =
+"<p>No products found</p>";
+
+
+return;
+
+
+}
 
 
 
-        let name =
-        product.name ||
-        "Beauty Product";
+
+products.forEach((product)=>{
+
+
+const card =
+document.createElement("div");
 
 
 
-        let brand =
-        product.brand ||
-        "BARQ";
+card.className =
+"product";
 
 
 
-        let price =
-        Number(product.price || 0);
+const image =
+product.image ||
+"https://images.unsplash.com/photo-1596462502278-27bfdc403348";
 
 
 
-    card.innerHTML = `
+const name =
+product.name ||
+"Beauty Product";
 
 
-<a class="product-link" href="product-details.html?id=${product.id}">
+
+const brand =
+product.brand ||
+"BARQ";
 
 
-<img 
+
+const price =
+Number(product.price || 0);
+
+
+
+card.innerHTML = `
+
+
+<a 
+class="product-link"
+href="product-details.html?id=${product.id}"
+>
+
+
+<img
 class="product-img"
 src="${image}"
+alt="${name}"
 >
 
 
@@ -186,6 +220,7 @@ ${price.toFixed(2)} SAR
 </a>
 
 
+
 <button 
 class="add-btn">
 
@@ -197,33 +232,45 @@ Add To Cart
 `;
 
 
-        card
-        .querySelector(".add-btn")
-        .onclick=function(){
-
-
-            addToCart(
-                product.id,
-                name,
-                price,
-                image,
-                brand
-            );
-
-
-        };
 
 
 
-        container.appendChild(card);
+card
+.querySelector(".add-btn")
+.onclick = ()=>{
+
+
+addToCart(
+
+product.id,
+
+name,
+
+price,
+
+image,
+
+brand
+
+);
+
+
+};
 
 
 
-    });
+container.appendChild(card);
+
+
+
+});
 
 
 
 }
+
+
+
 
 
 
@@ -246,12 +293,13 @@ searchInput.addEventListener(
 ()=>{
 
 
-let value =
-searchInput.value.toLowerCase();
+const value =
+searchInput.value
+.toLowerCase();
 
 
 
-let result =
+const result =
 productsData.filter(product=>{
 
 
@@ -264,7 +312,16 @@ return (
 
 ||
 
+
 (product.brand || "")
+.toLowerCase()
+.includes(value)
+
+
+||
+
+
+(product.category || "")
 .toLowerCase()
 .includes(value)
 
@@ -290,8 +347,11 @@ displayProducts(result);
 
 
 
+
+
+
 // ==========================================
-// CART
+// CART SYSTEM
 // ==========================================
 
 
@@ -300,12 +360,17 @@ function saveCart(){
 
 
 localStorage.setItem(
+
 "barqCart",
+
 JSON.stringify(cart)
+
 );
 
 
 }
+
+
 
 
 
@@ -319,17 +384,19 @@ brand
 ){
 
 
-let item =
+
+const existing =
 cart.find(
-x=>x.productId===id
+item =>
+item.productId === id
 );
 
 
 
-if(item){
+if(existing){
 
 
-item.quantity++;
+existing.quantity++;
 
 
 }
@@ -338,7 +405,6 @@ else{
 
 
 cart.push({
-
 
 productId:id,
 
@@ -352,7 +418,6 @@ brand:brand,
 
 quantity:1
 
-
 });
 
 
@@ -362,7 +427,14 @@ quantity:1
 
 saveCart();
 
+
 updateCart();
+
+
+
+alert(
+"Added to cart ✅"
+);
 
 
 
@@ -371,7 +443,11 @@ updateCart();
 
 
 
+
+
+
 function updateCart(){
+
 
 
 const items =
@@ -387,17 +463,17 @@ document.getElementById("cartCount");
 
 
 
-if(!items) return;
+let sum = 0;
+
+let quantity = 0;
 
 
 
-items.innerHTML="";
+
+if(items){
 
 
-let sum=0;
-
-let qty=0;
-
+items.innerHTML = "";
 
 
 
@@ -405,20 +481,18 @@ cart.forEach(
 (item,index)=>{
 
 
-let itemTotal =
+sum +=
 item.price *
 item.quantity;
 
 
+quantity +=
+item.quantity;
 
-sum += itemTotal;
-
-qty += item.quantity;
 
 
 
 items.innerHTML += `
-
 
 
 <div class="cart-item">
@@ -434,32 +508,34 @@ ${item.price} SAR
 </p>
 
 
-
 <button onclick="decreaseQuantity(${index})">
--
-</button>
 
+-
+
+</button>
 
 
 <span>
+
 ${item.quantity}
+
 </span>
 
 
-
 <button onclick="increaseQuantity(${index})">
+
 +
+
 </button>
 
 
 
-<button 
-class="remove-btn"
-onclick="removeCart(${index})">
+<button onclick="removeCart(${index})">
 
 Remove
 
 </button>
+
 
 
 </div>
@@ -473,20 +549,34 @@ Remove
 
 
 
+}
 
-if(total)
+
+
+if(total){
+
 total.innerText =
 sum.toFixed(2);
 
+}
 
 
-if(count)
+
+if(count){
+
 count.innerText =
-qty;
+quantity;
+
+}
 
 
 
 }
+
+
+
+
+
 
 
 
@@ -499,6 +589,7 @@ if(cart[index]){
 
 cart[index].quantity++;
 
+
 saveCart();
 
 updateCart();
@@ -508,6 +599,9 @@ updateCart();
 
 
 }
+
+
+
 
 
 
@@ -524,12 +618,16 @@ cart[index].quantity--;
 
 if(cart[index].quantity<=0){
 
+
 cart.splice(index,1);
+
 
 }
 
 
+
 saveCart();
+
 
 updateCart();
 
@@ -539,6 +637,9 @@ updateCart();
 
 
 }
+
+
+
 
 
 
@@ -551,7 +652,9 @@ cart.splice(index,1);
 
 saveCart();
 
+
 updateCart();
+
 
 
 }
@@ -559,33 +662,65 @@ updateCart();
 
 
 
+
+
+
+
+
 // ==========================================
-// OPEN CLOSE CART
+// CART OPEN CLOSE
 // ==========================================
+
 
 
 function openCart(){
 
 
-document.getElementById("cartBox")
-.style.display="block";
+const box =
+document.getElementById("cartBox");
+
+
+
+if(box){
+
+box.style.display="block";
+
+}
+
 
 
 updateCart();
 
 
+
 }
+
+
+
 
 
 
 function closeCart(){
 
 
-document.getElementById("cartBox")
-.style.display="none";
+const box =
+document.getElementById("cartBox");
+
+
+
+if(box){
+
+box.style.display="none";
+
+}
+
 
 
 }
+
+
+
+
 
 
 
@@ -607,11 +742,17 @@ return;
 }
 
 
-window.location.href=
+
+window.location.href =
 "checkout.html";
 
 
+
 }
+
+
+
+
 
 
 
@@ -619,51 +760,82 @@ window.location.href=
 // ==========================================
 // MOBILE MENU
 // ==========================================
+
+
 function toggleMenu(){
 
-    const menu =
-        document.getElementById("mainNav");
+
+const menu =
+document.getElementById("mainNav");
 
 
-    if(!menu) return;
 
+if(menu){
 
-    menu.classList.toggle("active");
+menu.classList.toggle("active");
+
+}
 
 
 }
-// CLOSE MOBILE MENU AFTER CLICK
-
-document.addEventListener("DOMContentLoaded",()=>{
-
-    const menuLinks =
-        document.querySelectorAll("#mainNav a");
 
 
-    menuLinks.forEach(link=>{
-
-        link.addEventListener("click",()=>{
-
-            const menu =
-                document.getElementById("mainNav");
 
 
-            if(menu){
 
-                menu.classList.remove("active");
 
-            }
 
-        });
+document.addEventListener(
+"DOMContentLoaded",
+()=>{
 
-    });
+
+const links =
+document.querySelectorAll(
+"#mainNav a"
+);
+
+
+
+links.forEach(link=>{
+
+
+link.addEventListener(
+"click",
+()=>{
+
+
+const menu =
+document.getElementById("mainNav");
+
+
+
+if(menu){
+
+menu.classList.remove("active");
+
+}
+
+
+});
+
 
 });
 
 
 
+});
+
+
+
+
+
+
+
+
+
 // ==========================================
-// MAKE AVAILABLE FOR HTML
+// EXPORT TO HTML
 // ==========================================
 
 
@@ -693,6 +865,8 @@ increaseQuantity;
 
 window.decreaseQuantity =
 decreaseQuantity;
+
+
 
 
 
