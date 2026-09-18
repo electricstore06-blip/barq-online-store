@@ -58,7 +58,7 @@ const snapshot =
 await getDocs(
 collection(db,"products")
 );
-
+console.log("PRODUCT COUNT:", snapshot.size);
 
 
 productsData = [];
