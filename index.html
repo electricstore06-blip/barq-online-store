@@ -7,9 +7,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>BARQ Online Store</title>
+<title>BARQ | Online Store</title>
 
-<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" href="favicon.ico">
 
 <link rel="stylesheet" href="style.css">
 
@@ -19,18 +19,22 @@
 <body>
 
 
-<!-- TOP BAR -->
+<!-- =========================
+TOP BAR
+========================= -->
 
 <div class="top-bar">
 
-🚚 Free shipping | ❤️ Authentic products | 🔒 Secure payment
+🚚 Free Shipping | ❤️ Authentic Products | 🔒 Secure Payment
 
 </div>
 
 
 
+<!-- =========================
+HEADER
+========================= -->
 
-<!-- HEADER -->
 
 <header>
 
@@ -46,6 +50,8 @@ ONLINE STORE
 </div>
 
 
+
+<!-- MOBILE MENU BUTTON -->
 
 <button 
 class="menu-toggle"
@@ -66,23 +72,23 @@ Home
 </a>
 
 
-<a href="index.html#products">
+<a href="#products">
 Shop
 </a>
 
 
-<a href="index.html#brands">
+<a href="#brands">
 Categories
 </a>
 
 
-<a href="index.html#products">
-Deals
+<a href="#offers">
+Offers
 </a>
 
 
-<a href="#contact">
-Contact
+<a href="orders.html">
+My Orders
 </a>
 
 
@@ -97,15 +103,16 @@ Contact
 
 </a>
 
-<a href="javascript:void(0)" onclick="openLogin()">
 
-🔐 Login
+
+<a href="#" onclick="openLogin(); return false;">
+
+🔐 Account
 
 </a>
 
 
 </nav>
-
 
 
 </header>
@@ -115,30 +122,31 @@ Contact
 
 
 
-<!-- HERO -->
+<!-- =========================
+BARQ BANNER
+========================= -->
 
-<section class="hero">
+
+<section class="barq-banner">
 
 
-<div class="hero-text">
+<div>
 
 
 <p class="small">
-
-BEAUTY & COSMETICS
-
+BARQ BEAUTY & FASHION
 </p>
-
 
 
 <h1>
 
-Look Good,
+Everything You Love,
 
 <br>
 
 <span>
-Feel Confident
+Delivered Fast
+
 </span>
 
 </h1>
@@ -147,38 +155,28 @@ Feel Confident
 
 <p>
 
-Premium cosmetics, skincare and beauty essentials for your everyday glow.
+Premium beauty, cosmetics and lifestyle products at your fingertips.
 
 </p>
-
-
 
 
 <button
 onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
 
-Shop Cosmetics →
+Shop Now →
 
 </button>
 
 
-
 </div>
 
-
-
-
-<div class="hero-image">
 
 
 <img
 
 src="https://images.unsplash.com/photo-1596462502278-27bfdc403348"
 
-alt="Beauty products">
-
-</div>
-
+alt="BARQ products">
 
 
 </section>
@@ -189,8 +187,35 @@ alt="Beauty products">
 
 
 
+<!-- =========================
+SEARCH
+========================= -->
 
-<!-- BRANDS -->
+
+<section class="search-area">
+
+
+<input
+
+id="searchInput"
+
+type="text"
+
+placeholder="Search products, brands and categories...">
+
+
+</section>
+
+
+
+
+
+
+
+<!-- =========================
+BRANDS
+========================= -->
+
 
 <section id="brands" class="brands">
 
@@ -200,7 +225,6 @@ alt="Beauty products">
 Popular Brands
 
 </h2>
-
 
 
 <div class="brand-list">
@@ -222,12 +246,17 @@ CeraVe
 
 
 <span>
+MAC
+</span>
+
+
+<span>
 The Ordinary
 </span>
 
 
 <span>
-MAC
+BARQ
 </span>
 
 
@@ -242,51 +271,31 @@ MAC
 
 
 
-
-<!-- PRODUCTS -->
+<!-- =========================
+PRODUCTS
+========================= -->
 
 
 <section id="products" class="products">
 
 
-
 <h2>
 
-Featured Beauty Products
+Featured Products
 
 </h2>
 
 
-
 <p class="products-subtitle">
 
-Discover your next beauty favorite
+Discover your next favorite product
 
 </p>
 
 
 
 
-<div class="search-box">
-
-
-<input
-
-type="text"
-
-id="searchInput"
-
-placeholder="Search cosmetics, skincare, makeup...">
-
-
-</div>
-
-
-
-
-
-<!-- FIREBASE PRODUCTS LOAD HERE -->
-
+<!-- FIREBASE PRODUCTS -->
 
 <div class="product-container">
 
@@ -304,10 +313,44 @@ placeholder="Search cosmetics, skincare, makeup...">
 
 
 
+<!-- =========================
+OFFERS
+========================= -->
 
-<!-- CONTACT PLACEHOLDER -->
+
+<section id="offers" class="offers">
+
+
+<h2>
+
+BARQ Deals
+
+</h2>
+
+
+<p>
+
+Special offers and discounts coming soon.
+
+</p>
+
+
+</section>
+
+
+
+
+
+
+
+
+<!-- =========================
+CONTACT
+========================= -->
+
 
 <section id="contact">
+
 
 </section>
 
@@ -319,14 +362,18 @@ placeholder="Search cosmetics, skincare, makeup...">
 
 
 
-<!-- CART -->
+<!-- =========================
+CART POPUP
+========================= -->
 
 
 <div id="cartBox" class="cart-box">
 
 
 <h2>
+
 Your Cart
+
 </h2>
 
 
@@ -348,7 +395,9 @@ Total:
 
 SAR
 
+
 </h3>
+
 
 
 
@@ -367,7 +416,6 @@ Close
 </button>
 
 
-
 </div>
 
 
@@ -378,7 +426,9 @@ Close
 
 
 
-<!-- LOGIN -->
+<!-- =========================
+LOGIN POPUP
+========================= -->
 
 
 <div id="loginBox" class="login-box">
@@ -403,7 +453,7 @@ onclick="closeLogin()">
 
 <h2>
 
-BARQ Login
+BARQ Account
 
 </h2>
 
@@ -411,7 +461,7 @@ BARQ Login
 
 <p>
 
-Login to your BARQ account
+Login to continue shopping
 
 </p>
 
@@ -420,9 +470,9 @@ Login to your BARQ account
 
 <input
 
-type="email"
-
 id="loginEmail"
+
+type="email"
 
 placeholder="Email">
 
@@ -432,9 +482,9 @@ placeholder="Email">
 
 <input
 
-type="password"
-
 id="loginPassword"
+
+type="password"
 
 placeholder="Password">
 
@@ -471,11 +521,15 @@ Login
 
 
 
-<!-- JAVASCRIPT -->
+
+<!-- =========================
+SCRIPTS
+========================= -->
 
 
 <script type="module" src="script.js"></script>
 
+<script type="module" src="auth.js"></script>
 
 
 
