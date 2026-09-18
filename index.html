@@ -3,15 +3,15 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>BARQ Online Store</title>
+<title>BARQ Online Store</title>
 
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -23,9 +23,11 @@
 
 <div class="top-bar">
 
-    🚚 Free shipping | ❤️ Authentic products | 🔒 Secure payment
+🚚 Free shipping | ❤️ Authentic products | 🔒 Secure payment
 
 </div>
+
+
 
 
 <!-- HEADER -->
@@ -33,33 +35,28 @@
 <header>
 
 
-    <div class="logo">
+<div class="logo">
 
-        ⚡ BARQ
+⚡ BARQ
 
-        <span>
-            ONLINE STORE
-        </span>
+<span>
+ONLINE STORE
+</span>
 
-    </div>
-
-
-
-    <!-- MOBILE BUTTON -->
-
-    <button 
-        class="menu-toggle"
-        onclick="toggleMenu()"
-    >
-
-        ☰
-
-    </button>
+</div>
 
 
 
+<button 
+class="menu-toggle"
+onclick="toggleMenu()">
 
-    <!-- ONE NAV ONLY -->
+☰
+
+</button>
+
+
+
 
 <nav id="mainNav">
 
@@ -89,9 +86,10 @@ Contact
 </a>
 
 
+
 <a href="#" onclick="openCart(); return false;">
 
-🛒 Cart 
+🛒 Cart
 
 <span id="cartCount">
 0
@@ -100,59 +98,13 @@ Contact
 </a>
 
 
-<a href="#" onclick="openLogin(); return false;">
-
-🔐 Login
-
-</a>
-
-
-</nav>
-
-<nav id="mainNav">
-
-
-<a href="index.html">
-Home
-</a>
-
-
-<a href="index.html#products">
-Shop
-</a>
-
-
-<a href="index.html#brands">
-Categories
-</a>
-
-
-<a href="index.html#products">
-Deals
-</a>
-
-
-<a href="#contact">
-Contact
-</a>
-
-
-<a href="#" onclick="openCart(); return false;">
-
-🛒 Cart 
-
-<span id="cartCount">
-0
-</span>
-
-</a>
-
 
 <a href="#" onclick="openLogin(); return false;">
 
 🔐 Login
 
 </a>
+
 
 
 </nav>
@@ -164,60 +116,79 @@ Contact
 
 
 
+
+
 <!-- HERO -->
 
 <section class="hero">
 
 
-    <div class="hero-text">
+<div class="hero-text">
 
 
-        <p class="small">
-            BEAUTY & COSMETICS
-        </p>
+<p class="small">
+
+BEAUTY & COSMETICS
+
+</p>
 
 
-        <h1>
 
-            Look Good,
+<h1>
 
-            <br>
+Look Good,
 
-            <span>
-                Feel Confident
-            </span>
+<br>
 
-        </h1>
+<span>
+Feel Confident
+</span>
 
-
-        <p>
-            Premium cosmetics, skincare and beauty essentials for your everyday glow.
-        </p>
+</h1>
 
 
-        <button
-            onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})"
-        >
 
-            Shop Cosmetics →
+<p>
 
-        </button>
+Premium cosmetics, skincare and beauty essentials for your everyday glow.
 
-
-    </div>
+</p>
 
 
-    <div class="hero-image">
 
-        <img
-            src="https://images.unsplash.com/photo-1596462502278-27bfdc403348"
-            alt="Beauty products"
-        >
 
-    </div>
+<button
+onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+
+Shop Cosmetics →
+
+</button>
+
+
+
+</div>
+
+
+
+
+<div class="hero-image">
+
+
+<img
+
+src="https://images.unsplash.com/photo-1596462502278-27bfdc403348"
+
+alt="Beauty products">
+
+</div>
+
 
 
 </section>
+
+
+
+
 
 
 
@@ -226,73 +197,105 @@ Contact
 
 <section id="brands" class="brands">
 
-    <h2>
-        Popular Brands
-    </h2>
+
+<h2>
+
+Popular Brands
+
+</h2>
 
 
-    <div class="brand-list">
 
-        <span>
-            Maybelline
-        </span>
+<div class="brand-list">
 
-        <span>
-            NYX
-        </span>
 
-        <span>
-            CeraVe
-        </span>
+<span>
+Maybelline
+</span>
 
-        <span>
-            The Ordinary
-        </span>
 
-        <span>
-            MAC
-        </span>
+<span>
+NYX
+</span>
 
-    </div>
+
+<span>
+CeraVe
+</span>
+
+
+<span>
+The Ordinary
+</span>
+
+
+<span>
+MAC
+</span>
+
+
+</div>
+
 
 </section>
+
+
+
+
 
 
 
 
 <!-- PRODUCTS -->
 
+
 <section id="products" class="products">
 
 
-    <h2>
-        Featured Beauty Products
-    </h2>
+
+<h2>
+
+Featured Beauty Products
+
+</h2>
 
 
-    <p class="products-subtitle">
-        Discover your next beauty favorite
-    </p>
+
+<p class="products-subtitle">
+
+Discover your next beauty favorite
+
+</p>
 
 
-    <!-- SEARCH -->
-
-    <div class="search-box">
-
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Search cosmetics, skincare, makeup..."
-        >
-
-    </div>
 
 
-    <!-- FIREBASE PRODUCTS APPEAR HERE -->
+<div class="search-box">
 
-    <div class="product-container">
 
-    </div>
+<input
+
+type="text"
+
+id="searchInput"
+
+placeholder="Search cosmetics, skincare, makeup...">
+
+
+</div>
+
+
+
+
+
+<!-- FIREBASE PRODUCTS LOAD HERE -->
+
+
+<div class="product-container">
+
+
+</div>
+
 
 
 </section>
@@ -300,42 +303,72 @@ Contact
 
 
 
+
+
+
+
+
+<!-- CONTACT PLACEHOLDER -->
+
+<section id="contact">
+
+</section>
+
+
+
+
+
+
+
+
+
 <!-- CART -->
+
 
 <div id="cartBox" class="cart-box">
 
 
-    <h2>
-        Your Cart
-    </h2>
+<h2>
+Your Cart
+</h2>
 
 
-    <div id="cartItems">
 
-    </div>
+<div id="cartItems">
 
-
-    <h3>
-
-        Total:
-
-        <span id="cartTotal">
-            0
-        </span>
-
-        SAR
-
-    </h3>
+</div>
 
 
-    <button onclick="checkout()">
-        Checkout
-    </button>
 
 
-    <button onclick="closeCart()">
-        Close
-    </button>
+<h3>
+
+Total:
+
+<span id="cartTotal">
+0
+</span>
+
+SAR
+
+</h3>
+
+
+
+<button onclick="checkout()">
+
+Checkout
+
+</button>
+
+
+
+<button onclick="closeCart()">
+
+Close
+
+</button>
+
 
 
 </div>
@@ -343,71 +376,114 @@ Contact
 
 
 
-<!-- LOGIN BOX -->
+
+
+
+
+
+<!-- LOGIN -->
+
 
 <div id="loginBox" class="login-box">
 
 
-    <div class="login-content">
+
+<div class="login-content">
 
 
-        <button
-            class="login-close"
-            onclick="closeLogin()"
-        >
+<button
 
-            ×
+class="login-close"
 
-        </button>
+onclick="closeLogin()">
 
+×
 
-        <h2>
-            BARQ Login
-        </h2>
+</button>
 
 
-        <p>
-            Login to your BARQ account
-        </p>
 
 
-        <input
-            type="email"
-            id="loginEmail"
-            placeholder="Email"
-        >
+<h2>
+
+BARQ Login
+
+</h2>
 
 
-        <input
-            type="password"
-            id="loginPassword"
-            placeholder="Password"
-        >
+
+<p>
+
+Login to your BARQ account
+
+</p>
 
 
-        <button id="loginButton">
-            Login
-        </button>
 
 
-        <p id="loginMessage"></p>
+<input
+
+type="email"
+
+id="loginEmail"
+
+placeholder="Email">
 
 
-    </div>
+
+
+
+<input
+
+type="password"
+
+id="loginPassword"
+
+placeholder="Password">
+
+
+
+
+
+<button id="loginButton">
+
+Login
+
+</button>
+
+
+
+
+<p id="loginMessage">
+
+</p>
+
+
 
 
 </div>
+
+
+
+</div>
+
+
+
+
 
 
 
 
 <!-- JAVASCRIPT -->
 
+
 <script type="module" src="script.js"></script>
 
 <script type="module" src="auth.js"></script>
 
 
+
 </body>
+
 
 </html>
