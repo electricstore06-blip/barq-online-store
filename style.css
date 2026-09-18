@@ -269,27 +269,45 @@ header{
 
 }
 
+#mainNav{
 
+    position:absolute;
 
-#mainNav.active{
+    top:70px;
 
-    display:flex;
+    left:0;
+
+    width:100%;
+
+    background:white;
+
+    display:none;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:20px;
+
+    padding:25px 0;
+
+    z-index:9999;
+
+    box-shadow:0 8px 20px rgba(0,0,0,0.15);
 
 }
-
-
 
 #mainNav a{
 
-    font-size:17px;
+    width:80%;
+
+    text-align:center;
+
+    padding:12px;
 
     border-bottom:1px solid #eee;
 
-    padding-bottom:10px;
-
 }
-
-
 
 
 .hero{
