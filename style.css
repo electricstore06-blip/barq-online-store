@@ -1,3 +1,7 @@
+/* =========================
+RESET
+========================= */
+
 *{
     margin:0;
     padding:0;
@@ -7,40 +11,56 @@
 
 
 body{
+
     background:#fff;
     color:#111;
+
 }
 
 
-/* TOP BAR */
+/* =========================
+TOP BAR
+========================= */
+
 
 .top-bar{
+
     background:#111;
     color:white;
     text-align:center;
     padding:12px;
     font-size:14px;
+
 }
 
 
-/* HEADER */
+
+/* =========================
+HEADER
+========================= */
+
 
 header{
 
+    width:100%;
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:20px 40px;
+    padding:18px 5%;
     background:white;
     border-bottom:1px solid #eee;
+    position:relative;
+    z-index:1000;
 
 }
+
 
 
 .logo{
 
-    font-size:28px;
+    font-size:30px;
     font-weight:bold;
+    color:#d4145a;
 
 }
 
@@ -48,6 +68,7 @@ header{
 .logo span{
 
     display:block;
+    color:#111;
     font-size:10px;
     letter-spacing:4px;
 
@@ -55,60 +76,91 @@ header{
 
 
 
+
+/* =========================
+NAVIGATION
+========================= */
+
+
 #mainNav{
 
     display:flex;
+    align-items:center;
     gap:25px;
 
 }
+
 
 
 #mainNav a{
 
     text-decoration:none;
     color:#111;
-    font-size:16px;
+    font-size:15px;
+    cursor:pointer;
 
 }
 
+
+
+#mainNav a:hover{
+
+    color:#d4145a;
+
+}
+
+
+
+/* MOBILE BUTTON */
 
 
 .menu-toggle{
 
     display:none;
+    border:none;
     background:#d4145a;
     color:white;
-    border:0;
-    padding:10px 15px;
-    border-radius:8px;
+    font-size:22px;
+    padding:8px 14px;
+    border-radius:10px;
+    cursor:pointer;
 
 }
 
 
 
 
-/* HERO */
+/* =========================
+BARQ BANNER
+========================= */
 
-.hero{
 
-    margin:30px auto;
+.barq-banner{
+
     width:90%;
-    background:#f9dce7;
-    border-radius:25px;
+    margin:30px auto;
 
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+    background:#f9dce7;
+
+    border-radius:25px;
 
     padding:50px;
 
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    overflow:hidden;
+
 }
 
 
 
-.hero-text{
+.barq-banner div{
 
-    width:45%;
+    width:50%;
 
 }
 
@@ -122,16 +174,18 @@ header{
 }
 
 
-.hero h1{
+
+.barq-banner h1{
 
     font-size:55px;
     margin:20px 0;
+    line-height:1.1;
 
 }
 
 
 
-.hero h1 span{
+.barq-banner h1 span{
 
     color:#d4145a;
 
@@ -139,32 +193,88 @@ header{
 
 
 
-.hero button{
+.barq-banner p{
 
-    margin-top:25px;
-    background:#d4145a;
-    color:white;
-    border:0;
-    padding:15px 35px;
-    border-radius:10px;
+    font-size:18px;
+    margin-bottom:20px;
 
 }
 
 
 
-.hero-image img{
+.barq-banner button{
+
+    background:#d4145a;
+    color:white;
+    border:none;
+    padding:15px 35px;
+    border-radius:10px;
+    cursor:pointer;
+
+}
+
+
+
+.barq-banner img{
 
     width:400px;
+    max-width:45%;
     border-radius:20px;
 
 }
 
 
 
-/* PRODUCTS */
 
+
+/* =========================
+SEARCH
+========================= */
+
+
+.search-area{
+
+    width:90%;
+    margin:30px auto;
+
+}
+
+
+
+.search-area input{
+
+    width:100%;
+    padding:16px;
+
+    border:1px solid #ddd;
+
+    border-radius:15px;
+
+    font-size:16px;
+
+    outline:none;
+
+}
+
+
+
+.search-area input:focus{
+
+    border-color:#d4145a;
+
+}
+
+
+
+
+/* =========================
+BRANDS
+========================= */
+
+
+.brands,
 .products,
-.brands{
+.offers{
 
     width:90%;
     margin:50px auto;
@@ -173,19 +283,321 @@ header{
 
 
 
+.brands h2,
+.products h2,
+.offers h2{
+
+    font-size:32px;
+    margin-bottom:20px;
+
+}
+
+
+
+
+.brand-list{
+
+    display:flex;
+    flex-wrap:wrap;
+    gap:15px;
+
+}
+
+
+
+.brand-list span{
+
+    background:#fce5ee;
+    color:#d4145a;
+
+    padding:12px 25px;
+
+    border-radius:30px;
+
+    font-weight:bold;
+
+}
+
+
+
+
+
+/* =========================
+PRODUCT GRID
+========================= */
+
+
 .product-container{
 
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+
+    grid-template-columns:
+    repeat(4,1fr);
+
     gap:20px;
 
 }
 
-header{
 
-    padding:15px 20px;
+
+
+.product{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:15px;
+
+    box-shadow:
+    0 5px 20px rgba(0,0,0,.10);
+
+    transition:.2s;
+
+    text-align:center;
 
 }
+
+
+
+.product:hover{
+
+    transform:translateY(-5px);
+
+}
+
+
+
+.product img,
+.product-img{
+
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    border-radius:15px;
+
+}
+
+
+
+.product h3{
+
+    margin:15px 0;
+    font-size:18px;
+
+}
+
+
+
+.brand{
+
+    color:#777;
+
+}
+
+
+
+.price{
+
+    color:#d4145a;
+    font-size:18px;
+    font-weight:bold;
+
+}
+
+
+
+.add-btn{
+
+    width:100%;
+    margin-top:15px;
+
+    background:#d4145a;
+    color:white;
+
+    border:none;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+}
+
+
+
+
+/* =========================
+CART
+========================= */
+
+
+.cart-box{
+
+    display:none;
+
+    position:fixed;
+
+    top:80px;
+    right:20px;
+
+    width:350px;
+
+    max-width:90%;
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:20px;
+
+    box-shadow:
+    0 10px 40px rgba(0,0,0,.25);
+
+    z-index:20000;
+
+}
+
+
+
+.cart-item{
+
+    padding:15px 0;
+
+    border-bottom:1px solid #eee;
+
+}
+
+
+
+.cart-box button{
+
+    width:100%;
+
+    margin-top:10px;
+
+    padding:12px;
+
+    background:#d4145a;
+
+    color:white;
+
+    border:none;
+
+    border-radius:10px;
+
+}
+
+
+
+
+
+/* =========================
+LOGIN
+========================= */
+
+
+.login-box{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.5);
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:30000;
+
+}
+
+
+
+.login-content{
+
+    background:white;
+
+    width:380px;
+
+    max-width:90%;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    text-align:center;
+
+}
+
+
+
+.login-content input{
+
+    width:100%;
+
+    padding:14px;
+
+    margin:10px 0;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+}
+
+
+
+.login-content button{
+
+    width:100%;
+
+    padding:13px;
+
+    background:#d4145a;
+
+    color:white;
+
+    border:none;
+
+    border-radius:10px;
+
+}
+
+
+
+.login-close{
+
+    background:none!important;
+
+    color:#111!important;
+
+    font-size:25px;
+
+}
+
+
+
+
+/* =========================
+MOBILE
+========================= */
+
+
+@media(max-width:700px){
+
+
+
+header{
+
+    padding:15px;
+
+}
+
 
 
 .logo{
@@ -195,50 +607,10 @@ header{
 }
 
 
-.product img{
-
-    width:100%;
-
-}
-
-/* MOBILE NOON STYLE */
-
-@media(max-width:700px){
-
-
-header{
-
-    padding:12px 15px;
-    position:relative;
-    height:70px;
-
-}
-
-
-
-.logo{
-
-    font-size:22px;
-
-}
-
-
-
-.logo span{
-
-    font-size:8px;
-    letter-spacing:3px;
-
-}
-
-
 
 .menu-toggle{
 
     display:block;
-    font-size:22px;
-    background:#d4145a;
-    padding:8px 12px;
 
 }
 
@@ -248,7 +620,9 @@ header{
 #mainNav{
 
     position:absolute;
+
     top:70px;
+
     left:0;
 
     width:100%;
@@ -261,45 +635,26 @@ header{
 
     padding:20px;
 
-    gap:18px;
+    gap:15px;
 
-    z-index:1000;
+    box-shadow:
+    0 10px 20px rgba(0,0,0,.15);
 
-    box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+
+
+#mainNav.active{
+
+    display:flex;
 
 }
 
-#mainNav{
 
-    position:absolute;
-
-    top:70px;
-
-    left:0;
-
-    width:100%;
-
-    background:white;
-
-    display:none;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    gap:20px;
-
-    padding:25px 0;
-
-    z-index:9999;
-
-    box-shadow:0 8px 20px rgba(0,0,0,0.15);
-
-}
 
 #mainNav a{
 
-    width:80%;
+    width:100%;
 
     text-align:center;
 
@@ -310,25 +665,16 @@ header{
 }
 
 
-.hero{
+
+
+
+.barq-banner{
 
     width:94%;
 
-    margin:20px auto;
-
-    padding:25px 15px;
-
-    border-radius:20px;
+    padding:25px;
 
     flex-direction:column;
-
-}
-
-
-
-.hero-text{
-
-    width:100%;
 
     text-align:center;
 
@@ -336,37 +682,36 @@ header{
 
 
 
-.hero h1{
-
-    font-size:38px;
-
-    line-height:1.1;
-
-}
-
-
-
-.hero-text p{
-
-    font-size:16px;
-
-}
-
-
-
-.hero-image img{
+.barq-banner div{
 
     width:100%;
 
-    margin-top:20px;
+}
+
+
+
+.barq-banner h1{
+
+    font-size:38px;
 
 }
 
 
 
+.barq-banner img{
 
+    max-width:100%;
+
+    margin-top:25px;
+
+}
+
+
+
+.search-area,
 .products,
-.brands{
+.brands,
+.offers{
 
     width:94%;
 
@@ -392,6 +737,15 @@ header{
 
 
 
+.product img,
+.product-img{
+
+    height:130px;
+
+}
+
+
+
 .product h3{
 
     font-size:14px;
@@ -399,113 +753,15 @@ header{
 }
 
 
-}
-/* =========================
-LOGIN POPUP
-========================= */
 
-.login-box{
+.cart-box{
 
-    display:none;
+    width:calc(100% - 30px);
 
-    position:fixed;
-
-    top:0;
-    left:0;
-
-    width:100%;
-    height:100%;
-
-    background:rgba(0,0,0,0.5);
-
-    justify-content:center;
-    align-items:center;
-
-    z-index:99999;
-
-}
-
-
-.login-content{
-
-    background:white;
-
-    width:350px;
-
-    padding:30px;
-
-    border-radius:20px;
-
-    text-align:center;
-
-}
-
-
-.login-content h2{
-
-    margin-bottom:10px;
-
-}
-
-
-.login-content input{
-
-    width:100%;
-
-    padding:12px;
-
-    margin:8px 0;
-
-    border:1px solid #ddd;
-
-    border-radius:8px;
+    right:15px;
 
 }
 
 
 
-.login-content button{
-
-    width:100%;
-
-    padding:12px;
-
-    margin-top:10px;
-
-    background:#d4145a;
-
-    color:white;
-
-    border:none;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
 }
-
-
-
-.login-close{
-
-    width:auto !important;
-
-    float:right;
-
-    background:none !important;
-
-    color:#111 !important;
-
-    font-size:25px;
-
-}
-
-
-#loginMessage{
-
-    margin-top:15px;
-
-    font-size:14px;
-
-}
-
