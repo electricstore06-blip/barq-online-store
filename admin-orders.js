@@ -397,53 +397,67 @@ function displayOrder(order){
     }
 
 
+/* =========================================
+   STATUS DROPDOWN
+========================================= */
 
-    /* =========================================
-       STATUS DROPDOWN
-    ========================================= */
 
- const statusHTML = `
-<select class="status-select" data-order-id="${order.id}">
+const statusHTML = `
 
-<option ${status==="Pending"?"selected":""}>
+<select 
+class="status-select"
+data-order-id="${order.id}"
+>
+
+
+<option value="Pending" ${status==="Pending"?"selected":""}>
 Pending
 </option>
 
-<option ${status==="Processing"?"selected":""}>
+
+<option value="Processing" ${status==="Processing"?"selected":""}>
 Processing
 </option>
 
-<option ${status==="Shipped"?"selected":""}>
+
+<option value="Shipped" ${status==="Shipped"?"selected":""}>
 Shipped
 </option>
 
-<option ${status==="Out for Delivery"?"selected":""}>
+
+<option value="Out for Delivery" ${status==="Out for Delivery"?"selected":""}>
 Out for Delivery
 </option>
 
-<option ${status==="Delivered"?"selected":""}>
+
+<option value="Delivered" ${status==="Delivered"?"selected":""}>
 Delivered
 </option>
 
-<option ${status==="Delivery Delayed"?"selected":""}>
+
+<option value="Delivery Delayed" ${status==="Delivery Delayed"?"selected":""}>
 Delivery Delayed
 </option>
 
-<option ${status==="Replacement Requested"?"selected":""}>
+
+<option value="Replacement Requested" ${status==="Replacement Requested"?"selected":""}>
 Replacement Requested
 </option>
 
-<option ${status==="Replacement Approved"?"selected":""}>
+
+<option value="Replacement Approved" ${status==="Replacement Approved"?"selected":""}>
 Replacement Approved
 </option>
 
-<option ${status==="Cancelled"?"selected":""}>
+
+<option value="Cancelled" ${status==="Cancelled"?"selected":""}>
 Cancelled
 </option>
 
-</select>
-`;  
 
+</select>
+
+`;
 
         <div class="order-card-header">
 
