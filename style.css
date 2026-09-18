@@ -686,3 +686,18 @@ nav#mainNav{
 .login-content{
     z-index:50001;
 }
+/* PRODUCT DETAILS LINK */
+
+.product-link{
+
+    text-decoration:none;
+    color:inherit;
+
+}
+
+
+.product-link:hover{
+
+    color:inherit;
+
+}
