@@ -64,9 +64,9 @@ console.log("PRODUCT COUNT:", snapshot.size);
 productsData = [];
 
 
-
 snapshot.forEach((doc)=>{
 
+console.log("PRODUCT DATA:", doc.id, doc.data());
 
 productsData.push({
 
@@ -75,7 +75,6 @@ id:doc.id,
 ...doc.data()
 
 });
-
 
 });
 
