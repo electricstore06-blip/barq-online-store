@@ -402,45 +402,41 @@ function displayOrder(order){
        STATUS DROPDOWN
     ========================================= */
 
-    const statusHTML = `
+ <option ${status==="Pending"?"selected":""}>
+Pending
+</option>
 
-        <select
-            class="status-select"
-            data-order-id="${order.id}"
-        >
+<option ${status==="Processing"?"selected":""}>
+Processing
+</option>
 
-            <option ${status==="Pending"?"selected":""}>
-                Pending
-            </option>
+<option ${status==="Shipped"?"selected":""}>
+Shipped
+</option>
 
+<option ${status==="Out for Delivery"?"selected":""}>
+Out for Delivery
+</option>
 
-            <option ${status==="Processing"?"selected":""}>
-                Processing
-            </option>
+<option ${status==="Delivered"?"selected":""}>
+Delivered
+</option>
 
+<option ${status==="Delivery Delayed"?"selected":""}>
+Delivery Delayed
+</option>
 
-            <option ${status==="Shipped"?"selected":""}>
-                Shipped
-            </option>
+<option ${status==="Replacement Requested"?"selected":""}>
+Replacement Requested
+</option>
 
+<option ${status==="Replacement Approved"?"selected":""}>
+Replacement Approved
+</option>
 
-            <option ${status==="Delivered"?"selected":""}>
-                Delivered
-            </option>
-
-
-            <option ${status==="Cancelled"?"selected":""}>
-                Cancelled
-            </option>
-
-
-        </select>
-
-    `;
-
-
-
-    orderCard.innerHTML = `
+<option ${status==="Cancelled"?"selected":""}>
+Cancelled
+</option>  
 
 
         <div class="order-card-header">
