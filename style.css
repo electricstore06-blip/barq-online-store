@@ -1,633 +1,285 @@
-header{
-display:flex;
-...
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
 }
 
-nav{
-display:flex;
-...
-}<!DOCTYPE html>
-<html lang="en">
 
-<head>
+body{
+    background:#fff;
+    color:#111;
+}
 
-<meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+/* TOP BAR */
 
-<title>BARQ Online Store</title>
+.top-bar{
+    background:#111;
+    color:white;
+    text-align:center;
+    padding:12px;
+    font-size:14px;
+}
 
-<link rel="icon" type="image/x-icon" href="favicon.ico">
 
-<link rel="stylesheet" href="style.css">
+/* HEADER */
 
-</head>
+header{
 
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:20px 40px;
+    background:white;
+    border-bottom:1px solid #eee;
 
-<body>
+}
 
 
-<!-- TOP BAR -->
+.logo{
 
-<div class="top-bar">
+    font-size:28px;
+    font-weight:bold;
 
-🚚 Free shipping | ❤️ Authentic products | 🔒 Secure payment
+}
 
-</div>
 
+.logo span{
 
+    display:block;
+    font-size:10px;
+    letter-spacing:4px;
 
+}
 
 
-<!-- NOON STYLE HEADER -->
 
-<header class="noon-header">
+#mainNav{
 
+    display:flex;
+    gap:25px;
 
+}
 
-<div class="logo">
 
-⚡ BARQ
+#mainNav a{
 
-<span>
-ONLINE STORE
-</span>
+    text-decoration:none;
+    color:#111;
+    font-size:16px;
 
-</div>
+}
 
 
 
+.menu-toggle{
 
+    display:none;
+    background:#d4145a;
+    color:white;
+    border:0;
+    padding:10px 15px;
+    border-radius:8px;
 
-<div class="header-search">
+}
 
-<input
 
-type="text"
 
-placeholder="Search products, brands and categories">
 
+/* HERO */
 
-</div>
+.hero{
 
+    margin:30px auto;
+    width:90%;
+    background:#f9dce7;
+    border-radius:25px;
 
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
+    padding:50px;
 
+}
 
-<div class="header-actions">
 
 
-<a href="#" onclick="openCart(); return false;">
+.hero-text{
 
-🛒 Cart
+    width:45%;
 
-<span id="cartCount">
-0
-</span>
+}
 
-</a>
 
 
+.small{
 
+    color:#d4145a;
+    font-weight:bold;
 
-<a href="#" onclick="openLogin(); return false;">
+}
 
-🔐 Login
 
-</a>
+.hero h1{
 
+    font-size:55px;
+    margin:20px 0;
 
-</div>
+}
 
 
 
+.hero h1 span{
 
+    color:#d4145a;
 
+}
 
-<button
 
-class="menu-toggle"
 
-onclick="toggleMenu()">
+.hero button{
 
-☰
+    margin-top:25px;
+    background:#d4145a;
+    color:white;
+    border:0;
+    padding:15px 35px;
+    border-radius:10px;
 
-</button>
+}
 
 
 
-</header>
+.hero-image img{
 
+    width:400px;
+    border-radius:20px;
 
+}
 
 
 
+/* PRODUCTS */
 
+.products,
+.brands{
 
-<!-- CATEGORY BAR -->
+    width:90%;
+    margin:50px auto;
 
+}
 
-<div class="category-bar">
 
 
-<a href="index.html#products">
-Bras
-</a>
+.product-container{
 
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
 
-<a href="index.html#products">
-Panties
-</a>
+}
 
 
-<a href="index.html#products">
-Sets
-</a>
+.product{
 
+    border:1px solid #ddd;
+    padding:15px;
+    border-radius:15px;
 
-<a href="index.html#products">
-Sleepwear
-</a>
+}
 
 
-<a href="index.html#products">
-Beauty
-</a>
+.product img{
 
+    width:100%;
 
-<a href="index.html#products">
-Offers
-</a>
+}
 
 
-</div>
 
+/* MOBILE */
 
+@media(max-width:700px){
 
 
+header{
 
+    padding:15px;
 
+}
 
 
-<!-- MOBILE MENU -->
+.menu-toggle{
 
+    display:block;
 
-<nav id="mainNav">
+}
 
 
-<a href="index.html">
+#mainNav{
 
-Home
+    position:absolute;
+    top:80px;
+    left:0;
+    width:100%;
+    background:white;
 
-</a>
+    display:none;
+    flex-direction:column;
+    text-align:center;
+    padding:20px;
 
+}
 
-<a href="index.html#products">
 
-Shop
+#mainNav.active{
 
-</a>
+    display:flex;
 
+}
 
-<a href="index.html#brands">
 
-Categories
 
-</a>
+.hero{
 
+    flex-direction:column;
+    text-align:center;
+    padding:30px;
 
-<a href="index.html#products">
+}
 
-Deals
 
-</a>
 
+.hero-text{
 
-<a href="#contact">
+    width:100%;
 
-Contact
+}
 
-</a>
 
+.hero h1{
 
-<a href="#" onclick="openCart(); return false;">
+    font-size:38px;
 
-🛒 Cart
+}
 
-</a>
 
+.hero-image img{
 
-<a href="#" onclick="openLogin(); return false;">
+    width:100%;
+    margin-top:20px;
 
-🔐 Login
+}
 
-</a>
 
 
-</nav>
+.product-container{
 
+    grid-template-columns:repeat(2,1fr);
 
+}
 
 
-
-
-
-
-<!-- HERO -->
-
-
-<section class="hero">
-
-
-
-<div class="hero-text">
-
-
-<p class="small">
-
-BEAUTY & LINGERIE
-
-</p>
-
-
-
-
-<h1>
-
-Look Good,
-
-<br>
-
-<span>
-
-Feel Confident
-
-</span>
-
-</h1>
-
-
-
-
-<p>
-
-Premium beauty, lingerie and lifestyle essentials from BARQ.
-
-</p>
-
-
-
-
-<button
-
-onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
-
-Shop Now →
-
-</button>
-
-
-
-</div>
-
-
-
-
-
-
-<div class="hero-image">
-
-
-<img
-
-src="https://images.unsplash.com/photo-1596462502278-27bfdc403348"
-
-alt="BARQ products">
-
-
-</div>
-
-
-
-</section>
- <!-- BRANDS -->
-
-<section id="brands" class="brands">
-
-
-<h2>
-Popular Brands
-</h2>
-
-
-<div class="brand-list">
-
-
-<span>
-Babaero
-</span>
-
-
-<span>
-BARQ Beauty
-</span>
-
-
-<span>
-Premium Care
-</span>
-
-
-<span>
-Luxury Collection
-</span>
-
-
-<span>
-New Arrivals
-</span>
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<!-- PRODUCTS -->
-
-
-<section id="products" class="products">
-
-
-
-<h2>
-
-Featured Products
-
-</h2>
-
-
-
-<p class="products-subtitle">
-
-Discover your next favorite
-
-</p>
-
-
-
-
-
-<!-- SEARCH -->
-
-
-<div class="search-box">
-
-
-<input
-
-type="text"
-
-id="searchInput"
-
-placeholder="Search products, brands and categories">
-
-
-</div>
-
-
-
-
-
-
-
-<!-- FIREBASE PRODUCTS LOAD HERE -->
-
-
-<div class="product-container">
-
-
-</div>
-
-
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<!-- CONTACT -->
-
-
-<section id="contact">
-
-</section>
-
-
-
-
-
-
-
-
-
-<!-- CART -->
-
-
-<div id="cartBox" class="cart-box">
-
-
-
-<h2>
-
-Your Cart
-
-</h2>
-
-
-
-
-<div id="cartItems">
-
-</div>
-
-
-
-
-
-<h3>
-
-Total:
-
-<span id="cartTotal">
-
-0
-
-</span>
-
-SAR
-
-</h3>
-
-
-
-
-<button onclick="checkout()">
-
-Checkout
-
-</button>
-
-
-
-
-<button onclick="closeCart()">
-
-Close
-
-</button>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<!-- LOGIN -->
-
-
-<div id="loginBox" class="login-box">
-
-
-
-<div class="login-content">
-
-
-
-<button
-
-class="login-close"
-
-onclick="closeLogin()">
-
-×
-
-</button>
-
-
-
-
-
-<h2>
-
-BARQ Login
-
-</h2>
-
-
-
-
-<p>
-
-Login to your BARQ account
-
-</p>
-
-
-
-
-
-
-<input
-
-type="email"
-
-id="loginEmail"
-
-placeholder="Email">
-
-
-
-
-
-
-
-<input
-
-type="password"
-
-id="loginPassword"
-
-placeholder="Password">
-
-
-
-
-
-
-
-<button id="loginButton">
-
-Login
-
-</button>
-
-
-
-
-
-<p id="loginMessage">
-
-</p>
-
-
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<!-- JAVASCRIPT -->
-
-
-<script type="module" src="script.js"></script>
-
-
-<script type="module" src="auth.js"></script>
-
-
-
-</body>
-
-
-</html>  
+}
