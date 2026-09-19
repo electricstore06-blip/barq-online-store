@@ -445,29 +445,25 @@ Cancelled
 
 </select>
 
+`; 
 
+const orderHTML = `
 <div class="order-card-header">
 
+    <div>
+        <h3>
+            ${orderNumber}
+        </h3>
 
-            <div>
+        <p>
+            ${orderDate}
+        </p>
 
-                <h3>
-                    ${orderNumber}
-                </h3>
+    </div>
 
-
-                <p>
-                    ${orderDate}
-                </p>
-
-            </div>
-
-
-            ${statusHTML}
-
-
-        </div>
-
+</div>
+`;
+        
 
 
 
