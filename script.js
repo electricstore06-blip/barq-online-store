@@ -781,7 +781,18 @@ window.removeCart = removeCart;
 window.increaseQuantity = increaseQuantity;
 window.decreaseQuantity = decreaseQuantity;
 
+const menuButton =
+document.getElementById("menuButton");
 
+
+if(menuButton){
+
+menuButton.addEventListener(
+"click",
+toggleMenu
+);
+
+}
 
 
 // ==========================================
