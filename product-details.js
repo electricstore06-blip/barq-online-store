@@ -1,20 +1,18 @@
 import { db } from "./firebase-config.js";
 
 import {
-    doc,
-    getDoc
+doc,
+getDoc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
+const params = new URLSearchParams(
+window.location.search
+);
 
-const params =
-new URLSearchParams(window.location.search);
 
-
-const productId =
-params.get("id");
-
+const productId = params.get("id");
 
 
 const container =
@@ -47,7 +45,6 @@ productId
 );
 
 
-
 const snap =
 await getDoc(ref);
 
@@ -58,7 +55,6 @@ if(!snap.exists()){
 
 container.innerHTML =
 "<h2>Product not found</h2>";
-
 
 return;
 
@@ -75,25 +71,20 @@ snap.data();
 container.innerHTML = `
 
 
-<div class="product-details-page">
+<div class="product-details-box">
 
 
 
-<div class="product-image-box">
+<img
 
-
-<img 
 src="${product.image}"
-alt="${product.name}"
+
+class="details-image"
+
+onerror="this.style.display='none'"
+
 >
 
-
-</div>
-
-
-
-
-<div class="product-info">
 
 
 <h1>
@@ -103,105 +94,76 @@ ${product.name}
 
 
 <h3>
-${product.brand || "BARQ"}
+${product.brand || ""}
 </h3>
 
 
 
-<p>
-${product.category || ""}
-</p>
-
-
-
-<div class="price-box">
-
+<h2>
 ${product.price} SAR
-
-</div>
+</h2>
 
 
 
 <p>
-
-${product.description || 
-"Premium quality product from BARQ Store."}
-
+${product.description || ""}
 </p>
 
 
 
-
-<div class="option-title">
-
+<h3>
 Choose Color
-
-</div>
-
-
-<div class="option-buttons">
+</h3>
 
 
-${
-(product.colors || [])
-.map(color =>
+<div class="options">
 
-`
+${(product.colors || []).map(color=>`
 
 <button>
 ${color}
 </button>
 
-`
-
-).join("")
-}
-
+`).join("")}
 
 </div>
 
 
 
 
-<div class="option-title">
-
+<h3>
 Choose Size
-
-</div>
-
-
-<div class="option-buttons">
+</h3>
 
 
-${
-(product.sizes || [])
-.map(size =>
+<div class="options">
 
-`
+${(product.sizes || []).map(size=>`
 
 <button>
 ${size}
 </button>
 
-`
-
-).join("")
-}
-
+`).join("")}
 
 </div>
 
 
 
 
+<button
 
-<button 
+class="add-cart-details"
 
-class="add-cart-btn"
-
-id="addCartButton"
-
->
+onclick="
+addToCart(
+'${snap.id}',
+'${product.name}',
+${product.price},
+'${product.image}',
+'${product.brand}'
+)
+">
 
 Add To Cart
 
@@ -212,41 +174,7 @@ Add To Cart
 </div>
 
 
-</div>
-
-
 `;
-
-
-
-
-
-document
-.getElementById("addCartButton")
-.onclick = ()=>{
-
-
-addToCart(
-
-productId,
-
-product.name,
-
-product.price,
-
-product.image,
-
-product.brand || "BARQ"
-
-);
-
-
-alert("Added to cart ✅");
-
-
-};
-
-
 
 
 
@@ -254,19 +182,12 @@ alert("Added to cart ✅");
 
 catch(error){
 
-
-console.error(
-"Product loading error:",
-error
-);
-
+console.error(error);
 
 container.innerHTML =
 "<h2>Error loading product</h2>";
 
-
 }
-
 
 
 }
