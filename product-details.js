@@ -70,21 +70,21 @@ snap.data();
 
 container.innerHTML = `
 
+<div class="product-details-page">
 
-<div class="product-details-box">
 
-
+<div class="product-image-box">
 
 <img
-
 src="${product.image}"
-
-class="details-image"
-
-onerror="this.style.display='none'"
-
+alt="${product.name}"
 >
 
+</div>
+
+
+
+<div class="product-info">
 
 
 <h1>
@@ -92,22 +92,89 @@ ${product.name}
 </h1>
 
 
-
 <h3>
-${product.brand || ""}
+${product.brand || "BARQ"}
 </h3>
 
 
-
-<h2>
+<div class="price-box">
 ${product.price} SAR
-</h2>
-
+</div>
 
 
 <p>
 ${product.description || ""}
 </p>
+
+
+
+<h3 class="option-title">
+Choose Color
+</h3>
+
+
+<div class="option-buttons">
+
+${(product.colors || []).map(color=>`
+
+<button>
+${color}
+</button>
+
+`).join("")}
+
+</div>
+
+
+
+
+
+<h3 class="option-title">
+Choose Size
+</h3>
+
+
+<div class="option-buttons">
+
+${(product.sizes || []).map(size=>`
+
+<button>
+${size}
+</button>
+
+`).join("")}
+
+</div>
+
+
+
+
+
+<button
+
+class="add-cart-btn"
+
+onclick="
+addToCart(
+'${snap.id}',
+'${product.name}',
+${product.price},
+'${product.image}',
+'${product.brand}'
+)
+">
+
+Add To Cart
+
+</button>
+
+
+</div>
+
+
+</div>
+
+`;
 
 
 
