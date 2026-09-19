@@ -772,39 +772,14 @@ menu.classList.remove("active");
 // ==========================================
 // EXPORT TO HTML
 // ==========================================
-
-
-window.toggleMenu =
-toggleMenu;
-
-
-window.openCart =
-openCart;
-
-
-window.closeCart =
-closeCart;
-
-
-window.checkout =
-checkout;
-
-
-window.removeCart =
-removeCart;
-
-
-window.increaseQuantity =
-increaseQuantity;
-
-
-window.decreaseQuantity =
-decreaseQuantity;
-
-
-window.addToCart =
-addToCart;
-
+window.addToCart = addToCart;
+window.toggleMenu = toggleMenu;
+window.openCart = openCart;
+window.closeCart = closeCart;
+window.checkout = checkout;
+window.removeCart = removeCart;
+window.increaseQuantity = increaseQuantity;
+window.decreaseQuantity = decreaseQuantity;
 
 
 
