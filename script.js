@@ -9,7 +9,7 @@ import { db } from "./firebase-config.js";
 import {
     collection,
     getDocs
-}
+} 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
@@ -28,15 +28,14 @@ JSON.parse(localStorage.getItem("barqCart")) || [];
 
 
 
+
 // ==========================================
 // LOAD PRODUCTS FROM FIREBASE
 // ==========================================
 
 
 async function loadProducts(){
-
 console.log("LOAD PRODUCTS STARTED");
-
 
 const container =
 document.querySelector(".product-container");
@@ -59,30 +58,15 @@ const snapshot =
 await getDocs(
 collection(db,"products")
 );
-
-
-
-console.log(
-"PRODUCT COUNT:",
-snapshot.size
-);
-
+console.log("PRODUCT COUNT:", snapshot.size);
 
 
 productsData = [];
 
 
-
 snapshot.forEach((doc)=>{
 
-
-console.log(
-"PRODUCT DATA:",
-doc.id,
-doc.data()
-);
-
-
+console.log("PRODUCT DATA:", doc.id, doc.data());
 
 productsData.push({
 
@@ -91,7 +75,6 @@ id:doc.id,
 ...doc.data()
 
 });
-
 
 });
 
@@ -102,6 +85,7 @@ displayProducts(productsData);
 
 
 }
+
 
 catch(error){
 
@@ -116,10 +100,14 @@ error
 container.innerHTML =
 "<p>Unable to load products</p>";
 
+
 }
 
 
+
 }
+
+
 
 
 
@@ -132,80 +120,59 @@ container.innerHTML =
 
 function displayProducts(products){
 
+const container = document.querySelector(".product-container");
 
-const container =
-document.querySelector(".product-container");
-
-
-
-console.log(
-"DISPLAY PRODUCTS:",
-products
-);
-
+console.log("DISPLAY PRODUCTS:", products);
 
 
 if(!container){
 
-console.error(
-"NO PRODUCT CONTAINER"
-);
+console.error("NO PRODUCT CONTAINER");
 
 return;
 
 }
 
 
-
 container.innerHTML = "";
-
 
 
 products.forEach((product)=>{
 
 
-const card =
-document.createElement("div");
+const card = document.createElement("div");
 
+card.className = "product";
 
-
-card.className =
-"product";
-
-
-
-
-
-
-card.querySelector(".view-product-btn").onclick = ()=>{
-
-
-window.location.href =
-"./product-details.html?id=" + product.id;
-
-
-};
 
 card.innerHTML = `
 
-<div class="product-click">
+<a class="product-link"
+href="./product-details.html?id=${product.id}">
+
 
 <img
 class="product-img"
 src="${product.image}"
 alt="${product.name}">
 
-<h3>${product.name}</h3>
+
+<h3>
+${product.name}
+</h3>
+
 
 <p class="brand">
 ${product.brand || "BARQ"}
 </p>
 
+
 <p class="price">
 ${Number(product.price).toFixed(2)} SAR
 </p>
 
-</div>
+
+</a>
 
 
 <button class="add-btn">
@@ -216,28 +183,15 @@ Add To Cart
 
 
 
-card.querySelector(".product-click").onclick = ()=>{
-
-window.location.href =
-`product-details.html?id=${product.id}`;
-
-};
-
 card.querySelector(".add-btn").onclick = ()=>{
 
 
 addToCart(
-
 product.id,
-
 product.name,
-
 product.price,
-
 product.image,
-
 product.brand
-
 );
 
 
@@ -248,17 +202,14 @@ product.brand
 container.appendChild(card);
 
 
-
 });
 
 
-
-console.log(
-"PRODUCT CARDS CREATED"
-);
-
+console.log("PRODUCT CARDS CREATED");
 
 }
+
+
 // ==========================================
 // SEARCH
 // ==========================================
@@ -278,7 +229,8 @@ searchInput.addEventListener(
 
 
 const value =
-searchInput.value.toLowerCase();
+searchInput.value
+.toLowerCase();
 
 
 
@@ -324,6 +276,9 @@ displayProducts(result);
 
 
 }
+
+
+
 
 
 
@@ -425,6 +380,7 @@ alert(
 
 
 
+
 function updateCart(){
 
 
@@ -445,6 +401,7 @@ document.getElementById("cartCount");
 let sum = 0;
 
 let quantity = 0;
+
 
 
 
@@ -469,6 +426,7 @@ item.quantity;
 
 
 
+
 items.innerHTML += `
 
 
@@ -485,7 +443,6 @@ ${item.price} SAR
 </p>
 
 
-
 <button onclick="decreaseQuantity(${index})">
 
 -
@@ -493,13 +450,11 @@ ${item.price} SAR
 </button>
 
 
-
 <span>
 
 ${item.quantity}
 
 </span>
-
 
 
 <button onclick="increaseQuantity(${index})">
@@ -526,6 +481,7 @@ Remove
 
 
 });
+
 
 
 }
@@ -557,6 +513,9 @@ quantity;
 
 
 
+
+
+
 function increaseQuantity(index){
 
 
@@ -567,7 +526,6 @@ cart[index].quantity++;
 
 
 saveCart();
-
 
 updateCart();
 
@@ -635,9 +593,19 @@ updateCart();
 
 
 }
+
+
+
+
+
+
+
+
+
 // ==========================================
 // CART OPEN CLOSE
 // ==========================================
+
 
 
 function openCart(){
@@ -666,6 +634,7 @@ updateCart();
 
 
 
+
 function closeCart(){
 
 
@@ -683,6 +652,8 @@ box.style.display="none";
 
 
 }
+
+
 
 
 
@@ -713,6 +684,8 @@ window.location.href =
 
 
 }
+
+
 
 
 
@@ -799,40 +772,14 @@ menu.classList.remove("active");
 // ==========================================
 // EXPORT TO HTML
 // ==========================================
-
-
-window.addToCart =
-addToCart;
-
-
-window.toggleMenu =
-toggleMenu;
-
-
-window.openCart =
-openCart;
-
-
-window.closeCart =
-closeCart;
-
-
-window.checkout =
-checkout;
-
-
-window.removeCart =
-removeCart;
-
-
-window.increaseQuantity =
-increaseQuantity;
-
-
-window.decreaseQuantity =
-decreaseQuantity;
-
-
+window.addToCart = addToCart;
+window.toggleMenu = toggleMenu;
+window.openCart = openCart;
+window.closeCart = closeCart;
+window.checkout = checkout;
+window.removeCart = removeCart;
+window.increaseQuantity = increaseQuantity;
+window.decreaseQuantity = decreaseQuantity;
 
 
 
