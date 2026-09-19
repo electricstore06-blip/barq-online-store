@@ -174,46 +174,6 @@ card.className =
 
 
 
-card.innerHTML = `
-
-
-<img
-class="product-img"
-src="${product.image}"
-alt="${product.name}"
->
-
-
-<h3>
-${product.name}
-</h3>
-
-
-<p class="brand">
-${product.brand || "BARQ"}
-</p>
-
-
-<p class="price">
-${Number(product.price).toFixed(2)} SAR
-</p>
-
-
-<button class="view-product-btn">
-
-View Product
-
-</button>
-
-
-<button class="add-btn">
-
-Add To Cart
-
-</button>
-
-
-`;
 
 
 
@@ -226,7 +186,42 @@ window.location.href =
 
 };
 
+card.innerHTML = `
 
+<div class="product-click">
+
+<img
+class="product-img"
+src="${product.image}"
+alt="${product.name}">
+
+<h3>${product.name}</h3>
+
+<p class="brand">
+${product.brand || "BARQ"}
+</p>
+
+<p class="price">
+${Number(product.price).toFixed(2)} SAR
+</p>
+
+</div>
+
+
+<button class="add-btn">
+Add To Cart
+</button>
+
+`;
+
+
+
+card.querySelector(".product-click").onclick = ()=>{
+
+window.location.href =
+`product-details.html?id=${product.id}`;
+
+};
 
 card.querySelector(".add-btn").onclick = ()=>{
 
