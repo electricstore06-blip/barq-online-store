@@ -365,15 +365,14 @@ if (placeOrderButton) {
             }
 
 
-            /* Location is required */
+         /* Location is optional */
 
-            if (!latitude || !longitude) {
+if (!latitude || !longitude) {
 
-                checkoutMessage.textContent =
-                    "Please select your current location.";
+    checkoutMessage.textContent =
+        "Using delivery address only.";
 
-                return;
-            }
+} 
 
 
             /* =========================================
@@ -442,11 +441,11 @@ if (placeOrderButton) {
 
                     /* CUSTOMER GPS LOCATION */
 
-                    latitude:
-                        Number(latitude),
+                latitude:
+    latitude ? Number(latitude) : null,
 
-                    longitude:
-                        Number(longitude),
+longitude:
+    longitude ? Number(longitude) : null,
 
                     locationAccuracy:
                         Number(locationAccuracy || 0),
