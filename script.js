@@ -802,6 +802,9 @@ window.decreaseQuantity =
 decreaseQuantity;
 
 
+window.addToCart =
+addToCart;
+
 
 
 
