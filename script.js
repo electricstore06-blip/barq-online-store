@@ -148,7 +148,7 @@ card.className = "product";
 card.innerHTML = `
 
 <a class="product-link"
-href="product-details.html?id=${product.id}">
+href="./product-details.html?id=${product.id}">
 
 
 <img
