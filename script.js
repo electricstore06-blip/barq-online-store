@@ -1,3 +1,7 @@
+// ==========================================
+// DISPLAY PRODUCTS
+// ==========================================
+
 function displayProducts(products){
 
 const container =
@@ -8,6 +12,7 @@ console.log(
 "DISPLAY PRODUCTS:",
 products
 );
+
 
 
 if(!container){
@@ -21,7 +26,9 @@ return;
 }
 
 
+
 container.innerHTML = "";
+
 
 
 products.forEach((product)=>{
@@ -40,10 +47,12 @@ card.innerHTML = `
 
 <div class="product-click">
 
+
 <img
 class="product-img"
 src="${product.image}"
 alt="${product.name}">
+
 
 
 <h3>
@@ -51,14 +60,17 @@ ${product.name}
 </h3>
 
 
+
 <p class="brand">
 ${product.brand || "BARQ"}
 </p>
 
 
+
 <p class="price">
 ${Number(product.price).toFixed(2)} SAR
 </p>
+
 
 
 </div>
@@ -74,11 +86,17 @@ Add To Cart
 
 
 
-// PRODUCT DETAILS CLICK ONLY HERE
+
+// ==========================================
+// PRODUCT DETAILS CLICK
+// ==========================================
 
 const productArea =
 card.querySelector(".product-click");
 
+
+
+if(productArea){
 
 productArea.onclick = ()=>{
 
@@ -89,19 +107,28 @@ window.location.href =
 
 };
 
+}
 
 
 
+
+
+// ==========================================
 // ADD TO CART BUTTON
+// ==========================================
 
 const addButton =
 card.querySelector(".add-btn");
 
 
+
+if(addButton){
+
 addButton.onclick = (event)=>{
 
 
 event.stopPropagation();
+
 
 
 addToCart(
@@ -121,6 +148,9 @@ product.brand
 
 };
 
+}
+
+
 
 
 container.appendChild(card);
@@ -128,6 +158,7 @@ container.appendChild(card);
 
 
 });
+
 
 
 console.log(
