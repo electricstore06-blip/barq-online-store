@@ -109,10 +109,6 @@ container.innerHTML =
 
 
 
-
-
-
-
 // ==========================================
 // DISPLAY PRODUCTS
 // ==========================================
@@ -147,8 +143,8 @@ card.className = "product";
 
 card.innerHTML = `
 
-<a class="product-link"
-href="./product-details.html?id=${product.id}">
+
+<div class="product-click">
 
 
 <img
@@ -172,34 +168,87 @@ ${Number(product.price).toFixed(2)} SAR
 </p>
 
 
-</a>
+</div>
+
 
 
 <button class="add-btn">
 Add To Cart
 </button>
 
+
 `;
 
 
 
-card.querySelector(".add-btn").onclick = ()=>{
+
+// CLICK PRODUCT IMAGE / NAME
+
+const productArea =
+card.querySelector(".product-click");
+
+
+if(productArea){
+
+productArea.onclick = ()=>{
+
+
+console.log(
+"PRODUCT CLICKED:",
+product.id
+);
+
+
+window.location.href =
+"./product-details.html?id=" + product.id;
+
+
+};
+
+}
+
+
+
+
+
+// ADD TO CART
+
+const addButton =
+card.querySelector(".add-btn");
+
+
+if(addButton){
+
+addButton.onclick = (event)=>{
+
+
+event.stopPropagation();
+
 
 
 addToCart(
+
 product.id,
+
 product.name,
+
 product.price,
+
 product.image,
+
 product.brand
+
 );
 
 
 };
 
+}
+
 
 
 container.appendChild(card);
+
 
 
 });
@@ -208,6 +257,10 @@ container.appendChild(card);
 console.log("PRODUCT CARDS CREATED");
 
 }
+
+
+
+
 
 
 // ==========================================
