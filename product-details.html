@@ -1,115 +1,264 @@
-import { db } from "./firebase-config.js";
+<!DOCTYPE html>
+<html lang="en">
 
-import {
-doc,
-getDoc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<head>
 
+<meta charset="UTF-8">
 
-const params = new URLSearchParams(
-window.location.search
-);
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>BARQ | Product Details</title>
 
-const productId = params.get("id");
+<link rel="stylesheet" href="style.css">
 
+<link rel="icon" href="favicon.ico">
 
-console.log("Product ID:", productId);
+<style>
 
+.product-details-page{
 
+padding:40px;
 
-async function loadProduct(){
+display:flex;
 
+gap:40px;
 
-if(!productId){
+flex-wrap:wrap;
 
-console.error("No product ID");
+max-width:1200px;
 
-return;
-
-}
-
-
-
-const ref = doc(
-db,
-"products",
-productId
-);
-
-
-
-const snap =
-await getDoc(ref);
-
-
-
-if(!snap.exists()){
-
-console.log("Product not found");
-
-document.getElementById("productDetails").innerHTML =
-"<h2>Product not found</h2>";
-
-return;
+margin:auto;
 
 }
 
 
 
-const product = snap.data();
+.product-image-box{
+
+flex:1;
+
+min-width:300px;
+
+text-align:center;
+
+}
 
 
 
-document.getElementById("productDetails").innerHTML = `
+.product-image-box img{
+
+width:100%;
+
+max-width:450px;
+
+border-radius:20px;
+
+}
 
 
-<img 
-src="${product.image}"
-class="details-image"
->
+
+.product-info{
+
+flex:1;
+
+min-width:300px;
+
+}
 
 
-<h1>
-${product.name}
-</h1>
 
+.product-info h1{
+
+font-size:35px;
+
+}
+
+
+
+.price-box{
+
+font-size:28px;
+
+font-weight:bold;
+
+margin:20px 0;
+
+}
+
+
+
+.option-title{
+
+font-weight:bold;
+
+margin-top:20px;
+
+}
+
+
+
+.option-buttons button{
+
+margin:5px;
+
+padding:10px 18px;
+
+border-radius:20px;
+
+border:1px solid #ccc;
+
+background:white;
+
+cursor:pointer;
+
+}
+
+
+
+.add-cart-btn{
+
+margin-top:30px;
+
+padding:15px 40px;
+
+background:black;
+
+color:white;
+
+border:none;
+
+border-radius:30px;
+
+font-size:18px;
+
+cursor:pointer;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="top-bar">
+
+🚚 Free Shipping | ❤️ Authentic Products | 🔒 Secure Payment
+
+</div>
+
+
+
+<header>
+
+<div class="logo">
+
+⚡ BARQ
+
+<span>
+ONLINE STORE
+</span>
+
+</div>
+
+
+<nav id="mainNav">
+
+<a href="index.html">
+Home
+</a>
+
+
+<a href="index.html#products">
+Shop
+</a>
+
+
+<a href="orders.html">
+My Orders
+</a>
+
+
+<a href="#" onclick="openCart();return false;">
+
+🛒 Cart
+
+<span id="cartCount">
+0
+</span>
+
+</a>
+
+
+</nav>
+
+
+</header>
+
+
+
+
+
+<section id="productDetails">
 
 <p>
-Brand: ${product.brand}
+Loading product...
 </p>
 
 
-<h2>
-${product.price} SAR
-</h2>
+</section>
 
 
-<p>
-${product.category}
-</p>
 
 
-<button onclick="
-addToCart(
-'${snap.id}',
-'${product.name}',
-${product.price},
-'${product.image}',
-'${product.brand}'
-)
-">
-Add To Cart
+
+<div id="cartBox" class="cart-box">
+
+
+<h2>Your Cart</h2>
+
+
+<div id="cartItems"></div>
+
+
+<h3>
+
+Total:
+
+<span id="cartTotal">
+0
+</span>
+
+SAR
+
+</h3>
+
+
+<button onclick="checkout()">
+Checkout
 </button>
 
 
-`;
+<button onclick="closeCart()">
+Close
+</button>
+
+
+</div>
 
 
 
-}
 
 
+<script type="module" src="product-details.js"></script>
 
-loadProduct();
+<script type="module" src="script.js"></script>
+
+
+</body>
+
+
+</html>
