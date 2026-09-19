@@ -7,6 +7,9 @@ getDoc
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
+console.log("PRODUCT DETAILS JS STARTED");
+
+
 const params = new URLSearchParams(
 window.location.search
 );
@@ -23,10 +26,14 @@ document.getElementById("productDetails");
 async function loadProduct(){
 
 
+console.log("PRODUCT ID:", productId);
+
+
+
 if(!productId){
 
 container.innerHTML =
-"<h2>Product not found</h2>";
+"<h2>No product id</h2>";
 
 return;
 
@@ -45,8 +52,13 @@ productId
 );
 
 
+
 const snap =
 await getDoc(ref);
+
+
+
+console.log("FIREBASE RESULT:", snap.exists());
 
 
 
@@ -58,7 +70,6 @@ container.innerHTML =
 
 return;
 
-
 }
 
 
@@ -68,17 +79,21 @@ snap.data();
 
 
 
+console.log("PRODUCT:", product);
+
+
+
 container.innerHTML = `
+
 
 <div class="product-details-page">
 
 
 <div class="product-image-box">
 
-<img
-src="${product.image}"
-alt="${product.name}"
->
+
+<img src="${product.image}">
+
 
 </div>
 
@@ -97,9 +112,13 @@ ${product.brand || "BARQ"}
 </h3>
 
 
+
 <div class="price-box">
+
 ${product.price} SAR
+
 </div>
+
 
 
 <p>
@@ -108,134 +127,72 @@ ${product.description || ""}
 
 
 
-<h3 class="option-title">
+<h3>
 Choose Color
 </h3>
 
 
 <div class="option-buttons">
 
-${(product.colors || []).map(color=>`
+${(product.colors || []).map(
+color=>`
 
 <button>
 ${color}
 </button>
 
-`).join("")}
+`
+).join("")}
 
 </div>
 
 
 
 
-
-<h3 class="option-title">
+<h3>
 Choose Size
 </h3>
 
 
 <div class="option-buttons">
 
-${(product.sizes || []).map(size=>`
+
+${(product.sizes || []).map(
+size=>`
 
 <button>
 ${size}
 </button>
 
-`).join("")}
+`
+).join("")}
+
 
 </div>
 
 
 
 
-
 <button
-
 class="add-cart-btn"
 
-onclick="
-addToCart(
+onclick="addToCart(
 '${snap.id}',
 '${product.name}',
 ${product.price},
 '${product.image}',
-'${product.brand}'
-)
-">
+'${product.brand || ""}'
+)"
+
+>
 
 Add To Cart
 
 </button>
 
 
-</div>
-
 
 </div>
-
-`;
-
-
-
-<h3>
-Choose Color
-</h3>
-
-
-<div class="options">
-
-${(product.colors || []).map(color=>`
-
-<button>
-${color}
-</button>
-
-`).join("")}
-
-</div>
-
-
-
-
-<h3>
-Choose Size
-</h3>
-
-
-<div class="options">
-
-${(product.sizes || []).map(size=>`
-
-<button>
-${size}
-</button>
-
-`).join("")}
-
-</div>
-
-
-
-
-<button
-
-class="add-cart-details"
-
-onclick="
-addToCart(
-'${snap.id}',
-'${product.name}',
-${product.price},
-'${product.image}',
-'${product.brand}'
-)
-">
-
-Add To Cart
-
-</button>
-
 
 
 </div>
@@ -247,14 +204,21 @@ Add To Cart
 
 }
 
+
 catch(error){
 
-console.error(error);
+
+console.error(
+"PRODUCT DETAILS ERROR:",
+error
+);
+
 
 container.innerHTML =
 "<h2>Error loading product</h2>";
 
 }
+
 
 
 }
