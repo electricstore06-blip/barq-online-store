@@ -120,137 +120,78 @@ container.innerHTML =
 
 function displayProducts(products){
 
+const container = document.querySelector(".product-container");
 
-const container =
-document.querySelector(".product-container");
+console.log("DISPLAY PRODUCTS:", products);
 
 
+if(!container){
 
-if(!container) return;
+console.error("NO PRODUCT CONTAINER");
 
+return;
+
+}
 
 
 container.innerHTML = "";
 
 
-
-if(products.length===0){
-
-
-container.innerHTML =
-"<p>No products found</p>";
-
-
-return;
-
-
-}
-
-
-
-
 products.forEach((product)=>{
 
 
-const card =
-document.createElement("div");
+const card = document.createElement("div");
 
-
-
-card.className =
-"product";
-
-
-
-const image =
-product.image ||
-"https://images.unsplash.com/photo-1596462502278-27bfdc403348";
-
-
-
-const name =
-product.name ||
-"Beauty Product";
-
-
-
-const brand =
-product.brand ||
-"BARQ";
-
-
-
-const price =
-Number(product.price || 0);
-
+card.className = "product";
 
 
 card.innerHTML = `
 
-
-<a 
-class="product-link"
-href="product-details.html?id=${product.id}"
->
+<a class="product-link"
+href="product-details.html?id=${product.id}">
 
 
 <img
 class="product-img"
-src="${image}"
-alt="${name}"
->
+src="${product.image}"
+alt="${product.name}">
 
 
 <h3>
-${name}
+${product.name}
 </h3>
 
 
 <p class="brand">
-${brand}
+${product.brand || "BARQ"}
 </p>
 
 
 <p class="price">
-${price.toFixed(2)} SAR
+${Number(product.price).toFixed(2)} SAR
 </p>
 
 
 </a>
 
 
-
-<button 
-class="add-btn">
-
+<button class="add-btn">
 Add To Cart
-
 </button>
-
 
 `;
 
 
 
-
-
-card
-.querySelector(".add-btn")
-.onclick = ()=>{
+card.querySelector(".add-btn").onclick = ()=>{
 
 
 addToCart(
-
 product.id,
-
-name,
-
-price,
-
-image,
-
-brand
-
+product.name,
+product.price,
+product.image,
+product.brand
 );
 
 
@@ -261,17 +202,12 @@ brand
 container.appendChild(card);
 
 
-
 });
 
 
+console.log("PRODUCT CARDS CREATED");
 
 }
-
-
-
-
-
 
 
 // ==========================================
