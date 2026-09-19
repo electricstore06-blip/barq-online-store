@@ -115,7 +115,13 @@ container.innerHTML =
 
 
 function displayProducts(products){
+if(!products || products.length === 0){
 
+console.log("NO PRODUCTS TO DISPLAY - KEEP OLD PRODUCTS");
+
+return;
+
+}
 const container = document.querySelector(".product-container");
 
 console.log("DISPLAY PRODUCTS:", products);
