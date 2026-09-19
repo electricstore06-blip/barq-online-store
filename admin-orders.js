@@ -400,8 +400,6 @@ function displayOrder(order){
 /* =========================================
    STATUS DROPDOWN
 ========================================= */
-
-
 const statusHTML = `
 
 <select 
@@ -409,53 +407,48 @@ class="status-select"
 data-order-id="${order.id}"
 >
 
-
 <option value="Pending" ${status==="Pending"?"selected":""}>
 Pending
 </option>
-
 
 <option value="Processing" ${status==="Processing"?"selected":""}>
 Processing
 </option>
 
-
 <option value="Shipped" ${status==="Shipped"?"selected":""}>
 Shipped
 </option>
-
 
 <option value="Out for Delivery" ${status==="Out for Delivery"?"selected":""}>
 Out for Delivery
 </option>
 
-
 <option value="Delivered" ${status==="Delivered"?"selected":""}>
 Delivered
 </option>
-
 
 <option value="Delivery Delayed" ${status==="Delivery Delayed"?"selected":""}>
 Delivery Delayed
 </option>
 
-
 <option value="Replacement Requested" ${status==="Replacement Requested"?"selected":""}>
 Replacement Requested
 </option>
-
 
 <option value="Replacement Approved" ${status==="Replacement Approved"?"selected":""}>
 Replacement Approved
 </option>
 
-
 <option value="Cancelled" ${status==="Cancelled"?"selected":""}>
 Cancelled
 </option>
 
-
 </select>
+
+`;
+
+
+<div class="order-card-header">
 
 
 
