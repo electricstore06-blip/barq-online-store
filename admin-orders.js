@@ -397,9 +397,11 @@ function displayOrder(order){
     }
 
 
+
 /* =========================================
    STATUS DROPDOWN
 ========================================= */
+
 const statusHTML = `
 
 <select 
@@ -445,12 +447,15 @@ Cancelled
 
 </select>
 
-`; 
+`;
+
 
 const orderHTML = `
+
 <div class="order-card-header">
 
     <div>
+
         <h3>
             ${orderNumber}
         </h3>
@@ -461,130 +466,100 @@ const orderHTML = `
 
     </div>
 
+    ${statusHTML}
+
 </div>
+
+
+<div class="customer-section">
+
+    <h4>
+        Customer Information
+    </h4>
+
+    <p>
+        <strong>Name:</strong>
+        ${customerName}
+    </p>
+
+    <p>
+        <strong>Phone:</strong>
+        ${phone}
+    </p>
+
+    <p>
+        <strong>Email:</strong>
+        ${email}
+    </p>
+
+    <p>
+        <strong>Address:</strong>
+        ${address}
+    </p>
+
+    <div class="location-box">
+
+        <strong>
+            Customer Location:
+        </strong>
+
+        <br>
+
+        ${locationHTML}
+
+    </div>
+
+</div>
+
+
+<div class="products-section">
+
+    <h4>
+        Products
+    </h4>
+
+    ${productsHTML}
+
+</div>
+
+
+<div class="payment-section">
+
+    <h4>
+        Payment
+    </h4>
+
+    <p>
+        <strong>Method:</strong>
+        ${paymentMethod}
+    </p>
+
+    <p>
+        <strong>Subtotal:</strong>
+        SAR ${subtotal.toFixed(2)}
+    </p>
+
+    <p>
+        <strong>Delivery:</strong>
+        SAR ${delivery.toFixed(2)}
+    </p>
+
+    <p class="order-total">
+
+        <strong>
+            Total:
+        </strong>
+
+        SAR ${total.toFixed(2)}
+
+    </p>
+
+</div>
+
 `;
-        
 
 
-
-        <div class="customer-section">
-
-            <h4>
-                Customer Information
-            </h4>
-
-
-            <p>
-                <strong>Name:</strong>
-                ${customerName}
-            </p>
-
-
-            <p>
-                <strong>Phone:</strong>
-                ${phone}
-            </p>
-
-
-            <p>
-                <strong>Email:</strong>
-                ${email}
-            </p>
-
-
-            <p>
-                <strong>Address:</strong>
-                ${address}
-            </p>
-
-
-
-            <div class="location-box">
-
-                <strong>
-                    Customer Location:
-                </strong>
-
-                <br>
-
-                ${locationHTML}
-
-            </div>
-
-
-        </div>
-
-
-
-
-        <div class="products-section">
-
-
-            <h4>
-                Products
-            </h4>
-
-
-            ${productsHTML}
-
-
-        </div>
-
-
-
-
-
-        <div class="payment-section">
-
-
-            <h4>
-                Payment
-            </h4>
-
-
-            <p>
-                <strong>Method:</strong>
-                ${paymentMethod}
-            </p>
-
-
-            <p>
-                <strong>Subtotal:</strong>
-                SAR ${subtotal.toFixed(2)}
-            </p>
-
-
-            <p>
-                <strong>Delivery:</strong>
-                SAR ${delivery.toFixed(2)}
-            </p>
-
-
-            <p class="order-total">
-
-                <strong>
-                    Total:
-                </strong>
-
-                SAR ${total.toFixed(2)}
-
-            </p>
-
-
-        </div>
-
-
-    `;
-
-
-
-    ordersContainer.appendChild(orderCard);
-
-
-}
-
-
-
+orderCard.innerHTML = orderHTML;
 
 
 /* =========================================
