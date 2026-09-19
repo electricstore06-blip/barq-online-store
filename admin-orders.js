@@ -229,91 +229,45 @@ async function loadOrders() {
 /* =========================================
    DISPLAY ONE ORDER
 ========================================= */
-
 function displayOrder(order){
 
+    const orderCard = document.createElement("div");
 
-    const orderCard =
-        document.createElement("div");
-
-
-    orderCard.className =
-        "order-card";
+    orderCard.className = "order-card";
 
 
-    const customerName =
-        order.customerName ||
-        "Customer";
+    const customerName = order.customerName || "Customer";
+    const phone = order.phone || "Not provided";
+    const email = order.email || "Not provided";
+    const address = order.address || "Not provided";
+    const orderNumber = order.orderNumber || "BARQ0000";
+    const status = order.status || "Pending";
+
+    const paymentMethod = order.paymentMethod || "Not selected";
+
+    const subtotal = Number(order.subtotal || 0);
+    const delivery = Number(order.delivery || 0);
+    const total = Number(order.total || 0);
 
 
-    const phone =
-        order.phone ||
-        "Not provided";
-
-
-    const email =
-        order.email ||
-        "Not provided";
-
-
-    const address =
-        order.address ||
-        "Not provided";
-
-
-    const orderNumber =
-        order.orderNumber ||
-        "BARQ0000";
-
-
-    const status =
-        order.status ||
-        "Pending";
-
-
-    const paymentMethod =
-        order.paymentMethod ||
-        "Not selected";
-
-
-    const subtotal =
-        Number(order.subtotal || 0);
-
-
-    const delivery =
-        Number(order.delivery || 0);
-
-
-    const total =
-        Number(order.total || 0);
-
-
-
-    let orderDate =
-        "Date not available";
-
+    let orderDate = "Date not available";
 
     if(order.date){
 
-        const date =
-            new Date(order.date);
-
+        const date = new Date(order.date);
 
         if(!isNaN(date.getTime())){
-
-            orderDate =
-                date.toLocaleString();
-
+            orderDate = date.toLocaleString();
         }
 
-    }    /* =========================================
-       LOCATION
-    ========================================= */
+    }
 
-    let locationHTML =
-        `<span class="no-location">
+
+    let locationHTML = `
+        <span class="no-location">
             Location not available
-        </span>`;
+        </span>
+    `;
 
 
     if(
@@ -322,35 +276,26 @@ function displayOrder(order){
     ){
 
         const mapURL =
-            "https://www.google.com/maps?q=" +
-            order.latitude +
-            "," +
-            order.longitude;
+        "https://www.google.com/maps?q=" +
+        order.latitude +
+        "," +
+        order.longitude;
 
 
         locationHTML = `
-
-            <a
-                href="${mapURL}"
-                target="_blank"
-                class="location-link"
-            >
-                📍 Open Customer Location
+            <a 
+            href="${mapURL}"
+            target="_blank"
+            class="location-link">
+            📍 Open Customer Location
             </a>
-
         `;
 
     }
 
 
 
-    /* =========================================
-       PRODUCTS
-    ========================================= */
-
-    let productsHTML =
-        "<p>No products found.</p>";
-
+    let productsHTML = "<p>No products found.</p>";
 
 
     if(
@@ -358,208 +303,163 @@ function displayOrder(order){
         order.items.length > 0
     ){
 
-        productsHTML =
-            "<ul>";
-
+        productsHTML = "<ul>";
 
         order.items.forEach((item)=>{
 
-
             productsHTML += `
-
                 <li>
-
-                    <strong>
-                        ${item.name}
-                    </strong>
-
+                    <strong>${item.name}</strong>
                     <br>
-
-                    Quantity:
-                    ${item.quantity}
-
+                    Quantity: ${item.quantity}
                     <br>
-
-                    Price:
-                    SAR ${Number(item.price).toFixed(2)}
-
+                    Price: SAR ${Number(item.price).toFixed(2)}
                 </li>
-
             `;
-
 
         });
 
-
-        productsHTML +=
-            "</ul>";
+        productsHTML += "</ul>";
 
     }
 
 
 
-/* =========================================
-   STATUS DROPDOWN
-========================================= */
+    const statusHTML = `
 
-const statusHTML = `
+    <select 
+    class="status-select"
+    data-order-id="${order.id}">
 
-<select 
-class="status-select"
-data-order-id="${order.id}"
->
+    <option value="Pending" ${status==="Pending"?"selected":""}>
+    Pending
+    </option>
 
-<option value="Pending" ${status==="Pending"?"selected":""}>
-Pending
-</option>
+    <option value="Processing" ${status==="Processing"?"selected":""}>
+    Processing
+    </option>
 
-<option value="Processing" ${status==="Processing"?"selected":""}>
-Processing
-</option>
+    <option value="Shipped" ${status==="Shipped"?"selected":""}>
+    Shipped
+    </option>
 
-<option value="Shipped" ${status==="Shipped"?"selected":""}>
-Shipped
-</option>
+    <option value="Out for Delivery" ${status==="Out for Delivery"?"selected":""}>
+    Out for Delivery
+    </option>
 
-<option value="Out for Delivery" ${status==="Out for Delivery"?"selected":""}>
-Out for Delivery
-</option>
+    <option value="Delivered" ${status==="Delivered"?"selected":""}>
+    Delivered
+    </option>
 
-<option value="Delivered" ${status==="Delivered"?"selected":""}>
-Delivered
-</option>
+    <option value="Delivery Delayed" ${status==="Delivery Delayed"?"selected":""}>
+    Delivery Delayed
+    </option>
 
-<option value="Delivery Delayed" ${status==="Delivery Delayed"?"selected":""}>
-Delivery Delayed
-</option>
+    <option value="Replacement Requested" ${status==="Replacement Requested"?"selected":""}>
+    Replacement Requested
+    </option>
 
-<option value="Replacement Requested" ${status==="Replacement Requested"?"selected":""}>
-Replacement Requested
-</option>
+    <option value="Replacement Approved" ${status==="Replacement Approved"?"selected":""}>
+    Replacement Approved
+    </option>
 
-<option value="Replacement Approved" ${status==="Replacement Approved"?"selected":""}>
-Replacement Approved
-</option>
+    <option value="Cancelled" ${status==="Cancelled"?"selected":""}>
+    Cancelled
+    </option>
 
-<option value="Cancelled" ${status==="Cancelled"?"selected":""}>
-Cancelled
-</option>
+    </select>
 
-</select>
-
-`;
+    `;
 
 
-const orderHTML = `
 
-<div class="order-card-header">
+    orderCard.innerHTML = `
 
-    <div>
+    <div class="order-card-header">
 
-        <h3>
-            ${orderNumber}
-        </h3>
+        <div>
 
-        <p>
-            ${orderDate}
-        </p>
+            <h3>${orderNumber}</h3>
+
+            <p>${orderDate}</p>
+
+        </div>
 
     </div>
 
-    ${statusHTML}
 
-</div>
+    <div class="customer-section">
+
+        <h4>Customer Information</h4>
+
+        <p><strong>Name:</strong> ${customerName}</p>
+
+        <p><strong>Phone:</strong> ${phone}</p>
+
+        <p><strong>Email:</strong> ${email}</p>
+
+        <p><strong>Address:</strong> ${address}</p>
 
 
-<div class="customer-section">
+        <div class="location-box">
 
-    <h4>
-        Customer Information
-    </h4>
-
-    <p>
-        <strong>Name:</strong>
-        ${customerName}
-    </p>
-
-    <p>
-        <strong>Phone:</strong>
-        ${phone}
-    </p>
-
-    <p>
-        <strong>Email:</strong>
-        ${email}
-    </p>
-
-    <p>
-        <strong>Address:</strong>
-        ${address}
-    </p>
-
-    <div class="location-box">
-
-        <strong>
-            Customer Location:
-        </strong>
+        <strong>Customer Location:</strong>
 
         <br>
 
         ${locationHTML}
 
+        </div>
+
     </div>
 
-</div>
 
 
-<div class="products-section">
+    <div class="products-section">
 
-    <h4>
-        Products
-    </h4>
+        <h4>Products</h4>
 
-    ${productsHTML}
+        ${productsHTML}
 
-</div>
+    </div>
 
 
-<div class="payment-section">
 
-    <h4>
-        Payment
-    </h4>
+    <div class="payment-section">
 
-    <p>
-        <strong>Method:</strong>
-        ${paymentMethod}
-    </p>
+        <h4>Payment</h4>
 
-    <p>
-        <strong>Subtotal:</strong>
-        SAR ${subtotal.toFixed(2)}
-    </p>
+        <p><strong>Method:</strong> ${paymentMethod}</p>
 
-    <p>
-        <strong>Delivery:</strong>
-        SAR ${delivery.toFixed(2)}
-    </p>
+        <p><strong>Subtotal:</strong> SAR ${subtotal.toFixed(2)}</p>
 
-    <p class="order-total">
+        <p><strong>Delivery:</strong> SAR ${delivery.toFixed(2)}</p>
 
-        <strong>
-            Total:
-        </strong>
+        <p class="order-total">
 
+        <strong>Total:</strong>
         SAR ${total.toFixed(2)}
 
-    </p>
-
-</div>
-
-`;
+        </p>
 
 
-orderCard.innerHTML = orderHTML;
+    </div>
+
+
+    <div class="status-section">
+
+        <h4>Status</h4>
+
+        ${statusHTML}
+
+    </div>
+
+    `;
+
+
+    ordersContainer.appendChild(orderCard);
+
+}
 
 
 /* =========================================
