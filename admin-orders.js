@@ -241,9 +241,16 @@ function displayOrder(order){
     const email = order.email || "Not provided";
     const address = order.address || "Not provided";
     const orderNumber = order.orderNumber || "BARQ0000";
-    const status = order.status || "Pending";
+  const status = order.status || "Pending";
 
-    const paymentMethod = order.paymentMethod || "Not selected";
+
+const statusClass =
+    status
+    .toLowerCase()
+    .replaceAll(" ", "-");
+
+
+const paymentMethod = order.paymentMethod || "Not selected"; 
 
     const subtotal = Number(order.subtotal || 0);
     const delivery = Number(order.delivery || 0);
