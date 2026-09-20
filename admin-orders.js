@@ -510,7 +510,7 @@ async function(event){
                 {
 
                     status:newStatus
-
+ statusUpdatedAt: new Date().toISOString()
                 }
 
             );
