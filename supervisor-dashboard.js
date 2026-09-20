@@ -1,340 +1,740 @@
-/* ==========================================
-   BARQ SUPERVISOR DASHBOARD
-========================================== */
+// ==========================================
+// BARQ SUPERVISOR DASHBOARD
+// ==========================================
 
-* {
-    box-sizing: border-box;
-}
+import { db, auth } from "./firebase-config.js";
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f5f6f8;
-    color: #222;
-}
+import {
+    collection,
+    getDocs,
+    doc,
+    getDoc,
+    updateDoc,
+    query,
+    where
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-.supervisor-page {
-    min-height: 100vh;
-}
+import {
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
-/* ==========================================
-   HEADER
-========================================== */
+// ==========================================
+// ELEMENTS
+// ==========================================
 
-.supervisor-header {
-    background: #111;
-    color: white;
-    padding: 20px 30px;
+const supervisorName =
+    document.getElementById("supervisor-name");
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+const totalOrders =
+    document.getElementById("total-orders");
 
-    gap: 20px;
-}
+const pendingOrders =
+    document.getElementById("pending-orders");
 
-.supervisor-header h1 {
-    margin: 0 0 5px;
-    font-size: 28px;
-}
+const activeDrivers =
+    document.getElementById("active-drivers");
 
-.supervisor-header p {
-    margin: 0;
-    color: #ccc;
-}
+const deliveryOrders =
+    document.getElementById("delivery-orders");
 
-#logout-btn {
-    background: #d62828;
-    color: white;
+const driversContainer =
+    document.getElementById("drivers-container");
 
-    border: none;
-    border-radius: 8px;
+const ordersContainer =
+    document.getElementById("orders-container");
 
-    padding: 11px 20px;
+const message =
+    document.getElementById("supervisor-message");
 
-    font-size: 15px;
-    font-weight: bold;
+const logoutButton =
+    document.getElementById("logout-btn");
 
-    cursor: pointer;
-}
+const refreshDriversButton =
+    document.getElementById("refresh-drivers-btn");
 
-#logout-btn:hover {
-    opacity: 0.85;
-}
+const refreshOrdersButton =
+    document.getElementById("refresh-orders-btn");
 
 
-/* ==========================================
-   MAIN CONTENT
-========================================== */
+// ==========================================
+// CURRENT SUPERVISOR
+// ==========================================
 
-.supervisor-content {
-    width: 95%;
-    max-width: 1200px;
+let currentSupervisor = null;
 
-    margin: 30px auto;
-}
 
+// ==========================================
+// SHOW MESSAGE
+// ==========================================
 
-/* ==========================================
-   WELCOME
-========================================== */
+function showMessage(text) {
 
-.welcome-box {
-    background: white;
-
-    border-radius: 12px;
-
-    padding: 25px;
-
-    margin-bottom: 25px;
-
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.welcome-box h2 {
-    margin-top: 0;
-}
-
-.welcome-box p {
-    color: #666;
-}
-
-
-/* ==========================================
-   SUMMARY CARDS
-========================================== */
-
-.summary-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 20px;
-
-    margin-bottom: 30px;
-}
-
-.summary-card {
-    background: white;
-
-    border-radius: 12px;
-
-    padding: 22px;
-
-    text-align: center;
-
-    box-shadow:
-        0 2px 8px
-        rgba(0, 0, 0, 0.08);
-}
-
-.summary-card h3 {
-    margin: 0 0 12px;
-
-    font-size: 16px;
-
-    color: #666;
-}
-
-.summary-card strong {
-    font-size: 32px;
-}
-
-
-/* ==========================================
-   DASHBOARD SECTIONS
-========================================== */
-
-.dashboard-section {
-    background: white;
-
-    border-radius: 12px;
-
-    padding: 25px;
-
-    margin-bottom: 25px;
-
-    box-shadow:
-        0 2px 8px
-        rgba(0, 0, 0, 0.08);
-}
-
-.section-header {
-    display: flex;
-
-    justify-content: space-between;
-    align-items: center;
-
-    margin-bottom: 20px;
-}
-
-.section-header h2 {
-    margin: 0;
-}
-
-.section-header button {
-    border: none;
-
-    border-radius: 8px;
-
-    padding: 9px 15px;
-
-    background: #111;
-    color: white;
-
-    cursor: pointer;
-}
-
-.section-header button:hover {
-    opacity: 0.85;
-}
-
-
-/* ==========================================
-   DRIVERS
-========================================== */
-
-.driver-card {
-    border: 1px solid #ddd;
-
-    border-radius: 10px;
-
-    padding: 15px;
-
-    margin-bottom: 12px;
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    gap: 15px;
-}
-
-.driver-info h3 {
-    margin: 0 0 6px;
-}
-
-.driver-info p {
-    margin: 4px 0;
-
-    color: #666;
-}
-
-.driver-status {
-    font-weight: bold;
-}
-
-.driver-status.active {
-    color: green;
-}
-
-.driver-status.inactive {
-    color: #888;
-}
-
-
-/* ==========================================
-   ORDERS
-========================================== */
-
-.order-card {
-    border: 1px solid #ddd;
-
-    border-radius: 10px;
-
-    padding: 18px;
-
-    margin-bottom: 15px;
-}
-
-.order-card h3 {
-    margin-top: 0;
-}
-
-.order-card p {
-    margin: 7px 0;
-}
-
-.order-actions {
-    margin-top: 15px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    flex-wrap: wrap;
-}
-
-.order-actions select {
-    padding: 8px;
-
-    border: 1px solid #ccc;
-
-    border-radius: 7px;
-}
-
-
-/* ==========================================
-   MESSAGE
-========================================== */
-
-#supervisor-message {
-    margin: 20px 0;
-
-    padding: 12px;
-
-    border-radius: 8px;
-
-    text-align: center;
-
-    font-weight: bold;
-}
-
-
-/* ==========================================
-   MOBILE
-========================================== */
-
-@media (max-width: 800px) {
-
-    .summary-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-    .supervisor-header {
-        padding: 18px;
-    }
-
-    .supervisor-content {
-        width: 92%;
+    if (message) {
+        message.textContent = text;
     }
 
 }
 
 
-@media (max-width: 500px) {
+// ==========================================
+// VERIFY SUPERVISOR
+// ==========================================
 
-    .summary-grid {
-        grid-template-columns: 1fr;
+async function verifySupervisor(user) {
+
+    if (!user) {
+        return false;
     }
 
-    .supervisor-header {
-        flex-direction: column;
+    try {
 
-        align-items: flex-start;
-    }
+        const usersRef =
+            collection(db, "users");
 
-    .driver-card {
-        flex-direction: column;
+        const q =
+            query(
+                usersRef,
+                where("uid", "==", user.uid)
+            );
 
-        align-items: flex-start;
+        const snapshot =
+            await getDocs(q);
+
+        if (snapshot.empty) {
+            return false;
+        }
+
+        const staffData =
+            snapshot.docs[0].data();
+
+        if (
+            staffData.role !== "Supervisor" &&
+            staffData.role !== "supervisor"
+        ) {
+            return false;
+        }
+
+        currentSupervisor = {
+            id: snapshot.docs[0].id,
+            ...staffData
+        };
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "Supervisor verification error:",
+            error
+        );
+
+        return false;
     }
 
 }
+
+
+// ==========================================
+// LOAD DRIVERS
+// ==========================================
+
+async function loadDrivers() {
+
+    if (!driversContainer) {
+        return;
+    }
+
+    driversContainer.innerHTML =
+        "Loading drivers...";
+
+    try {
+
+        const usersSnapshot =
+            await getDocs(
+                collection(db, "users")
+            );
+
+        const drivers =
+            [];
+
+        usersSnapshot.forEach(
+            (staffDoc) => {
+
+                const data =
+                    staffDoc.data();
+
+                if (
+                    data.role === "Driver" ||
+                    data.role === "driver"
+                ) {
+
+                    drivers.push({
+                        id: staffDoc.id,
+                        ...data
+                    });
+
+                }
+
+            }
+        );
+
+        if (activeDrivers) {
+
+            activeDrivers.textContent =
+                drivers.filter(
+                    driver =>
+                        driver.active === true
+                ).length;
+
+        }
+
+
+        if (drivers.length === 0) {
+
+            driversContainer.innerHTML =
+                "<p>No drivers found.</p>";
+
+            return;
+        }
+
+
+        driversContainer.innerHTML = "";
+
+
+        drivers.forEach(
+            (driver) => {
+
+                const card =
+                    document.createElement("div");
+
+                card.className =
+                    "driver-card";
+
+
+                const status =
+                    driver.active === true
+                        ? "Active"
+                        : "Inactive";
+
+
+                const statusClass =
+                    driver.active === true
+                        ? "active"
+                        : "inactive";
+
+
+                card.innerHTML = `
+
+                    <div class="driver-info">
+
+                        <h3>
+                            ${driver.name || "Unnamed Driver"}
+                        </h3>
+
+                        <p>
+                            Email:
+                            ${driver.email || "-"}
+                        </p>
+
+                        <p>
+                            Phone:
+                            ${driver.phone || "-"}
+                        </p>
+
+                        <p>
+                            City:
+                            ${driver.city || "-"}
+                        </p>
+
+                    </div>
+
+                    <div class="driver-status ${statusClass}">
+                        ${status}
+                    </div>
+
+                `;
+
+
+                driversContainer.appendChild(card);
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Load drivers error:",
+            error
+        );
+
+        driversContainer.innerHTML =
+            "<p>Unable to load drivers.</p>";
+
+    }
+
+}
+
+
+// ==========================================
+// LOAD ORDERS
+// ==========================================
+
+async function loadOrders() {
+
+    if (!ordersContainer) {
+        return;
+    }
+
+    ordersContainer.innerHTML =
+        "Loading orders...";
+
+    try {
+
+        const ordersSnapshot =
+            await getDocs(
+                collection(db, "orders")
+            );
+
+
+        const orders =
+            [];
+
+
+        ordersSnapshot.forEach(
+            (orderDoc) => {
+
+                orders.push({
+
+                    id: orderDoc.id,
+
+                    ...orderDoc.data()
+
+                });
+
+            }
+        );
+
+
+        // ==================================
+        // SUMMARY
+        // ==================================
+
+        if (totalOrders) {
+
+            totalOrders.textContent =
+                orders.length;
+
+        }
+
+
+        const pending =
+            orders.filter(
+                order =>
+                    !order.status ||
+                    order.status === "Pending"
+            ).length;
+
+
+        const delivery =
+            orders.filter(
+                order =>
+                    order.status ===
+                    "Out for Delivery"
+            ).length;
+
+
+        if (pendingOrders) {
+
+            pendingOrders.textContent =
+                pending;
+
+        }
+
+
+        if (deliveryOrders) {
+
+            deliveryOrders.textContent =
+                delivery;
+
+        }
+
+
+        // ==================================
+        // NO ORDERS
+        // ==================================
+
+        if (orders.length === 0) {
+
+            ordersContainer.innerHTML =
+                "<p>No orders found.</p>";
+
+            return;
+        }
+
+
+        // ==================================
+        // DISPLAY ORDERS
+        // ==================================
+
+        ordersContainer.innerHTML = "";
+
+
+        orders.forEach(
+            (order) => {
+
+                const card =
+                    document.createElement("div");
+
+                card.className =
+                    "order-card";
+
+
+                const status =
+                    order.status ||
+                    "Pending";
+
+
+                const customerName =
+                    order.customerName ||
+                    order.name ||
+                    "Customer";
+
+
+                const customerEmail =
+                    order.customerEmail ||
+                    order.email ||
+                    "-";
+
+
+                const customerPhone =
+                    order.phone ||
+                    order.customerPhone ||
+                    "-";
+
+
+                card.innerHTML = `
+
+                    <h3>
+                        Order #${order.id}
+                    </h3>
+
+                    <p>
+                        <strong>Customer:</strong>
+                        ${customerName}
+                    </p>
+
+                    <p>
+                        <strong>Email:</strong>
+                        ${customerEmail}
+                    </p>
+
+                    <p>
+                        <strong>Phone:</strong>
+                        ${customerPhone}
+                    </p>
+
+                    <p>
+                        <strong>Total:</strong>
+                        ${Number(
+                            order.total || 0
+                        ).toFixed(2)} SAR
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+                        ${status}
+                    </p>
+
+                    <div class="order-actions">
+
+                        <label>
+                            Update Status:
+                        </label>
+
+                        <select
+                            class="status-select"
+                            data-order-id="${order.id}"
+                        >
+
+                            <option
+                                value="Pending"
+                                ${status === "Pending" ? "selected" : ""}
+                            >
+                                Pending
+                            </option>
+
+                            <option
+                                value="Processing"
+                                ${status === "Processing" ? "selected" : ""}
+                            >
+                                Processing
+                            </option>
+
+                            <option
+                                value="Shipped"
+                                ${status === "Shipped" ? "selected" : ""}
+                            >
+                                Shipped
+                            </option>
+
+                            <option
+                                value="Out for Delivery"
+                                ${status === "Out for Delivery" ? "selected" : ""}
+                            >
+                                Out for Delivery
+                            </option>
+
+                            <option
+                                value="Delivered"
+                                ${status === "Delivered" ? "selected" : ""}
+                            >
+                                Delivered
+                            </option>
+
+                            <option
+                                value="Delivery Delayed"
+                                ${status === "Delivery Delayed" ? "selected" : ""}
+                            >
+                                Delivery Delayed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                `;
+
+
+                ordersContainer.appendChild(card);
+
+            }
+        );
+
+
+        // ==================================
+        // STATUS CHANGE
+        // ==================================
+
+        const statusSelects =
+            ordersContainer.querySelectorAll(
+                ".status-select"
+            );
+
+
+        statusSelects.forEach(
+            (select) => {
+
+                select.addEventListener(
+                    "change",
+                    async (event) => {
+
+                        const orderId =
+                            event.target
+                                .dataset
+                                .orderId;
+
+                        const newStatus =
+                            event.target.value;
+
+
+                        try {
+
+                            await updateDoc(
+                                doc(
+                                    db,
+                                    "orders",
+                                    orderId
+                                ),
+                                {
+                                    status:
+                                        newStatus,
+
+                                    statusUpdatedAt:
+                                        new Date()
+                                }
+                            );
+
+
+                            showMessage(
+                                "Order status updated successfully."
+                            );
+
+
+                            await loadOrders();
+
+
+                        } catch (error) {
+
+                            console.error(
+                                "Order status update error:",
+                                error
+                            );
+
+                            showMessage(
+                                "Unable to update order status."
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Load orders error:",
+            error
+        );
+
+        ordersContainer.innerHTML =
+            "<p>Unable to load orders.</p>";
+
+    }
+
+}
+
+
+// ==========================================
+// LOAD DASHBOARD
+// ==========================================
+
+async function loadDashboard() {
+
+    showMessage(
+        "Loading Supervisor Dashboard..."
+    );
+
+    await loadDrivers();
+
+    await loadOrders();
+
+    showMessage(
+        "Supervisor Dashboard ready."
+    );
+
+}
+
+
+// ==========================================
+// LOGOUT
+// ==========================================
+
+if (logoutButton) {
+
+    logoutButton.addEventListener(
+        "click",
+        async () => {
+
+            try {
+
+                await signOut(auth);
+
+                window.location.href =
+                    "index.html";
+
+            } catch (error) {
+
+                console.error(
+                    "Logout error:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// REFRESH BUTTONS
+// ==========================================
+
+if (refreshDriversButton) {
+
+    refreshDriversButton.addEventListener(
+        "click",
+        loadDrivers
+    );
+
+}
+
+
+if (refreshOrdersButton) {
+
+    refreshOrdersButton.addEventListener(
+        "click",
+        loadOrders
+    );
+
+}
+
+
+// ==========================================
+// AUTH CHECK
+// ==========================================
+
+onAuthStateChanged(
+    auth,
+    async (user) => {
+
+        if (!user) {
+
+            window.location.href =
+                "index.html";
+
+            return;
+
+        }
+
+
+        const isSupervisor =
+            await verifySupervisor(user);
+
+
+        if (!isSupervisor) {
+
+            alert(
+                "Access denied. Supervisor account required."
+            );
+
+            window.location.href =
+                "index.html";
+
+            return;
+
+        }
+
+
+        // ==================================
+        // SHOW SUPERVISOR NAME
+        // ==================================
+
+        if (supervisorName) {
+
+            supervisorName.textContent =
+                currentSupervisor.name ||
+                user.email ||
+                "Supervisor";
+
+        }
+
+
+        console.log(
+            "Supervisor verified:",
+            user.email
+        );
+
+
+        await loadDashboard();
+
+    }
+);
