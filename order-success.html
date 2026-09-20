@@ -110,28 +110,9 @@
 </div>
 
 
-<script>
-
-const order =
-    JSON.parse(localStorage.getItem("barqOrder"));
+<script type="module" src="order-success.js"></script>
 
 
-if (order) {
-
-    document.getElementById("customer-name").textContent =
-        "Dear " + (order.customerName || "Customer") + ",";
-
-
-    document.getElementById("order-number").textContent =
-        order.orderNumber || "BARQ0000";
-
-
-    document.getElementById("order-total").textContent =
-        "SAR " + Number(order.total || 0).toFixed(2);
-
-}
-
-</script>
 
 
 </body>
