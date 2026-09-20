@@ -952,3 +952,60 @@ PRODUCT DETAILS PAGE
 
 
 }
+/* =====================================
+   STATUS COLORS
+===================================== */
+
+.status-select {
+    font-weight: bold;
+    border-width: 2px;
+}
+
+
+/* Pending */
+.status-select option[value="Pending"] {
+    color: orange;
+}
+
+
+/* Processing */
+.status-select option[value="Processing"] {
+    color: blue;
+}
+
+
+/* Shipped */
+.status-select option[value="Shipped"] {
+    color: purple;
+}
+
+
+/* Out for Delivery */
+.status-select option[value="Out for Delivery"] {
+    color: darkorange;
+}
+
+
+/* Delivered */
+.status-select option[value="Delivered"] {
+    color: green;
+}
+
+
+/* Delivery Delayed */
+.status-select option[value="Delivery Delayed"] {
+    color: red;
+}
+
+
+/* Replacement */
+.status-select option[value="Replacement Requested"],
+.status-select option[value="Replacement Approved"] {
+    color: brown;
+}
+
+
+/* Cancelled */
+.status-select option[value="Cancelled"] {
+    color: red;
+}
