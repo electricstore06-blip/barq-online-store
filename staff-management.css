@@ -1,0 +1,163 @@
+*{
+    box-sizing:border-box;
+}
+
+
+body{
+
+    margin:0;
+
+    font-family:Arial, sans-serif;
+
+    background:#f5f7fb;
+
+}
+
+
+
+.staff-page{
+
+    min-height:100vh;
+
+}
+
+
+
+.staff-header{
+
+    background:#111827;
+
+    color:white;
+
+    padding:20px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+
+
+.staff-header h1{
+
+    margin:0;
+
+    font-size:26px;
+
+}
+
+
+
+#back-btn{
+
+    background:white;
+
+    color:#111827;
+
+    border:none;
+
+    padding:10px 20px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}
+
+
+
+.staff-container{
+
+    max-width:600px;
+
+    margin:40px auto;
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:15px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+
+}
+
+
+
+.staff-container h2{
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+}
+
+
+
+.staff-form{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+
+
+.staff-form input,
+.staff-form select{
+
+    padding:14px;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+    font-size:16px;
+
+}
+
+
+
+#create-staff-btn{
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:15px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+}
+
+
+
+#create-staff-btn:hover{
+
+    background:#1d4ed8;
+
+}
+
+
+
+#staff-message{
+
+    text-align:center;
+
+    margin-top:20px;
+
+    font-weight:bold;
+
+}
