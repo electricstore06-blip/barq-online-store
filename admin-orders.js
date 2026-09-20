@@ -507,12 +507,14 @@ async function(event){
                     orderId
                 ),
 
-                {
+                
 
-                    status:newStatus
- statusUpdatedAt: new Date().toISOString()
+      {
+    status:newStatus,
+    statusUpdatedAt: new Date().toISOString()
+}            
               
- }
+ 
             );
 
 
