@@ -6,39 +6,29 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-const order =
-    JSON.parse(localStorage.getItem("barqOrder"));
+const orderId = localStorage.getItem("barqOrderId");
 
+if(orderId){
 
-if(order){
+const orderRef = doc(db,"orders",orderId);
 
-    const orderId = order.id;
+onSnapshot(orderRef,(snapshot)=>{
 
+if(snapshot.exists()){
 
-    if(orderId){
+const data = snapshot.data();
 
-        const orderRef = doc(db, "orders", orderId);
+document.getElementById("order-number").textContent =
+data.orderNumber;
 
+document.getElementById("total").textContent =
+"SAR " + data.total;
 
-        onSnapshot(orderRef, (snapshot)=>{
+document.getElementById("order-status").textContent =
+data.status || "Pending";
 
+}
 
-            if(snapshot.exists()){
-
-
-                const data = snapshot.data();
-
-
-                document.getElementById("order-status").textContent =
-                    data.status || "Pending";
-
-
-            }
-
-
-        });
-
-
-    }
+});
 
 }
