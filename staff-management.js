@@ -5,6 +5,7 @@ import {
     addDoc,
     doc,
     getDoc,
+    setDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -296,33 +297,20 @@ createButton.addEventListener(
                PRIMARY ADMIN AUTH IS STILL ACTIVE
             ================================= */
 
-            await addDoc(
-                collection(
-                    db,
-                    "users"
-                ),
-                {
-
-                    uid: uid,
-
-                    name: name,
-
-                    email: email,
-
-                    phone: phone,
-
-                    role: role,
-
-                    city: city,
-
-                    active: true,
-
-                    createdAt:
-                        serverTimestamp()
-
-                }
-            );
-
+          await setDoc(
+    doc(db, "users", uid),
+    {
+        uid: uid,
+        name: name,
+        email: email,
+        phone: phone,
+        role: role,
+        city: city,
+        active: true,
+        createdAt:
+            serverTimestamp()
+    }
+);
 
 
             console.log(
