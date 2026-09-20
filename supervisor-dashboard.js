@@ -151,10 +151,12 @@ async function loadDrivers() {
 
     try {
 
-        const usersSnapshot =
-            await getDocs(
-                collection(db, "users")
-            );
+       const driversQuery = query(
+    collection(db, "users"),
+    where("role", "==", "driver")
+);
+
+const usersSnapshot = await getDocs(driversQuery);
 
         const drivers =
             [];
