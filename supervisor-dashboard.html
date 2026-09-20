@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BARQ Supervisor Dashboard</title>
+
+    <link rel="stylesheet" href="supervisor-dashboard.css">
+</head>
+
+<body>
+
+    <div class="supervisor-page">
+
+        <!-- HEADER -->
+        <header class="supervisor-header">
+
+            <div>
+                <h1>BARQ Supervisor</h1>
+                <p>Driver & Order Management</p>
+            </div>
+
+            <button id="logout-btn">
+                Logout
+            </button>
+
+        </header>
+
+
+        <!-- MAIN CONTENT -->
+        <main class="supervisor-content">
+
+            <!-- WELCOME -->
+            <section class="welcome-box">
+
+                <h2>
+                    Welcome, <span id="supervisor-name">Supervisor</span>
+                </h2>
+
+                <p>
+                    Manage drivers, assigned orders and delivery operations.
+                </p>
+
+            </section>
+
+
+            <!-- SUMMARY -->
+            <section class="summary-grid">
+
+                <div class="summary-card">
+                    <h3>Total Orders</h3>
+                    <strong id="total-orders">0</strong>
+                </div>
+
+                <div class="summary-card">
+                    <h3>Pending Orders</h3>
+                    <strong id="pending-orders">0</strong>
+                </div>
+
+                <div class="summary-card">
+                    <h3>Active Drivers</h3>
+                    <strong id="active-drivers">0</strong>
+                </div>
+
+                <div class="summary-card">
+                    <h3>Out for Delivery</h3>
+                    <strong id="delivery-orders">0</strong>
+                </div>
+
+            </section>
+
+
+            <!-- DRIVERS -->
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <h2>Drivers</h2>
+
+                    <button id="refresh-drivers-btn">
+                        🔄 Refresh
+                    </button>
+
+                </div>
+
+                <div id="drivers-container">
+                    Loading drivers...
+                </div>
+
+            </section>
+
+
+            <!-- ORDERS -->
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <h2>Orders</h2>
+
+                    <button id="refresh-orders-btn">
+                        🔄 Refresh
+                    </button>
+
+                </div>
+
+                <div id="orders-container">
+                    Loading orders...
+                </div>
+
+            </section>
+
+
+            <!-- MESSAGE -->
+            <div id="supervisor-message"></div>
+
+        </main>
+
+    </div>
+
+
+    <script
+        type="module"
+        src="supervisor-dashboard.js">
+    </script>
+
+</body>
+
+</html>
