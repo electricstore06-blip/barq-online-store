@@ -498,11 +498,14 @@ longitude:
                 /* =========================================
                    SAVE ORDER LOCALLY
                 ========================================= */
-
-                localStorage.setItem(
-                    "barqOrder",
-                    JSON.stringify(orderData)
-                );
+localStorage.setItem(
+    "barqOrder",
+    JSON.stringify({
+        id: orderRef.id,
+        ...orderData
+    })
+);
+               
 
                 localStorage.setItem(
                     "barqOrderTotal",
