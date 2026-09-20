@@ -402,3 +402,45 @@ body {
     }
 
 }
+/* STATUS BOX COLORS */
+
+.status-select.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-select.processing {
+    background: #cfe2ff;
+    color: #084298;
+}
+
+.status-select.shipped {
+    background: #e2d9f3;
+    color: #432874;
+}
+
+.status-select.out-for-delivery {
+    background: #ffe5b4;
+    color: #8a4b00;
+}
+
+.status-select.delivered {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.status-select.delivery-delayed {
+    background: #f8d7da;
+    color: #842029;
+}
+
+.status-select.replacement-requested,
+.status-select.replacement-approved {
+    background: #e7d8c9;
+    color: #664d03;
+}
+
+.status-select.cancelled {
+    background: #f8d7da;
+    color: #842029;
+}
