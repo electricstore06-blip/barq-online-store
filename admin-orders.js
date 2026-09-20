@@ -334,9 +334,10 @@ const paymentMethod = order.paymentMethod || "Not selected";
 
     const statusHTML = `
 
-    <select 
-    class="status-select"
-    data-order-id="${order.id}">
+<select 
+class="status-select ${statusClass}"
+data-order-id="${order.id}"
+>   
 
     <option value="Pending" ${status==="Pending"?"selected":""}>
     Pending
