@@ -21,7 +21,7 @@ const data = snapshot.data();
 document.getElementById("order-number").textContent =
 data.orderNumber;
 
-document.getElementById("total").textContent =
+document.getElementById("order-total").textContent =
 "SAR " + data.total;
 
 document.getElementById("order-status").textContent =
