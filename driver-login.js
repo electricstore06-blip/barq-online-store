@@ -96,7 +96,7 @@ user.email
 const driverRef =
 doc(
 db,
-"drivers",
+"users",
 user.uid
 );
 
