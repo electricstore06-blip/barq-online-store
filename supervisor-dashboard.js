@@ -8,7 +8,6 @@ import {
     collection,
     getDocs,
     doc,
-    getDoc,
     updateDoc,
     query,
     where
@@ -63,6 +62,13 @@ const refreshOrdersButton =
 // ==========================================
 
 let currentSupervisor = null;
+
+
+// ==========================================
+// AVAILABLE DRIVERS
+// ==========================================
+
+let availableDrivers = [];
 
 
 // ==========================================
@@ -151,15 +157,16 @@ async function loadDrivers() {
 
     try {
 
-       const driversQuery = query(
-    collection(db, "users"),
-    where("role", "==", "driver")
-);
+        const driversQuery =
+            query(
+                collection(db, "users"),
+                where("role", "==", "driver")
+            );
 
-const usersSnapshot = await getDocs(driversQuery);
+        const usersSnapshot =
+            await getDocs(driversQuery);
 
-        const drivers =
-            [];
+        const drivers = [];
 
         usersSnapshot.forEach(
             (staffDoc) => {
@@ -182,6 +189,12 @@ const usersSnapshot = await getDocs(driversQuery);
             }
         );
 
+
+        // Save drivers for order assignment
+        availableDrivers = drivers;
+
+
+        // Active driver count
         if (activeDrivers) {
 
             activeDrivers.textContent =
@@ -228,7 +241,6 @@ const usersSnapshot = await getDocs(driversQuery);
 
 
                 card.innerHTML = `
-
                     <div class="driver-info">
 
                         <h3>
@@ -255,7 +267,6 @@ const usersSnapshot = await getDocs(driversQuery);
                     <div class="driver-status ${statusClass}">
                         ${status}
                     </div>
-
                 `;
 
 
@@ -281,6 +292,50 @@ const usersSnapshot = await getDocs(driversQuery);
 
 
 // ==========================================
+// DRIVER ASSIGNMENT OPTIONS
+// ==========================================
+
+function createDriverOptions(order) {
+
+    let options = `
+        <option value="">
+            Unassigned
+        </option>
+    `;
+
+
+    availableDrivers.forEach(
+        (driver) => {
+
+            const driverId =
+                driver.uid || driver.id;
+
+            const selected =
+                order.assignedDriverId === driverId
+                    ? "selected"
+                    : "";
+
+
+            options += `
+                <option
+                    value="${driverId}"
+                    ${selected}
+                >
+                    ${driver.name || "Unnamed Driver"}
+                    ${driver.city ? " - " + driver.city : ""}
+                </option>
+            `;
+
+        }
+    );
+
+
+    return options;
+
+}
+
+
+// ==========================================
 // LOAD ORDERS
 // ==========================================
 
@@ -300,9 +355,7 @@ async function loadOrders() {
                 collection(db, "orders")
             );
 
-
-        const orders =
-            [];
+        const orders = [];
 
 
         ordersSnapshot.forEach(
@@ -417,6 +470,11 @@ async function loadOrders() {
                     "-";
 
 
+                const assignedDriverName =
+                    order.assignedDriverName ||
+                    "Unassigned";
+
+
                 card.innerHTML = `
 
                     <h3>
@@ -449,6 +507,9 @@ async function loadOrders() {
                         <strong>Status:</strong>
                         ${status}
                     </p>
+
+
+                    <!-- STATUS -->
 
                     <div class="order-actions">
 
@@ -507,6 +568,34 @@ async function loadOrders() {
 
                     </div>
 
+
+                    <!-- DRIVER ASSIGNMENT -->
+
+                    <div class="order-actions">
+
+                        <label>
+                            Assign Driver:
+                        </label>
+
+                        <select
+                            class="driver-select"
+                            data-order-id="${order.id}"
+                        >
+
+                            ${createDriverOptions(order)}
+
+                        </select>
+
+                    </div>
+
+
+                    <p>
+                        <strong>Assigned Driver:</strong>
+                        <span class="assigned-driver-name">
+                            ${assignedDriverName}
+                        </span>
+                    </p>
+
                 `;
 
 
@@ -537,6 +626,7 @@ async function loadOrders() {
                             event.target
                                 .dataset
                                 .orderId;
+
 
                         const newStatus =
                             event.target.value;
@@ -575,8 +665,175 @@ async function loadOrders() {
                                 error
                             );
 
+
                             showMessage(
                                 "Unable to update order status."
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+        // ==================================
+        // DRIVER ASSIGNMENT CHANGE
+        // ==================================
+
+        const driverSelects =
+            ordersContainer.querySelectorAll(
+                ".driver-select"
+            );
+
+
+        driverSelects.forEach(
+            (select) => {
+
+                select.addEventListener(
+                    "change",
+                    async (event) => {
+
+                        const orderId =
+                            event.target
+                                .dataset
+                                .orderId;
+
+
+                        const selectedDriverId =
+                            event.target.value;
+
+
+                        try {
+
+                            // --------------------------
+                            // UNASSIGN DRIVER
+                            // --------------------------
+
+                            if (!selectedDriverId) {
+
+                                await updateDoc(
+                                    doc(
+                                        db,
+                                        "orders",
+                                        orderId
+                                    ),
+                                    {
+
+                                        assignedDriverId:
+                                            null,
+
+                                        assignedDriverName:
+                                            null,
+
+                                        assignedDriverPhone:
+                                            null,
+
+                                        assignedDriverCity:
+                                            null,
+
+                                        assignedAt:
+                                            null,
+
+                                        assignedByUid:
+                                            null
+                                    }
+                                );
+
+
+                                showMessage(
+                                    "Driver unassigned successfully."
+                                );
+
+
+                                await loadOrders();
+
+                                return;
+                            }
+
+
+                            // --------------------------
+                            // FIND DRIVER
+                            // --------------------------
+
+                            const selectedDriver =
+                                availableDrivers.find(
+                                    driver =>
+                                        (
+                                            driver.uid ||
+                                            driver.id
+                                        ) ===
+                                        selectedDriverId
+                                );
+
+
+                            if (!selectedDriver) {
+
+                                showMessage(
+                                    "Driver not found."
+                                );
+
+                                return;
+                            }
+
+
+                            // --------------------------
+                            // ASSIGN DRIVER
+                            // --------------------------
+
+                            await updateDoc(
+                                doc(
+                                    db,
+                                    "orders",
+                                    orderId
+                                ),
+                                {
+
+                                    assignedDriverId:
+                                        selectedDriver.uid ||
+                                        selectedDriver.id,
+
+                                    assignedDriverName:
+                                        selectedDriver.name ||
+                                        "Unnamed Driver",
+
+                                    assignedDriverPhone:
+                                        selectedDriver.phone ||
+                                        null,
+
+                                    assignedDriverCity:
+                                        selectedDriver.city ||
+                                        null,
+
+                                    assignedAt:
+                                        new Date(),
+
+                                    assignedByUid:
+                                        currentSupervisor.uid
+                                }
+                            );
+
+
+                            showMessage(
+                                "Driver assigned successfully."
+                            );
+
+
+                            await loadOrders();
+
+
+                        } catch (error) {
+
+                            console.error(
+                                "Driver assignment error:",
+                                error
+                            );
+
+
+                            showMessage(
+                                "Unable to assign driver."
                             );
 
                         }
@@ -594,6 +851,7 @@ async function loadOrders() {
             "Load orders error:",
             error
         );
+
 
         ordersContainer.innerHTML =
             "<p>Unable to load orders.</p>";
@@ -613,9 +871,12 @@ async function loadDashboard() {
         "Loading Supervisor Dashboard..."
     );
 
+
     await loadDrivers();
 
+
     await loadOrders();
+
 
     showMessage(
         "Supervisor Dashboard ready."
@@ -638,8 +899,10 @@ if (logoutButton) {
 
                 await signOut(auth);
 
+
                 window.location.href =
                     "index.html";
+
 
             } catch (error) {
 
@@ -664,7 +927,13 @@ if (refreshDriversButton) {
 
     refreshDriversButton.addEventListener(
         "click",
-        loadDrivers
+        async () => {
+
+            await loadDrivers();
+
+            await loadOrders();
+
+        }
     );
 
 }
@@ -694,7 +963,6 @@ onAuthStateChanged(
                 "index.html";
 
             return;
-
         }
 
 
@@ -708,11 +976,11 @@ onAuthStateChanged(
                 "Access denied. Supervisor account required."
             );
 
+
             window.location.href =
                 "index.html";
 
             return;
-
         }
 
 
