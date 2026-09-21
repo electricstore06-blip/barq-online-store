@@ -167,7 +167,7 @@ console.error(error);
 
 
 message.textContent =
-"Login failed";
+error.code + ": " + error.message;
 
 
 }
