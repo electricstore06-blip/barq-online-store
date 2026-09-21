@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>BARQ Driver Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="driver-dashboard.css"
+    >
+</head>
+
+<body>
+
+    <div class="driver-page">
+
+        <!-- HEADER -->
+        <header class="driver-header">
+
+            <div>
+                <h1>BARQ Driver</h1>
+
+                <p>
+                    Delivery Dashboard
+                </p>
+            </div>
+
+            <button id="logout-btn">
+                Logout
+            </button>
+
+        </header>
+
+
+        <!-- DRIVER INFORMATION -->
+        <main class="driver-content">
+
+            <section class="driver-welcome">
+
+                <h2>
+                    Welcome,
+                    <span id="driver-name">
+                        Driver
+                    </span>
+                </h2>
+
+                <p>
+                    Your assigned delivery orders
+                </p>
+
+            </section>
+
+
+            <!-- SUMMARY -->
+            <section class="driver-summary">
+
+                <div class="summary-card">
+
+                    <h3>
+                        Assigned Orders
+                    </h3>
+
+                    <strong id="assigned-orders">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <h3>
+                        Pending
+                    </h3>
+
+                    <strong id="pending-orders">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <h3>
+                        Out for Delivery
+                    </h3>
+
+                    <strong id="delivery-orders">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <h3>
+                        Delivered
+                    </h3>
+
+                    <strong id="delivered-orders">
+                        0
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+            <!-- MESSAGE -->
+            <div id="driver-message">
+                Loading...
+            </div>
+
+
+            <!-- ORDERS -->
+            <section class="driver-orders">
+
+                <div class="section-header">
+
+                    <h2>
+                        My Delivery Orders
+                    </h2>
+
+                    <button id="refresh-btn">
+                        🔄 Refresh
+                    </button>
+
+                </div>
+
+
+                <div id="orders-container">
+
+                    <!-- Driver orders will appear here -->
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script
+        type="module"
+        src="driver-dashboard.js"
+    ></script>
+
+</body>
+
+</html>
