@@ -12,12 +12,13 @@ from
 
 
 import {
-    doc,
-    getDoc
+    collection,
+    query,
+    where,
+    getDocs
 }
 from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
 
 
 console.log("BARQ DRIVER LOGIN LOADED");
