@@ -89,41 +89,30 @@ console.log(
 user.email
 );
 
-
-
-
 // Check driver profile
 
-const driverRef =
-doc(
-db,
-"users",
-user.uid
+const driverQuery =
+query(
+    collection(db, "users"),
+    where("uid", "==", user.uid)
 );
 
-
-
 const driverSnap =
-await getDoc(driverRef);
+await getDocs(driverQuery);
 
+if(driverSnap.empty){
 
+    message.textContent =
+    "Driver account not approved";
 
-if(!driverSnap.exists()){
-
-
-message.textContent =
-"Driver account not approved";
-
-
-return;
-
+    return;
 
 }
 
-
-
 const driverData =
-driverSnap.data();
+driverSnap.docs[0].data();
+
+
 
 
 
