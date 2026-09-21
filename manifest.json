@@ -2,7 +2,7 @@
   "name": "BARQ Driver",
   "short_name": "BARQ Driver",
   "description": "BARQ Driver Delivery App",
-  "start_url": "./driver-dashboard.html",
+ "start_url": "./driver-login.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#111111",
