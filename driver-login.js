@@ -24,14 +24,12 @@ from
 console.log("BARQ DRIVER LOGIN LOADED");
 
 
-
 const loginBtn =
 document.getElementById("login-btn");
 
 
 const message =
 document.getElementById("message");
-
 
 
 loginBtn.addEventListener(
@@ -50,21 +48,18 @@ document.getElementById("password")
 .value;
 
 
-
 if(!email || !password){
 
-message.textContent =
-"Enter email and password";
+    message.textContent =
+    "Enter email and password";
 
-return;
+    return;
 
 }
 
 
-
 message.textContent =
 "Logging in...";
-
 
 
 try{
@@ -72,24 +67,25 @@ try{
 
 const result =
 await signInWithEmailAndPassword(
-auth,
-email,
-password
+    auth,
+    email,
+    password
 );
-
 
 
 const user =
 result.user;
 
 
-
 console.log(
-"Driver login:",
-user.email
+    "Driver login:",
+    user.email
 );
 
-// Check driver profile
+
+// ==========================================
+// CHECK DRIVER PROFILE
+// ==========================================
 
 const driverQuery =
 query(
@@ -97,8 +93,10 @@ query(
     where("uid", "==", user.uid)
 );
 
+
 const driverSnap =
 await getDocs(driverQuery);
+
 
 if(driverSnap.empty){
 
@@ -109,49 +107,70 @@ if(driverSnap.empty){
 
 }
 
+
 const driverData =
 driverSnap.docs[0].data();
 
 
-
-
+// ==========================================
+// CHECK DRIVER ROLE
+// ==========================================
 
 if(driverData.role !== "driver"){
 
+    message.textContent =
+    "This account is not a driver";
 
-message.textContent =
-"This account is not a driver";
-
-
-return;
-
+    return;
 
 }
 
 
+// ==========================================
+// CHECK DRIVER ACTIVE STATUS
+// ==========================================
+
+if(driverData.active !== true){
+
+    message.textContent =
+    "Driver account is inactive";
+
+    return;
+
+}
+
+
+// ==========================================
+// LOGIN SUCCESS
+// ==========================================
 
 message.textContent =
 "Login successful";
 
 
-
 setTimeout(()=>{
 
-
-window.location.href =
-"driver-dashboard.html";
-
+    window.location.href =
+    "driver-dashboard.html";
 
 },800);
 
 
-
 }
+
+
 catch(error){
 
-    console.error(error);
+    console.error(
+        "BARQ Driver Login Error:",
+        error
+    );
 
-message.textContent =
-error.code + ": " + error.message;
+
+    message.textContent =
+    error.code + ": " + error.message;
+
 }
+
+
 });
