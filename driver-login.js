@@ -157,21 +157,12 @@ window.location.href =
 
 
 }
-
-
 catch(error){
 
+    console.error(error);
 
-console.error(error);
-
-
-
-message.textContent =
-error.code + ": " + error.message;
-
+    message.textContent =
+    error.code + ": " + error.message;
 
 }
 
-
-
-});
