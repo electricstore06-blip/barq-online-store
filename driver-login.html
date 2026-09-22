@@ -179,12 +179,30 @@ Login
 
 
 </div>
-
-
-
 <script type="module" src="driver-login.js"></script>
 
+<script>
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", () => {
+
+        navigator.serviceWorker.register("service-worker.js")
+            .then(() => {
+                console.log("BARQ Driver Service Worker Registered");
+            })
+            .catch((error) => {
+                console.log(
+                    "Service Worker Error:",
+                    error
+                );
+            });
+
+    });
+
+}
+</script>
 
 </body>
-
 </html>
+
+
