@@ -1,4 +1,4 @@
-const CACHE_NAME = "barq-driver-v1";
+const CACHE_NAME = "barq-driver-v2";
 
 const APP_FILES = [
     "./",
@@ -6,8 +6,9 @@ const APP_FILES = [
     "./driver-dashboard.css",
     "./driver-dashboard.js",
     "./firebase-config.js",
-    "./manifest.json",
-    "./barq-driver-icon-512.png"
+   "./manifest.json",
+"./barq-driver-icon-192.png",
+"./barq-driver-icon-512.png"
 ];
 
 self.addEventListener("install", event => {
