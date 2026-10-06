@@ -269,12 +269,16 @@ async function loadOrders() {
 
             ordersContainer.innerHTML = `
                 <div class="no-orders">
-                    <h3>No assigned orders</h3>
+
+                    <h3>
+                        No assigned orders
+                    </h3>
 
                     <p>
                         You currently have no delivery
                         orders assigned to you.
                     </p>
+
                 </div>
             `;
 
@@ -341,7 +345,9 @@ async function loadOrders() {
 
                 let locationHtml = `
                     <p>
-                        <strong>Delivery Location:</strong>
+                        <strong>
+                            Delivery Location:
+                        </strong>
                         ${address}
                     </p>
                 `;
@@ -358,6 +364,7 @@ async function loadOrders() {
 
                     locationHtml += `
                         <p>
+
                             <a
                                 href="${mapUrl}"
                                 target="_blank"
@@ -365,6 +372,7 @@ async function loadOrders() {
                             >
                                 📍 Open Customer Location
                             </a>
+
                         </p>
                     `;
 
@@ -393,17 +401,23 @@ async function loadOrders() {
                         </h4>
 
                         <p>
-                            <strong>Name:</strong>
+                            <strong>
+                                Name:
+                            </strong>
                             ${customerName}
                         </p>
 
                         <p>
-                            <strong>Phone:</strong>
+                            <strong>
+                                Phone:
+                            </strong>
                             ${customerPhone}
                         </p>
 
                         <p>
-                            <strong>Email:</strong>
+                            <strong>
+                                Email:
+                            </strong>
                             ${customerEmail}
                         </p>
 
@@ -634,11 +648,20 @@ if (logoutButton) {
 
             try {
 
+                showMessage(
+                    "Logging out..."
+                );
+
+
                 await signOut(auth);
 
 
+                // IMPORTANT:
+                // Return to BARQ DRIVER login,
+                // NOT the BARQ Store page.
+
                 window.location.href =
-                    "index.html";
+                    "./driver-login.html";
 
 
             } catch (error) {
@@ -646,6 +669,11 @@ if (logoutButton) {
                 console.error(
                     "Logout error:",
                     error
+                );
+
+
+                showMessage(
+                    "Unable to logout. Please try again."
                 );
 
             }
@@ -664,10 +692,14 @@ onAuthStateChanged(
     auth,
     async (user) => {
 
+        // ----------------------------------
+        // NOT LOGGED IN
+        // ----------------------------------
+
         if (!user) {
 
             window.location.href =
-                "index.html";
+                "./driver-login.html";
 
             return;
 
@@ -680,6 +712,10 @@ onAuthStateChanged(
         );
 
 
+        // ----------------------------------
+        // VERIFY DRIVER
+        // ----------------------------------
+
         const isDriver =
             await verifyDriver(user);
 
@@ -691,8 +727,11 @@ onAuthStateChanged(
             );
 
 
+            await signOut(auth);
+
+
             window.location.href =
-                "index.html";
+                "./driver-login.html";
 
             return;
 
@@ -705,18 +744,47 @@ onAuthStateChanged(
         );
 
 
+        // ----------------------------------
+        // LOAD DASHBOARD
+        // ----------------------------------
+
         await loadDashboard();
 
     }
 );
+
+
+// ==========================================
+// SERVICE WORKER
+// ==========================================
+
 if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./service-worker.js")
-            .then(() => {
-                console.log("BARQ Driver service worker registered");
-            })
-            .catch(error => {
-                console.error("Service worker registration failed:", error);
-            });
-    });
+
+    window.addEventListener(
+        "load",
+        () => {
+
+            navigator.serviceWorker
+                .register("./service-worker.js")
+                .then(() => {
+
+                    console.log(
+                        "BARQ Driver service worker registered"
+                    );
+
+                })
+                .catch(
+                    (error) => {
+
+                        console.error(
+                            "Service worker registration failed:",
+                            error
+                        );
+
+                    }
+                );
+
+        }
+    );
+
 }
