@@ -1,14 +1,12 @@
-const CACHE_NAME = "barq-driver-v2";
+const CACHE_NAME = "barq-driver-v3";
 
 const APP_FILES = [
     "./",
-    "./driver-dashboard.html",
-    "./driver-dashboard.css",
-    "./driver-dashboard.js",
-    "./firebase-config.js",
-   "./manifest.json",
-"./barq-driver-icon-192.png",
-"./barq-driver-icon-512.png"
+    "./driver-login.html",
+    "./driver-login.js",
+    "./manifest.json",
+    "./barq-driver-icon-192.png",
+    "./barq-driver-icon-512.png"
 ];
 
 self.addEventListener("install", event => {
@@ -33,7 +31,8 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
     event.respondWith(
-        fetch(event.request)
-            .catch(() => caches.match(event.request))
+        caches.match(event.request).then(cachedResponse => {
+            return cachedResponse || fetch(event.request);
+        })
     );
 });
