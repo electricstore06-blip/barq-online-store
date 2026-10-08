@@ -2,7 +2,7 @@
 // BARQ DRIVER DASHBOARD
 // ==========================================
 
-import { db, auth } from "./firebase-config.js";
+import { db, auth } from "./driver-firebase-config.js";
 
 import {
     collection,
