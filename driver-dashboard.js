@@ -3,7 +3,6 @@
 // ==========================================
 
 import { db, auth } from "./driver-firebase-config.js";
-
 import {
     collection,
     getDocs,
