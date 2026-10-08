@@ -2,175 +2,170 @@
 // BARQ DRIVER LOGIN
 // ==========================================
 
-import { auth, db } from "./firebase-config.js";
+import { auth, db } from "./driver-firebase-config.js";
 
 import {
     signInWithEmailAndPassword
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
     collection,
     query,
     where,
     getDocs
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
 console.log("BARQ DRIVER LOGIN LOADED");
 
 
 const loginBtn =
-document.getElementById("login-btn");
-
+    document.getElementById("login-btn");
 
 const message =
-document.getElementById("message");
+    document.getElementById("message");
 
 
 loginBtn.addEventListener(
-"click",
-async ()=>{
+    "click",
+    async () => {
+
+        const email =
+            document
+                .getElementById("email")
+                .value
+                .trim();
+
+        const password =
+            document
+                .getElementById("password")
+                .value;
 
 
-const email =
-document.getElementById("email")
-.value
-.trim();
+        if (!email || !password) {
+
+            message.textContent =
+                "Enter email and password";
+
+            return;
+        }
 
 
-const password =
-document.getElementById("password")
-.value;
+        message.textContent =
+            "Logging in...";
 
 
-if(!email || !password){
+        try {
 
-    message.textContent =
-    "Enter email and password";
+            // ==========================================
+            // DRIVER FIREBASE LOGIN
+            // ==========================================
 
-    return;
-
-}
-
-
-message.textContent =
-"Logging in...";
-
-
-try{
+            const result =
+                await signInWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
 
 
-const result =
-await signInWithEmailAndPassword(
-    auth,
-    email,
-    password
+            const user =
+                result.user;
+
+
+            console.log(
+                "Driver login:",
+                user.email
+            );
+
+
+            // ==========================================
+            // CHECK DRIVER PROFILE
+            // ==========================================
+
+            const driverQuery =
+                query(
+                    collection(db, "users"),
+                    where("uid", "==", user.uid)
+                );
+
+
+            const driverSnap =
+                await getDocs(driverQuery);
+
+
+            if (driverSnap.empty) {
+
+                message.textContent =
+                    "Driver account not approved";
+
+                return;
+            }
+
+
+            const driverData =
+                driverSnap.docs[0].data();
+
+
+            // ==========================================
+            // CHECK DRIVER ROLE
+            // ==========================================
+
+            if (
+                driverData.role !== "driver" &&
+                driverData.role !== "Driver"
+            ) {
+
+                message.textContent =
+                    "This account is not a driver";
+
+                return;
+            }
+
+
+            // ==========================================
+            // CHECK DRIVER ACTIVE STATUS
+            // ==========================================
+
+            if (driverData.active !== true) {
+
+                message.textContent =
+                    "Driver account is inactive";
+
+                return;
+            }
+
+
+            // ==========================================
+            // LOGIN SUCCESS
+            // ==========================================
+
+            message.textContent =
+                "Login successful";
+
+
+            setTimeout(() => {
+
+                window.location.href =
+                    "./driver-dashboard.html";
+
+            }, 800);
+
+        }
+
+
+        catch (error) {
+
+            console.error(
+                "BARQ Driver Login Error:",
+                error
+            );
+
+
+            message.textContent =
+                error.code + ": " + error.message;
+
+        }
+
+    }
 );
-
-
-const user =
-result.user;
-
-
-console.log(
-    "Driver login:",
-    user.email
-);
-
-
-// ==========================================
-// CHECK DRIVER PROFILE
-// ==========================================
-
-const driverQuery =
-query(
-    collection(db, "users"),
-    where("uid", "==", user.uid)
-);
-
-
-const driverSnap =
-await getDocs(driverQuery);
-
-
-if(driverSnap.empty){
-
-    message.textContent =
-    "Driver account not approved";
-
-    return;
-
-}
-
-
-const driverData =
-driverSnap.docs[0].data();
-
-
-// ==========================================
-// CHECK DRIVER ROLE
-// ==========================================
-
-if(driverData.role !== "driver"){
-
-    message.textContent =
-    "This account is not a driver";
-
-    return;
-
-}
-
-
-// ==========================================
-// CHECK DRIVER ACTIVE STATUS
-// ==========================================
-
-if(driverData.active !== true){
-
-    message.textContent =
-    "Driver account is inactive";
-
-    return;
-
-}
-
-
-// ==========================================
-// LOGIN SUCCESS
-// ==========================================
-
-message.textContent =
-"Login successful";
-
-
-setTimeout(()=>{
-
-    window.location.href =
-    "driver-dashboard.html";
-
-},800);
-
-
-}
-
-
-catch(error){
-
-    console.error(
-        "BARQ Driver Login Error:",
-        error
-    );
-
-
-    message.textContent =
-    error.code + ": " + error.message;
-
-}
-
-
-});
