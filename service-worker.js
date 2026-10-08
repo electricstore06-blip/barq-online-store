@@ -1,4 +1,4 @@
-const CACHE_NAME = "barq-driver-v3";
+const CACHE_NAME = "barq-driver-v4";
 
 const APP_FILES = [
     "./",
@@ -9,6 +9,7 @@ const APP_FILES = [
     "./barq-driver-icon-512.png"
 ];
 
+// INSTALL
 self.addEventListener("install", event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
@@ -17,6 +18,7 @@ self.addEventListener("install", event => {
     );
 });
 
+// ACTIVATE
 self.addEventListener("activate", event => {
     event.waitUntil(
         caches.keys().then(keys =>
@@ -29,10 +31,16 @@ self.addEventListener("activate", event => {
     );
 });
 
+// FETCH
 self.addEventListener("fetch", event => {
     event.respondWith(
-        caches.match(event.request).then(cachedResponse => {
-            return cachedResponse || fetch(event.request);
-        })
+        caches.match(event.request)
+            .then(cachedResponse => {
+                if (cachedResponse) {
+                    return cachedResponse;
+                }
+
+                return fetch(event.request);
+            })
     );
 });
