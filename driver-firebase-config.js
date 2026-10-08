@@ -10,7 +10,7 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
 
-    apiKey: "AIzaSyBFZKliLs7ZEHK2bGgasw1GjM0vbVNPVA",
+ apiKey: "AIzaSyBFZKliLs7ZEHK2hbGgasw1GjM0vbVNPVA",
 
     authDomain: "barq-online-store-a1413.firebaseapp.com",
 
