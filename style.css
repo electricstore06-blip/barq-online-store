@@ -1,1011 +1,1755 @@
-/* =========================
-RESET
-========================= */
+/* =====================================================
+   BARQ ONLINE STORE — PROFESSIONAL DESIGN
+   Modern • Minimal • Responsive
+===================================================== */
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
+
+/* =====================================================
+   1. GLOBAL STYLES
+===================================================== */
+
+:root {
+    --black: #111111;
+    --dark: #202020;
+    --white: #ffffff;
+    --background: #f7f7f7;
+    --light-gray: #f1f1f1;
+    --border: #e5e5e5;
+    --text: #222222;
+    --muted: #777777;
+    --success: #18794e;
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
+
+    --shadow:
+        0 8px 30px rgba(0, 0, 0, 0.06);
+
+    --transition:
+        all 0.25s ease;
 }
 
 
-body{
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 
-    background:#fff;
-    color:#111;
-
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
 }
 
 
-/* =========================
-TOP BAR
-========================= */
-
-
-.top-bar{
-
-    background:#111;
-    color:white;
-    text-align:center;
-    padding:12px;
-    font-size:14px;
-
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px;
 }
 
 
+body {
+    background: var(--white);
+    color: var(--text);
 
-/* =========================
-HEADER
-========================= */
+    font-size: 15px;
+    line-height: 1.6;
 
-
-header{
-
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:18px 5%;
-    background:white;
-    border-bottom:1px solid #eee;
-    position:relative;
-    z-index:1000;
-
+    -webkit-font-smoothing: antialiased;
 }
 
 
-
-.logo{
-
-    font-size:30px;
-    font-weight:bold;
-    color:#d4145a;
-
+button,
+input {
+    font: inherit;
 }
 
 
-.logo span{
-
-    display:block;
-    color:#111;
-    font-size:10px;
-    letter-spacing:4px;
-
+button {
+    cursor: pointer;
 }
 
 
-
-
-/* =========================
-NAVIGATION
-========================= */
-
-
-#mainNav{
-
-    display:flex;
-    align-items:center;
-    gap:25px;
-
+img {
+    max-width: 100%;
 }
 
 
-
-#mainNav a{
-
-    text-decoration:none;
-    color:#111;
-    font-size:15px;
-    cursor:pointer;
-
+a {
+    color: inherit;
 }
 
 
-
-#mainNav a:hover{
-
-    color:#d4145a;
-
+::selection {
+    background: var(--black);
+    color: var(--white);
 }
 
 
+/* =====================================================
+   2. TOP ANNOUNCEMENT BAR
+===================================================== */
 
-/* MOBILE BUTTON */
+.top-bar {
+    background: var(--black);
+    color: var(--white);
 
+    text-align: center;
 
-.menu-toggle{
+    padding: 10px 16px;
 
-    display:none;
-    border:none;
-    background:#d4145a;
-    color:white;
-    font-size:22px;
-    padding:8px 14px;
-    border-radius:10px;
-    cursor:pointer;
+    font-size: 12px;
+    font-weight: 500;
 
+    letter-spacing: 0.4px;
 }
 
 
+/* =====================================================
+   3. HEADER
+===================================================== */
 
+header {
+    width: 100%;
 
-/* =========================
-BARQ BANNER
-========================= */
+    min-height: 82px;
 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-.barq-banner{
+    gap: 25px;
 
-    width:90%;
-    margin:30px auto;
+    padding: 18px 5%;
 
-    background:#f9dce7;
+    background: var(--white);
 
-    border-radius:25px;
+    border-bottom: 1px solid var(--border);
 
-    padding:50px;
+    position: sticky;
+    top: 0;
 
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    overflow:hidden;
-
+    z-index: 1000;
 }
 
 
+/* BRAND LOGO */
 
-.barq-banner div{
+.logo {
+    flex-shrink: 0;
 
-    width:50%;
+    color: var(--black);
 
+    font-size: 30px;
+    font-weight: 900;
+
+    line-height: 1.1;
+    letter-spacing: -1.5px;
 }
 
 
+.logo span {
+    display: block;
 
-.small{
+    margin-top: 5px;
 
-    color:#d4145a;
-    font-weight:bold;
+    color: var(--muted);
 
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 4px;
 }
 
 
+/* =====================================================
+   4. NAVIGATION
+===================================================== */
 
-.barq-banner h1{
+#mainNav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 
-    font-size:55px;
-    margin:20px 0;
-    line-height:1.1;
-
+    gap: 25px;
 }
 
 
+#mainNav a {
+    position: relative;
 
-.barq-banner h1 span{
+    text-decoration: none;
 
-    color:#d4145a;
+    color: var(--text);
 
+    font-size: 13px;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    transition: var(--transition);
 }
 
 
-
-.barq-banner p{
-
-    font-size:18px;
-    margin-bottom:20px;
-
+#mainNav a:hover {
+    color: var(--muted);
 }
 
 
+#mainNav a::after {
+    content: "";
 
-.barq-banner button{
+    position: absolute;
 
-    background:#d4145a;
-    color:white;
-    border:none;
-    padding:15px 35px;
-    border-radius:10px;
-    cursor:pointer;
+    left: 0;
+    bottom: -7px;
 
+    width: 0;
+    height: 2px;
+
+    background: var(--black);
+
+    transition: var(--transition);
 }
 
 
-
-.barq-banner img{
-
-    width:400px;
-    max-width:45%;
-    border-radius:20px;
-
+#mainNav a:hover::after {
+    width: 100%;
 }
 
 
+/* MOBILE MENU BUTTON */
 
+.menu-toggle {
+    display: none;
 
+    background: var(--black);
+    color: var(--white);
 
-/* =========================
-SEARCH
-========================= */
+    border: none;
+    border-radius: var(--radius-sm);
 
+    padding: 9px 13px;
 
-.search-area{
+    font-size: 22px;
+    line-height: 1;
 
-    width:90%;
-    margin:30px auto;
-
+    transition: var(--transition);
 }
 
 
-
-.search-area input{
-
-    width:100%;
-    padding:16px;
-
-    border:1px solid #ddd;
-
-    border-radius:15px;
-
-    font-size:16px;
-
-    outline:none;
-
+.menu-toggle:hover {
+    background: #333333;
 }
 
 
+/* =====================================================
+   5. HERO BANNER
+===================================================== */
 
-.search-area input:focus{
+.barq-banner {
+    width: 90%;
 
-    border-color:#d4145a;
+    max-width: 1450px;
 
+    min-height: 400px;
+
+    margin: 38px auto;
+
+    padding: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 45px;
+
+    background: #f4f4f4;
+
+    border-radius: var(--radius-lg);
+
+    overflow: hidden;
 }
 
 
+.barq-banner > div {
+    flex: 1;
+    min-width: 0;
+}
 
 
-/* =========================
-BRANDS
-========================= */
+.barq-banner .small {
+    display: inline-block;
 
+    margin-bottom: 12px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+
+.barq-banner h1 {
+    margin: 10px 0 22px;
+
+    color: var(--black);
+
+    font-size: clamp(38px, 4.5vw, 64px);
+
+    font-weight: 850;
+
+    line-height: 1.08;
+    letter-spacing: -2.5px;
+}
+
+
+.barq-banner h1 span {
+    color: #777777;
+}
+
+
+.barq-banner p {
+    max-width: 480px;
+
+    margin-bottom: 25px;
+
+    color: #626262;
+
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+
+.barq-banner button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 49px;
+
+    padding: 14px 27px;
+
+    background: var(--black);
+    color: var(--white);
+
+    border: 1px solid var(--black);
+    border-radius: var(--radius-sm);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    transition: var(--transition);
+}
+
+
+.barq-banner button:hover {
+    background: transparent;
+    color: var(--black);
+
+    transform: translateY(-2px);
+}
+
+
+.barq-banner img {
+    display: block;
+
+    flex: 0 1 43%;
+
+    width: 43%;
+    max-width: 480px;
+
+    height: 310px;
+
+    object-fit: cover;
+
+    border-radius: var(--radius-md);
+}
+
+
+/* =====================================================
+   6. SEARCH AREA
+===================================================== */
+
+.search-area {
+    width: 90%;
+    max-width: 1000px;
+
+    margin: 45px auto 55px;
+
+    position: relative;
+}
+
+
+.search-area input {
+    display: block;
+
+    width: 100%;
+    min-height: 58px;
+
+    padding: 17px 22px;
+
+    background: #fafafa;
+    color: var(--black);
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    outline: none;
+
+    font-size: 14px;
+
+    transition: var(--transition);
+}
+
+
+.search-area input::placeholder {
+    color: #999999;
+}
+
+
+.search-area input:focus {
+    background: var(--white);
+
+    border-color: #777777;
+
+    box-shadow:
+        0 0 0 4px rgba(0, 0, 0, 0.04);
+}
+
+
+/* =====================================================
+   7. SECTION LAYOUT
+===================================================== */
 
 .brands,
 .products,
-.offers{
+.offers {
+    width: 90%;
+    max-width: 1450px;
 
-    width:90%;
-    margin:50px auto;
-
+    margin: 65px auto;
 }
-
 
 
 .brands h2,
 .products h2,
-.offers h2{
+.offers h2 {
+    margin-bottom: 10px;
 
-    font-size:32px;
-    margin-bottom:20px;
+    color: var(--black);
 
+    font-size: clamp(25px, 3vw, 34px);
+
+    font-weight: 800;
+
+    line-height: 1.25;
+    letter-spacing: -1px;
 }
 
 
+.products-subtitle {
+    margin-bottom: 28px;
 
+    color: var(--muted);
 
-.brand-list{
-
-    display:flex;
-    flex-wrap:wrap;
-    gap:15px;
-
+    font-size: 14px;
 }
 
 
+/* =====================================================
+   8. POPULAR BRANDS
+===================================================== */
 
-.brand-list span{
-
-    background:#fce5ee;
-    color:#d4145a;
-
-    padding:12px 25px;
-
-    border-radius:30px;
-
-    font-weight:bold;
-
-}
-
-
-
-
-
-/* =========================
-PRODUCT GRID
-========================= */
-
-
-.product-container{
-
-    display:grid;
+.brand-list {
+    display: grid;
 
     grid-template-columns:
-    repeat(4,1fr);
+        repeat(6, minmax(0, 1fr));
 
-    gap:20px;
+    gap: 12px;
 
+    margin-top: 25px;
 }
 
 
+.brand-list span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 65px;
+
+    padding: 12px;
+
+    background: var(--white);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+
+    color: #333333;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-align: center;
+
+    transition: var(--transition);
+}
 
 
-.product{
+.brand-list span:hover {
+    background: var(--black);
+    color: var(--white);
 
-    background:white;
+    border-color: var(--black);
 
-    border-radius:18px;
+    transform: translateY(-3px);
+}
 
-    padding:15px;
+
+/* =====================================================
+   9. PRODUCT GRID
+===================================================== */
+
+.product-container {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 24px;
+
+    align-items: stretch;
+}
+
+
+/* PRODUCT CARD */
+
+.product {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 14px;
+
+    background: var(--white);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+
+    text-align: left;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+
+.product:hover {
+    transform: translateY(-5px);
+
+    border-color: #cccccc;
 
     box-shadow:
-    0 5px 20px rgba(0,0,0,.10);
-
-    transition:.2s;
-
-    text-align:center;
-
+        0 12px 30px rgba(0, 0, 0, 0.08);
 }
 
 
+/* CLICKABLE PRODUCT CONTENT */
 
-.product:hover{
+.product-click {
+    flex: 1;
 
-    transform:translateY(-5px);
-
-}
-
-
-
-.product img,
-.product-img{
-
-    width:100%;
-    height:220px;
-    object-fit:cover;
-    border-radius:15px;
-
-}
-
-
-
-.product h3{
-
-    margin:15px 0;
-    font-size:18px;
-
-}
-
-
-
-.brand{
-
-    color:#777;
-
-}
-
-
-
-.price{
-
-    color:#d4145a;
-    font-size:18px;
-    font-weight:bold;
-
-}
-
-
-
-.add-btn{
-
-    width:100%;
-    margin-top:15px;
-
-    background:#d4145a;
-    color:white;
-
-    border:none;
-
-    padding:12px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-}
-
-
-
-
-/* =========================
-CART
-========================= */
-
-
-.cart-box{
-
-    display:none;
-
-    position:fixed;
-
-    top:80px;
-    right:20px;
-
-    width:350px;
-
-    max-width:90%;
-
-    background:white;
-
-    padding:25px;
-
-    border-radius:20px;
-
-    box-shadow:
-    0 10px 40px rgba(0,0,0,.25);
-
-    z-index:20000;
-
-}
-
-
-
-.cart-item{
-
-    padding:15px 0;
-
-    border-bottom:1px solid #eee;
-
-}
-
-
-
-.cart-box button{
-
-    width:100%;
-
-    margin-top:10px;
-
-    padding:12px;
-
-    background:#d4145a;
-
-    color:white;
-
-    border:none;
-
-    border-radius:10px;
-
-}
-
-
-
-
-
-/* =========================
-LOGIN
-========================= */
-
-
-.login-box{
-
-    display:none;
-
-    position:fixed;
-
-    inset:0;
-
-    background:rgba(0,0,0,.5);
-
-    justify-content:center;
-
-    align-items:center;
-
-    z-index:30000;
-
-}
-
-
-
-.login-content{
-
-    background:white;
-
-    width:380px;
-
-    max-width:90%;
-
-    padding:30px;
-
-    border-radius:20px;
-
-    text-align:center;
-
-}
-
-
-
-.login-content input{
-
-    width:100%;
-
-    padding:14px;
-
-    margin:10px 0;
-
-    border:1px solid #ddd;
-
-    border-radius:10px;
-
-}
-
-
-
-.login-content button{
-
-    width:100%;
-
-    padding:13px;
-
-    background:#d4145a;
-
-    color:white;
-
-    border:none;
-
-    border-radius:10px;
-
-}
-
-
-
-.login-close{
-
-    background:none!important;
-
-    color:#111!important;
-
-    font-size:25px;
-
-}
-
-
-
-
-/* =========================
-MOBILE
-========================= */
-
-
-@media(max-width:700px){
-
-
-
-header{
-
-    padding:15px;
-
-}
-
-
-
-.logo{
-
-    font-size:24px;
-
-}
-
-
-
-.menu-toggle{
-
-    display:block;
-
-}
-
-
-
-
-#mainNav{
-
-    position:absolute;
-
-    top:70px;
-
-    left:0;
-
-    width:100%;
-
-    background:white;
-
-    display:none;
-
-    flex-direction:column;
-
-    padding:20px;
-
-    gap:15px;
-
-    box-shadow:
-    0 10px 20px rgba(0,0,0,.15);
-
-}
-
-
-
-#mainNav.active{
-
-    display:flex;
-
-}
-
-
-
-#mainNav a{
-
-    width:100%;
-
-    text-align:center;
-
-    padding:12px;
-
-    border-bottom:1px solid #eee;
-
-}
-
-
-
-
-
-.barq-banner{
-
-    width:94%;
-
-    padding:25px;
-
-    flex-direction:column;
-
-    text-align:center;
-
-}
-
-
-
-.barq-banner div{
-
-    width:100%;
-
-}
-
-
-
-.barq-banner h1{
-
-    font-size:38px;
-
-}
-
-
-
-.barq-banner img{
-
-    max-width:100%;
-
-    margin-top:25px;
-
-}
-
-
-
-.search-area,
-.products,
-.brands,
-.offers{
-
-    width:94%;
-
-}
-
-
-
-.product-container{
-
-    grid-template-columns:repeat(2,1fr);
-
-    gap:12px;
-
-}
-
-
-
-.product{
-
-    padding:10px;
-
-}
-
-
-
-.product img,
-.product-img{
-
-    height:130px;
-
-}
-
-
-
-.product h3{
-
-    font-size:14px;
-
-}
-
-
-
-.cart-box{
-
-    width:calc(100% - 30px);
-
-    right:15px;
-
-}
-
-
-
-}
-/* =========================
-PRODUCT DETAILS PAGE
-========================= */
-
-#productDetails{
-
-    width:90%;
-    max-width:1200px;
-    margin:40px auto;
-    background:white;
-
-}
-
-
-.product-details-box{
-
-    display:flex;
-    align-items:flex-start;
-    gap:50px;
-
-    padding:30px;
-
+    cursor: pointer;
 }
 
 
 /* PRODUCT IMAGE */
 
-.details-image{
+.product img,
+.product-img {
+    display: block;
 
-    width:50%;
-    max-width:500px;
-    height:500px;
+    width: 100%;
+    height: 240px;
 
-    object-fit:contain;
+    margin-bottom: 15px;
 
-    border-radius:25px;
+    padding: 8px;
 
-    box-shadow:
-    0 10px 30px rgba(0,0,0,.12);
+    background: #f8f8f8;
 
+    border-radius: 10px;
+
+    object-fit: contain;
+
+    transition: transform 0.3s ease;
 }
 
+
+.product:hover .product-img {
+    transform: scale(1.025);
+}
+
+
+/* PRODUCT NAME */
+
+.product h3 {
+    margin: 8px 0;
+
+    color: var(--black);
+
+    font-size: 15px;
+    font-weight: 700;
+
+    line-height: 1.45;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* BRAND NAME */
+
+.product .brand {
+    margin-bottom: 8px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+/* PRODUCT PRICE */
+
+.product .price {
+    margin-top: 10px;
+
+    color: var(--black);
+
+    font-size: 18px;
+    font-weight: 800;
+
+    letter-spacing: -0.4px;
+}
+
+
+/* ADD TO CART BUTTON */
+
+.add-btn {
+    display: block;
+
+    width: 100%;
+    min-height: 45px;
+
+    margin-top: 18px;
+
+    padding: 12px 10px;
+
+    background: var(--black);
+    color: var(--white);
+
+    border: 1px solid var(--black);
+    border-radius: var(--radius-sm);
+
+    font-size: 12px;
+    font-weight: 700;
+
+    transition: var(--transition);
+}
+
+
+.add-btn:hover {
+    background: var(--white);
+    color: var(--black);
+}
+
+
+.add-btn:active {
+    transform: scale(0.98);
+}
+
+
+/* =====================================================
+   10. OFFERS SECTION
+===================================================== */
+
+.offers {
+    padding: 45px;
+
+    background: #f5f5f5;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+
+    text-align: center;
+}
+
+
+.offers h2 {
+    margin-bottom: 12px;
+}
+
+
+.offers p {
+    color: var(--muted);
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   11. SHOPPING CART
+===================================================== */
+
+.cart-box {
+    display: none;
+
+    position: fixed;
+
+    top: 95px;
+    right: 25px;
+
+    width: 390px;
+    max-width: calc(100% - 30px);
+
+    max-height: calc(100vh - 120px);
+
+    overflow-y: auto;
+
+    padding: 25px;
+
+    background: var(--white);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.18);
+
+    z-index: 20000;
+}
+
+
+.cart-box h2 {
+    margin-bottom: 20px;
+
+    color: var(--black);
+
+    font-size: 23px;
+    font-weight: 800;
+}
+
+
+.cart-box h3 {
+    margin-top: 22px;
+    padding-top: 18px;
+
+    border-top: 1px solid var(--border);
+
+    color: var(--black);
+
+    font-size: 17px;
+}
+
+
+#cartItems {
+    margin-top: 12px;
+}
+
+
+.cart-item {
+    padding: 16px 0;
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+.cart-item b {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--black);
+
+    font-size: 14px;
+}
+
+
+.cart-item p {
+    margin-bottom: 10px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+
+.cart-item button {
+    margin: 4px 4px 0 0;
+
+    padding: 7px 11px;
+
+    background: #f5f5f5;
+    color: var(--black);
+
+    border: 1px solid var(--border);
+    border-radius: 6px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    transition: var(--transition);
+}
+
+
+.cart-item button:hover {
+    background: var(--black);
+    color: var(--white);
+
+    border-color: var(--black);
+}
+
+
+/* CART ACTION BUTTONS */
+
+.cart-box > button {
+    display: block;
+
+    width: 100%;
+
+    margin-top: 12px;
+
+    padding: 13px;
+
+    background: var(--black);
+    color: var(--white);
+
+    border: 1px solid var(--black);
+    border-radius: var(--radius-sm);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    transition: var(--transition);
+}
+
+
+.cart-box > button:hover {
+    background: var(--white);
+    color: var(--black);
+}
+
+
+/* =====================================================
+   12. CUSTOMER LOGIN
+===================================================== */
+
+.login-box {
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.60);
+
+    justify-content: center;
+    align-items: center;
+
+    z-index: 30000;
+
+    backdrop-filter: blur(4px);
+}
+
+
+.login-content {
+    position: relative;
+
+    width: 420px;
+    max-width: 100%;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 38px 32px;
+
+    background: var(--white);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+
+    text-align: center;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.18);
+}
+
+
+.login-content h2 {
+    margin-bottom: 10px;
+
+    color: var(--black);
+
+    font-size: 26px;
+    font-weight: 800;
+}
+
+
+.login-content p {
+    margin-bottom: 18px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+
+.login-content input {
+    display: block;
+
+    width: 100%;
+
+    margin: 13px 0;
+
+    padding: 14px 15px;
+
+    background: #fafafa;
+    color: var(--black);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+
+    outline: none;
+
+    font-size: 14px;
+
+    transition: var(--transition);
+}
+
+
+.login-content input:focus {
+    background: var(--white);
+
+    border-color: #777777;
+
+    box-shadow:
+        0 0 0 3px rgba(0, 0, 0, 0.04);
+}
+
+
+.login-content button:not(.login-close) {
+    display: block;
+
+    width: 100%;
+
+    margin-top: 16px;
+
+    padding: 14px;
+
+    background: var(--black);
+    color: var(--white);
+
+    border: 1px solid var(--black);
+    border-radius: var(--radius-sm);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    transition: var(--transition);
+}
+
+
+.login-content button:not(.login-close):hover {
+    background: #333333;
+}
+
+
+.login-content #loginMessage {
+    margin-top: 15px;
+
+    overflow-wrap: anywhere;
+}
+
+
+.login-close {
+    position: absolute;
+
+    top: 12px;
+    right: 15px;
+
+    width: 35px !important;
+    height: 35px;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+    color: var(--black) !important;
+
+    border: none !important;
+
+    font-size: 28px !important;
+    line-height: 1;
+}
+
+
+/* =====================================================
+   13. PRODUCT DETAILS PAGE
+===================================================== */
+
+#productDetails {
+    width: 90%;
+    max-width: 1200px;
+
+    margin: 45px auto;
+
+    background: var(--white);
+}
+
+
+.product-details-box {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 55px;
+
+    padding: 30px 0;
+}
+
+
+/* MAIN PRODUCT IMAGE */
+
+.details-image {
+    display: block;
+
+    width: 50%;
+    max-width: 520px;
+
+    height: 500px;
+
+    padding: 15px;
+
+    background: #f8f8f8;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+
+    object-fit: contain;
+}
 
 
 /* PRODUCT INFORMATION */
 
-.product-details-box h1{
-
-    font-size:38px;
-    margin-bottom:10px;
-
+.product-details-box > div {
+    flex: 1;
+    min-width: 0;
 }
 
 
+.product-details-box h1 {
+    margin-bottom: 14px;
 
-.product-details-box h3{
+    color: var(--black);
 
-    margin-top:15px;
+    font-size: 36px;
+    font-weight: 800;
 
+    line-height: 1.2;
+    letter-spacing: -1px;
 }
 
 
+.product-details-box h3 {
+    margin-top: 22px;
+    margin-bottom: 10px;
 
-.product-details-box h2{
+    color: var(--black);
 
-    color:#d4145a;
-
-    font-size:28px;
-
-    margin:20px 0;
-
+    font-size: 15px;
+    font-weight: 700;
 }
 
 
+.product-details-box h2 {
+    margin: 22px 0;
 
-.product-details-box p{
+    color: var(--black);
 
-    line-height:1.6;
-
-    font-size:16px;
-
+    font-size: 30px;
+    font-weight: 800;
 }
 
 
+.product-details-box p {
+    color: #666666;
 
-/* OPTIONS */
-
-.options{
-
-    margin-top:10px;
-
+    font-size: 15px;
+    line-height: 1.9;
 }
 
 
-.options button{
+/* SIZE / COLOR OPTIONS */
 
-    background:white;
+.options {
+    display: flex;
+    flex-wrap: wrap;
 
-    border:1px solid #ddd;
+    gap: 8px;
 
-    padding:10px 18px;
-
-    margin:5px;
-
-    border-radius:25px;
-
-    cursor:pointer;
-
+    margin-top: 12px;
 }
 
 
-.options button:hover{
+.options button {
+    min-width: 44px;
 
-    background:#d4145a;
+    padding: 10px 16px;
 
-    color:white;
+    background: var(--white);
+    color: var(--black);
 
+    border: 1px solid #cccccc;
+    border-radius: var(--radius-sm);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    transition: var(--transition);
 }
 
 
+.options button:hover,
+.options button:focus {
+    background: var(--black);
+    color: var(--white);
 
-
-/* ADD CART */
-
-.add-cart-details{
-
-    margin-top:30px;
-
-    padding:15px 45px;
-
-    background:#d4145a;
-
-    color:white;
-
-    border:none;
-
-    border-radius:30px;
-
-    font-size:18px;
-
-    cursor:pointer;
-
+    border-color: var(--black);
 }
 
 
-.add-cart-details:hover{
+/* PRODUCT DETAILS ADD TO CART */
 
-    background:#111;
+.add-cart-details {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
+    min-height: 52px;
+
+    margin-top: 28px;
+
+    padding: 15px 35px;
+
+    background: var(--black);
+    color: var(--white);
+
+    border: 1px solid var(--black);
+    border-radius: var(--radius-sm);
+
+    font-size: 14px;
+    font-weight: 700;
+
+    transition: var(--transition);
 }
 
 
-
-
-
-/* MOBILE PRODUCT DETAILS */
-
-@media(max-width:700px){
-
-
-.product-details-box{
-
-    flex-direction:column;
-
-    padding:15px;
-
+.add-cart-details:hover {
+    background: var(--white);
+    color: var(--black);
 }
 
 
-.details-image{
-
-    width:100%;
-
-    height:350px;
-
-}
-
-
-.product-details-box h1{
-
-    font-size:28px;
-
-}
-
-
-
-}
-/* =====================================
-   STATUS COLORS
-===================================== */
+/* =====================================================
+   14. ORDER STATUS COLORS
+   Preserve existing admin order status styling
+===================================================== */
 
 .status-select {
-    font-weight: bold;
+    font-weight: 700;
     border-width: 2px;
 }
 
 
-/* Pending */
 .status-select option[value="Pending"] {
     color: orange;
 }
 
 
-/* Processing */
 .status-select option[value="Processing"] {
     color: blue;
 }
 
 
-/* Shipped */
 .status-select option[value="Shipped"] {
     color: purple;
 }
 
 
-/* Out for Delivery */
 .status-select option[value="Out for Delivery"] {
     color: darkorange;
 }
 
 
-/* Delivered */
 .status-select option[value="Delivered"] {
     color: green;
 }
 
 
-/* Delivery Delayed */
 .status-select option[value="Delivery Delayed"] {
     color: red;
 }
 
 
-/* Replacement */
 .status-select option[value="Replacement Requested"],
 .status-select option[value="Replacement Approved"] {
     color: brown;
 }
 
 
-/* Cancelled */
 .status-select option[value="Cancelled"] {
     color: red;
+}
+
+
+/* =====================================================
+   15. TABLET RESPONSIVE DESIGN
+===================================================== */
+
+@media (max-width: 1050px) {
+
+    header {
+        padding: 16px 4%;
+    }
+
+
+    #mainNav {
+        gap: 16px;
+    }
+
+
+    #mainNav a {
+        font-size: 12px;
+    }
+
+
+    .barq-banner {
+        padding: 38px;
+        gap: 30px;
+    }
+
+
+    .barq-banner img {
+        height: 280px;
+    }
+
+
+    .product-container {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 18px;
+    }
+
+
+    .brand-list {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+
+    .product-details-box {
+        gap: 35px;
+    }
+
+
+    .details-image {
+        height: 430px;
+    }
+
+}
+
+
+/* =====================================================
+   16. MOBILE RESPONSIVE DESIGN
+===================================================== */
+
+@media (max-width: 700px) {
+
+    /* HEADER */
+
+    header {
+        min-height: 70px;
+
+        padding: 13px 5%;
+
+        gap: 12px;
+    }
+
+
+    .logo {
+        font-size: 25px;
+    }
+
+
+    .logo span {
+        font-size: 8px;
+        letter-spacing: 3px;
+    }
+
+
+    .menu-toggle {
+        display: block;
+        flex-shrink: 0;
+    }
+
+
+    /* MOBILE NAVIGATION */
+
+    #mainNav {
+        display: none;
+
+        position: absolute;
+
+        top: 100%;
+        left: 0;
+
+        width: 100%;
+        max-height: calc(100vh - 100px);
+
+        overflow-y: auto;
+
+        padding: 12px 20px 20px;
+
+        background: var(--white);
+
+        border-bottom: 1px solid var(--border);
+
+        box-shadow:
+            0 12px 25px rgba(0, 0, 0, 0.08);
+
+        flex-direction: column;
+        align-items: stretch;
+
+        gap: 0;
+    }
+
+
+    #mainNav.active {
+        display: flex;
+    }
+
+
+    #mainNav a {
+        width: 100%;
+
+        padding: 14px 5px;
+
+        border-bottom: 1px solid #eeeeee;
+
+        font-size: 14px;
+
+        text-align: left;
+    }
+
+
+    #mainNav a::after {
+        display: none;
+    }
+
+
+    /* HERO */
+
+    .barq-banner {
+        width: 92%;
+
+        margin: 22px auto 30px;
+
+        padding: 28px 22px;
+
+        flex-direction: column;
+        align-items: stretch;
+
+        gap: 22px;
+
+        border-radius: var(--radius-md);
+
+        text-align: left;
+    }
+
+
+    .barq-banner > div {
+        width: 100%;
+    }
+
+
+    .barq-banner .small {
+        font-size: 10px;
+        letter-spacing: 1.5px;
+    }
+
+
+    .barq-banner h1 {
+        margin: 12px 0 17px;
+
+        font-size: clamp(34px, 9vw, 46px);
+
+        letter-spacing: -1.5px;
+    }
+
+
+    .barq-banner p {
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+
+    .barq-banner button {
+        min-height: 46px;
+        padding: 12px 22px;
+    }
+
+
+    .barq-banner img {
+        width: 100%;
+        max-width: 100%;
+
+        height: 220px;
+
+        margin: 0;
+
+        border-radius: var(--radius-sm);
+    }
+
+
+    /* SEARCH */
+
+    .search-area {
+        width: 92%;
+
+        margin: 28px auto 40px;
+    }
+
+
+    .search-area input {
+        min-height: 52px;
+
+        padding: 14px 16px;
+
+        font-size: 13px;
+    }
+
+
+    /* SECTIONS */
+
+    .brands,
+    .products,
+    .offers {
+        width: 92%;
+
+        margin: 42px auto;
+    }
+
+
+    .brands h2,
+    .products h2,
+    .offers h2 {
+        font-size: 25px;
+        letter-spacing: -0.6px;
+    }
+
+
+    .products-subtitle {
+        margin-bottom: 20px;
+
+        font-size: 13px;
+    }
+
+
+    /* BRANDS */
+
+    .brand-list {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 8px;
+
+        margin-top: 20px;
+    }
+
+
+    .brand-list span {
+        min-height: 50px;
+
+        padding: 8px 5px;
+
+        font-size: 11px;
+
+        overflow-wrap: anywhere;
+    }
+
+
+    /* PRODUCT GRID */
+
+    .product-container {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 12px;
+    }
+
+
+    .product {
+        padding: 9px;
+
+        border-radius: 11px;
+    }
+
+
+    .product:hover {
+        transform: none;
+    }
+
+
+    .product img,
+    .product-img {
+        height: 155px;
+
+        margin-bottom: 10px;
+
+        padding: 5px;
+
+        border-radius: 8px;
+    }
+
+
+    .product h3 {
+        margin: 6px 0;
+
+        font-size: 13px;
+        line-height: 1.4;
+    }
+
+
+    .product .brand {
+        margin-bottom: 5px;
+
+        font-size: 11px;
+    }
+
+
+    .product .price {
+        margin-top: 7px;
+
+        font-size: 15px;
+    }
+
+
+    .add-btn {
+        min-height: 40px;
+
+        margin-top: 12px;
+
+        padding: 10px 5px;
+
+        font-size: 11px;
+    }
+
+
+    /* OFFERS */
+
+    .offers {
+        padding: 28px 20px;
+
+        border-radius: var(--radius-md);
+    }
+
+
+    /* CART */
+
+    .cart-box {
+        top: 80px;
+        right: 15px;
+
+        width: 390px;
+        max-width: calc(100% - 30px);
+
+        max-height: calc(100vh - 100px);
+
+        padding: 20px;
+
+        border-radius: 15px;
+    }
+
+
+    /* LOGIN */
+
+    .login-content {
+        padding: 35px 22px 25px;
+
+        border-radius: 15px;
+    }
+
+
+    .login-content h2 {
+        font-size: 23px;
+    }
+
+
+    /* PRODUCT DETAILS */
+
+    #productDetails {
+        width: 92%;
+
+        margin: 25px auto;
+    }
+
+
+    .product-details-box {
+        flex-direction: column;
+
+        gap: 25px;
+
+        padding: 5px 0;
+    }
+
+
+    .details-image {
+        width: 100%;
+        max-width: none;
+
+        height: 320px;
+
+        padding: 10px;
+
+        border-radius: var(--radius-md);
+    }
+
+
+    .product-details-box h1 {
+        font-size: 27px;
+
+        letter-spacing: -0.5px;
+    }
+
+
+    .product-details-box h2 {
+        font-size: 25px;
+    }
+
+
+    .product-details-box p {
+        font-size: 14px;
+    }
+
+
+    .add-cart-details {
+        width: 100%;
+
+        min-height: 49px;
+
+        padding: 13px 20px;
+    }
+
+}
+
+
+/* =====================================================
+   17. SMALL MOBILE SCREENS
+===================================================== */
+
+@media (max-width: 380px) {
+
+    .logo {
+        font-size: 22px;
+    }
+
+
+    .barq-banner {
+        padding: 22px 17px;
+    }
+
+
+    .barq-banner h1 {
+        font-size: 32px;
+    }
+
+
+    .product-container {
+        gap: 9px;
+    }
+
+
+    .product {
+        padding: 7px;
+    }
+
+
+    .product img,
+    .product-img {
+        height: 125px;
+    }
+
+
+    .product h3 {
+        font-size: 12px;
+    }
+
+
+    .product .price {
+        font-size: 14px;
+    }
+
+
+    .add-btn {
+        font-size: 10px;
+    }
+
+
+    .brand-list span {
+        font-size: 10px;
+    }
+
+}
+
+
+/* =====================================================
+   18. ACCESSIBILITY
+===================================================== */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+    outline: 2px solid #666666;
+    outline-offset: 3px;
+}
+
+
+/* Reduce motion when requested by the user's device */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+
 }
