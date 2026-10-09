@@ -271,7 +271,7 @@ header {
 
     gap: 45px;
 
-    background: #f5f7fa;
+   background: #f8f3ed;
 
     border-radius: var(--radius-lg);
 
@@ -546,7 +546,7 @@ header {
     background: var(--white);
 
     border: 1px solid var(--border);
-    border-radius: var(--radius-md);
+border-radius: 18px;
 
     text-align: left;
 
