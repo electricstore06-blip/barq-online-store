@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BARQ Admin Products</title>
+    <link rel="stylesheet" href="admin-products.css">
+</head>
+<body>
+    <div class="admin-page">
+        <header class="admin-header">
+            <div>
+                <h1>BARQ Admin</h1>
+                <p>Product Management</p>
+            </div>
+            <button id="logout-btn" type="button">Logout</button>
+        </header>
+
+        <main class="admin-content">
+            <div class="products-header">
+                <h2>Manage Products</h2>
+                <a href="admin-orders.html">View Orders</a>
+            </div>
+
+            <div id="admin-message">Checking admin access...</div>
+
+            <section id="product-form-section" hidden>
+                <h3 id="form-title">Add New Product</h3>
+
+                <form id="product-form">
+                    <input type="hidden" id="product-id">
+
+                    <label for="product-name">Product Name *</label>
+                    <input id="product-name" required maxlength="150"
+                           placeholder="Example: Samsung Phone">
+
+                    <label for="product-brand">Brand</label>
+                    <input id="product-brand" maxlength="100"
+                           placeholder="Example: Samsung">
+
+                    <label for="product-price">Price (SAR) *</label>
+                    <input id="product-price" type="number" min="0"
+                           step="0.01" required placeholder="299.00">
+
+                    <label for="product-category">Category</label>
+                    <input id="product-category" maxlength="100"
+                           placeholder="Example: Electronics">
+
+                    <label for="product-image">Product Image URL *</label>
+                    <input id="product-image" type="url" required
+                           placeholder="https://example.com/product.jpg">
+
+                    <div class="image-preview-box">
+                        <p>Image preview</p>
+                        <img id="image-preview" alt="Product preview" hidden>
+                    </div>
+
+                    <label for="product-description">Description</label>
+                    <textarea id="product-description" rows="4"
+                              maxlength="3000"
+                              placeholder="Describe this product"></textarea>
+
+                    <label for="product-colors">Colors</label>
+                    <input id="product-colors"
+                           placeholder="Black, White, Blue">
+
+                    <label for="product-sizes">Sizes</label>
+                    <input id="product-sizes"
+                           placeholder="Small, Medium, Large">
+
+                    <label class="checkbox-label">
+                        <input id="product-active" type="checkbox" checked>
+                        Show this product in the store
+                    </label>
+
+                    <div class="form-buttons">
+                        <button id="save-product-btn" type="submit">
+                            Save Product
+                        </button>
+                        <button id="cancel-edit-btn" type="button" hidden>
+                            Cancel Edit
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <section id="product-list-section" hidden>
+                <h3>Existing Products</h3>
+                <div id="products-container">Loading products...</div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="admin-products.js"></script>
+</body>
+</html>
