@@ -146,12 +146,34 @@ section { scroll-margin-top: 100px; }
 .brand-item:hover, .brand-card:hover, #brands button:hover, #brands a:hover {
   border-color: var(--accent); background: var(--cream); color: var(--accent);
 }
-
-/* Search */
-.search-container {
-  width: min(620px,calc(100% - 48px)); margin: 0 auto 44px;
-  display: flex; align-items: stretch;
+/* BARQ Search Bar */
+.search-area {
+  width: 100%;
+  padding: 18px 20px;
+  display: flex;
+  justify-content: center;
+  background: #ffffff;
+  border: none;
 }
+
+.search-area input {
+  width: 100%;
+  max-width: 600px;
+  height: 46px;
+  padding: 0 18px;
+  border: 1px solid #e5d8ce;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #302925;
+  font-size: 14px;
+  outline: none;
+}
+
+.search-area input:focus {
+  border-color: #a87560;
+  box-shadow: 0 0 0 3px rgba(168, 117, 96, 0.10);
+}
+
 .search-container input, #searchInput {
   width: 100%; min-width: 0; min-height: 48px; padding: 12px 17px;
   border: 1px solid var(--border); border-right: 0; border-radius: 2px 0 0 2px;
