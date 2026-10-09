@@ -1,7 +1,7 @@
-```javascript
-// ==========================================
-// BARQ DRIVER DASHBOARD
-// ==========================================
+
+ // ==========================================
+ // BARQ DRIVER DASHBOARD
+ // ==========================================
 
 import { db, auth } from "./driver-firebase-config.js";
 
@@ -20,7 +20,6 @@ import {
     signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-
 // ==========================================
 // ELEMENTS
 // ==========================================
@@ -35,14 +34,12 @@ const driverMessage = document.getElementById("driver-message");
 const logoutButton = document.getElementById("logout-btn");
 const refreshButton = document.getElementById("refresh-btn");
 
-
 // ==========================================
 // CURRENT DRIVER
 // ==========================================
 
 let currentDriver = null;
 let ordersUnsubscribe = null;
-
 
 // ==========================================
 // MESSAGE
@@ -54,15 +51,12 @@ function showMessage(text) {
     }
 }
 
-
 // ==========================================
 // VERIFY DRIVER
 // ==========================================
 
 async function verifyDriver(user) {
-    if (!user) {
-        return false;
-    }
+    if (!user) return false;
 
     try {
         const usersRef = collection(db, "users");
@@ -74,9 +68,7 @@ async function verifyDriver(user) {
 
         const snapshot = await getDocs(driverQuery);
 
-        if (snapshot.empty) {
-            return false;
-        }
+        if (snapshot.empty) return false;
 
         const driverData = snapshot.docs[0].data();
 
@@ -87,9 +79,7 @@ async function verifyDriver(user) {
             return false;
         }
 
-        if (driverData.active !== true) {
-            return false;
-        }
+        if (driverData.active !== true) return false;
 
         currentDriver = {
             id: snapshot.docs[0].id,
@@ -97,14 +87,12 @@ async function verifyDriver(user) {
         };
 
         return true;
-
     } catch (error) {
         console.error("Driver verification error:", error);
         showMessage("Unable to verify driver account.");
         return false;
     }
 }
-
 
 // ==========================================
 // DISPLAY ORDERS
@@ -141,9 +129,7 @@ function displayOrders(orders) {
         deliveredOrders.textContent = delivered;
     }
 
-    if (!ordersContainer) {
-        return;
-    }
+    if (!ordersContainer) return;
 
     if (orders.length === 0) {
         ordersContainer.innerHTML = `
@@ -165,7 +151,10 @@ function displayOrders(orders) {
         const customerName = order.customerName || order.name || "Customer";
         const customerPhone = order.customerPhone || order.phone || "-";
         const customerEmail = order.customerEmail || order.email || "-";
-        const address = order.address || order.deliveryAddress || order.customerAddress || "-";
+        const address = order.address ||
+            order.deliveryAddress ||
+            order.customerAddress ||
+            "-";
 
         let locationHtml = `
             <p>
@@ -178,11 +167,16 @@ function displayOrders(orders) {
             order.latitude !== undefined &&
             order.longitude !== undefined
         ) {
-            const mapUrl = `https://www.google.com/maps?q=${order.latitude},${order.longitude}`;
+            const mapUrl =
+                `https://www.google.com/maps?q=${order.latitude},${order.longitude}`;
 
             locationHtml += `
                 <p>
-                    <a href="${mapUrl}" target="_blank" rel="noopener noreferrer">
+                    <a
+                        href="${mapUrl}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
                         📍 Open Customer Location
                     </a>
                 </p>
@@ -211,7 +205,10 @@ function displayOrders(orders) {
             <div class="driver-order-actions">
                 <label>Delivery Status</label>
 
-                <select class="driver-status-select" data-order-id="${order.id}">
+                <select
+                    class="driver-status-select"
+                    data-order-id="${order.id}"
+                >
                     <option value="Pending" ${status === "Pending" ? "selected" : ""}>Pending</option>
                     <option value="Out for Delivery" ${status === "Out for Delivery" ? "selected" : ""}>Out for Delivery</option>
                     <option value="Delivered" ${status === "Delivered" ? "selected" : ""}>Delivered</option>
@@ -242,7 +239,6 @@ function displayOrders(orders) {
                 );
 
                 showMessage("Delivery status updated successfully.");
-
             } catch (error) {
                 console.error("Delivery status update error:", error);
                 showMessage("Unable to update delivery status.");
@@ -250,7 +246,6 @@ function displayOrders(orders) {
         });
     });
 }
-
 
 // ==========================================
 // REAL-TIME LOAD ASSIGNED ORDERS
@@ -314,7 +309,6 @@ function startOrdersListener() {
     );
 }
 
-
 // ==========================================
 // LOAD DRIVER DASHBOARD
 // ==========================================
@@ -332,7 +326,6 @@ async function loadDashboard() {
     startOrdersListener();
 }
 
-
 // ==========================================
 // MANUAL REFRESH
 // ==========================================
@@ -343,7 +336,6 @@ if (refreshButton) {
         startOrdersListener();
     });
 }
-
 
 // ==========================================
 // LOGOUT
@@ -362,14 +354,12 @@ if (logoutButton) {
             await signOut(auth);
 
             window.location.href = "./driver-login.html";
-
         } catch (error) {
             console.error("Logout error:", error);
             showMessage("Unable to logout. Please try again.");
         }
     });
 }
-
 
 // ==========================================
 // AUTHENTICATION
@@ -398,4 +388,5 @@ onAuthStateChanged(auth, async user => {
 
     await loadDashboard();
 });
-```
+
+// No Service Worker registration in this file.
