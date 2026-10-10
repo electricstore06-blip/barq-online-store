@@ -521,3 +521,379 @@ footer a:hover { color: var(--accent); }
   text-align: center;
   color: #8b6553;
 }
+
+/* =========================================
+   BARQ LUXURY HOMEPAGE REDESIGN
+   Cream • White • Beige • Black
+   ========================================= */
+
+:root {
+  --barq-cream: #faf7f2;
+  --barq-white: #ffffff;
+  --barq-beige: #eee4da;
+  --barq-brown: #96745e;
+  --barq-dark: #292522;
+  --barq-muted: #786f68;
+  --barq-border: #e9e1d9;
+  --barq-shadow: 0 8px 28px rgba(41, 37, 34, 0.07);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+/* Main page */
+body {
+  background: var(--barq-white);
+  color: var(--barq-dark);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+header {
+  background: var(--barq-white);
+  border-bottom: 1px solid var(--barq-border);
+  box-shadow: 0 2px 12px rgba(41, 37, 34, 0.035);
+}
+
+/* BARQ logo */
+.logo {
+  color: var(--barq-dark);
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+/* Navigation */
+nav a {
+  color: var(--barq-dark);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+nav a:hover {
+  color: var(--barq-brown);
+}
+
+/* Search section */
+.search-area {
+  background: var(--barq-white);
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+
+/* Search input */
+#searchInput {
+  border: 1px solid var(--barq-border);
+  border-radius: 5px;
+  background: var(--barq-cream);
+  color: var(--barq-dark);
+}
+
+#searchInput:focus {
+  border-color: var(--barq-brown);
+  box-shadow: 0 0 0 3px rgba(150, 116, 94, 0.12);
+}
+
+#searchInput::placeholder {
+  color: #9a8b81;
+}
+
+/* Hero banner */
+.barq-banner {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--barq-cream);
+  background-position: center;
+  background-size: cover;
+  min-height: 440px;
+  display: flex;
+  align-items: center;
+  padding: 65px 7%;
+  box-sizing: border-box;
+}
+
+/* Hero text */
+.barq-banner h1,
+.barq-banner h2 {
+  color: var(--barq-dark);
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.barq-banner p {
+  color: #62564e;
+  max-width: 500px;
+}
+
+/* Buttons */
+button,
+.barq-banner a,
+#products button {
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* Product section */
+.products {
+  padding: 55px 5%;
+  background: var(--barq-white);
+}
+
+.products h2 {
+  color: var(--barq-dark);
+  text-align: center;
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.products-subtitle {
+  color: var(--barq-muted);
+  text-align: center;
+  margin: 0 auto 30px;
+}
+
+/* Product grid */
+.product-container {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 25px;
+}
+
+/* Product cards */
+.product {
+  min-width: 0;
+  overflow: hidden;
+  background: var(--barq-white);
+  border: 1px solid #f0ebe6;
+  border-radius: 6px;
+  box-shadow: none;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.product:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--barq-shadow);
+  border-color: var(--barq-beige);
+}
+
+/* Product image */
+.product-img {
+  display: block;
+  width: 100%;
+  height: 250px;
+  object-fit: contain;
+  background: var(--barq-cream);
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+/* Product information */
+.product h3 {
+  color: var(--barq-dark);
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 14px 14px 5px;
+}
+
+.product .brand {
+  color: var(--barq-muted);
+  font-size: 12px;
+  margin: 0 14px 5px;
+}
+
+.product .price {
+  color: var(--barq-dark);
+  font-size: 17px;
+  font-weight: 700;
+  margin: 8px 14px 14px;
+}
+
+/* Add to cart button */
+.product .add-btn {
+  display: block;
+  width: calc(100% - 28px);
+  margin: 0 14px 16px;
+  padding: 12px 10px;
+  border: 1px solid var(--barq-dark);
+  border-radius: 3px;
+  background: var(--barq-dark);
+  color: var(--barq-white);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.product .add-btn:hover {
+  background: var(--barq-brown);
+  border-color: var(--barq-brown);
+}
+
+/* Popular brands */
+#brands {
+  background: var(--barq-cream);
+  padding: 55px 5%;
+}
+
+#brands h2 {
+  text-align: center;
+  color: var(--barq-dark);
+  margin-bottom: 28px;
+}
+
+#brands button,
+#brands a {
+  transition: all 0.2s ease;
+}
+
+#brands button:hover,
+#brands a:hover {
+  color: var(--barq-brown);
+}
+
+/* Offers */
+#offers {
+  background: var(--barq-cream);
+  border-top: 1px solid var(--barq-border);
+  border-bottom: 1px solid var(--barq-border);
+}
+
+/* Search results */
+#searchResultsSection {
+  background: var(--barq-white);
+  padding-top: 35px;
+  padding-bottom: 35px;
+}
+
+/* Cart panel */
+#cartBox {
+  background: var(--barq-white);
+  color: var(--barq-dark);
+  border-left: 1px solid var(--barq-border);
+}
+
+/* Login panel */
+#loginBox .login-content {
+  background: var(--barq-white);
+  border: 1px solid var(--barq-border);
+  border-radius: 8px;
+  box-shadow: var(--barq-shadow);
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline-color: var(--barq-brown);
+}
+
+/* Product links */
+.product a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+}
+
+/* Tablet */
+@media (max-width: 1000px) {
+  .product-container {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .product-img {
+    height: 220px;
+  }
+
+  .barq-banner {
+    min-height: 380px;
+    padding: 50px 5%;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .product-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .products {
+    padding: 35px 12px;
+  }
+
+  .product-img {
+    height: 170px;
+    padding: 8px;
+  }
+
+  .product h3 {
+    font-size: 13px;
+    margin: 10px 9px 4px;
+  }
+
+  .product .brand {
+    margin: 0 9px 4px;
+    font-size: 11px;
+  }
+
+  .product .price {
+    margin: 7px 9px 12px;
+    font-size: 15px;
+  }
+
+  .product .add-btn {
+    width: calc(100% - 18px);
+    margin: 0 9px 12px;
+    padding: 10px 5px;
+    font-size: 12px;
+  }
+
+  .barq-banner {
+    min-height: 330px;
+    padding: 35px 20px;
+    background-position: center;
+  }
+
+  .search-area {
+    padding: 12px 16px;
+  }
+
+  #brands {
+    padding: 35px 15px;
+  }
+}
+
+/* Respect reduced-motion settings */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
