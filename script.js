@@ -354,7 +354,7 @@ document.querySelectorAll(".beauty-category-card").forEach((card) => {
 
         // Support common category names and variations.
         const categoryAliases = {
-            makeup: ["makeup", "cosmetics", "make up"],
+           makeup: ["makeup", "cosmetics", "make up", "beauty"], 
             skincare: ["skincare", "skin care", "skin-care"],
             perfume: ["perfume", "fragrance", "fragrances"],
             haircare: ["haircare", "hair care", "hair-care"],
