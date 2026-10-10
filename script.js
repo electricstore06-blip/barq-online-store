@@ -268,79 +268,32 @@ console.log("PRODUCT CARDS CREATED");
 
 
 
-
 // ==========================================
-// SEARCH
+// BARQ PRODUCT SEARCH
 // ==========================================
 
+const searchInput = document.getElementById("searchInput");
 
-const searchInput =
-document.getElementById("searchInput");
+if (searchInput) {
+  searchInput.addEventListener("input", function () {
+    const value = searchInput.value.trim().toLowerCase();
 
+    // Use the original loaded products as the search source.
+    const result = productsData.filter((product) => {
+      const name = (product.name || "").toLowerCase();
+      const brand = (product.brand || "").toLowerCase();
+      const category = (product.category || "").toLowerCase();
 
+      return (
+        name.includes(value) ||
+        brand.includes(value) ||
+        category.includes(value)
+      );
+    });
 
-if(searchInput){
-
-
-searchInput.addEventListener(
-"input",
-()=>{
-
-
-const value =
-searchInput.value
-.toLowerCase();
-
-
-
-const result =
-productsData.filter(product=>{
-
-
-return (
-
-(product.name || "")
-.toLowerCase()
-.includes(value)
-
-
-||
-
-
-(product.brand || "")
-.toLowerCase()
-.includes(value)
-
-
-||
-
-
-(product.category || "")
-.toLowerCase()
-.includes(value)
-
-
-);
-
-
-});
-
-
-
-displayProducts(result);
-
-
-
-});
-
-
+    displayProducts(result);
+  });
 }
-
-
-
-
-
-
 
 
 
