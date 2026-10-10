@@ -31,45 +31,101 @@
                     <input type="hidden" id="product-id">
 
                     <label for="product-name">Product Name *</label>
-                    <input id="product-name" required maxlength="150"
-                           placeholder="Example: Samsung Phone">
+                    <input
+                        id="product-name"
+                        required
+                        maxlength="150"
+                        placeholder="Example: Samsung Phone"
+                    >
 
                     <label for="product-brand">Brand</label>
-                    <input id="product-brand" maxlength="100"
-                           placeholder="Example: Samsung">
+                    <input
+                        id="product-brand"
+                        maxlength="100"
+                        placeholder="Example: Samsung"
+                    >
 
-                    <label for="product-price">Price (SAR) *</label>
-                    <input id="product-price" type="number" min="0"
-                           step="0.01" required placeholder="299.00">
+                    <label for="product-price">Base Price (SAR) *</label>
+                    <input
+                        id="product-price"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        required
+                        placeholder="299.00"
+                    >
+
+                    <small>
+                        Base price is used when the product has no size-specific prices.
+                    </small>
 
                     <label for="product-category">Category</label>
-                    <input id="product-category" maxlength="100"
-                           placeholder="Example: Electronics">
+                    <input
+                        id="product-category"
+                        maxlength="100"
+                        placeholder="Example: Electronics"
+                    >
 
                     <label for="product-image">Product Image URL *</label>
-                    <input id="product-image" type="url" required
-                           placeholder="https://example.com/product.jpg">
+                    <input
+                        id="product-image"
+                        type="url"
+                        required
+                        placeholder="https://example.com/product.jpg"
+                    >
 
                     <div class="image-preview-box">
                         <p>Image preview</p>
-                        <img id="image-preview" alt="Product preview" hidden>
+                        <img
+                            id="image-preview"
+                            alt="Product preview"
+                            hidden
+                        >
                     </div>
 
                     <label for="product-description">Description</label>
-                    <textarea id="product-description" rows="4"
-                              maxlength="3000"
-                              placeholder="Describe this product"></textarea>
+                    <textarea
+                        id="product-description"
+                        rows="4"
+                        maxlength="3000"
+                        placeholder="Describe this product"
+                    ></textarea>
 
                     <label for="product-colors">Colors</label>
-                    <input id="product-colors"
-                           placeholder="Black, White, Blue">
+                    <input
+                        id="product-colors"
+                        placeholder="Black, White, Blue"
+                    >
 
                     <label for="product-sizes">Sizes</label>
-                    <input id="product-sizes"
-                           placeholder="Small, Medium, Large">
+                    <input
+                        id="product-sizes"
+                        placeholder="30ml, 50ml, 100ml"
+                    >
+
+                    <small>
+                        Enter sizes separated by commas.
+                    </small>
+
+                    <label for="product-size-prices">
+                        Size Prices (SAR)
+                    </label>
+                    <input
+                        id="product-size-prices"
+                        placeholder="30ml:79, 50ml:129, 100ml:199"
+                    >
+
+                    <small>
+                        Enter each size followed by its price.
+                        Example: 30ml:79, 50ml:129, 100ml:199.
+                    </small>
 
                     <label class="checkbox-label">
-                        <input id="product-active" type="checkbox" checked>
+                        <input
+                            id="product-active"
+                            type="checkbox"
+                            checked
+                        >
                         Show this product in the store
                     </label>
 
@@ -77,7 +133,12 @@
                         <button id="save-product-btn" type="submit">
                             Save Product
                         </button>
-                        <button id="cancel-edit-btn" type="button" hidden>
+
+                        <button
+                            id="cancel-edit-btn"
+                            type="button"
+                            hidden
+                        >
                             Cancel Edit
                         </button>
                     </div>
