@@ -35,6 +35,7 @@ const imageInput = document.getElementById("product-image");
 const descriptionInput = document.getElementById("product-description");
 const colorsInput = document.getElementById("product-colors");
 const sizesInput = document.getElementById("product-sizes");
+const sizePricesInput = document.getElementById("product-size-prices");
 const activeInput = document.getElementById("product-active");
 const imagePreview = document.getElementById("image-preview");
 
@@ -46,12 +47,18 @@ const logoutButton = document.getElementById("logout-btn");
 let currentAdmin = null;
 let productsLoaded = false;
 
-// Show a message on the page
+// ==========================================
+// MESSAGES
+// ==========================================
+
 function showMessage(text) {
     message.textContent = text;
 }
 
-// Only allow secure HTTPS image links
+// ==========================================
+// IMAGE URL VALIDATION
+// ==========================================
+
 function getSecureImageUrl(value) {
     try {
         const url = new URL(value.trim());
@@ -66,7 +73,10 @@ function getSecureImageUrl(value) {
     }
 }
 
-// Convert "Black, White, Blue" into an array
+// ==========================================
+// CONVERT COMMA-SEPARATED OPTIONS INTO ARRAYS
+// ==========================================
+
 function splitOptions(value) {
     return value
         .split(",")
@@ -74,7 +84,95 @@ function splitOptions(value) {
         .filter(Boolean);
 }
 
-// Preview image before saving
+// ==========================================
+// PARSE SIZE PRICES
+//
+// Example input:
+// 30ml:79, 50ml:129, 100ml:199
+//
+// Result:
+// {
+//     "30ml": 79,
+//     "50ml": 129,
+//     "100ml": 199
+// }
+// ==========================================
+
+function parseSizePrices(value, sizes) {
+    const sizePrices = {};
+
+    if (!value.trim()) {
+        return {
+            valid: true,
+            prices: sizePrices
+        };
+    }
+
+    const entries = value.split(",");
+
+    for (const entry of entries) {
+        const parts = entry.split(":");
+
+        if (parts.length !== 2) {
+            return {
+                valid: false,
+                error: `Invalid size price "${entry}". Use the format 30ml:79.`
+            };
+        }
+
+        const size = parts[0].trim();
+        const priceText = parts[1].trim();
+        const price = Number(priceText);
+
+        if (!size || priceText === "" ||
+            !Number.isFinite(price) || price < 0) {
+            return {
+                valid: false,
+                error: `Invalid price for "${size || entry}". Enter a valid price of 0 or more.`
+            };
+        }
+
+        if (!sizes.includes(size)) {
+            return {
+                valid: false,
+                error: `The size "${size}" is missing from the Sizes field.`
+            };
+        }
+
+        if (Object.prototype.hasOwnProperty.call(sizePrices, size)) {
+            return {
+                valid: false,
+                error: `The size "${size}" has been entered more than once.`
+            };
+        }
+
+        sizePrices[size] = price;
+    }
+
+    return {
+        valid: true,
+        prices: sizePrices
+    };
+}
+
+// ==========================================
+// FORMAT SIZE PRICES FOR EDITING
+// ==========================================
+
+function formatSizePrices(sizePrices) {
+    if (!sizePrices || typeof sizePrices !== "object") {
+        return "";
+    }
+
+    return Object.entries(sizePrices)
+        .map(([size, price]) => `${size}:${price}`)
+        .join(", ");
+}
+
+// ==========================================
+// IMAGE PREVIEW
+// ==========================================
+
 imageInput.addEventListener("input", () => {
     const url = getSecureImageUrl(imageInput.value);
 
@@ -95,7 +193,10 @@ imageInput.addEventListener("input", () => {
     imagePreview.src = url;
 });
 
-// Reset form for a new product
+// ==========================================
+// RESET FORM
+// ==========================================
+
 function resetForm() {
     form.reset();
 
@@ -110,7 +211,10 @@ function resetForm() {
     cancelButton.hidden = true;
 }
 
-// Create product card safely
+// ==========================================
+// CREATE PRODUCT CARD
+// ==========================================
+
 function createProductCard(id, product) {
     const card = document.createElement("article");
     card.className = "product-card";
@@ -122,6 +226,7 @@ function createProductCard(id, product) {
 
     if (imageUrl) {
         image.src = imageUrl;
+
         image.onerror = () => {
             image.hidden = true;
         };
@@ -140,10 +245,33 @@ function createProductCard(id, product) {
     price.textContent = `${Number(product.price || 0).toFixed(2)} SAR`;
 
     const category = document.createElement("p");
-    category.textContent = "Category: " + (product.category || "Uncategorized");
+    category.textContent =
+        "Category: " + (product.category || "Uncategorized");
 
     const status = document.createElement("p");
-    status.textContent = product.active === false ? "Hidden from store" : "Active";
+    status.textContent =
+        product.active === false ? "Hidden from store" : "Active";
+
+    const sizeInformation = document.createElement("p");
+
+    const sizes = Array.isArray(product.sizes) ? product.sizes : [];
+    const sizePrices = product.sizePrices || {};
+
+    if (sizes.length > 0) {
+        const details = sizes.map(size => {
+            if (
+                Object.prototype.hasOwnProperty.call(sizePrices, size)
+            ) {
+                return `${size}: ${Number(sizePrices[size]).toFixed(2)} SAR`;
+            }
+
+            return `${size}: Base price`;
+        });
+
+        sizeInformation.textContent = "Size prices: " + details.join(" | ");
+    } else {
+        sizeInformation.textContent = "No sizes configured.";
+    }
 
     const actions = document.createElement("div");
     actions.className = "product-actions";
@@ -172,27 +300,47 @@ function createProductCard(id, product) {
 
         try {
             await deleteDoc(doc(db, "products", id));
+
             showMessage("Product deleted successfully.");
+
             await loadProducts();
         } catch (error) {
             console.error("DELETE PRODUCT ERROR:", error);
-            showMessage("Could not delete product. Check Firebase permissions.");
+
+            showMessage(
+                "Could not delete product. Check Firebase permissions."
+            );
+
             deleteButton.disabled = false;
         }
     });
 
     actions.append(editButton, deleteButton);
-    card.append(image, name, brand, price, category, status, actions);
+
+    card.append(
+        image,
+        name,
+        brand,
+        price,
+        category,
+        status,
+        sizeInformation,
+        actions
+    );
 
     return card;
 }
 
-// Load products from Firestore
+// ==========================================
+// LOAD PRODUCTS FROM FIREBASE
+// ==========================================
+
 async function loadProducts() {
     container.replaceChildren();
 
     const loading = document.createElement("p");
     loading.textContent = "Loading products...";
+
     container.appendChild(loading);
 
     try {
@@ -202,38 +350,60 @@ async function loadProducts() {
 
         if (snapshot.empty) {
             const empty = document.createElement("p");
-            empty.textContent = "No products yet. Add your first product above.";
+
+            empty.textContent =
+                "No products yet. Add your first product above.";
+
             container.appendChild(empty);
             return;
         }
 
         snapshot.forEach(productDoc => {
             container.appendChild(
-                createProductCard(productDoc.id, productDoc.data())
+                createProductCard(
+                    productDoc.id,
+                    productDoc.data()
+                )
             );
         });
     } catch (error) {
         console.error("LOAD PRODUCTS ERROR:", error);
+
         container.replaceChildren();
 
         const errorText = document.createElement("p");
+
         errorText.textContent =
             "Could not load products. Check your Firestore security rules.";
+
         container.appendChild(errorText);
     }
 }
 
-// Fill form when editing
+// ==========================================
+// EDIT EXISTING PRODUCT
+// ==========================================
+
 function editProduct(id, product) {
     productIdInput.value = id;
+
     nameInput.value = product.name || "";
     brandInput.value = product.brand || "";
     priceInput.value = product.price ?? "";
     categoryInput.value = product.category || "";
     imageInput.value = product.image || "";
     descriptionInput.value = product.description || "";
-    colorsInput.value = (product.colors || []).join(", ");
-    sizesInput.value = (product.sizes || []).join(", ");
+
+    colorsInput.value = (
+        Array.isArray(product.colors) ? product.colors : []
+    ).join(", ");
+
+    sizesInput.value = (
+        Array.isArray(product.sizes) ? product.sizes : []
+    ).join(", ");
+
+    sizePricesInput.value = formatSizePrices(product.sizePrices);
+
     activeInput.checked = product.active !== false;
 
     const url = getSecureImageUrl(product.image || "");
@@ -263,7 +433,10 @@ function editProduct(id, product) {
     });
 }
 
-// Save a new product or update an existing product
+// ==========================================
+// SAVE OR UPDATE PRODUCT
+// ==========================================
+
 form.addEventListener("submit", async event => {
     event.preventDefault();
 
@@ -277,20 +450,38 @@ form.addEventListener("submit", async event => {
     const category = categoryInput.value.trim();
     const description = descriptionInput.value.trim();
     const image = getSecureImageUrl(imageInput.value);
-    const price = Number(priceInput.value);
+    const priceText = priceInput.value.trim();
+    const price = Number(priceText);
+
+    const colors = splitOptions(colorsInput.value);
+    const sizes = splitOptions(sizesInput.value);
 
     if (!name) {
         showMessage("Please enter the product name.");
         return;
     }
 
-    if (!Number.isFinite(price) || price < 0) {
-        showMessage("Please enter a valid price.");
+    if (
+        priceText === "" ||
+        !Number.isFinite(price) ||
+        price < 0
+    ) {
+        showMessage("Please enter a valid base price.");
         return;
     }
 
     if (!image) {
         showMessage("Please enter a valid HTTPS image URL.");
+        return;
+    }
+
+    const parsedPrices = parseSizePrices(
+        sizePricesInput.value,
+        sizes
+    );
+
+    if (!parsedPrices.valid) {
+        showMessage(parsedPrices.error);
         return;
     }
 
@@ -301,8 +492,9 @@ form.addEventListener("submit", async event => {
         category,
         image,
         description,
-        colors: splitOptions(colorsInput.value),
-        sizes: splitOptions(sizesInput.value),
+        colors,
+        sizes,
+        sizePrices: parsedPrices.prices,
         active: activeInput.checked,
         updatedAt: serverTimestamp(),
         updatedBy: currentAdmin.uid
@@ -310,6 +502,7 @@ form.addEventListener("submit", async event => {
 
     saveButton.disabled = true;
     saveButton.textContent = "Saving...";
+
     showMessage("Saving product...");
 
     try {
@@ -323,16 +516,20 @@ form.addEventListener("submit", async event => {
 
             showMessage("Product updated successfully.");
         } else {
-            await addDoc(collection(db, "products"), {
-                ...productData,
-                createdAt: serverTimestamp(),
-                createdBy: currentAdmin.uid
-            });
+            await addDoc(
+                collection(db, "products"),
+                {
+                    ...productData,
+                    createdAt: serverTimestamp(),
+                    createdBy: currentAdmin.uid
+                }
+            );
 
             showMessage("Product added successfully.");
         }
 
         resetForm();
+
         await loadProducts();
     } catch (error) {
         console.error("SAVE PRODUCT ERROR:", error);
@@ -342,33 +539,46 @@ form.addEventListener("submit", async event => {
         );
     } finally {
         saveButton.disabled = false;
+
         saveButton.textContent = productIdInput.value
             ? "Update Product"
             : "Save Product";
     }
 });
 
-// Cancel editing
+// ==========================================
+// CANCEL EDITING
+// ==========================================
+
 cancelButton.addEventListener("click", () => {
     resetForm();
     showMessage("Editing cancelled.");
 });
 
-// Sign out
+// ==========================================
+// LOG OUT
+// ==========================================
+
 logoutButton.addEventListener("click", async () => {
     logoutButton.disabled = true;
 
     try {
         await signOut(auth);
+
         window.location.href = "index.html";
     } catch (error) {
         console.error("LOGOUT ERROR:", error);
+
         showMessage("Could not log out. Please try again.");
+
         logoutButton.disabled = false;
     }
 });
 
-// Verify that the signed-in user is an admin
+// ==========================================
+// VERIFY ADMIN ACCESS
+// ==========================================
+
 onAuthStateChanged(auth, async user => {
     formSection.hidden = true;
     listSection.hidden = true;
@@ -385,10 +595,14 @@ onAuthStateChanged(auth, async user => {
             doc(db, "admins", user.uid)
         );
 
-        if (!adminSnapshot.exists() ||
-            adminSnapshot.data().role !== "admin") {
+        if (
+            !adminSnapshot.exists() ||
+            adminSnapshot.data().role !== "admin"
+        ) {
             showMessage("Access denied. Admin account required.");
+
             await signOut(auth);
+
             window.location.href = "index.html";
             return;
         }
@@ -398,14 +612,18 @@ onAuthStateChanged(auth, async user => {
         formSection.hidden = false;
         listSection.hidden = false;
 
-        showMessage("Admin access verified. You can manage products.");
+        showMessage(
+            "Admin access verified. You can manage products."
+        );
 
         if (!productsLoaded) {
             productsLoaded = true;
+
             await loadProducts();
         }
     } catch (error) {
         console.error("ADMIN CHECK ERROR:", error);
+
         showMessage(
             "Could not verify admin access. Check your internet connection and Firestore security rules."
         );
