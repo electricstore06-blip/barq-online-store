@@ -1,521 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>BARQ | Online Store</title>
-
-<link rel="icon" href="favicon.ico">
-
-<link rel="stylesheet" href="style.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BARQ | Online Store</title>
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 
 <body>
 
-
-<!-- =========================
-TOP BAR
-========================= -->
-
-<div class="top-bar">
-
-🚚 Free Shipping | ❤️ Authentic Products | 🔒 Secure Payment
-
-</div>
-
-
-
-<!-- =========================
-HEADER
-========================= -->
-
-
-<header>
-
-
-<div class="logo">
-
-⚡ BARQ
-
-<span>
-ONLINE STORE
-</span>
-
-</div>
-
-
-
-<!-- MOBILE MENU BUTTON -->
-
-<button 
-class="menu-toggle"
-onclick="toggleMenu()">
-
-☰
-
-</button>
-
-
-
-
-<nav id="mainNav">
-
-
-<a href="index.html">
-Home
-</a>
-
-
-<a href="#products">
-Shop
-</a>
-
-
-<a href="#brands">
-Categories
-</a>
-
-
-<a href="#offers">
-Offers
-</a>
-
-
-<a href="orders.html">
-My Orders
-</a>
-
-
-
-<a href="#" onclick="openCart(); return false;">
-
-🛒 Cart
-
-<span id="cartCount">
-0
-</span>
-
-</a>
-
-
-
-<a href="#" onclick="openLogin(); return false;">
-
-🔐 Account
-
-</a>
-
-
-</nav>
-
-
-</header>
-<!-- BARQ Search -->
-<section class="search-area">
-  <input
-    id="searchInput"
-    type="text"
-    placeholder="Search products, brands and categories..."
-  >
-</section>
-
-<!-- BARQ Search Results -->
-<section id="searchResultsSection" class="products" hidden>
-  <h2>Search Results</h2>
-  <p class="products-subtitle">Products matching your search</p>
-  <div id="searchResultsContainer" class="product-container"></div>
-</section>
-
-
-
-<!-- =========================
-BARQ BANNER
-========================= -->
-
-
-<section class="barq-banner">
-
-
-<div>
-
-
-<p class="small">
-BARQ BEAUTY & FASHION
-</p>
-
-
-<h1>
-
-Everything You Love,
-
-<br>
-
-<span>
-Delivered Fast
-
-</span>
-
-</h1>
-
-
-
-<p>
-
-Premium beauty, cosmetics and lifestyle products at your fingertips.
-
-</p>
-
-
-<button
-onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
-
-Shop Now →
-
-</button>
-
-
-</div>
-
-
-
-<img
-
-src="https://images.unsplash.com/photo-1596462502278-27bfdc403348"
-
-alt="BARQ products">
-
-
-</section>
-
-
-<!-- =========================
-BRANDS
-========================= -->
-
-
-<section id="brands" class="brands">
-
-
-<h2>
-
-Popular Brands
-
-</h2>
-
-
-<div class="brand-list">
-
-
-<span>
-Maybelline
-</span>
-
-
-<span>
-NYX
-</span>
-
-
-<span>
-CeraVe
-</span>
-
-
-<span>
-MAC
-</span>
-
-
-<span>
-The Ordinary
-</span>
-
-
-<span>
-BARQ
-</span>
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-
-
-<!-- =========================
-PRODUCTS
-========================= -->
-
-
-<section id="products" class="products">
-
-
-<h2>
-
-Featured Products
-
-</h2>
-
-
-<p class="products-subtitle">
-
-Discover your next favorite product
-
-</p>
-
-
-
-
-<!-- FIREBASE PRODUCTS -->
-
-<div class="product-container">
-
-
-</div>
-
-
-
-</section>
-
-
-
-
-
-
-
-
-<!-- =========================
-OFFERS
-========================= -->
-
-
-<section id="offers" class="offers">
-
-
-<h2>
-
-BARQ Deals
-
-</h2>
-
-
-<p>
-
-Special offers and discounts coming soon.
-
-</p>
-
-
-</section>
-
-
-
-
-
-
-
-
-<!-- =========================
-CONTACT
-========================= -->
-
-
-<section id="contact">
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<!-- =========================
-CART POPUP
-========================= -->
-
-
-<div id="cartBox" class="cart-box">
-
-
-<h2>
-
-Your Cart
-
-</h2>
-
-
-
-<div id="cartItems">
-
-</div>
-
-
-
-
-<h3>
-
-Total:
-
-<span id="cartTotal">
-0
-</span>
-
-SAR
-
-
-</h3>
-
-
-
-
-<button onclick="checkout()">
-
-Checkout
-
-</button>
-
-
-
-<button onclick="closeCart()">
-
-Close
-
-</button>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<!-- =========================
-LOGIN POPUP
-========================= -->
-
-
-<div id="loginBox" class="login-box">
-
-
-
-<div class="login-content">
-
-
-<button
-
-class="login-close"
-
-onclick="closeLogin()">
-
-×
-
-</button>
-
-
-
-
-<h2>
-
-BARQ Account
-
-</h2>
-
-
-
-<p>
-
-Login to continue shopping
-
-</p>
-
-
-
-
-<input
-
-id="loginEmail"
-
-type="email"
-
-placeholder="Email">
-
-
-
-
-
-<input
-
-id="loginPassword"
-
-type="password"
-
-placeholder="Password">
-
-
-
-
-
-<button id="loginButton">
-
-Login
-
-</button>
-
-
-
-
-<p id="loginMessage">
-
-</p>
-
-
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<!-- =========================
-SCRIPTS
-========================= -->
-
-
-<script type="module" src="script.js"></script>
-
-<script type="module" src="auth.js"></script>
-
-
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    🚚 Free Shipping | ❤️ Authentic Products | 🔒 Secure Payment
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      ⚡ BARQ
+      <span>ONLINE STORE</span>
+    </div>
+
+    <button class="menu-toggle" type="button" onclick="toggleMenu()">☰</button>
+
+    <nav id="mainNav">
+      <a href="index.html">Home</a>
+      <a href="#products">Shop</a>
+      <a href="#beauty-categories">Categories</a>
+      <a href="#offers">Offers</a>
+      <a href="orders.html">My Orders</a>
+      <a href="#" onclick="openCart(); return false;">
+        🛒 Cart <span id="cartCount">0</span>
+      </a>
+      <a href="#" onclick="openLogin(); return false;">🔐 Account</a>
+    </nav>
+  </header>
+
+  <!-- SEARCH -->
+  <section class="search-area">
+    <input
+      id="searchInput"
+      type="text"
+      placeholder="Search products, brands and categories..."
+      aria-label="Search products">
+  </section>
+
+  <!-- SEARCH RESULTS -->
+  <section id="searchResultsSection" class="products" hidden>
+    <h2>Search Results</h2>
+    <p class="products-subtitle">Products matching your search</p>
+    <div id="searchResultsContainer" class="product-container"></div>
+  </section>
+
+  <!-- HERO BANNER -->
+  <section class="barq-banner">
+    <div>
+      <p class="small">BARQ BEAUTY &amp; FASHION</p>
+
+      <h1>
+        Everything You Love,
+        <br>
+        <span>Delivered Fast</span>
+      </h1>
+
+      <p>
+        Premium beauty, cosmetics and lifestyle products at your fingertips.
+      </p>
+
+      <button
+        type="button"
+        onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+        Shop Now →
+      </button>
+    </div>
+
+    <img
+      src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1000&q=85"
+      alt="BARQ beauty and cosmetics collection">
+  </section>
+
+  <!-- LUXURY BEAUTY CATEGORIES -->
+  <section id="beauty-categories" class="beauty-categories">
+
+    <div class="category-heading">
+      <span class="category-eyebrow">DISCOVER YOUR FAVORITES</span>
+      <h2>Shop by Category</h2>
+      <p>Find the essentials that make every day feel special.</p>
+    </div>
+
+    <div class="beauty-category-grid">
+
+      <a href="#products" class="beauty-category-card" data-category="makeup">
+        <img
+          src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80"
+          alt="Makeup products"
+          loading="lazy">
+        <div class="beauty-category-info">
+          <h3>Makeup</h3>
+          <span>Shop Now →</span>
+        </div>
+      </a>
+
+      <a href="#products" class="beauty-category-card" data-category="skincare">
+        <img
+          src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=600&q=80"
+          alt="Skincare products"
+          loading="lazy">
+        <div class="beauty-category-info">
+          <h3>Skincare</h3>
+          <span>Shop Now →</span>
+        </div>
+      </a>
+
+      <a href="#products" class="beauty-category-card" data-category="perfume">
+        <img
+          src="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=600&q=80"
+          alt="Perfume bottles"
+          loading="lazy">
+        <div class="beauty-category-info">
+          <h3>Perfume</h3>
+          <span>Shop Now →</span>
+        </div>
+      </a>
+
+      <a href="#products" class="beauty-category-card" data-category="haircare">
+        <img
+          src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80"
+          alt="Haircare and beauty"
+          loading="lazy">
+        <div class="beauty-category-info">
+          <h3>Haircare</h3>
+          <span>Shop Now →</span>
+        </div>
+      </a>
+
+      <a href="#products" class="beauty-category-card" data-category="fashion">
+        <img
+          src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=600&q=80"
+          alt="Fashion and accessories"
+          loading="lazy">
+        <div class="beauty-category-info">
+          <h3>Fashion &amp; Accessories</h3>
+          <span>Shop Now →</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- POPULAR BRANDS -->
+  <section id="brands" class="brands">
+    <h2>Popular Brands</h2>
+
+    <div class="brand-list">
+      <span>Maybelline</span>
+      <span>NYX</span>
+      <span>CeraVe</span>
+      <span>MAC</span>
+      <span>The Ordinary</span>
+      <span>BARQ</span>
+    </div>
+  </section>
+
+  <!-- FIREBASE PRODUCTS -->
+  <section id="products" class="products">
+    <h2>Featured Products</h2>
+    <p class="products-subtitle">Discover your next favorite product</p>
+    <div class="product-container"></div>
+  </section>
+
+  <!-- OFFERS -->
+  <section id="offers" class="offers">
+    <h2>BARQ Deals</h2>
+    <p>Special offers and discounts coming soon.</p>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact"></section>
+
+  <!-- SHOPPING CART -->
+  <div id="cartBox" class="cart-box">
+    <h2>Your Cart</h2>
+
+    <div id="cartItems"></div>
+
+    <h3>
+      Total: <span id="cartTotal">0</span> SAR
+    </h3>
+
+    <button type="button" onclick="checkout()">Checkout</button>
+    <button type="button" onclick="closeCart()">Close</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="loginBox" class="login-box">
+    <div class="login-content">
+
+      <button
+        class="login-close"
+        type="button"
+        onclick="closeLogin()"
+        aria-label="Close login">
+        ×
+      </button>
+
+      <h2>BARQ Account</h2>
+      <p>Login to continue shopping</p>
+
+      <input id="loginEmail" type="email" placeholder="Email">
+      <input id="loginPassword" type="password" placeholder="Password">
+
+      <button id="loginButton" type="button">Login</button>
+      <p id="loginMessage"></p>
+
+    </div>
+  </div>
+
+  <!-- EXISTING SCRIPTS -->
+  <script type="module" src="script.js"></script>
+  <script type="module" src="auth.js"></script>
 
 </body>
-
-
 </html>
