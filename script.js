@@ -440,295 +440,49 @@ JSON.stringify(cart)
 
 
 function addToCart(
-id,
-name,
-price,
-image,
-brand
-){
+  id,
+  name,
+  price,
+  image,
+  brand,
+  color = "",
+  size = ""
+) {
+  const selectedPrice = Number(price);
 
+  if (!Number.isFinite(selectedPrice) || selectedPrice < 0) {
+    alert("Invalid product price.");
+    return;
+  }
 
+  // Match the same product only when its selected options also match.
+  const existing = cart.find(item =>
+    item.productId === id &&
+    (item.color || "") === color &&
+    (item.size || "") === size &&
+    Number(item.price) === selectedPrice
+  );
 
-const existing =
-cart.find(
-item =>
-item.productId === id
-);
+  if (existing) {
+    existing.quantity++;
+  } else {
+    cart.push({
+      productId: id,
+      name: name,
+      price: selectedPrice,
+      image: image,
+      brand: brand,
+      color: color,
+      size: size,
+      quantity: 1
+    });
+  }
 
+  saveCart();
+  updateCart();
 
-
-if(existing){
-
-
-existing.quantity++;
-
-
+  alert("Added to cart ✅");
 }
-
-else{
-
-
-cart.push({
-
-productId:id,
-
-name:name,
-
-price:Number(price),
-
-image:image,
-
-brand:brand,
-
-quantity:1
-
-});
-
-
-}
-
-
-
-saveCart();
-
-
-updateCart();
-
-
-
-alert(
-"Added to cart ✅"
-);
-
-
-
-}
-
-
-
-
-
-
-
-function updateCart(){
-
-
-
-const items =
-document.getElementById("cartItems");
-
-
-const total =
-document.getElementById("cartTotal");
-
-
-const count =
-document.getElementById("cartCount");
-
-
-
-let sum = 0;
-
-let quantity = 0;
-
-
-
-
-if(items){
-
-
-items.innerHTML = "";
-
-
-
-cart.forEach(
-(item,index)=>{
-
-
-sum +=
-item.price *
-item.quantity;
-
-
-quantity +=
-item.quantity;
-
-
-
-
-items.innerHTML += `
-
-
-<div class="cart-item">
-
-
-<b>
-${item.name}
-</b>
-
-
-<p>
-${item.price} SAR
-</p>
-
-
-<button onclick="decreaseQuantity(${index})">
-
--
-
-</button>
-
-
-<span>
-
-${item.quantity}
-
-</span>
-
-
-<button onclick="increaseQuantity(${index})">
-
-+
-
-</button>
-
-
-
-<button onclick="removeCart(${index})">
-
-Remove
-
-</button>
-
-
-
-</div>
-
-
-`;
-
-
-
-});
-
-
-
-}
-
-
-
-if(total){
-
-total.innerText =
-sum.toFixed(2);
-
-}
-
-
-
-if(count){
-
-count.innerText =
-quantity;
-
-}
-
-
-
-}
-
-
-
-
-
-
-
-
-
-function increaseQuantity(index){
-
-
-if(cart[index]){
-
-
-cart[index].quantity++;
-
-
-saveCart();
-
-updateCart();
-
-
-}
-
-
-}
-
-
-
-
-
-
-
-function decreaseQuantity(index){
-
-
-if(cart[index]){
-
-
-cart[index].quantity--;
-
-
-
-if(cart[index].quantity<=0){
-
-
-cart.splice(index,1);
-
-
-}
-
-
-
-saveCart();
-
-
-updateCart();
-
-
-}
-
-
-
-}
-
-
-
-
-
-
-
-function removeCart(index){
-
-
-cart.splice(index,1);
-
-
-saveCart();
-
-
-updateCart();
-
-
-
-}
-
-
-
-
-
-
-
 
 
 // ==========================================
