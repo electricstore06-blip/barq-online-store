@@ -264,9 +264,6 @@ console.log("PRODUCT CARDS CREATED");
 
 }
 
-
-
-
 // ==========================================
 // BARQ PRODUCT SEARCH
 // ==========================================
@@ -275,75 +272,141 @@ const searchInput = document.getElementById("searchInput");
 const searchResultsSection = document.getElementById("searchResultsSection");
 const searchResultsContainer = document.getElementById("searchResultsContainer");
 
-if (searchInput && searchResultsSection && searchResultsContainer) {
-  searchInput.addEventListener("input", function () {
-    const value = searchInput.value.trim().toLowerCase();
+if (searchInput) {
+    searchInput.addEventListener("input", function () {
+        const value = searchInput.value.trim().toLowerCase();
 
-    // Empty search: hide results and restore normal homepage.
-    if (!value) {
-      searchResultsSection.hidden = true;
-      searchResultsContainer.innerHTML = "";
-      return;
-    }
-
-    // Find matching products.
-    const results = productsData.filter((product) => {
-      const name = String(product.name || "").toLowerCase();
-      const brand = String(product.brand || "").toLowerCase();
-      const category = String(product.category || "").toLowerCase();
-
-      return (
-        name.includes(value) ||
-        brand.includes(value) ||
-        category.includes(value)
-      );
-    });
-
-    // Show the dedicated results section.
-    searchResultsSection.hidden = false;
-
-    if (results.length === 0) {
-      searchResultsContainer.innerHTML =
-        '<p class="no-search-results">No products found. Try another name or brand.</p>';
-      return;
-    }
-
-    // Reuse the existing product-card renderer.
-    const originalContainer = document.querySelector("#products .product-container");
-
-    if (!originalContainer) {
-      console.error("Original product container was not found.");
-      return;
-    }
-
-    // Copy the existing card design and render matching products.
-    searchResultsContainer.innerHTML = "";
-
-    results.forEach((product) => {
-      const originalCard = Array.from(originalContainer.children).find((card) => {
-        const title = card.querySelector("h3");
-        const brandElement = card.querySelector(".brand");
-
-        return (
-          title &&
-          title.textContent.trim() === String(product.name || "").trim() &&
-          (!brandElement ||
-            brandElement.textContent.trim() === String(product.brand || "").trim())
+        const originalContainer = document.querySelector(
+            "#products .product-container"
         );
-      });
 
-      if (originalCard) {
-        searchResultsContainer.appendChild(originalCard.cloneNode(true));
-      }
-    });
+        // Empty search: restore the normal homepage.
+        if (!value) {
+            if (searchResultsSection) {
+                searchResultsSection.hidden = true;
+            }
 
-    // Put search results directly beneath the search bar.
-    searchResultsSection.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
+            if (searchResultsContainer) {
+                searchResultsContainer.innerHTML = "";
+            }
+
+            if (originalContainer) {
+                originalContainer.style.display = "";
+            }
+
+            return;
+        }
+
+        // Search the actual products loaded from Firebase.
+        const results = productsData.filter((product) => {
+            const name = String(product.name || "").toLowerCase();
+            const brand = String(product.brand || "").toLowerCase();
+            const category = String(product.category || "").toLowerCase();
+
+            return (
+                name.includes(value) ||
+                brand.includes(value) ||
+                category.includes(value)
+            );
+        });
+
+        // Show search results below the search bar.
+        if (searchResultsSection && searchResultsContainer) {
+            searchResultsSection.hidden = false;
+
+            searchResultsContainer.innerHTML = "";
+
+            if (results.length === 0) {
+                searchResultsContainer.innerHTML = `
+                    <p class="no-search-results">
+                        No products found. Try another product name or brand.
+                    </p>
+                `;
+            } else {
+                results.forEach((product) => {
+                    const card = document.createElement("div");
+                    card.className = "product";
+
+                    const productArea = document.createElement("div");
+                    productArea.className = "product-click";
+
+                    const image = document.createElement("img");
+                    image.className = "product-img";
+                    image.src = product.image || "";
+                    image.alt = product.name || "Product";
+                    image.loading = "lazy";
+
+                    image.onerror = function () {
+                        this.style.display = "none";
+                    };
+
+                    const name = document.createElement("h3");
+                    name.textContent = product.name || "Product";
+
+                    const brand = document.createElement("p");
+                    brand.className = "brand";
+                    brand.textContent = product.brand || "BARQ";
+
+                    const price = document.createElement("p");
+                    price.className = "price";
+
+                    const numericPrice = Number(product.price);
+                    price.textContent =
+                        (Number.isFinite(numericPrice) ? numericPrice : 0)
+                            .toFixed(2) + " SAR";
+
+                    productArea.append(image, name, brand, price);
+
+                    productArea.addEventListener("click", function () {
+                        window.location.href =
+                            "./product-details.html?id=" +
+                            encodeURIComponent(product.id);
+                    });
+
+                    const button = document.createElement("button");
+                    button.className = "add-btn";
+                    button.textContent = "Add To Cart";
+
+                    button.addEventListener("click", function (event) {
+                        event.stopPropagation();
+
+                        addToCart(
+                            product.id,
+                            product.name,
+                            product.price,
+                            product.image,
+                            product.brand
+                        );
+                    });
+
+                    card.append(productArea, button);
+                    searchResultsContainer.appendChild(card);
+                });
+            }
+
+            // Keep the original featured products section unchanged.
+            // Search results are displayed separately above it.
+            searchResultsSection.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        } else {
+            // Fallback if the separate results section is missing.
+            if (!originalContainer) {
+                console.error("Product container was not found.");
+                return;
+            }
+
+            if (results.length === 0) {
+                originalContainer.innerHTML =
+                    "<p>No products found. Try another name or brand.</p>";
+            } else {
+                displayProducts(results);
+            }
+        }
     });
-  });
 }
+
 
 
 // ==========================================
