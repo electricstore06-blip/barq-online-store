@@ -1,250 +1,202 @@
 import { db } from "./firebase-config.js";
 
 import {
-  doc,
-  getDoc
+    doc,
+    getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-console.log("PRODUCT DETAILS JS STARTED");
 
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
 const container = document.getElementById("productDetails");
 
+let product = null;
+let selectedColor = "";
+let selectedSize = "";
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[character]);
+}
+
+function getPrice(size = "") {
+    const sizePrices = product?.sizePrices || {};
+
+    if (size && sizePrices[size] !== undefined) {
+        const price = Number(sizePrices[size]);
+
+        if (Number.isFinite(price) && price >= 0) {
+            return price;
+        }
+    }
+
+    return Number(product?.price) || 0;
+}
+
 async function loadProduct() {
-  if (!productId) {
-    container.innerHTML = "<h2>No product id</h2>";
-    return;
-  }
-
-  try {
-    const ref = doc(db, "products", productId);
-    const snap = await getDoc(ref);
-
-    if (!snap.exists()) {
-      container.innerHTML = "<h2>Product not found</h2>";
-      return;
+    if (!productId) {
+        container.innerHTML = "<h2>Product not found.</h2>";
+        return;
     }
 
-    const product = snap.data();
+    try {
+        const productRef = doc(db, "products", productId);
+        const snapshot = await getDoc(productRef);
 
-    const colors = Array.isArray(product.colors)
-      ? product.colors
-      : [];
+        if (!snapshot.exists()) {
+            container.innerHTML = "<h2>Product not found.</h2>";
+            return;
+        }
 
-    const sizes = Array.isArray(product.sizes)
-      ? product.sizes
-      : [];
+        product = {
+            id: snapshot.id,
+            ...snapshot.data()
+        };
 
-    // Each size can have its own price.
-    // If no size-specific price exists, use the normal product price.
-    const sizePrices = product.sizePrices || {};
+        const colors = Array.isArray(product.colors)
+            ? product.colors
+            : [];
 
-    let selectedColor = "";
-    let selectedSize = "";
+        const sizes = Array.isArray(product.sizes)
+            ? product.sizes
+            : [];
 
-    function getCurrentPrice() {
-      if (selectedSize && sizePrices[selectedSize] !== undefined) {
-        return Number(sizePrices[selectedSize]);
-      }
+        selectedColor = "";
+        selectedSize = "";
 
-      return Number(product.price) || 0;
-    }
+        container.innerHTML = `
+            <div class="product-details-page">
 
-    container.innerHTML = `
-      <div class="product-details-page">
-
-        <div class="product-image-box">
-          <img
-            src="${product.image || ""}"
-            alt="${product.name || "Product"}"
-          >
-        </div>
-
-        <div class="product-info">
-
-          <h1>${product.name || "Product"}</h1>
-
-          <h3>${product.brand || "BARQ"}</h3>
-
-          <div class="price-box" id="productPrice">
-            ${Number(product.price) || 0} SAR
-          </div>
-
-          <p>${product.description || ""}</p>
-
-          ${
-            colors.length
-              ? `
-                <h3>Choose Color *</h3>
-                <div class="option-buttons" id="colorOptions">
-                  ${colors.map(color => `
-                    <button
-                      type="button"
-                      class="product-option"
-                      data-color="${color}"
-                    >${color}</button>
-                  `).join("")}
+                <div class="product-image-box">
+                    <img
+                        src="${escapeHTML(product.image || "")}"
+                        alt="${escapeHTML(product.name || "Product")}"
+                    >
                 </div>
-              `
-              : ""
-          }
 
-          ${
-            sizes.length
-              ? `
-                <h3>Choose Size *</h3>
-                <div class="option-buttons" id="sizeOptions">
-                  ${sizes.map(size => `
-                    <button
-                      type="button"
-                      class="product-option"
-                      data-size="${size}"
-                    >${size}</button>
-                  `).join("")}
+                <div class="product-info">
+
+                    <h1>${escapeHTML(product.name)}</h1>
+
+                    <h3>${escapeHTML(product.brand || "BARQ")}</h3>
+
+                    <div class="price-box" id="selectedPrice">
+                        ${getPrice().toFixed(2)} SAR
+                    </div>
+
+                    <p>${escapeHTML(product.description || "")}</p>
+
+                    ${
+                        colors.length
+                            ? `
+                                <h3 class="option-title">Choose Color</h3>
+                                <div class="option-buttons" id="colorOptions">
+                                    ${colors.map(color => `
+                                        <button
+                                            type="button"
+                                            class="variant-button"
+                                            data-color="${escapeHTML(color)}"
+                                            aria-pressed="false"
+                                        >${escapeHTML(color)}</button>
+                                    `).join("")}
+                                </div>
+                            `
+                            : ""
+                    }
+
+                    ${
+                        sizes.length
+                            ? `
+                                <h3 class="option-title">Choose Size</h3>
+                                <div class="option-buttons" id="sizeOptions">
+                                    ${sizes.map(size => `
+                                        <button
+                                            type="button"
+                                            class="variant-button"
+                                            data-size="${escapeHTML(size)}"
+                                            aria-pressed="false"
+                                        >${escapeHTML(size)}</button>
+                                    `).join("")}
+                                </div>
+                            `
+                            : ""
+                    }
+
+                    <button type="button" class="add-cart-btn" id="addProductToCart">
+                        Add To Cart
+                    </button>
+
                 </div>
-              `
-              : ""
-          }
+            </div>
+        `;
 
-          <p id="optionMessage" role="status"></p>
+        // Color selection
+        container.querySelectorAll("[data-color]").forEach(button => {
+            button.addEventListener("click", () => {
+                selectedColor = button.dataset.color;
 
-          <button
-            type="button"
-            class="add-cart-btn"
-            id="addProductToCart"
-          >
-            Add To Cart
-          </button>
+                container.querySelectorAll("[data-color]").forEach(option => {
+                    const active = option === button;
+                    option.setAttribute("aria-pressed", String(active));
+                    option.style.background = active ? "#d4145a" : "white";
+                    option.style.color = active ? "white" : "black";
+                });
+            });
+        });
 
-        </div>
-      </div>
-    `;
+        // Size selection and price update
+        container.querySelectorAll("[data-size]").forEach(button => {
+            button.addEventListener("click", () => {
+                selectedSize = button.dataset.size;
 
-    // Style selected options.
-    const style = document.createElement("style");
+                container.querySelectorAll("[data-size]").forEach(option => {
+                    const active = option === button;
+                    option.setAttribute("aria-pressed", String(active));
+                    option.style.background = active ? "#d4145a" : "white";
+                    option.style.color = active ? "white" : "black";
+                });
 
-    style.textContent = `
-      .product-option.selected {
-        background: #d4145a;
-        color: white;
-        border-color: #d4145a;
-      }
+                document.getElementById("selectedPrice").textContent =
+                    `${getPrice(selectedSize).toFixed(2)} SAR`;
+            });
+        });
 
-      .product-option:focus-visible {
-        outline: 2px solid #d4145a;
-        outline-offset: 3px;
-      }
+        // Add product with the selected options
+        document.getElementById("addProductToCart").addEventListener("click", () => {
+            if (colors.length && !selectedColor) {
+                alert("Please choose a color first.");
+                return;
+            }
 
-      #optionMessage {
-        color: #d4145a;
-        margin-top: 12px;
-      }
-    `;
+            if (sizes.length && !selectedSize) {
+                alert("Please choose a size first.");
+                return;
+            }
 
-    document.head.appendChild(style);
+            if (typeof window.addToCart !== "function") {
+                alert("Cart is unavailable. Please refresh the page.");
+                return;
+            }
 
-    const priceElement = document.getElementById("productPrice");
-    const messageElement = document.getElementById("optionMessage");
+            window.addToCart(
+                product.id,
+                product.name,
+                getPrice(selectedSize),
+                product.image || "",
+                product.brand || "BARQ",
+                selectedColor,
+                selectedSize
+            );
+        });
 
-    function updatePrice() {
-      priceElement.textContent = `${getCurrentPrice()} SAR`;
+    } catch (error) {
+        console.error("Product details error:", error);
+        container.innerHTML = "<h2>Unable to load product. Please refresh.</h2>";
     }
-
-    function selectOption(button, groupSelector, value, type) {
-      document.querySelectorAll(
-        `${groupSelector} .product-option`
-      ).forEach(option => {
-        option.classList.remove("selected");
-        option.setAttribute("aria-pressed", "false");
-      });
-
-      button.classList.add("selected");
-      button.setAttribute("aria-pressed", "true");
-
-      if (type === "color") {
-        selectedColor = value;
-      } else {
-        selectedSize = value;
-      }
-
-      messageElement.textContent = "";
-      updatePrice();
-    }
-
-    document.querySelectorAll("[data-color]").forEach(button => {
-      button.setAttribute("aria-pressed", "false");
-
-      button.addEventListener("click", () => {
-        selectOption(
-          button,
-          "#colorOptions",
-          button.dataset.color,
-          "color"
-        );
-      });
-    });
-
-    document.querySelectorAll("[data-size]").forEach(button => {
-      button.setAttribute("aria-pressed", "false");
-
-      button.addEventListener("click", () => {
-        selectOption(
-          button,
-          "#sizeOptions",
-          button.dataset.size,
-          "size"
-        );
-      });
-    });
-
-    document.getElementById("addProductToCart").addEventListener(
-      "click",
-      () => {
-        if (colors.length && !selectedColor) {
-          messageElement.textContent =
-            "Please choose a color before adding to cart.";
-          return;
-        }
-
-        if (sizes.length && !selectedSize) {
-          messageElement.textContent =
-            "Please choose a size before adding to cart.";
-          return;
-        }
-
-        const price = getCurrentPrice();
-
-        if (!Number.isFinite(price) || price < 0) {
-          messageElement.textContent =
-            "This product has an invalid price.";
-          return;
-        }
-
-        if (typeof window.addToCart !== "function") {
-          messageElement.textContent =
-            "Cart is not ready. Please refresh the page and try again.";
-          console.error("addToCart function not found.");
-          return;
-        }
-
-        // Pass the selected options along with the product details.
-        window.addToCart(
-          snap.id,
-          product.name || "Product",
-          price,
-          product.image || "",
-          product.brand || "",
-          selectedColor,
-          selectedSize
-        );
-      }
-    );
-
-  } catch (error) {
-    console.error("PRODUCT DETAILS ERROR:", error);
-    container.innerHTML = "<h2>Error loading product</h2>";
-  }
 }
 
 loadProduct();
