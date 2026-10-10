@@ -107,162 +107,97 @@ container.innerHTML =
 
 }
 
-
-
 // ==========================================
 // DISPLAY PRODUCTS
 // ==========================================
 
+function displayProducts(products) {
+    const container = document.querySelector(
+        "#products .product-container"
+    );
 
-function displayProducts(products){
-if(!products || products.length === 0){
+    if (!container) {
+        console.error("Product container not found.");
+        return;
+    }
 
-console.log("NO PRODUCTS TO DISPLAY - KEEP OLD PRODUCTS");
+    // Clear the old product cards.
+    container.innerHTML = "";
 
-return;
+    // Show a message if there are no products.
+    if (!Array.isArray(products) || products.length === 0) {
+        container.innerHTML = `
+            <p class="no-products">
+                No products available right now.
+            </p>
+        `;
+        return;
+    }
 
-}
-const container = document.querySelector(".product-container");
+    products.forEach((product) => {
+        const card = document.createElement("div");
+        card.className = "product";
 
-console.log("DISPLAY PRODUCTS:", products);
+        const productArea = document.createElement("div");
+        productArea.className = "product-click";
 
+        const image = document.createElement("img");
+        image.className = "product-img";
+        image.src = product.image || "";
+        image.alt = product.name || "Product";
+        image.loading = "lazy";
 
-if(!container){
+        image.onerror = function () {
+            this.style.display = "none";
+        };
 
-console.error("NO PRODUCT CONTAINER");
+        const name = document.createElement("h3");
+        name.textContent = product.name || "Product";
 
-return;
+        const brand = document.createElement("p");
+        brand.className = "brand";
+        brand.textContent = product.brand || "BARQ";
 
-}
+        const price = document.createElement("p");
+        price.className = "price";
 
+        const numericPrice = Number(product.price);
+        price.textContent =
+            (Number.isFinite(numericPrice) ? numericPrice : 0).toFixed(2)
+            + " SAR";
 
-container.innerHTML = "";
+        productArea.append(image, name, brand, price);
 
+        productArea.addEventListener("click", function () {
+            window.location.href =
+                "./product-details.html?id=" +
+                encodeURIComponent(product.id);
+        });
 
-products.forEach((product)=>{
+        const button = document.createElement("button");
+        button.className = "add-btn";
+        button.textContent = "Add To Cart";
 
+        button.addEventListener("click", function (event) {
+            event.stopPropagation();
 
-const card = document.createElement("div");
+            addToCart(
+                product.id,
+                product.name,
+                product.price,
+                product.image,
+                product.brand
+            );
+        });
 
-card.className = "product";
+        card.append(productArea, button);
+        container.appendChild(card);
+    });
 
-
-card.innerHTML = `
-
-
-<div class="product-click">
-
-
-<img
-class="product-img"
-src="${product.image}"
-alt="${product.name}">
-
-
-<h3>
-${product.name}
-</h3>
-
-
-<p class="brand">
-${product.brand || "BARQ"}
-</p>
-
-
-<p class="price">
-${Number(product.price).toFixed(2)} SAR
-</p>
-
-
-</div>
-
-
-
-<button class="add-btn">
-Add To Cart
-</button>
-
-
-`;
-
-
-
-
-// CLICK PRODUCT IMAGE / NAME
-
-const productArea =
-card.querySelector(".product-click");
-
-
-if(productArea){
-
-productArea.onclick = ()=>{
-
-
-console.log(
-"PRODUCT CLICKED:",
-product.id
-);
-
-
-window.location.href =
-"./product-details.html?id=" + product.id;
-
-
-};
-
+    console.log("Products displayed:", products.length);
 }
 
 
-
-
-
-// ADD TO CART
-
-const addButton =
-card.querySelector(".add-btn");
-
-
-if(addButton){
-
-addButton.onclick = (event)=>{
-
-
-event.stopPropagation();
-
-
-
-addToCart(
-
-product.id,
-
-product.name,
-
-product.price,
-
-product.image,
-
-product.brand
-
-);
-
-
-};
-
-}
-
-
-
-container.appendChild(card);
-
-
-
-});
-
-
-console.log("PRODUCT CARDS CREATED");
-
-}
 
 // ==========================================
 // BARQ PRODUCT SEARCH
