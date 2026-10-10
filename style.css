@@ -501,3 +501,23 @@ footer a:hover { color: var(--accent); }
     left: 30px;
   }
 }
+/* BARQ Search Results */
+#searchResultsSection[hidden] {
+  display: none !important;
+}
+
+#searchResultsSection {
+  scroll-margin-top: 20px;
+}
+
+#searchResultsSection h2 {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.no-search-results {
+  grid-column: 1 / -1;
+  padding: 30px 16px;
+  text-align: center;
+  color: #8b6553;
+}
