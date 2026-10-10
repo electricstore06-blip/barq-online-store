@@ -23,10 +23,11 @@ function escapeHTML(value) {
     })[character]);
 }
 
+// Find the correct price for the selected size.
 function getPrice(size = "") {
     const sizePrices = product?.sizePrices || {};
 
-    if (size && sizePrices[size] !== undefined) {
+    if (size && Object.prototype.hasOwnProperty.call(sizePrices, size)) {
         const price = Number(sizePrices[size]);
 
         if (Number.isFinite(price) && price >= 0) {
@@ -37,7 +38,22 @@ function getPrice(size = "") {
     return Number(product?.price) || 0;
 }
 
+// Display the selected price.
+function updateDisplayedPrice() {
+    const priceElement = document.getElementById("selectedPrice");
+
+    if (priceElement) {
+        priceElement.textContent =
+            `${getPrice(selectedSize).toFixed(2)} SAR`;
+    }
+}
+
 async function loadProduct() {
+    if (!container) {
+        console.error("Product details container not found.");
+        return;
+    }
+
     if (!productId) {
         container.innerHTML = "<h2>Product not found.</h2>";
         return;
@@ -80,7 +96,7 @@ async function loadProduct() {
 
                 <div class="product-info">
 
-                    <h1>${escapeHTML(product.name)}</h1>
+                    <h1>${escapeHTML(product.name || "Product")}</h1>
 
                     <h3>${escapeHTML(product.brand || "BARQ")}</h3>
 
@@ -94,6 +110,7 @@ async function loadProduct() {
                         colors.length
                             ? `
                                 <h3 class="option-title">Choose Color</h3>
+
                                 <div class="option-buttons" id="colorOptions">
                                     ${colors.map(color => `
                                         <button
@@ -112,6 +129,7 @@ async function loadProduct() {
                         sizes.length
                             ? `
                                 <h3 class="option-title">Choose Size</h3>
+
                                 <div class="option-buttons" id="sizeOptions">
                                     ${sizes.map(size => `
                                         <button
@@ -126,7 +144,11 @@ async function loadProduct() {
                             : ""
                     }
 
-                    <button type="button" class="add-cart-btn" id="addProductToCart">
+                    <button
+                        type="button"
+                        class="add-cart-btn"
+                        id="addProductToCart"
+                    >
                         Add To Cart
                     </button>
 
@@ -134,13 +156,14 @@ async function loadProduct() {
             </div>
         `;
 
-        // Color selection
+        // Select a color.
         container.querySelectorAll("[data-color]").forEach(button => {
             button.addEventListener("click", () => {
                 selectedColor = button.dataset.color;
 
                 container.querySelectorAll("[data-color]").forEach(option => {
                     const active = option === button;
+
                     option.setAttribute("aria-pressed", String(active));
                     option.style.background = active ? "#d4145a" : "white";
                     option.style.color = active ? "white" : "black";
@@ -148,24 +171,33 @@ async function loadProduct() {
             });
         });
 
-        // Size selection and price update
+        // Select a size and immediately update the price.
         container.querySelectorAll("[data-size]").forEach(button => {
             button.addEventListener("click", () => {
                 selectedSize = button.dataset.size;
 
                 container.querySelectorAll("[data-size]").forEach(option => {
                     const active = option === button;
+
                     option.setAttribute("aria-pressed", String(active));
                     option.style.background = active ? "#d4145a" : "white";
                     option.style.color = active ? "white" : "black";
                 });
 
-                document.getElementById("selectedPrice").textContent =
-                    `${getPrice(selectedSize).toFixed(2)} SAR`;
+                updateDisplayedPrice();
+
+                console.log(
+                    "Selected size:",
+                    selectedSize,
+                    "Selected price:",
+                    getPrice(selectedSize),
+                    "Saved size prices:",
+                    product.sizePrices
+                );
             });
         });
 
-        // Add product with the selected options
+        // Add the selected product, size, color, and price to the cart.
         document.getElementById("addProductToCart").addEventListener("click", () => {
             if (colors.length && !selectedColor) {
                 alert("Please choose a color first.");
@@ -182,10 +214,12 @@ async function loadProduct() {
                 return;
             }
 
+            const selectedPrice = getPrice(selectedSize);
+
             window.addToCart(
                 product.id,
                 product.name,
-                getPrice(selectedSize),
+                selectedPrice,
                 product.image || "",
                 product.brand || "BARQ",
                 selectedColor,
@@ -195,7 +229,8 @@ async function loadProduct() {
 
     } catch (error) {
         console.error("Product details error:", error);
-        container.innerHTML = "<h2>Unable to load product. Please refresh.</h2>";
+        container.innerHTML =
+            "<h2>Unable to load product. Please refresh.</h2>";
     }
 }
 
