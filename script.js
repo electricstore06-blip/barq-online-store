@@ -342,7 +342,77 @@ if (searchInput) {
     });
 }
 
+// ==========================================
+// BARQ CATEGORY FILTER
+// ==========================================
 
+document.querySelectorAll(".beauty-category-card").forEach((card) => {
+    card.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        const category = this.dataset.category;
+
+        // Support common category names and variations.
+        const categoryAliases = {
+            makeup: ["makeup", "cosmetics", "make up"],
+            skincare: ["skincare", "skin care", "skin-care"],
+            perfume: ["perfume", "fragrance", "fragrances"],
+            haircare: ["haircare", "hair care", "hair-care"],
+            fashion: [
+                "fashion",
+                "accessories",
+                "fashion & accessories",
+                "fashion and accessories"
+            ]
+        };
+
+        const matchingNames = categoryAliases[category] || [category];
+
+        const filteredProducts = productsData.filter((product) => {
+            const productCategory = String(product.category || "")
+                .trim()
+                .toLowerCase();
+
+            return matchingNames.includes(productCategory);
+        });
+
+        // Display matching products in the existing product section.
+        const productsSection = document.getElementById("products");
+
+        if (!productsSection) return;
+
+        // Hide search results so they don't confuse the customer.
+        const searchResults = document.getElementById("searchResultsSection");
+
+        if (searchResults) {
+            searchResults.hidden = true;
+        }
+
+        // Clear the search box.
+        const searchInput = document.getElementById("searchInput");
+
+        if (searchInput) {
+            searchInput.value = "";
+        }
+
+        // Display matching products.
+        const title = productsSection.querySelector("h2");
+
+        if (title) {
+            title.textContent =
+                category.charAt(0).toUpperCase() + category.slice(1) +
+                " Products";
+        }
+
+        displayProducts(filteredProducts);
+
+        // Move the customer to the product list.
+        productsSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    });
+});
 
 // ==========================================
 // CART SYSTEM
