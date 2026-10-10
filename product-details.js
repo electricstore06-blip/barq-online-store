@@ -27,13 +27,12 @@ function escapeHTML(value) {
 function getPrice(size = "") {
     const sizePrices = product?.sizePrices || {};
 
-    if (size && Object.prototype.hasOwnProperty.call(sizePrices, size)) {
-        const price = Number(sizePrices[size]);
-
-        if (Number.isFinite(price) && price >= 0) {
-            return price;
-        }
+    if (size && sizePrices[size] !== undefined) {
+        return Number(sizePrices[size]);
     }
+
+    return Number(product?.price) || 0;
+}
 
     return Number(product?.price) || 0;
 }
