@@ -267,22 +267,30 @@ console.log("PRODUCT CARDS CREATED");
 
 
 
-
 // ==========================================
 // BARQ PRODUCT SEARCH
 // ==========================================
 
 const searchInput = document.getElementById("searchInput");
+const searchResultsSection = document.getElementById("searchResultsSection");
+const searchResultsContainer = document.getElementById("searchResultsContainer");
 
-if (searchInput) {
+if (searchInput && searchResultsSection && searchResultsContainer) {
   searchInput.addEventListener("input", function () {
     const value = searchInput.value.trim().toLowerCase();
 
-    // Use the original loaded products as the search source.
-    const result = productsData.filter((product) => {
-      const name = (product.name || "").toLowerCase();
-      const brand = (product.brand || "").toLowerCase();
-      const category = (product.category || "").toLowerCase();
+    // Empty search: hide results and restore normal homepage.
+    if (!value) {
+      searchResultsSection.hidden = true;
+      searchResultsContainer.innerHTML = "";
+      return;
+    }
+
+    // Find matching products.
+    const results = productsData.filter((product) => {
+      const name = String(product.name || "").toLowerCase();
+      const brand = String(product.brand || "").toLowerCase();
+      const category = String(product.category || "").toLowerCase();
 
       return (
         name.includes(value) ||
@@ -291,10 +299,51 @@ if (searchInput) {
       );
     });
 
-    displayProducts(result);
+    // Show the dedicated results section.
+    searchResultsSection.hidden = false;
+
+    if (results.length === 0) {
+      searchResultsContainer.innerHTML =
+        '<p class="no-search-results">No products found. Try another name or brand.</p>';
+      return;
+    }
+
+    // Reuse the existing product-card renderer.
+    const originalContainer = document.querySelector("#products .product-container");
+
+    if (!originalContainer) {
+      console.error("Original product container was not found.");
+      return;
+    }
+
+    // Copy the existing card design and render matching products.
+    searchResultsContainer.innerHTML = "";
+
+    results.forEach((product) => {
+      const originalCard = Array.from(originalContainer.children).find((card) => {
+        const title = card.querySelector("h3");
+        const brandElement = card.querySelector(".brand");
+
+        return (
+          title &&
+          title.textContent.trim() === String(product.name || "").trim() &&
+          (!brandElement ||
+            brandElement.textContent.trim() === String(product.brand || "").trim())
+        );
+      });
+
+      if (originalCard) {
+        searchResultsContainer.appendChild(originalCard.cloneNode(true));
+      }
+    });
+
+    // Put search results directly beneath the search bar.
+    searchResultsSection.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
   });
 }
-
 
 
 // ==========================================
