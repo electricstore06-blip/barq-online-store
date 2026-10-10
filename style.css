@@ -174,13 +174,36 @@ section { scroll-margin-top: 100px; }
   box-shadow: 0 0 0 3px rgba(168, 117, 96, 0.10);
 }
 
-.search-container input, #searchInput {
-  width: 100%; min-width: 0; min-height: 48px; padding: 12px 17px;
-  border: 1px solid var(--border); border-right: 0; border-radius: 2px 0 0 2px;
-  background: #fff; color: var(--text); font-size: 13px; outline: none;
+/* BARQ Luxury Search Input */
+.search-container input,
+#searchInput {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 600px;
+  min-height: 48px;
+  padding: 12px 18px 12px 45px;
+
+  border: 1px solid #e5d8ce;
+  border-radius: 4px;
+
+  background-color: #ffffff;
+  color: #302925;
+  font-size: 14px;
+  outline: none;
+
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.search-container input:focus, #searchInput:focus {
-  border-color: var(--rose); box-shadow: 0 0 0 3px rgba(201,158,140,.12);
+
+#searchInput:focus {
+  border-color: #b58b76;
+  box-shadow: 0 0 0 3px rgba(181, 139, 118, 0.12);
+}
+
+#searchInput::placeholder {
+  color: #9a8b81;
+  opacity: 1;
 }
 .search-container button {
   min-width: 90px; padding: 0 18px; border: 1px solid var(--black);
@@ -439,4 +462,42 @@ footer a:hover { color: var(--accent); }
 /* Honor reduced-motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
+/* BARQ Search Icon */
+.search-area {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 20px;
+  background: #ffffff;
+}
+
+.search-area::before {
+  content: "⌕";
+  position: absolute;
+  left: calc(50% - 280px);
+  top: 50%;
+  transform: translateY(-50%);
+
+  color: #8b6553;
+  font-size: 28px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.search-area #searchInput {
+  width: 100%;
+  max-width: 600px;
+  padding-left: 45px;
+}
+
+@media (max-width: 640px) {
+  .search-area {
+    padding: 12px 16px;
+  }
+
+  .search-area::before {
+    left: 30px;
+  }
 }
