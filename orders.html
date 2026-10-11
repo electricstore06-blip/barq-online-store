@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Orders - BARQ</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px 16px;
+            font-family: Arial, sans-serif;
+            background: #f7f7f9;
+            color: #222;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .order-card {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .order-number {
+            color: #e41462;
+            font-weight: bold;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: #fff0c2;
+            color: #805b00;
+            font-size: 13px;
+        }
+
+        .order-total {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e41462;
+            margin-top: 15px;
+        }
+
+        .message {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            text-align: center;
+            color: #666;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #e41462;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .back-button:hover {
+            background: #bd1050;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <h1>My Orders</h1>
+        <p class="subtitle">View your recent BARQ orders</p>
+
+        <div id="ordersList" class="message">
+            Loading your orders...
+        </div>
+
+        <div style="text-align: center;">
+            <a href="index.html" class="back-button">
+                Continue Shopping
+            </a>
+        </div>
+    </main>
+
+    <script type="module">
+        import { db } from "./firebase-config.js";
+
+        import {
+            collection,
+            getDocs,
+            query,
+            where
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const ordersList = document.getElementById("ordersList");
+
+        // The checkout should save the customer's email in localStorage.
+        const email = localStorage.getItem("barqCustomerEmail");
+
+        function escapeHTML(value) {
+            return String(value ?? "").replace(/[&<>"']/g, character => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            })[character]);
+        }
+
+        async function loadOrders() {
+            if (!email) {
+                ordersList.innerHTML = `
+                    <p>We couldn't identify your customer email.</p>
+                    <p>Please place an order or sign in using the same browser.</p>
+                `;
+                return;
+            }
+
+            try {
+                const ordersQuery = query(
+                    collection(db, "orders"),
+                    where("email", "==", email)
+                );
+
+                const snapshot = await getDocs(ordersQuery);
+
+                if (snapshot.empty) {
+                    ordersList.innerHTML = `
+                        <p>No orders found for this email address.</p>
+                    `;
+                    return;
+                }
+
+                const orders = snapshot.docs.map(document => ({
+                    id: document.id,
+                    ...document.data()
+                }));
+
+                orders.sort((a, b) => {
+                    const dateA = a.createdAt?.seconds || 0;
+                    const dateB = b.createdAt?.seconds || 0;
+                    return dateB - dateA;
+                });
+
+                ordersList.className = "";
+
+                ordersList.innerHTML = orders.map(order => `
+                    <article class="order-card">
+                        <div class="order-header">
+                            <div>
+                                <div>Order Number</div>
+                                <div class="order-number">
+                                    ${escapeHTML(order.orderNumber || order.id)}
+                                </div>
+                            </div>
+
+                            <span class="status">
+                                ${escapeHTML(order.status || "Pending")}
+                            </span>
+                        </div>
+
+                        <div>
+                            <strong>Items:</strong>
+                            ${Array.isArray(order.items)
+                                ? order.items.map(item =>
+                                    escapeHTML(item.name || item.productName || "Product")
+                                ).join(", ")
+                                : "See order details"}
+                        </div>
+
+                        <div class="order-total">
+                            Total: SAR ${Number(order.total || 0).toFixed(2)}
+                        </div>
+                    </article>
+                `).join("");
+
+            } catch (error) {
+                console.error("Unable to load orders:", error);
+
+                ordersList.innerHTML = `
+                    <p>Unable to load orders.</p>
+                    <p>Please try again later.</p>
+                `;
+            }
+        }
+
+        loadOrders();
+    </script>
+</body>
+</html>
