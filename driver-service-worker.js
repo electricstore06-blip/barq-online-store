@@ -1,5 +1,4 @@
-
-const CACHE_NAME = "barq-driver-v3";
+const CACHE_NAME = "barq-driver-v4";
 
 const APP_FILES = [
     "./driver-login.html",
@@ -34,8 +33,7 @@ self.addEventListener("activate", event => {
                             key !== CACHE_NAME
                         )
                         .map(key => caches.delete(key))
-                )
-            )
+            ))
             .then(() => self.clients.claim())
     );
 });
@@ -46,29 +44,47 @@ self.addEventListener("fetch", event => {
 
     const url = new URL(event.request.url);
 
-    // Only cache requests from this same origin.
+    // Handle only requests from this origin.
     if (url.origin !== self.location.origin) return;
 
+    // Do not intercept customer-store pages or assets.
+    const path = url.pathname;
+
+    const isDriverFile =
+        path.endsWith("/driver-login.html") ||
+        path.endsWith("/driver-login.js") ||
+        path.endsWith("/driver-dashboard.html") ||
+        path.endsWith("/driver-dashboard.css") ||
+        path.endsWith("/driver-dashboard.js") ||
+        path.endsWith("/driver-firebase-config.js") ||
+        path.endsWith("/manifest.json") ||
+        path.endsWith("/barq-driver-icon-192.png") ||
+        path.endsWith("/barq-driver-icon-512.png");
+
+    if (!isDriverFile) return;
+
     event.respondWith(
-        caches.match(event.request)
-            .then(cachedResponse => {
-                if (cachedResponse) return cachedResponse;
+        caches.open(CACHE_NAME).then(async cache => {
+            const cachedResponse = await cache.match(event.request);
 
-                return fetch(event.request).then(networkResponse => {
-                    if (
-                        networkResponse &&
-                        networkResponse.status === 200 &&
-                        networkResponse.type === "basic"
-                    ) {
-                        const responseClone = networkResponse.clone();
+            if (cachedResponse) {
+                return cachedResponse;
+            }
 
-                        caches.open(CACHE_NAME).then(cache => {
-                            cache.put(event.request, responseClone);
-                        });
-                    }
+            const networkResponse = await fetch(event.request);
 
-                    return networkResponse;
-                });
-            })
+            if (
+                networkResponse &&
+                networkResponse.status === 200 &&
+                networkResponse.type === "basic"
+            ) {
+                await cache.put(
+                    event.request,
+                    networkResponse.clone()
+                );
+            }
+
+            return networkResponse;
+        })
     );
 });
