@@ -205,15 +205,28 @@
         ×
       </button>
 
-      <h2>BARQ Account</h2>
-      <p>Login to continue shopping</p>
+<h2>BARQ Account</h2>
+<p>Login or create your customer account</p>
 
-      <input id="loginEmail" type="email" placeholder="Email">
-      <input id="loginPassword" type="password" placeholder="Password">
+<input
+  id="loginEmail"
+  type="email"
+  placeholder="Email"
+  autocomplete="email"
+>
 
-      <button id="loginButton" type="button">Login</button>
-      <p id="loginMessage"></p>
+<input
+  id="loginPassword"
+  type="password"
+  placeholder="Password"
+  autocomplete="current-password"
+>
 
+<button id="loginButton" type="button">Login</button>
+
+<button id="registerButton" type="button">Create Account</button>
+
+<p id="loginMessage" role="status" aria-live="polite"></p>    
     </div>
   </div>
 
