@@ -516,7 +516,8 @@ localStorage.setItem(
                     "barqOrderId",
                     orderRef.id
                 );
-
+localStorage.setItem("barqCustomerEmail", email);
+localStorage.setItem("barqCustomerName", fullName);
 
                 /* =========================================
                    CLEAR CART
