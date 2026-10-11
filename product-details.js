@@ -1,4 +1,3 @@
-
 import { db } from "./firebase-config.js";
 
 import {
@@ -26,16 +25,40 @@ function escapeHTML(value) {
 
 // Find the correct price for the selected size.
 function getPrice(size = "") {
-    const sizePrices = product?.sizePrices || {};
+    if (!product) return 0;
 
+    const sizePrices = product.sizePrices || {};
+
+    // Check prices saved in the sizePrices object.
     if (size && sizePrices[size] !== undefined) {
-        return Number(sizePrices[size]);
+        const price = Number(sizePrices[size]);
+        if (Number.isFinite(price)) return price;
     }
 
-    return Number(product?.price) || 0;
-}
+    // Check prices saved as separate Firebase fields.
+    if (size && product[size] !== undefined) {
+        const price = Number(product[size]);
+        if (Number.isFinite(price)) return price;
+    }
 
-    return Number(product?.price) || 0;
+    // Support numeric keys such as "30", "50", and "100".
+    const match = String(size).match(/\d+/);
+
+    if (match) {
+        const numberKey = match[0];
+
+        if (sizePrices[numberKey] !== undefined) {
+            const price = Number(sizePrices[numberKey]);
+            if (Number.isFinite(price)) return price;
+        }
+
+        if (product[numberKey] !== undefined) {
+            const price = Number(product[numberKey]);
+            if (Number.isFinite(price)) return price;
+        }
+    }
+
+    return Number(product.price) || 0;
 }
 
 // Display the selected price.
@@ -72,6 +95,8 @@ async function loadProduct() {
             id: snapshot.id,
             ...snapshot.data()
         };
+
+        console.log("Loaded product:", product);
 
         const colors = Array.isArray(product.colors)
             ? product.colors
@@ -171,7 +196,7 @@ async function loadProduct() {
             });
         });
 
-        // Select a size and immediately update the price.
+        // Select a size and update the price.
         container.querySelectorAll("[data-size]").forEach(button => {
             button.addEventListener("click", () => {
                 selectedSize = button.dataset.size;
@@ -187,45 +212,43 @@ async function loadProduct() {
                 updateDisplayedPrice();
 
                 console.log(
-                    "Selected size:",
-                    selectedSize,
-                    "Selected price:",
-                    getPrice(selectedSize),
-                    "Saved size prices:",
-                    product.sizePrices
+                    "Selected size:", selectedSize,
+                    "Selected price:", getPrice(selectedSize)
                 );
             });
         });
 
-        // Add the selected product, size, color, and price to the cart.
-        document.getElementById("addProductToCart").addEventListener("click", () => {
-            if (colors.length && !selectedColor) {
-                alert("Please choose a color first.");
-                return;
-            }
+        // Add the selected product to the cart.
+        document.getElementById("addProductToCart")
+            .addEventListener("click", () => {
 
-            if (sizes.length && !selectedSize) {
-                alert("Please choose a size first.");
-                return;
-            }
+                if (colors.length && !selectedColor) {
+                    alert("Please choose a color first.");
+                    return;
+                }
 
-            if (typeof window.addToCart !== "function") {
-                alert("Cart is unavailable. Please refresh the page.");
-                return;
-            }
+                if (sizes.length && !selectedSize) {
+                    alert("Please choose a size first.");
+                    return;
+                }
 
-            const selectedPrice = getPrice(selectedSize);
+                if (typeof window.addToCart !== "function") {
+                    alert("Cart is unavailable. Please refresh the page.");
+                    return;
+                }
 
-            window.addToCart(
-                product.id,
-                product.name,
-                selectedPrice,
-                product.image || "",
-                product.brand || "BARQ",
-                selectedColor,
-                selectedSize
-            );
-        });
+                const selectedPrice = getPrice(selectedSize);
+
+                window.addToCart(
+                    product.id,
+                    product.name,
+                    selectedPrice,
+                    product.image || "",
+                    product.brand || "BARQ",
+                    selectedColor,
+                    selectedSize
+                );
+            });
 
     } catch (error) {
         console.error("Product details error:", error);
