@@ -22,34 +22,28 @@ import {
 
 console.log("BARQ AUTH LOADED");
 
-
 // ==========================================
 // LOGIN FUNCTION
 // ==========================================
 
 async function login(email, password) {
-
     return await signInWithEmailAndPassword(
         auth,
         email,
         password
     );
-
 }
 
-
 // ==========================================
-// REGISTER
+// REGISTER FUNCTION
 // ==========================================
 
 async function register(email, password) {
-
     return await createUserWithEmailAndPassword(
         auth,
         email,
         password
     );
-
 }
 
 // ==========================================
@@ -57,466 +51,288 @@ async function register(email, password) {
 // ==========================================
 
 async function logout() {
-
     await signOut(auth);
-
     location.reload();
-
 }
-
 
 // ==========================================
 // OPEN LOGIN
 // ==========================================
 
 function openLogin() {
-
-    const menu =
-        document.getElementById("mainNav");
+    const menu = document.getElementById("mainNav");
 
     if (menu) {
         menu.classList.remove("active");
     }
 
-    const box =
-        document.getElementById("loginBox");
+    const box = document.getElementById("loginBox");
 
     if (box) {
         box.style.display = "flex";
     }
-
 }
-
 
 // ==========================================
 // CLOSE LOGIN
 // ==========================================
 
 function closeLogin() {
-
-    const box =
-        document.getElementById("loginBox");
+    const box = document.getElementById("loginBox");
 
     if (box) {
         box.style.display = "none";
     }
-
 }
 
-
 // ==========================================
-// CLICK OUTSIDE CLOSE
+// CLICK OUTSIDE TO CLOSE
 // ==========================================
 
-window.addEventListener(
-    "click",
-    (e) => {
+window.addEventListener("click", (event) => {
+    const box = document.getElementById("loginBox");
 
-        const box =
-            document.getElementById("loginBox");
-
-        if (
-            box &&
-            e.target === box
-        ) {
-
-            closeLogin();
-
-        }
-
+    if (box && event.target === box) {
+        closeLogin();
     }
-);
-
+});
 
 // ==========================================
-// ESC CLOSE
+// ESCAPE KEY TO CLOSE
 // ==========================================
 
-window.addEventListener(
-    "keydown",
-    (e) => {
-
-        if (e.key === "Escape") {
-            closeLogin();
-        }
-
+window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        closeLogin();
     }
-);
-
+});
 
 // ==========================================
 // ADMIN CHECK
 // ==========================================
 
 async function checkAdmin(user) {
-
     if (!user) {
         return false;
     }
 
     try {
+        const adminRef = doc(db, "admins", user.uid);
+        const snapshot = await getDoc(adminRef);
 
-        const adminRef =
-            doc(
-                db,
-                "admins",
-                user.uid
-            );
-
-        const snap =
-            await getDoc(adminRef);
-
-        if (!snap.exists()) {
+        if (!snapshot.exists()) {
             return false;
         }
 
-        const data =
-            snap.data();
+        const data = snapshot.data();
 
         return data.role === "admin";
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Admin check error",
-            error
-        );
-
+    } catch (error) {
+        console.error("Admin check error:", error);
         return false;
-
     }
-
 }
-
 
 // ==========================================
 // STAFF ROLE CHECK
 // ==========================================
 
 async function getStaffRole(user) {
-
     if (!user) {
         return null;
     }
 
     try {
+        const usersRef = collection(db, "users");
 
-        const usersRef =
-            collection(db, "users");
+        const staffQuery = query(
+            usersRef,
+            where("uid", "==", user.uid)
+        );
 
-        const staffQuery =
-            query(
-                usersRef,
-                where("uid", "==", user.uid)
-            );
-
-        const snapshot =
-            await getDocs(staffQuery);
+        const snapshot = await getDocs(staffQuery);
 
         if (snapshot.empty) {
-
             console.log(
                 "No staff profile found for:",
                 user.email
             );
 
             return null;
-
         }
 
-        const staffData =
-            snapshot.docs[0].data();
+        const staffData = snapshot.docs[0].data();
 
-        console.log(
-            "Staff profile:",
-            staffData
-        );
+        console.log("Staff profile:", staffData);
 
         return staffData.role || null;
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Staff role check error:",
-            error
-        );
-
+    } catch (error) {
+        console.error("Staff role check error:", error);
         return null;
-
     }
-
 }
-
 
 // ==========================================
 // LOGIN BUTTON
 // ==========================================
 
-const loginButton =
-    document.getElementById("loginButton");
-
+const loginButton = document.getElementById("loginButton");
 
 if (loginButton) {
+    loginButton.addEventListener("click", async () => {
+        const email = document
+            .getElementById("loginEmail")
+            .value
+            .trim();
 
-    loginButton.addEventListener(
-        "click",
-        async () => {
+        const password = document
+            .getElementById("loginPassword")
+            .value;
 
-            const email =
-                document
-                    .getElementById("loginEmail")
-                    .value
-                    .trim();
+        const message = document.getElementById("loginMessage");
 
-            const password =
-                document
-                    .getElementById("loginPassword")
-                    .value;
+        if (!email || !password) {
+            message.textContent = "Enter email and password.";
+            return;
+        }
 
-            const message =
-                document.getElementById("loginMessage");
+        message.textContent = "Logging in...";
 
+        try {
+            // Firebase login
+            const result = await login(email, password);
+            const user = result.user;
 
-            if (!email || !password) {
+            console.log("LOGIN:", user.email);
 
-                message.textContent =
-                    "Enter email and password";
+            // Check administrator
+            const admin = await checkAdmin(user);
+
+            if (admin) {
+                message.textContent = "Admin login successful.";
+
+                setTimeout(() => {
+                    window.location.href = "admin-orders.html";
+                }, 800);
 
                 return;
-
             }
 
+            // Check staff role
+            const role = await getStaffRole(user);
 
-            message.textContent =
-                "Logging in...";
+            console.log("USER ROLE:", role);
 
-
-            try {
-
-                // ==================================
-                // FIREBASE LOGIN
-                // ==================================
-
-                const result =
-                    await login(
-                        email,
-                        password
-                    );
-
-                const user =
-                    result.user;
-
-
-                console.log(
-                    "LOGIN:",
-                    user.email
-                );
-
-
-                // ==================================
-                // CHECK ADMIN
-                // ==================================
-
-                const admin =
-                    await checkAdmin(user);
-
-
-                if (admin) {
-
-                    message.textContent =
-                        "Admin login successful";
-
-
-                    setTimeout(
-                        () => {
-
-                            window.location.href =
-                                "admin-orders.html";
-
-                        },
-                        800
-                    );
-
-                    return;
-
-                }
-
-
-                // ==================================
-                // CHECK STAFF ROLE
-                // ==================================
-
-                const role =
-                    await getStaffRole(user);
-
-
-                console.log(
-                    "USER ROLE:",
-                    role
-                );
-
-
-                // ==================================
-                // SUPERVISOR
-                // ==================================
-
-                if (
-                    role === "supervisor" ||
-                    role === "Supervisor"
-                ) {
-
-                    message.textContent =
-                        "Supervisor login successful";
-
-
-                    setTimeout(
-                        () => {
-
-                            window.location.href =
-                                "supervisor-dashboard.html";
-
-                        },
-                        800
-                    );
-
-                    return;
-
-                }
-
-
-                // ==================================
-                // DRIVER
-                // ==================================
-
-                if (
-                    role === "driver" ||
-                    role === "Driver"
-                ) {
-
-                    message.textContent =
-                        "Driver login successful";
-
-
-                    setTimeout(
-                        () => {
-
-                            window.location.href =
-                                "driver-dashboard.html";
-
-                        },
-                        800
-                    );
-
-                    return;
-
-                }
-
-
-                // ==================================
-                // OTHER USERS / CUSTOMERS
-                // ==================================
-
+            // Supervisor
+            if (
+                role === "supervisor" ||
+                role === "Supervisor"
+            ) {
                 message.textContent =
-                    "Login successful";
+                    "Supervisor login successful.";
 
+                setTimeout(() => {
+                    window.location.href =
+                        "supervisor-dashboard.html";
+                }, 800);
 
-                setTimeout(
-                    () => {
-
-                        closeLogin();
-
-                    },
-                    1000
-                );
-
-
+                return;
             }
 
-            catch (error) {
+            // Driver
+            if (
+                role === "driver" ||
+                role === "Driver"
+            ) {
+                message.textContent =
+                    "Driver login successful.";
 
-                console.error(
-                    error
-                );
+                setTimeout(() => {
+                    window.location.href =
+                        "driver-dashboard.html";
+                }, 800);
 
-
-                switch (error.code) {
-
-                    case "auth/invalid-email":
-
-                        message.textContent =
-                            "Invalid email address";
-
-                        break;
-
-
-                    case "auth/user-not-found":
-
-                        message.textContent =
-                            "User not found";
-
-                        break;
-
-
-                    case "auth/wrong-password":
-
-                        message.textContent =
-                            "Wrong password";
-
-                        break;
-
-
-                    case "auth/invalid-credential":
-
-                        message.textContent =
-                            "Email or password incorrect";
-
-                        break;
-
-
-                    default:
-
-                        message.textContent =
-                            "Login failed";
-
-                }
-
+                return;
             }
 
+            // Customer or other user
+            message.textContent = "Login successful.";
+
+            setTimeout(() => {
+                closeLogin();
+            }, 1000);
+
+        } catch (error) {
+            console.error("Login error:", error);
+
+            switch (error.code) {
+                case "auth/invalid-email":
+                    message.textContent =
+                        "Invalid email address.";
+                    break;
+
+                case "auth/user-not-found":
+                    message.textContent =
+                        "User not found.";
+                    break;
+
+                case "auth/wrong-password":
+                    message.textContent =
+                        "Wrong password.";
+                    break;
+
+                case "auth/invalid-credential":
+                    message.textContent =
+                        "Email or password incorrect.";
+                    break;
+
+                case "auth/too-many-requests":
+                    message.textContent =
+                        "Too many attempts. Please try again later.";
+                    break;
+
+                default:
+                    message.textContent =
+                        "Login failed. Please try again.";
+            }
         }
-    );
-
+    });
+} else {
+    console.log("loginButton not found.");
 }
-else {
 
-    console.log(
-        "loginButton not found"
-    );
-
-}
 // ==========================================
 // CUSTOMER REGISTRATION BUTTON
 // ==========================================
 
-const registerButton = document.getElementById("registerButton");
+const registerButton =
+    document.getElementById("registerButton");
 
 if (registerButton) {
     registerButton.addEventListener("click", async () => {
+        const email = document
+            .getElementById("loginEmail")
+            .value
+            .trim();
 
-        const email = document.getElementById("loginEmail").value.trim();
-        const password = document.getElementById("loginPassword").value;
-        const message = document.getElementById("loginMessage");
+        const password = document
+            .getElementById("loginPassword")
+            .value;
+
+        const message =
+            document.getElementById("loginMessage");
 
         if (!email || !password) {
-            message.textContent = "Enter your email and password.";
+            message.textContent =
+                "Enter your email and password.";
+
             return;
         }
 
         if (password.length < 6) {
-            message.textContent = "Password must contain at least 6 characters.";
+            message.textContent =
+                "Password must contain at least 6 characters.";
+
             return;
         }
 
@@ -525,7 +341,8 @@ if (registerButton) {
         try {
             await register(email, password);
 
-            message.textContent = "Account created successfully!";
+            message.textContent =
+                "Account created successfully!";
 
             setTimeout(() => {
                 closeLogin();
@@ -536,84 +353,58 @@ if (registerButton) {
 
             switch (error.code) {
                 case "auth/email-already-in-use":
-                    message.textContent = "This email already has an account. Please log in.";
+                    message.textContent =
+                        "This email already has an account. Please log in.";
                     break;
 
                 case "auth/invalid-email":
-                    message.textContent = "Please enter a valid email address.";
+                    message.textContent =
+                        "Please enter a valid email address.";
                     break;
 
                 case "auth/weak-password":
-                    message.textContent = "Please choose a stronger password.";
+                    message.textContent =
+                        "Please choose a stronger password.";
                     break;
 
                 case "auth/operation-not-allowed":
-                    message.textContent = "Email/password registration is not enabled in Firebase.";
+                    message.textContent =
+                        "Email/password registration is not enabled in Firebase.";
+                    break;
+
+                case "auth/network-request-failed":
+                    message.textContent =
+                        "Network error. Please check your internet connection.";
                     break;
 
                 default:
-                    message.textContent = "Registration failed. Please try again.";
+                    message.textContent =
+                        "Registration failed. Please try again.";
             }
         }
     });
 }
 
 // ==========================================
-// USER STATUS
+// USER AUTHENTICATION STATUS
 // ==========================================
 
-onAuthStateChanged(
-    auth,
-    (user) => {
-
-// ==========================================
-// USER STATUS
-// ==========================================
-
-onAuthStateChanged(
-    auth,
-    (user) => {
-
-        if (user) {
-
-            console.log(
-                "Current user:",
-                user.email
-            );
-
-        }
-        else {
-
-            console.log(
-                "No user"
-            );
-
-        }
-
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log("Current user:", user.email);
+    } else {
+        console.log("No user signed in.");
     }
-);
-
+});
 
 // ==========================================
-// EXPORT
+// EXPORT FUNCTIONS FOR HTML
 // ==========================================
 
-window.openLogin =
-    openLogin;
+window.openLogin = openLogin;
+window.closeLogin = closeLogin;
+window.login = login;
+window.register = register;
+window.logout = logout;
 
-window.closeLogin =
-    closeLogin;
-
-window.login =
-    login;
-
-window.register =
-    register;
-
-window.logout =
-    logout;
-
-
-console.log(
-    "BARQ AUTH READY"
-);
+console.log("BARQ AUTH READY");
