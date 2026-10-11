@@ -126,7 +126,7 @@
         const ordersList = document.getElementById("ordersList");
 
         // The checkout should save the customer's email in localStorage.
-        const email = localStorage.getItem("barqCustomerEmail");
+        const savedOrder = JSON.parse(     localStorage.getItem("barqOrder") || "null" );  const email =     localStorage.getItem("barqCustomerEmail") ||     savedOrder?.email ||     "";
 
         function escapeHTML(value) {
             return String(value ?? "").replace(/[&<>"']/g, character => ({
