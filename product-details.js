@@ -1,25 +1,15 @@
 function getPrice(size = "") {
-    if (size && product) {
-        // Check the sizePrices map, if it exists.
-        const sizePrices = product.sizePrices || {};
+    if (!product) return 0;
 
-        if (Object.prototype.hasOwnProperty.call(sizePrices, size)) {
-            const price = Number(sizePrices[size]);
+    const sizePrices = product.sizePrices || {};
 
-            if (Number.isFinite(price)) {
-                return price;
-            }
-        }
-
-        // Check the existing top-level Firebase price fields.
-        if (Object.prototype.hasOwnProperty.call(product, size)) {
-            const price = Number(product[size]);
-
-            if (Number.isFinite(price)) {
-                return price;
-            }
-        }
+    if (size && sizePrices[size] !== undefined) {
+        return Number(sizePrices[size]) || 0;
     }
 
-    return Number(product?.price) || 0;
+    if (size && product[size] !== undefined) {
+        return Number(product[size]) || 0;
+    }
+
+    return Number(product.price) || 0;
 }
