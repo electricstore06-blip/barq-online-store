@@ -36,7 +36,7 @@ async function loginWithFacebook() {
     const provider = new FacebookAuthProvider();
     return await signInWithPopup(auth, provider);
 }
-```
+
 // ================================
 // REGISTER CUSTOMER
 // ================================
