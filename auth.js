@@ -27,7 +27,7 @@ import {
 async function login(email, password) {
     return await signInWithEmailAndPassword(auth, email, password);
 }
-```javascript
+
 // ================================
 // FACEBOOK LOGIN
 // ================================
