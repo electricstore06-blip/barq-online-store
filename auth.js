@@ -1,11 +1,14 @@
 import { auth, db } from "./firebase-config.js";
-
+```javascript
 import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     signOut,
-    onAuthStateChanged
+    onAuthStateChanged,
+    FacebookAuthProvider,
+    signInWithPopup
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+```
 
 import {
     doc,
@@ -24,8 +27,16 @@ import {
 async function login(email, password) {
     return await signInWithEmailAndPassword(auth, email, password);
 }
+```javascript
+// ================================
+// FACEBOOK LOGIN
+// ================================
 
-
+async function loginWithFacebook() {
+    const provider = new FacebookAuthProvider();
+    return await signInWithPopup(auth, provider);
+}
+```
 // ================================
 // REGISTER CUSTOMER
 // ================================
