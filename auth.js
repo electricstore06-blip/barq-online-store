@@ -1,5 +1,5 @@
 import { auth, db } from "./firebase-config.js";
-```javascript
+
 import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
