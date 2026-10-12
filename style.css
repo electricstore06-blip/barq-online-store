@@ -1051,3 +1051,159 @@ img {
     height: 230px;
   }
 }
+/* =========================================
+   BARQ ACCOUNT — MODERN SIGN-IN MODAL
+   ========================================= */
+
+.login-box {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.58);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.login-box.active {
+    display: flex;
+}
+
+.login-content {
+    position: relative;
+    width: 100%;
+    max-width: 470px;
+    padding: 42px 40px 36px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 12px 45px rgba(0, 0, 0, 0.18);
+    color: #222;
+    animation: barqLoginAppear 0.2s ease-out;
+}
+
+@keyframes barqLoginAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-close {
+    position: absolute;
+    top: 14px;
+    right: 15px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #333;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.login-close:hover {
+    background: #f2f2f2;
+}
+
+.login-content h2 {
+    margin: 8px 0 8px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 30px;
+    font-weight: 500;
+    color: #222;
+}
+
+.login-content > p:not(#loginMessage) {
+    margin: 0 0 24px;
+    color: #777;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.login-content input {
+    display: block;
+    width: 100%;
+    min-height: 52px;
+    margin: 12px 0;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background: #fff;
+    color: #222;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login-content input:focus {
+    border-color: #ff7900;
+    box-shadow: 0 0 0 2px rgba(255, 121, 0, 0.12);
+}
+
+.login-content button:not(.login-close) {
+    min-height: 48px;
+    margin: 8px 5px 0 0;
+    padding: 13px 22px;
+    border: none;
+    border-radius: 6px;
+    background: #ff7900;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.login-content button:not(.login-close):hover {
+    background: #e86d00;
+}
+
+.login-content button:not(.login-close):disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
+
+#loginButton {
+    min-width: 105px;
+}
+
+#registerButton {
+    min-width: 145px;
+}
+
+#loginMessage {
+    min-height: 20px;
+    margin: 14px 0 0;
+    color: #d93025;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+@media (max-width: 520px) {
+    .login-box {
+        padding: 16px;
+    }
+
+    .login-content {
+        max-width: 100%;
+        padding: 42px 24px 28px;
+    }
+
+    .login-content h2 {
+        font-size: 27px;
+    }
+
+    .login-content button:not(.login-close) {
+        padding: 12px 15px;
+    }
+}
