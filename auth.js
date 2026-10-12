@@ -358,7 +358,83 @@ if (registerButton) {
     });
 }
 
+```javascript
+// ================================
+// FACEBOOK LOGIN BUTTON
+// ================================
 
+const facebookLoginButton = document.getElementById("facebookLoginButton");
+
+if (facebookLoginButton) {
+    facebookLoginButton.addEventListener("click", async function () {
+        const message = document.getElementById("loginMessage");
+
+        facebookLoginButton.disabled = true;
+        facebookLoginButton.textContent = "Connecting to Facebook...";
+
+        if (message) {
+            message.textContent = "";
+            message.style.color = "";
+        }
+
+        try {
+            const credential = await loginWithFacebook();
+            const user = credential.user;
+
+            if (await checkAdmin(user)) {
+                window.location.href = "admin-orders.html";
+                return;
+            }
+
+            const role = await getStaffRole(user);
+
+            if (role === "supervisor" || role === "Supervisor") {
+                window.location.href = "supervisor-dashboard.html";
+                return;
+            }
+
+            if (role === "driver" || role === "Driver") {
+                window.location.href = "driver-dashboard.html";
+                return;
+            }
+
+            if (message) {
+                message.style.color = "green";
+                message.textContent = "Facebook login successful!";
+            }
+
+            setTimeout(function () {
+                closeLogin();
+                if (message) message.textContent = "";
+            }, 1000);
+
+        } catch (error) {
+            console.error("Facebook login failed:", error);
+
+            if (message) {
+                message.style.color = "red";
+
+                if (error.code === "auth/account-exists-with-different-credential") {
+                    message.textContent =
+                        "This email already uses another login method. Please sign in with that method first.";
+                } else if (error.code === "auth/popup-closed-by-user") {
+                    message.textContent = "Facebook login was cancelled.";
+                } else if (error.code === "auth/unauthorized-domain") {
+                    message.textContent =
+                        "This website domain is not authorized in Firebase.";
+                } else {
+                    message.textContent =
+                        "Facebook login failed. Please try again.";
+                }
+            }
+
+        } finally {
+            facebookLoginButton.disabled = false;
+            facebookLoginButton.textContent = "Continue with Facebook";
+        }
+    });
+}
+```
 // ================================
 // AUTHENTICATION STATUS
 // ================================
