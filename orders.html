@@ -164,58 +164,121 @@
 
                 const orders = snapshot.docs.map(document => ({
                     id: document.id,
-                    ...document.data()
-                }));
+                   <script type="module">
+    import { auth, db } from "./firebase-config.js";
 
-                orders.sort((a, b) => {
-                    const dateA = a.createdAt?.seconds || 0;
-                    const dateB = b.createdAt?.seconds || 0;
-                    return dateB - dateA;
-                });
+    import {
+        collection,
+        getDocs,
+        query,
+        where
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-                ordersList.className = "";
+    import {
+        onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-                ordersList.innerHTML = orders.map(order => `
-                    <article class="order-card">
-                        <div class="order-header">
-                            <div>
-                                <div>Order Number</div>
-                                <div class="order-number">
-                                    ${escapeHTML(order.orderNumber || order.id)}
-                                </div>
-                            </div>
+    const ordersList = document.getElementById("ordersList");
 
-                            <span class="status">
-                                ${escapeHTML(order.status || "Pending")}
-                            </span>
-                        </div>
+    function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, character => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        })[character]);
+    }
 
-                        <div>
-                            <strong>Items:</strong>
-                            ${Array.isArray(order.items)
-                                ? order.items.map(item =>
-                                    escapeHTML(item.name || item.productName || "Product")
-                                ).join(", ")
-                                : "See order details"}
-                        </div>
+    function showMessage(message) {
+        ordersList.className = "message";
+        ordersList.textContent = message;
+    }
 
-                        <div class="order-total">
-                            Total: SAR ${Number(order.total || 0).toFixed(2)}
-                        </div>
-                    </article>
-                `).join("");
+    async function loadOrders(user) {
+        showMessage("Loading your orders...");
 
-            } catch (error) {
-                console.error("Unable to load orders:", error);
+        try {
+            // Retrieve only orders belonging to the signed-in customer.
+            const ordersQuery = query(
+                collection(db, "orders"),
+                where("customerUid", "==", user.uid)
+            );
 
-                ordersList.innerHTML = `
-                    <p>Unable to load orders.</p>
-                    <p>Please try again later.</p>
-                `;
+            const snapshot = await getDocs(ordersQuery);
+
+            if (snapshot.empty) {
+                showMessage("No orders found for your account yet.");
+                return;
             }
+
+            const orders = snapshot.docs.map(orderDoc => ({
+                id: orderDoc.id,
+                ...orderDoc.data()
+            }));
+
+            orders.sort((a, b) => {
+                const dateA = a.createdAt?.seconds || 0;
+                const dateB = b.createdAt?.seconds || 0;
+                return dateB - dateA;
+            });
+
+            ordersList.className = "";
+
+            ordersList.innerHTML = orders.map(order => `
+                <article class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div>Order Number</div>
+                            <div class="order-number">
+                                ${escapeHTML(order.orderNumber || order.id)}
+                            </div>
+                        </div>
+
+                        <span class="status">
+                            ${escapeHTML(order.status || "Pending")}
+                        </span>
+                    </div>
+
+                    <div>
+                        <strong>Items:</strong>
+                        ${Array.isArray(order.items)
+                            ? order.items.map(item =>
+                                escapeHTML(
+                                    item.name ||
+                                    item.productName ||
+                                    "Product"
+                                )
+                            ).join(", ")
+                            : "See order details"}
+                    </div>
+
+                    <div class="order-total">
+                        Total: SAR ${Number(order.total || 0).toFixed(2)}
+                    </div>
+                </article>
+            `).join("");
+
+        } catch (error) {
+            console.error("Unable to load orders:", error);
+
+            showMessage(
+                error.code === "permission-denied"
+                    ? "You do not have permission to view these orders. Please check your account and Firestore rules."
+                    : "Unable to load orders. Please try again later."
+            );
+        }
+    }
+
+    // Wait for Firebase to determine which customer is signed in.
+    onAuthStateChanged(auth, user => {
+        if (!user) {
+            showMessage("Please sign in to view your orders.");
+            return;
         }
 
-        loadOrders();
-    </script>
+        loadOrders(user);
+    });
+</script> 
 </body>
 </html>
