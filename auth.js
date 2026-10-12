@@ -358,7 +358,7 @@ if (registerButton) {
     });
 }
 
-```javascript
+
 // ================================
 // FACEBOOK LOGIN BUTTON
 // ================================
