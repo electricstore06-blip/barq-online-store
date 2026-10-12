@@ -47,6 +47,7 @@
         .order-header {
             display: flex;
             justify-content: space-between;
+            align-items: flex-start;
             gap: 12px;
             flex-wrap: wrap;
             margin-bottom: 15px;
@@ -79,6 +80,7 @@
             border-radius: 12px;
             text-align: center;
             color: #666;
+            overflow-wrap: anywhere;
         }
 
         .back-button {
@@ -94,15 +96,30 @@
         .back-button:hover {
             background: #bd1050;
         }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 20px 12px;
+            }
+
+            .order-card {
+                padding: 16px;
+            }
+
+            .order-total {
+                font-size: 18px;
+            }
+        }
     </style>
 </head>
 
 <body>
     <main class="container">
         <h1>My Orders</h1>
+
         <p class="subtitle">View your recent BARQ orders</p>
 
-        <div id="ordersList" class="message">
+        <div id="ordersList" class="message" aria-live="polite">
             Loading your orders...
         </div>
 
@@ -114,7 +131,7 @@
     </main>
 
     <script type="module">
-        import { db } from "./firebase-config.js";
+        import { auth, db } from "./firebase-config.js";
 
         import {
             collection,
@@ -123,10 +140,11 @@
             where
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        const ordersList = document.getElementById("ordersList");
+        import {
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-        // The checkout should save the customer's email in localStorage.
-        const savedOrder = JSON.parse(     localStorage.getItem("barqOrder") || "null" );  const email =     localStorage.getItem("barqCustomerEmail") ||     savedOrder?.email ||     "";
+        const ordersList = document.getElementById("ordersList");
 
         function escapeHTML(value) {
             return String(value ?? "").replace(/[&<>"']/g, character => ({
@@ -138,147 +156,123 @@
             })[character]);
         }
 
-        async function loadOrders() {
-            if (!email) {
-                ordersList.innerHTML = `
-                    <p>We couldn't identify your customer email.</p>
-                    <p>Please place an order or sign in using the same browser.</p>
-                `;
-                return;
-            }
+        function showMessage(message) {
+            ordersList.className = "message";
+            ordersList.textContent = message;
+        }
+
+        async function loadOrders(user) {
+            showMessage("Loading your orders...");
 
             try {
+                // Only retrieve orders belonging to the signed-in customer.
                 const ordersQuery = query(
                     collection(db, "orders"),
-                    where("email", "==", email)
+                    where("customerUid", "==", user.uid)
                 );
 
                 const snapshot = await getDocs(ordersQuery);
 
                 if (snapshot.empty) {
-                    ordersList.innerHTML = `
-                        <p>No orders found for this email address.</p>
-                    `;
+                    showMessage(
+                        "No orders found for your account yet."
+                    );
                     return;
                 }
 
-                const orders = snapshot.docs.map(document => ({
-                    id: document.id,
-                   <script type="module">
-    import { auth, db } from "./firebase-config.js";
+                const orders = snapshot.docs.map(orderDoc => ({
+                    id: orderDoc.id,
+                    ...orderDoc.data()
+                }));
 
-    import {
-        collection,
-        getDocs,
-        query,
-        where
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+                // Show the newest orders first.
+                orders.sort((a, b) => {
+                    const dateA = a.createdAt?.seconds || 0;
+                    const dateB = b.createdAt?.seconds || 0;
 
-    import {
-        onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+                    return dateB - dateA;
+                });
 
-    const ordersList = document.getElementById("ordersList");
+                ordersList.className = "";
 
-    function escapeHTML(value) {
-        return String(value ?? "").replace(/[&<>"']/g, character => ({
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#39;"
-        })[character]);
-    }
+                ordersList.innerHTML = orders.map(order => {
+                    const itemNames = Array.isArray(order.items)
+                        ? order.items.map(item =>
+                            escapeHTML(
+                                item.name ||
+                                item.productName ||
+                                "Product"
+                            )
+                        ).join(", ")
+                        : "See order details";
 
-    function showMessage(message) {
-        ordersList.className = "message";
-        ordersList.textContent = message;
-    }
+                    const total = Number(order.total);
 
-    async function loadOrders(user) {
-        showMessage("Loading your orders...");
+                    const formattedTotal = Number.isFinite(total)
+                        ? total.toFixed(2)
+                        : "0.00";
 
-        try {
-            // Retrieve only orders belonging to the signed-in customer.
-            const ordersQuery = query(
-                collection(db, "orders"),
-                where("customerUid", "==", user.uid)
-            );
+                    return `
+                        <article class="order-card">
+                            <div class="order-header">
+                                <div>
+                                    <div>Order Number</div>
 
-            const snapshot = await getDocs(ordersQuery);
+                                    <div class="order-number">
+                                        ${escapeHTML(
+                                            order.orderNumber || order.id
+                                        )}
+                                    </div>
+                                </div>
 
-            if (snapshot.empty) {
-                showMessage("No orders found for your account yet.");
+                                <span class="status">
+                                    ${escapeHTML(
+                                        order.status || "Pending"
+                                    )}
+                                </span>
+                            </div>
+
+                            <div>
+                                <strong>Items:</strong>
+                                ${itemNames}
+                            </div>
+
+                            <div class="order-total">
+                                Total: SAR ${formattedTotal}
+                            </div>
+                        </article>
+                    `;
+                }).join("");
+
+            } catch (error) {
+                console.error("Unable to load orders:", error);
+
+                if (
+                    error.code === "permission-denied" ||
+                    error.code === "firestore/permission-denied"
+                ) {
+                    showMessage(
+                        "You do not have permission to view these orders. Please check your Firestore security rules."
+                    );
+                } else {
+                    showMessage(
+                        "Unable to load orders. Please try again later."
+                    );
+                }
+            }
+        }
+
+        // Wait until Firebase identifies the signed-in customer.
+        onAuthStateChanged(auth, user => {
+            if (!user) {
+                showMessage(
+                    "Please sign in to view your orders."
+                );
                 return;
             }
 
-            const orders = snapshot.docs.map(orderDoc => ({
-                id: orderDoc.id,
-                ...orderDoc.data()
-            }));
-
-            orders.sort((a, b) => {
-                const dateA = a.createdAt?.seconds || 0;
-                const dateB = b.createdAt?.seconds || 0;
-                return dateB - dateA;
-            });
-
-            ordersList.className = "";
-
-            ordersList.innerHTML = orders.map(order => `
-                <article class="order-card">
-                    <div class="order-header">
-                        <div>
-                            <div>Order Number</div>
-                            <div class="order-number">
-                                ${escapeHTML(order.orderNumber || order.id)}
-                            </div>
-                        </div>
-
-                        <span class="status">
-                            ${escapeHTML(order.status || "Pending")}
-                        </span>
-                    </div>
-
-                    <div>
-                        <strong>Items:</strong>
-                        ${Array.isArray(order.items)
-                            ? order.items.map(item =>
-                                escapeHTML(
-                                    item.name ||
-                                    item.productName ||
-                                    "Product"
-                                )
-                            ).join(", ")
-                            : "See order details"}
-                    </div>
-
-                    <div class="order-total">
-                        Total: SAR ${Number(order.total || 0).toFixed(2)}
-                    </div>
-                </article>
-            `).join("");
-
-        } catch (error) {
-            console.error("Unable to load orders:", error);
-
-            showMessage(
-                error.code === "permission-denied"
-                    ? "You do not have permission to view these orders. Please check your account and Firestore rules."
-                    : "Unable to load orders. Please try again later."
-            );
-        }
-    }
-
-    // Wait for Firebase to determine which customer is signed in.
-    onAuthStateChanged(auth, user => {
-        if (!user) {
-            showMessage("Please sign in to view your orders.");
-            return;
-        }
-
-        loadOrders(user);
-    });
-</script> 
+            loadOrders(user);
+        });
+    </script>
 </body>
 </html>
