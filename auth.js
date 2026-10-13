@@ -409,7 +409,7 @@ if (registerButton) {
     });
 }
 
-
+```js
 // ==========================================
 // FACEBOOK LOGIN BUTTON
 // ==========================================
@@ -433,12 +433,13 @@ if (facebookLoginButton) {
             const credential = await loginWithFacebook();
             const user = credential.user;
 
-            // Preserve existing admin and staff redirects.
+            // Preserve admin redirect.
             if (await checkAdmin(user)) {
                 window.location.href = "admin-orders.html";
                 return;
             }
 
+            // Preserve supervisor and driver redirects.
             const role = await getStaffRole(user);
 
             if (role === "supervisor" || role === "Supervisor") {
@@ -451,6 +452,7 @@ if (facebookLoginButton) {
                 return;
             }
 
+            // Customer login successful.
             if (message) {
                 message.style.color = "green";
                 message.textContent = "Facebook login successful!";
@@ -458,6 +460,7 @@ if (facebookLoginButton) {
 
             setTimeout(function () {
                 closeLogin();
+
                 if (message) {
                     message.textContent = "";
                 }
@@ -508,6 +511,7 @@ if (facebookLoginButton) {
         }
     });
 }
+```
 
 
 // ==========================================
