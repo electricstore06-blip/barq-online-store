@@ -1,3 +1,4 @@
+
 import { auth, db } from "./firebase-config.js";
 
 import {
@@ -6,9 +7,8 @@ import {
     signOut,
     onAuthStateChanged,
     FacebookAuthProvider,
- signInWithPopup,
-linkWithCredential
-
+    signInWithPopup,
+    linkWithCredential
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
@@ -21,35 +21,44 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-// ================================
-// LOGIN
-// ================================
+// ==========================================
+// PENDING FACEBOOK CREDENTIAL
+// ==========================================
+
+let pendingFacebookCredential = null;
+
+
+// ==========================================
+// EMAIL LOGIN
+// ==========================================
 
 async function login(email, password) {
     return await signInWithEmailAndPassword(auth, email, password);
 }
 
-// ================================
+
+// ==========================================
 // FACEBOOK LOGIN
-// ================================
+// ==========================================
 
 async function loginWithFacebook() {
     const provider = new FacebookAuthProvider();
     return await signInWithPopup(auth, provider);
 }
 
-// ================================
+
+// ==========================================
 // REGISTER CUSTOMER
-// ================================
+// ==========================================
 
 async function register(email, password) {
     return await createUserWithEmailAndPassword(auth, email, password);
 }
 
 
-// ================================
+// ==========================================
 // LOGOUT
-// ================================
+// ==========================================
 
 async function logout() {
     try {
@@ -62,9 +71,9 @@ async function logout() {
 }
 
 
-// ================================
+// ==========================================
 // OPEN LOGIN POPUP
-// ================================
+// ==========================================
 
 function openLogin() {
     const mobileNav = document.querySelector(".nav-links");
@@ -81,9 +90,9 @@ function openLogin() {
 }
 
 
-// ================================
+// ==========================================
 // CLOSE LOGIN POPUP
-// ================================
+// ==========================================
 
 function closeLogin() {
     const loginBox = document.getElementById("loginBox");
@@ -93,21 +102,14 @@ function closeLogin() {
     }
 }
 
-
-// Close popup when clicking outside it.
 document.addEventListener("click", function (event) {
     const loginBox = document.getElementById("loginBox");
 
-    if (
-        loginBox &&
-        event.target === loginBox
-    ) {
+    if (loginBox && event.target === loginBox) {
         closeLogin();
     }
 });
 
-
-// Close popup with Escape.
 document.addEventListener("keydown", function (event) {
     if (event.key === "Escape") {
         closeLogin();
@@ -115,9 +117,9 @@ document.addEventListener("keydown", function (event) {
 });
 
 
-// ================================
+// ==========================================
 // CHECK ADMIN ROLE
-// ================================
+// ==========================================
 
 async function checkAdmin(user) {
     try {
@@ -136,9 +138,9 @@ async function checkAdmin(user) {
 }
 
 
-// ================================
+// ==========================================
 // GET STAFF ROLE
-// ================================
+// ==========================================
 
 async function getStaffRole(user) {
     try {
@@ -156,7 +158,6 @@ async function getStaffRole(user) {
         }
 
         return staffSnapshot.docs[0].data().role || null;
-
     } catch (error) {
         console.error("Staff role check failed:", error);
         return null;
@@ -164,9 +165,9 @@ async function getStaffRole(user) {
 }
 
 
-// ================================
+// ==========================================
 // LOGIN BUTTON
-// ================================
+// ==========================================
 
 const loginButton = document.getElementById("loginButton");
 
@@ -198,14 +199,56 @@ if (loginButton) {
         try {
             const credential = await login(email, password);
             const user = credential.user;
+            let facebookLinked = false;
 
-            // Admin accounts go to the admin dashboard.
+            // Link Facebook only after the existing account
+            // has been authenticated successfully.
+            if (pendingFacebookCredential) {
+                try {
+                    await linkWithCredential(
+                        user,
+                        pendingFacebookCredential
+                    );
+
+                    pendingFacebookCredential = null;
+                    facebookLinked = true;
+
+                    console.log("Facebook account linked successfully.");
+                } catch (linkError) {
+                    console.error(
+                        "Facebook account linking failed:",
+                        linkError
+                    );
+
+                    message.style.color = "red";
+
+                    if (
+                        linkError.code ===
+                        "auth/credential-already-in-use"
+                    ) {
+                        message.textContent =
+                            "This Facebook account is already linked to another account.";
+                    } else if (
+                        linkError.code ===
+                        "auth/provider-already-linked"
+                    ) {
+                        pendingFacebookCredential = null;
+                        facebookLinked = true;
+                    } else {
+                        message.textContent =
+                            "You are logged in, but Facebook could not be linked. Please try again.";
+                        return;
+                    }
+                }
+            }
+
+            // Admin redirect
             if (await checkAdmin(user)) {
                 window.location.href = "admin-orders.html";
                 return;
             }
 
-            // Staff accounts keep their existing redirects.
+            // Supervisor and driver redirects
             const role = await getStaffRole(user);
 
             if (role === "supervisor" || role === "Supervisor") {
@@ -218,41 +261,47 @@ if (loginButton) {
                 return;
             }
 
-            // Regular customers stay on the store.
+            // Regular customer
             message.style.color = "green";
-            message.textContent = "Login successful!";
+            message.textContent = facebookLinked
+                ? "Login successful! Facebook linked successfully."
+                : "Login successful!";
 
             setTimeout(function () {
                 closeLogin();
                 message.textContent = "";
-            }, 1000);
+            }, 1500);
 
         } catch (error) {
             console.error("Login failed:", error);
-
             message.style.color = "red";
 
             switch (error.code) {
                 case "auth/invalid-email":
-                    message.textContent = "Please enter a valid email address.";
+                    message.textContent =
+                        "Please enter a valid email address.";
                     break;
 
                 case "auth/user-not-found":
                 case "auth/wrong-password":
                 case "auth/invalid-credential":
-                    message.textContent = "Incorrect email or password.";
+                    message.textContent =
+                        "Incorrect email or password.";
                     break;
 
                 case "auth/too-many-requests":
-                    message.textContent = "Too many attempts. Please try again later.";
+                    message.textContent =
+                        "Too many attempts. Please try again later.";
                     break;
 
                 case "auth/network-request-failed":
-                    message.textContent = "Network error. Check your internet connection.";
+                    message.textContent =
+                        "Network error. Check your internet connection.";
                     break;
 
                 case "auth/user-disabled":
-                    message.textContent = "This account has been disabled.";
+                    message.textContent =
+                        "This account has been disabled.";
                     break;
 
                 default:
@@ -268,9 +317,9 @@ if (loginButton) {
 }
 
 
-// ================================
+// ==========================================
 // REGISTER BUTTON
-// ================================
+// ==========================================
 
 const registerButton = document.getElementById("registerButton");
 
@@ -292,12 +341,14 @@ if (registerButton) {
         message.style.color = "";
 
         if (!email || !password) {
-            message.textContent = "Please enter your email and password.";
+            message.textContent =
+                "Please enter your email and password.";
             return;
         }
 
         if (password.length < 6) {
-            message.textContent = "Password must be at least 6 characters.";
+            message.textContent =
+                "Password must be at least 6 characters.";
             return;
         }
 
@@ -307,10 +358,9 @@ if (registerButton) {
         try {
             await register(email, password);
 
-            // Firebase signs the customer in automatically
-            // after a successful account registration.
             message.style.color = "green";
-            message.textContent = "Account created successfully!";
+            message.textContent =
+                "Account created successfully!";
 
             setTimeout(function () {
                 closeLogin();
@@ -319,7 +369,6 @@ if (registerButton) {
 
         } catch (error) {
             console.error("Registration failed:", error);
-
             message.style.color = "red";
 
             switch (error.code) {
@@ -329,7 +378,8 @@ if (registerButton) {
                     break;
 
                 case "auth/invalid-email":
-                    message.textContent = "Please enter a valid email address.";
+                    message.textContent =
+                        "Please enter a valid email address.";
                     break;
 
                 case "auth/weak-password":
@@ -360,11 +410,12 @@ if (registerButton) {
 }
 
 
-// ================================
+// ==========================================
 // FACEBOOK LOGIN BUTTON
-// ================================
+// ==========================================
 
-const facebookLoginButton = document.getElementById("facebookLoginButton");
+const facebookLoginButton =
+    document.getElementById("facebookLoginButton");
 
 if (facebookLoginButton) {
     facebookLoginButton.addEventListener("click", async function () {
@@ -382,6 +433,7 @@ if (facebookLoginButton) {
             const credential = await loginWithFacebook();
             const user = credential.user;
 
+            // Preserve existing admin and staff redirects.
             if (await checkAdmin(user)) {
                 window.location.href = "admin-orders.html";
                 return;
@@ -406,7 +458,9 @@ if (facebookLoginButton) {
 
             setTimeout(function () {
                 closeLogin();
-                if (message) message.textContent = "";
+                if (message) {
+                    message.textContent = "";
+                }
             }, 1000);
 
         } catch (error) {
@@ -415,25 +469,38 @@ if (facebookLoginButton) {
             if (message) {
                 message.style.color = "red";
 
-if (error.code === "auth/account-exists-with-different-credential") {
-    pendingFacebookCredential =
-        FacebookAuthProvider.credentialFromError(error);
+                if (
+                    error.code ===
+                    "auth/account-exists-with-different-credential"
+                ) {
+                    pendingFacebookCredential =
+                        FacebookAuthProvider.credentialFromError(error);
 
-    message.textContent =
-        "This email already has an account. Please log in with your email and password to link Facebook.";
+                    if (pendingFacebookCredential) {
+                        message.textContent =
+                            "This email already has an account. Log in with your existing email and password to link Facebook.";
+                    } else {
+                        message.textContent =
+                            "Facebook account conflict. Please log in using your existing method.";
+                    }
 
-} else if (error.code === "auth/popup-closed-by-user") {
-    message.textContent = "Facebook login was cancelled.";
+                } else if (
+                    error.code === "auth/popup-closed-by-user"
+                ) {
+                    message.textContent =
+                        "Facebook login was cancelled.";
 
-} else if (error.code === "auth/unauthorized-domain") {
-    message.textContent =
-        "This website domain is not authorized in Firebase.";
+                } else if (
+                    error.code === "auth/unauthorized-domain"
+                ) {
+                    message.textContent =
+                        "This website domain is not authorized in Firebase.";
 
-} else {
-    message.textContent =
-        "Facebook login failed. Please try again.";
-}
-
+                } else {
+                    message.textContent =
+                        "Facebook login failed. Please try again.";
+                }
+            }
 
         } finally {
             facebookLoginButton.disabled = false;
@@ -442,11 +509,11 @@ if (error.code === "auth/account-exists-with-different-credential") {
     });
 }
 
-// ================================
-// AUTHENTICATION STATUS
-// ================================
 
-// Only one authentication listener is needed.
+// ==========================================
+// AUTHENTICATION STATUS
+// ==========================================
+
 onAuthStateChanged(auth, function (user) {
     if (user) {
         console.log("Signed in:", user.email);
@@ -456,9 +523,9 @@ onAuthStateChanged(auth, function (user) {
 });
 
 
-// ================================
+// ==========================================
 // MAKE FUNCTIONS AVAILABLE TO HTML
-// ================================
+// ==========================================
 
 window.openLogin = openLogin;
 window.closeLogin = closeLogin;
