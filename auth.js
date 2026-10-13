@@ -37,6 +37,63 @@ async function login(email, password) {
 }
 
 
+```javascript
+// ==========================================
+// BARQ ONLINE STORE — AUTHENTICATION
+// Single clean version — no duplicate functions
+// ==========================================
+
+import { auth, db } from "./firebase-config.js";
+
+import {
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    FacebookAuthProvider,
+    signInWithPopup,
+    linkWithCredential
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    doc,
+    getDoc,
+    collection,
+    query,
+    where,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ==========================================
+// PENDING FACEBOOK CREDENTIAL
+// Used when an email account already exists
+// ==========================================
+
+let pendingFacebookCredential = null;
+
+// ==========================================
+// EMAIL LOGIN
+// ==========================================
+
+async function login(email, password) {
+    return await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+    );
+}
+
+// ==========================================
+// CUSTOMER REGISTRATION
+// ==========================================
+
+async function register(email, password) {
+    return await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+    );
+}
 
 // ==========================================
 // FACEBOOK LOGIN
@@ -45,24 +102,12 @@ async function login(email, password) {
 async function loginWithFacebook() {
     const provider = new FacebookAuthProvider();
 
-    // Ask Facebook to show the account chooser.
     provider.setCustomParameters({
-        auth_type: "reauthenticate"
+        display: "popup"
     });
 
     return await signInWithPopup(auth, provider);
 }
-
-
-
-// ==========================================
-// REGISTER CUSTOMER
-// ==========================================
-
-async function register(email, password) {
-    return await createUserWithEmailAndPassword(auth, email, password);
-}
-
 
 // ==========================================
 // LOGOUT
@@ -78,25 +123,17 @@ async function logout() {
     }
 }
 
-
 // ==========================================
 // OPEN LOGIN POPUP
 // ==========================================
 
 function openLogin() {
-    const mobileNav = document.querySelector(".nav-links");
-
-    if (mobileNav) {
-        mobileNav.classList.remove("active");
-    }
-
     const loginBox = document.getElementById("loginBox");
 
     if (loginBox) {
         loginBox.style.display = "flex";
     }
 }
-
 
 // ==========================================
 // CLOSE LOGIN POPUP
@@ -110,6 +147,7 @@ function closeLogin() {
     }
 }
 
+// Close popup when clicking outside it
 document.addEventListener("click", function (event) {
     const loginBox = document.getElementById("loginBox");
 
@@ -118,12 +156,12 @@ document.addEventListener("click", function (event) {
     }
 });
 
+// Close popup with Escape
 document.addEventListener("keydown", function (event) {
     if (event.key === "Escape") {
         closeLogin();
     }
 });
-
 
 // ==========================================
 // CHECK ADMIN ROLE
@@ -134,17 +172,15 @@ async function checkAdmin(user) {
         const adminRef = doc(db, "admins", user.uid);
         const adminSnapshot = await getDoc(adminRef);
 
-        if (!adminSnapshot.exists()) {
-            return false;
-        }
-
-        return adminSnapshot.data().role === "admin";
+        return (
+            adminSnapshot.exists() &&
+            adminSnapshot.data().role === "admin"
+        );
     } catch (error) {
         console.error("Admin role check failed:", error);
         return false;
     }
 }
-
 
 // ==========================================
 // GET STAFF ROLE
@@ -166,15 +202,40 @@ async function getStaffRole(user) {
         }
 
         return staffSnapshot.docs[0].data().role || null;
+
     } catch (error) {
         console.error("Staff role check failed:", error);
         return null;
     }
 }
 
+// ==========================================
+// REDIRECT ADMIN AND STAFF
+// ==========================================
+
+async function redirectStaff(user) {
+    if (await checkAdmin(user)) {
+        window.location.href = "admin-orders.html";
+        return true;
+    }
+
+    const role = await getStaffRole(user);
+
+    if (role === "supervisor" || role === "Supervisor") {
+        window.location.href = "supervisor-dashboard.html";
+        return true;
+    }
+
+    if (role === "driver" || role === "Driver") {
+        window.location.href = "driver-dashboard.html";
+        return true;
+    }
+
+    return false;
+}
 
 // ==========================================
-// LOGIN BUTTON
+// EMAIL LOGIN BUTTON
 // ==========================================
 
 const loginButton = document.getElementById("loginButton");
@@ -209,8 +270,8 @@ if (loginButton) {
             const user = credential.user;
             let facebookLinked = false;
 
-            // Link Facebook only after the existing account
-            // has been authenticated successfully.
+            // Link Facebook if a previous Facebook login
+            // reported that this email already has an account.
             if (pendingFacebookCredential) {
                 try {
                     await linkWithCredential(
@@ -222,54 +283,42 @@ if (loginButton) {
                     facebookLinked = true;
 
                     console.log("Facebook account linked successfully.");
+
                 } catch (linkError) {
                     console.error(
                         "Facebook account linking failed:",
                         linkError
                     );
 
-                    message.style.color = "red";
-
                     if (
-                        linkError.code ===
-                        "auth/credential-already-in-use"
-                    ) {
-                        message.textContent =
-                            "This Facebook account is already linked to another account.";
-                    } else if (
                         linkError.code ===
                         "auth/provider-already-linked"
                     ) {
                         pendingFacebookCredential = null;
                         facebookLinked = true;
-                    } else {
+
+                    } else if (
+                        linkError.code ===
+                        "auth/credential-already-in-use"
+                    ) {
+                        message.style.color = "red";
                         message.textContent =
-                            "You are logged in, but Facebook could not be linked. Please try again.";
+                            "This Facebook account is already linked to another account.";
+                        return;
+
+                    } else {
+                        message.style.color = "red";
+                        message.textContent =
+                            "Login succeeded, but Facebook could not be linked. Please try again.";
                         return;
                     }
                 }
             }
 
-            // Admin redirect
-            if (await checkAdmin(user)) {
-                window.location.href = "admin-orders.html";
+            if (await redirectStaff(user)) {
                 return;
             }
 
-            // Supervisor and driver redirects
-            const role = await getStaffRole(user);
-
-            if (role === "supervisor" || role === "Supervisor") {
-                window.location.href = "supervisor-dashboard.html";
-                return;
-            }
-
-            if (role === "driver" || role === "Driver") {
-                window.location.href = "driver-dashboard.html";
-                return;
-            }
-
-            // Regular customer
             message.style.color = "green";
             message.textContent = facebookLinked
                 ? "Login successful! Facebook linked successfully."
@@ -282,6 +331,7 @@ if (loginButton) {
 
         } catch (error) {
             console.error("Login failed:", error);
+
             message.style.color = "red";
 
             switch (error.code) {
@@ -324,9 +374,8 @@ if (loginButton) {
     });
 }
 
-
 // ==========================================
-// REGISTER BUTTON
+// CREATE ACCOUNT BUTTON
 // ==========================================
 
 const registerButton = document.getElementById("registerButton");
@@ -377,6 +426,7 @@ if (registerButton) {
 
         } catch (error) {
             console.error("Registration failed:", error);
+
             message.style.color = "red";
 
             switch (error.code) {
@@ -417,24 +467,105 @@ if (registerButton) {
     });
 }
 
+// ==========================================
+// FACEBOOK LOGIN BUTTON
+// ==========================================
 
-async function loginWithFacebook() {
-    const provider = new FacebookAuthProvider();
+const facebookLoginButton =
+    document.getElementById("facebookLoginButton");
 
-    provider.setCustomParameters({
-        display: "popup"
+if (facebookLoginButton) {
+    facebookLoginButton.addEventListener("click", async function () {
+        const message = document.getElementById("loginMessage");
+
+        facebookLoginButton.disabled = true;
+        facebookLoginButton.textContent = "Connecting to Facebook...";
+
+        if (message) {
+            message.textContent = "";
+            message.style.color = "";
+        }
+
+        try {
+            const credential = await loginWithFacebook();
+
+            pendingFacebookCredential = null;
+
+            if (await redirectStaff(credential.user)) {
+                return;
+            }
+
+            if (message) {
+                message.style.color = "green";
+                message.textContent =
+                    "Facebook login successful!";
+
+                setTimeout(function () {
+                    closeLogin();
+                    message.textContent = "";
+                }, 1500);
+            }
+
+        } catch (error) {
+            console.error("Facebook login failed:", error);
+
+            if (error.code ===
+                "auth/account-exists-with-different-credential") {
+
+                pendingFacebookCredential =
+                    FacebookAuthProvider.credentialFromError(error);
+
+                if (message) {
+                    message.style.color = "red";
+                    message.textContent =
+                        "An account already exists with this email. Enter your existing email and password, then click Login to link Facebook.";
+                }
+
+            } else if (
+                error.code === "auth/popup-closed-by-user"
+            ) {
+                if (message) {
+                    message.textContent =
+                        "Facebook login was cancelled.";
+                }
+
+            } else if (
+                error.code === "auth/popup-blocked"
+            ) {
+                if (message) {
+                    message.textContent =
+                        "Your browser blocked the login popup. Allow popups and try again.";
+                }
+
+            } else if (
+                error.code === "auth/unauthorized-domain"
+            ) {
+                if (message) {
+                    message.style.color = "red";
+                    message.textContent =
+                        "This website domain is not authorized in Firebase Authentication.";
+                }
+
+            } else {
+                if (message) {
+                    message.style.color = "red";
+                    message.textContent =
+                        "Facebook login failed. Please try again.";
+                }
+            }
+
+        } finally {
+            facebookLoginButton.disabled = false;
+            facebookLoginButton.textContent =
+                "Continue with Facebook";
+        }
     });
-
-    return await signInWithPopup(auth, provider);
 }
-
-
-
 
 // ==========================================
 // AUTHENTICATION STATUS
+// SHOW ACCOUNT OR LOGOUT
 // ==========================================
-
 
 onAuthStateChanged(auth, function (user) {
     const accountLink = document.getElementById("accountLink");
@@ -449,21 +580,21 @@ onAuthStateChanged(auth, function (user) {
     }
 
     if (user) {
-        console.log("Signed in:", user.email);
+        console.log("Signed in:", user.email || user.uid);
     } else {
         console.log("No customer signed in.");
     }
 });
 
-
 // ==========================================
-// MAKE FUNCTIONS AVAILABLE TO HTML
+// MAKE HTML FUNCTIONS AVAILABLE
 // ==========================================
 
 window.openLogin = openLogin;
 window.closeLogin = closeLogin;
+window.logout = logout;
 window.login = login;
 window.register = register;
-window.logout = logout;
 
 console.log("BARQ authentication initialized.");
+```
