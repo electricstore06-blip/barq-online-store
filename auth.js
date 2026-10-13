@@ -37,14 +37,22 @@ async function login(email, password) {
 }
 
 
+```js
 // ==========================================
 // FACEBOOK LOGIN
 // ==========================================
 
 async function loginWithFacebook() {
     const provider = new FacebookAuthProvider();
+
+    // Ask Facebook to show the account chooser.
+    provider.setCustomParameters({
+        auth_type: "reauthenticate"
+    });
+
     return await signInWithPopup(auth, provider);
 }
+```
 
 
 // ==========================================
