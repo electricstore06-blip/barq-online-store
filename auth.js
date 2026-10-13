@@ -415,19 +415,25 @@ if (facebookLoginButton) {
             if (message) {
                 message.style.color = "red";
 
-                if (error.code === "auth/account-exists-with-different-credential") {
-                    message.textContent =
-                        "This email already uses another login method. Please sign in with that method first.";
-                } else if (error.code === "auth/popup-closed-by-user") {
-                    message.textContent = "Facebook login was cancelled.";
-                } else if (error.code === "auth/unauthorized-domain") {
-                    message.textContent =
-                        "This website domain is not authorized in Firebase.";
-                } else {
-                    message.textContent =
-                        "Facebook login failed. Please try again.";
-                }
-            }
+if (error.code === "auth/account-exists-with-different-credential") {
+    pendingFacebookCredential =
+        FacebookAuthProvider.credentialFromError(error);
+
+    message.textContent =
+        "This email already has an account. Please log in with your email and password to link Facebook.";
+
+} else if (error.code === "auth/popup-closed-by-user") {
+    message.textContent = "Facebook login was cancelled.";
+
+} else if (error.code === "auth/unauthorized-domain") {
+    message.textContent =
+        "This website domain is not authorized in Firebase.";
+
+} else {
+    message.textContent =
+        "Facebook login failed. Please try again.";
+}
+
 
         } finally {
             facebookLoginButton.disabled = false;
