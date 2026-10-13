@@ -435,7 +435,19 @@ async function loginWithFacebook() {
 // AUTHENTICATION STATUS
 // ==========================================
 
+
 onAuthStateChanged(auth, function (user) {
+    const accountLink = document.getElementById("accountLink");
+    const logoutLink = document.getElementById("logoutLink");
+
+    if (accountLink) {
+        accountLink.hidden = !!user;
+    }
+
+    if (logoutLink) {
+        logoutLink.hidden = !user;
+    }
+
     if (user) {
         console.log("Signed in:", user.email);
     } else {
