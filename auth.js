@@ -37,7 +37,7 @@ async function login(email, password) {
 }
 
 
-```js
+
 // ==========================================
 // FACEBOOK LOGIN
 // ==========================================
@@ -52,7 +52,7 @@ async function loginWithFacebook() {
 
     return await signInWithPopup(auth, provider);
 }
-```
+
 
 
 // ==========================================
@@ -417,7 +417,7 @@ if (registerButton) {
     });
 }
 
-```js
+
 // ==========================================
 // FACEBOOK LOGIN BUTTON
 // ==========================================
@@ -519,7 +519,6 @@ if (facebookLoginButton) {
         }
     });
 }
-```
 
 
 // ==========================================
