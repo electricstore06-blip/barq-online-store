@@ -1,4 +1,4 @@
-
+```javascrip
 // ==========================================
 // BARQ ONLINE STORE — AUTHENTICATION
 // Single clean version — no duplicate functions
