@@ -1,4 +1,4 @@
-```javascript
+
 // ==========================================
 // BARQ ONLINE STORE — AUTHENTICATION
 // Single clean version — no duplicate functions
@@ -547,10 +547,7 @@ onAuthStateChanged(auth, function (user) {
     }
 });
 
-// ==========================================
-// MAKE HTML FUNCTIONS AVAILABLE
-// ==========================================
-
+// MAKE FUNCTIONS AVAILABLE TO HTML
 window.openLogin = openLogin;
 window.closeLogin = closeLogin;
 window.logout = logout;
@@ -558,4 +555,7 @@ window.login = login;
 window.register = register;
 
 console.log("BARQ authentication initialized.");
-```
+window.register = register;
+
+console.log("BARQ authentication initialized.");
+
