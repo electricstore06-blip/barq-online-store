@@ -11,7 +11,8 @@ import {
     createUserWithEmailAndPassword,
     signOut,
     onAuthStateChanged,
-    FacebookAuthProvider,
+      FacebookAuthProvider,
+    GoogleAuthProvider,
     signInWithPopup,
     linkWithCredential
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -69,7 +70,19 @@ async function loginWithFacebook() {
 
     return await signInWithPopup(auth, provider);
 }
+// ==========================================
+// GOOGLE LOGIN
+// ==========================================
 
+async function loginWithGoogle() {
+    const provider = new GoogleAuthProvider();
+
+    provider.setCustomParameters({
+        prompt: "select_account"
+    });
+
+    return await signInWithPopup(auth, provider);
+}
 // ==========================================
 // LOGOUT
 // ==========================================
@@ -519,6 +532,74 @@ if (facebookLoginButton) {
             facebookLoginButton.disabled = false;
             facebookLoginButton.textContent =
                 "Continue with Facebook";
+        }
+    });
+}
+
+// ==========================================
+// GOOGLE LOGIN BUTTON
+// ==========================================
+
+const googleLoginButton =
+    document.getElementById("googleLoginButton");
+
+if (googleLoginButton) {
+    googleLoginButton.addEventListener("click", async function () {
+        const message = document.getElementById("loginMessage");
+
+        googleLoginButton.disabled = true;
+        googleLoginButton.textContent = "Connecting to Google...";
+
+        if (message) {
+            message.textContent = "";
+            message.style.color = "";
+        }
+
+        try {
+            const credential = await loginWithGoogle();
+
+            if (await redirectStaff(credential.user)) {
+                return;
+            }
+
+            if (message) {
+                message.style.color = "green";
+                message.textContent = "Google login successful!";
+
+                setTimeout(function () {
+                    closeLogin();
+                    message.textContent = "";
+                }, 1500);
+            }
+
+        } catch (error) {
+            console.error("Google login failed:", error);
+
+            if (message) {
+                message.style.color = "red";
+
+                if (error.code === "auth/popup-closed-by-user") {
+                    message.textContent = "Google login was cancelled.";
+                } else if (error.code === "auth/popup-blocked") {
+                    message.textContent =
+                        "Your browser blocked the login popup. Allow popups and try again.";
+                } else if (error.code === "auth/unauthorized-domain") {
+                    message.textContent =
+                        "This website domain is not authorized in Firebase Authentication.";
+                } else if (
+                    error.code ===
+                    "auth/account-exists-with-different-credential"
+                ) {
+                    message.textContent =
+                        "An account already exists with this email using another login method. Please use your existing login method.";
+                } else {
+                    message.textContent =
+                        "Google login failed. Please try again.";
+                }
+            }
+        } finally {
+            googleLoginButton.disabled = false;
+            googleLoginButton.textContent = "Continue with Google";
         }
     });
 }
