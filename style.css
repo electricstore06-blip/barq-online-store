@@ -1207,3 +1207,197 @@ img {
         padding: 12px 15px;
     }
 }
+
+/* ==========================================
+   BARQ LOGIN MODAL — PROFESSIONAL DESIGN
+   Only affects the login popup
+   ========================================== */
+
+#loginBox.login-box,
+#loginBox {
+    padding: 20px;
+    background: rgba(31, 26, 22, 0.58);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+#loginBox .login-content {
+    position: relative;
+    width: min(100%, 440px);
+    max-width: 440px;
+    max-height: 90vh;
+    max-height: 90dvh;
+    overflow-y: auto;
+    padding: 42px 36px 30px;
+    background: #fffdfb;
+    border: 1px solid #e8ddd3;
+    border-radius: 16px;
+    box-shadow: 0 24px 70px rgba(35, 28, 24, 0.22);
+    color: #292522;
+}
+
+#loginBox .login-content h2 {
+    margin: 4px 0 8px;
+    color: #292522;
+    font: 500 30px/1.2 Georgia, "Times New Roman", serif;
+    letter-spacing: -0.4px;
+}
+
+#loginBox .login-content > p:not(#loginMessage) {
+    margin: 0 0 24px;
+    color: #786f68;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+#loginBox .login-content input {
+    display: block;
+    width: 100%;
+    min-height: 50px;
+    margin: 10px 0 0;
+    padding: 13px 14px;
+    border: 1px solid #e4dbd3;
+    border-radius: 8px;
+    background: #fff;
+    color: #292522;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+#loginBox .login-content input:focus {
+    border-color: #96745e;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(150, 116, 94, 0.12);
+}
+
+#loginBox .login-content input::placeholder {
+    color: #9a8d83;
+}
+
+/* Consistent button layout */
+#loginBox .login-content button:not(.login-close) {
+    display: flex;
+    width: 100%;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0 0;
+    padding: 13px 16px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    line-height: 1.35;
+    text-transform: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background 0.2s ease, border-color 0.2s ease,
+                transform 0.2s ease;
+}
+
+/* Login — dark and elegant */
+#loginBox #loginButton {
+    margin-top: 18px;
+    background: #292522;
+    border-color: #292522;
+    color: #fff;
+}
+
+#loginBox #loginButton:hover {
+    background: #44372f;
+    border-color: #44372f;
+    transform: translateY(-1px);
+}
+
+/* Create Account — outlined */
+#loginBox #registerButton {
+    background: #fffdfb;
+    border-color: #d8c8bb;
+    color: #5e493c;
+}
+
+#loginBox #registerButton:hover {
+    background: #f7f0e9;
+    border-color: #96745e;
+}
+
+/* Facebook — blue */
+#loginBox #facebookLoginButton {
+    background: #1877f2;
+    border-color: #1877f2;
+    color: #fff;
+}
+
+#loginBox #facebookLoginButton:hover {
+    background: #1669d8;
+    border-color: #1669d8;
+}
+
+/* Google — white with subtle border */
+#loginBox #googleLoginButton {
+    background: #fff;
+    border-color: #dcd6d0;
+    color: #302925;
+}
+
+#loginBox #googleLoginButton:hover {
+    background: #f8f6f3;
+    border-color: #bfb2a7;
+}
+
+#loginBox .login-content button:not(.login-close):disabled {
+    opacity: 0.65;
+    cursor: wait;
+    transform: none;
+}
+
+/* Close button */
+#loginBox .login-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #6f6259;
+    font-size: 27px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+#loginBox .login-close:hover {
+    background: #f3ebe3;
+    color: #292522;
+}
+
+/* Login status and error messages */
+#loginBox #loginMessage {
+    min-height: 20px;
+    margin: 14px 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* Mobile layout */
+@media (max-width: 520px) {
+    #loginBox {
+        padding: 14px;
+    }
+
+    #loginBox .login-content {
+        padding: 40px 22px 24px;
+        border-radius: 14px;
+    }
+
+    #loginBox .login-content h2 {
+        font-size: 27px;
+    }
+}
