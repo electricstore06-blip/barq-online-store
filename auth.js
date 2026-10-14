@@ -547,16 +547,12 @@ onAuthStateChanged(auth, function (user) {
     }
 });
 
-```javascript
+
 // MAKE FUNCTIONS AVAILABLE TO HTML
 window.openLogin = openLogin;
 window.closeLogin = closeLogin;
 window.logout = logout;
 window.login = login;
-window.register = register;
-
-console.log("BARQ authentication initialized.");
-
 window.register = register;
 
 console.log("BARQ authentication initialized.");
