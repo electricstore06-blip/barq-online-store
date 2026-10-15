@@ -1,4 +1,4 @@
-```javascript
+
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { initializeApp } = require("firebase-admin/app");
 const {
@@ -387,4 +387,4 @@ exports.moderateReview = onCall(async request => {
     status: action === "approve" ? "approved" : "rejected"
   };
 });
-```
+
