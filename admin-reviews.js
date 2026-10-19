@@ -1,4 +1,3 @@
-
 import { auth, db } from "./firebase-config.js";
 
 import {
@@ -17,6 +16,7 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+// Page elements
 const messageEl = document.getElementById("admin-message");
 const sectionEl = document.getElementById("reviews-section");
 const containerEl = document.getElementById("reviews-container");
@@ -24,11 +24,14 @@ const filterEl = document.getElementById("status-filter");
 const refreshBtn = document.getElementById("refresh-btn");
 
 let isAuthorizedAdmin = false;
+let isLoading = false;
 
+// Display a status message
 function showMessage(message) {
   messageEl.textContent = message;
 }
 
+// Format Firestore timestamps
 function formatDate(timestamp) {
   if (!timestamp || typeof timestamp.toDate !== "function") {
     return "Date unavailable";
@@ -37,10 +40,14 @@ function formatDate(timestamp) {
   return timestamp.toDate().toLocaleString();
 }
 
+// Safely display text
 function safeText(value, fallback = "") {
-  return typeof value === "string" ? value : fallback;
+  return typeof value === "string" && value.trim()
+    ? value
+    : fallback;
 }
 
+// Create HTML elements safely
 function createElement(tag, className, text) {
   const element = document.createElement(tag);
 
@@ -55,6 +62,7 @@ function createElement(tag, className, text) {
   return element;
 }
 
+// Create an action button
 function addReviewButton(actions, label, className, callback) {
   const button = createElement("button", className, label);
   button.type = "button";
@@ -66,6 +74,7 @@ function addReviewButton(actions, label, className, callback) {
     }
 
     const buttons = actions.querySelectorAll("button");
+
     buttons.forEach(item => {
       item.disabled = true;
     });
@@ -75,6 +84,7 @@ function addReviewButton(actions, label, className, callback) {
       await loadReviews();
     } catch (error) {
       console.error("Review action failed:", error);
+
       showMessage(
         "The action failed. Check your admin access and Firestore rules."
       );
@@ -88,6 +98,7 @@ function addReviewButton(actions, label, className, callback) {
   actions.appendChild(button);
 }
 
+// Display an individual review
 function renderReview(reviewId, review) {
   const card = createElement("article", "review-card");
 
@@ -106,7 +117,9 @@ function renderReview(reviewId, review) {
     `Customer: ${safeText(review.firstName, "Customer")}`,
     `Status: ${safeText(review.status, "unknown")}`,
     `Submitted: ${formatDate(review.createdAt)}`,
-    `Verified purchase: ${review.verifiedPurchase === true ? "Yes" : "No"}`,
+    `Verified purchase: ${
+      review.verifiedPurchase === true ? "Yes" : "No"
+    }`,
     `Product ID: ${safeText(review.productId, "Unavailable")}`,
     `Order ID: ${safeText(review.orderId, "Unavailable")}`
   ].join(" | ");
@@ -114,15 +127,18 @@ function renderReview(reviewId, review) {
   card.appendChild(meta);
 
   const rating = Number(review.rating);
+
   const validRating =
-    Number.isInteger(rating) && rating >= 1 && rating <= 5;
+    Number.isInteger(rating) &&
+    rating >= 1 &&
+    rating <= 5;
+
+  const ratingText = validRating
+    ? `${"★".repeat(rating)}${"☆".repeat(5 - rating)} (${rating}/5)`
+    : "Rating unavailable";
 
   card.appendChild(
-    createElement(
-      "div",
-      "review-rating",
-      validRating ? `${"★".repeat(rating)}${"☆".repeat(5 - rating)} (${rating}/5)` : "Rating unavailable"
-    )
+    createElement("div", "review-rating", ratingText)
   );
 
   card.appendChild(
@@ -135,53 +151,76 @@ function renderReview(reviewId, review) {
 
   const actions = createElement("div", "review-actions");
 
+  // Approve a review
   if (review.status !== "approved") {
-    addReviewButton(actions, "Approve", "approve-btn", async () => {
-      await updateDoc(doc(db, "productReviews", reviewId), {
-        status: "approved",
-        updatedAt: serverTimestamp()
-      });
+    addReviewButton(
+      actions,
+      "Approve",
+      "approve-btn",
+      async () => {
+        await updateDoc(doc(db, "productReviews", reviewId), {
+          status: "approved",
+          updatedAt: serverTimestamp()
+        });
 
-      showMessage("Review approved.");
-    });
-  }
-
-  if (review.status !== "rejected") {
-    addReviewButton(actions, "Reject", "reject-btn", async () => {
-      await updateDoc(doc(db, "productReviews", reviewId), {
-        status: "rejected",
-        updatedAt: serverTimestamp()
-      });
-
-      showMessage("Review rejected.");
-    });
-  }
-
-  addReviewButton(actions, "Delete", "delete-btn", async () => {
-    const confirmed = window.confirm(
-      "Are you sure you want to permanently delete this review?"
+        showMessage("Review approved.");
+      }
     );
+  }
 
-    if (!confirmed) {
-      return;
+  // Reject a review
+  if (review.status !== "rejected") {
+    addReviewButton(
+      actions,
+      "Reject",
+      "reject-btn",
+      async () => {
+        await updateDoc(doc(db, "productReviews", reviewId), {
+          status: "rejected",
+          updatedAt: serverTimestamp()
+        });
+
+        showMessage("Review rejected.");
+      }
+    );
+  }
+
+  // Permanently delete a review
+  addReviewButton(
+    actions,
+    "Delete",
+    "delete-btn",
+    async () => {
+      const confirmed = window.confirm(
+        "Are you sure you want to permanently delete this review?"
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      await deleteDoc(doc(db, "productReviews", reviewId));
+
+      showMessage("Review deleted.");
     }
-
-    await deleteDoc(doc(db, "productReviews", reviewId));
-    showMessage("Review deleted.");
-  });
+  );
 
   card.appendChild(actions);
 
   return card;
 }
 
+// Load reviews from Firestore
 async function loadReviews() {
-  if (!isAuthorizedAdmin) {
+  if (!isAuthorizedAdmin || isLoading) {
     return;
   }
 
+  isLoading = true;
   containerEl.replaceChildren();
+
   showMessage("Loading reviews...");
+
   refreshBtn.disabled = true;
   filterEl.disabled = true;
 
@@ -192,7 +231,10 @@ async function loadReviews() {
     const reviewsQuery =
       selectedStatus === "all"
         ? query(reviewsRef)
-        : query(reviewsRef, where("status", "==", selectedStatus));
+        : query(
+            reviewsRef,
+            where("status", "==", selectedStatus)
+          );
 
     const snapshot = await getDocs(reviewsQuery);
 
@@ -206,19 +248,24 @@ async function loadReviews() {
       data: reviewDoc.data()
     }));
 
+    // Show newest reviews first
     reviews.sort((a, b) => {
       const aTime = a.data.createdAt?.toMillis?.() || 0;
       const bTime = b.data.createdAt?.toMillis?.() || 0;
+
       return bTime - aTime;
     });
 
     const fragment = document.createDocumentFragment();
 
     for (const item of reviews) {
-      fragment.appendChild(renderReview(item.id, item.data));
+      fragment.appendChild(
+        renderReview(item.id, item.data)
+      );
     }
 
     containerEl.appendChild(fragment);
+
     showMessage(`Found ${reviews.length} review(s).`);
   } catch (error) {
     console.error("Could not load customer reviews:", error);
@@ -229,9 +276,11 @@ async function loadReviews() {
   } finally {
     refreshBtn.disabled = false;
     filterEl.disabled = false;
+    isLoading = false;
   }
 }
 
+// Verify the logged-in administrator
 onAuthStateChanged(auth, async user => {
   isAuthorizedAdmin = false;
   sectionEl.hidden = true;
@@ -243,13 +292,19 @@ onAuthStateChanged(auth, async user => {
     return;
   }
 
+  showMessage("Verifying admin access...");
+
   try {
     const adminRef = doc(db, "admins", user.uid);
     const adminSnapshot = await getDoc(adminRef);
 
-    if (!adminSnapshot.exists() ||
-        adminSnapshot.data().role !== "admin") {
-      showMessage("Access denied. This page is for BARQ administrators only.");
+    if (
+      !adminSnapshot.exists() ||
+      adminSnapshot.data().role !== "admin"
+    ) {
+      showMessage(
+        "Access denied. This page is for BARQ administrators only."
+      );
       return;
     }
 
@@ -259,12 +314,19 @@ onAuthStateChanged(auth, async user => {
     await loadReviews();
   } catch (error) {
     console.error("Admin authorization check failed:", error);
+
     showMessage(
       "Could not verify admin access. Check your connection and Firestore rules."
     );
   }
 });
 
-filterEl.addEventListener("change", loadReviews);
-refreshBtn.addEventListener("click", loadReviews);
+// Filter reviews by status
+filterEl.addEventListener("change", () => {
+  loadReviews();
+});
 
+// Refresh the reviews list
+refreshBtn.addEventListener("click", () => {
+  loadReviews();
+});
