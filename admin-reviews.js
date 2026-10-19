@@ -267,4 +267,4 @@ onAuthStateChanged(auth, async user => {
 
 filterEl.addEventListener("change", loadReviews);
 refreshBtn.addEventListener("click", loadReviews);
-```
+
