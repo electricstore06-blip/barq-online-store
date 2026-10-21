@@ -1,4 +1,4 @@
-```json
+
 {
   "name": "barq-review-functions",
   "description": "BARQ Online Store review backend",
@@ -17,4 +17,4 @@
     "nodemailer": "^6.9.16"
   }
 }
-```
+
