@@ -1,0 +1,166 @@
+rules_version = '2';
+
+service cloud.firestore {
+match /databases/{database}/documents {
+// ==============================
+// ADMIN SECURITY
+// ==============================
+
+function isAdmin() {
+  return request.auth != null
+    && exists(
+      /databases/$(database)/documents/admins/$(request.auth.uid)
+    )
+    && get(
+      /databases/$(database)/documents/admins/$(request.auth.uid)
+    ).data.role == "admin";
+}
+
+// ==============================
+// SUPERVISOR SECURITY
+// ==============================
+
+function isSupervisor() {
+  return request.auth != null
+    && exists(
+      /databases/$(database)/documents/users/$(request.auth.uid)
+    )
+    && get(
+      /databases/$(database)/documents/users/$(request.auth.uid)
+    ).data.role == "supervisor";
+}
+
+// ==============================
+// DRIVER SECURITY
+// ==============================
+
+function isAssignedDriver() {
+  return request.auth != null
+    && resource.data.assignedDriverId == request.auth.uid;
+}
+
+// ==============================
+// PRODUCT CATALOG
+// ==============================
+
+match /products/{productId} {
+  allow read: if true;
+  allow create, update, delete: if isAdmin();
+}
+
+// ==============================
+// CUSTOMER ORDERS
+// ==============================
+
+match /orders/{orderId} {
+
+  // Customers may create their own pending orders.
+  allow create: if request.auth != null
+    && request.resource.data.customerUid == request.auth.uid
+    && request.resource.data.status == "Pending"
+    && request.resource.data.items is list
+    && request.resource.data.productIds is list;
+
+  // Preserve existing order visibility.
+  allow read: if isAdmin()
+    || isSupervisor()
+    || isAssignedDriver()
+    || (
+      request.auth != null
+      && resource.data.customerUid == request.auth.uid
+    );
+
+  // Admins and supervisors can update orders.
+  // Drivers may update only assigned orders.
+  // No client may change customer ownership or product IDs.
+  allow update: if (
+      isAdmin() || isSupervisor() || isAssignedDriver()
+    )
+    && request.resource.data.customerUid == resource.data.customerUid
+    && request.resource.data.productIds == resource.data.productIds
+    && request.resource.data.items == resource.data.items;
+
+  allow delete: if isAdmin();
+}
+
+// ==============================
+// ADMIN ACCOUNTS
+// ==============================
+
+match /admins/{userId} {
+  allow read: if request.auth != null
+    && request.auth.uid == userId;
+
+  allow write: if isAdmin();
+}
+
+// ==============================
+// USER ACCOUNTS
+// ==============================
+
+match /users/{userId} {
+  allow create: if isAdmin();
+
+  allow read: if isAdmin()
+    || (
+      request.auth != null
+      && resource.data.uid == request.auth.uid
+    )
+    || (
+      isSupervisor()
+      && resource.data.role == "driver"
+    );
+
+  allow update, delete: if isAdmin();
+}
+
+// ==============================
+// PRODUCT REVIEWS
+// ==============================
+
+function hasDeliveredPurchase(productId) {
+  return request.resource.data.orderId is string
+    && exists(
+      /databases/$(database)/documents/orders/$(request.resource.data.orderId)
+    )
+    && get(
+      /databases/$(database)/documents/orders/$(request.resource.data.orderId)
+    ).data.customerUid == request.auth.uid
+    && get(
+      /databases/$(database)/documents/orders/$(request.resource.data.orderId)
+    ).data.status == "Delivered"
+    && productId in get(
+      /databases/$(database)/documents/orders/$(request.resource.data.orderId)
+    ).data.productIds;
+}
+
+match /productReviews/{reviewId} {
+
+  // Public customers see approved reviews only.
+  // Admins can see all reviews.
+  allow read: if isAdmin()
+    || resource.data.status == "approved";
+
+  // A customer can submit one pending review per product.
+  // The document ID must match the customer's UID and product ID.
+  allow create: if request.auth != null
+    && reviewId == request.auth.uid + "_" + request.resource.data.productId
+    && request.resource.data.userId == request.auth.uid
+    && request.resource.data.productId is string
+    && request.resource.data.orderId is string
+    && request.resource.data.rating is int
+    && request.resource.data.rating >= 1
+    && request.resource.data.rating <= 5
+    && request.resource.data.comment is string
+    && request.resource.data.comment.size() <= 2000
+    && request.resource.data.status == "pending"
+    && request.resource.data.verifiedPurchase == true
+    && hasDeliveredPurchase(request.resource.data.productId);
+
+  // Only admins may approve, reject, or delete reviews.
+  allow update, delete: if isAdmin();
+}
+
+
+}
+}
