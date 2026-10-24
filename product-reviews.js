@@ -4,26 +4,21 @@
 import { auth, db } from "./firebase-config.js";
 
 import {
-  collection,
-  query,
-  where,
-  getDocs
+collection,
+query,
+where,
+getDocs,
+doc,
+setDoc,
+serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import {
-  getFunctions,
-  httpsCallable
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
 
 import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-const functions = getFunctions(auth.app);
-const submitProductReview = httpsCallable(
-  functions,
-  "submitProductReview"
-);
+
 
 let currentProductId = null;
 let reviewSection = null;
@@ -468,12 +463,23 @@ async function handleReviewSubmit(event) {
   showMessage("Submitting your review...");
 
   try {
-    await submitProductReview({
-      orderId,
-      productId: currentProductId,
-      rating,
-      comment
-    });
+  const reviewRef = doc(
+  db,
+  "productReviews",
+  `${auth.currentUser.uid}_${currentProductId}`
+);
+
+await setDoc(reviewRef, {
+  userId: auth.currentUser.uid,
+  orderId,
+  productId: currentProductId,
+  rating,
+  comment,
+  status: "pending",
+  verifiedPurchase: true,
+  createdAt: serverTimestamp(),
+  updatedAt: serverTimestamp()
+}); 
 
     reviewSection.querySelector(
       "#barq-review-comment"
