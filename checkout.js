@@ -323,7 +323,12 @@ if (placeOrderButton) {
                 locationAccuracy: Number(locationAccuracy || 0),
 
                 paymentMethod: paymentElement.value,
-
+productIds: [
+    ...new Set(
+        cart.map(item => String(item.productId || ""))
+            .filter(Boolean)
+    )
+],
                 items: cart.map(item => ({
                     productId: String(item.productId || ""),
                     name: String(item.name || "Product"),
