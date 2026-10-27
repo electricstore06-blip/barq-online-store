@@ -1,5 +1,99 @@
 
 /* =========================================
+   BARQ CARD DETAILS
+========================================= */
+
+.card-details {
+    margin-top: 24px;
+    padding: 22px;
+    border: 1px solid var(--line, #e7e0d5);
+    border-radius: 12px;
+    background: #fbf8f1;
+}
+
+.card-details-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.card-details-heading h3 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.card-details-heading p {
+    margin-top: 5px;
+    color: var(--muted, #77756d);
+    font-size: 12px;
+}
+
+.card-secure-label {
+    color: #6f674f;
+    font-size: 10px;
+}
+
+.card-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 15px;
+}
+
+.card-form-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+.card-details .form-field {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.card-details .form-field label {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.card-details .form-field input {
+    width: 100%;
+    min-width: 0;
+    height: 49px;
+    padding: 0 14px;
+    border: 1px solid #ded8cd;
+    border-radius: 9px;
+    background: #fffefa;
+    font-size: 13px;
+}
+
+.card-details .form-field input:focus {
+    border-color: var(--gold, #b49a6c);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(180, 154, 108, 0.12);
+}
+
+.card-security-note {
+    margin-top: 16px;
+    color: var(--muted, #77756d);
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+@media (max-width: 380px) {
+    .card-details {
+        padding: 16px 12px;
+    }
+
+    .card-form-grid {
+        gap: 14px 10px;
+    }
+}
+
+/* =========================================
    BARQ PREMIUM CHECKOUT
    Cream • Black • Muted Gold
 ========================================= */
