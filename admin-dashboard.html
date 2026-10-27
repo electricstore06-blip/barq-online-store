@@ -257,6 +257,81 @@ th{color:var(--muted);font-weight:600}
 
 <div class="grid two-col">
 <section class="card">
+ <section class="card" id="delivery-costs">
+  <h2>Courier Delivery Costs</h2>
+
+  <div class="notice">
+    Record payments made to delivery companies. Enter each invoice or payment only once.
+  </div>
+
+  <form id="delivery-cost-form" style="display:grid;gap:12px;margin:16px 0;">
+
+    <label>
+      Courier company
+      <input id="delivery-company" type="text" maxlength="100"
+        required placeholder="e.g. Aramex"
+        style="display:block;width:100%;padding:11px;margin-top:6px;border:1px solid var(--line);border-radius:8px;">
+    </label>
+
+    <label>
+      Payment or invoice date
+      <input id="delivery-date" type="date" required
+        style="display:block;width:100%;padding:11px;margin-top:6px;border:1px solid var(--line);border-radius:8px;">
+    </label>
+
+    <label>
+      Number of deliveries
+      <input id="delivery-count" type="number" min="1" max="100000"
+        step="1" required placeholder="e.g. 10"
+        style="display:block;width:100%;padding:11px;margin-top:6px;border:1px solid var(--line);border-radius:8px;">
+    </label>
+
+    <label>
+      Total courier charges (SAR)
+      <input id="delivery-amount" type="number" min="0.01"
+        max="100000000" step="0.01" required placeholder="e.g. 150.00"
+        style="display:block;width:100%;padding:11px;margin-top:6px;border:1px solid var(--line);border-radius:8px;">
+    </label>
+
+    <label>
+      Notes (optional)
+      <input id="delivery-notes" type="text" maxlength="500"
+        placeholder="e.g. October invoice"
+        style="display:block;width:100%;padding:11px;margin-top:6px;border:1px solid var(--line);border-radius:8px;">
+    </label>
+
+    <button id="save-delivery-cost" type="submit" class="primary-link"
+      style="border:0;">
+      + Save Courier Cost
+    </button>
+
+    <p id="delivery-cost-message" role="status" aria-live="polite"></p>
+  </form>
+
+  <h3>Recorded Courier Costs</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Company</th>
+          <th>Deliveries</th>
+          <th>Amount</th>
+          <th>Notes</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="delivery-cost-list">
+        <tr>
+          <td colspan="6" class="empty">Courier costs will appear here.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div style="height:16px"></div>
 <h2>Quick Actions</h2>
 <div class="actions">
 <a class="action" href="admin-products.html"><span>＋</span>Add / Manage Products</a>
@@ -344,13 +419,19 @@ function render(){
 }
 
 let expenses = [];
-
+let deliveryCosts = [];
 function setExpenseMessage(message, isError = false) {
   const el = $("expense-message");
   el.textContent = message;
   el.style.color = isError ? "var(--red)" : "var(--green)";
 }
+function setDeliveryCostMessage(message, isError = false) {
+  const element = $("delivery-cost-message");
+  if (!element) return;
 
+  element.textContent = message;
+  element.style.color = isError ? "red" : "green";
+}
 function renderExpenses() {
   const tbody = $("expense-list");
   tbody.replaceChildren();
@@ -505,7 +586,124 @@ $("expense-form").addEventListener("submit", async event => {
     button.disabled = false;
   }
 });
-  
+  function renderDeliveryCosts() {
+  const tbody = $("delivery-cost-list");
+  if (!tbody) return;
+
+  tbody.replaceChildren();
+
+  if (deliveryCosts.length === 0) {
+    const row = document.createElement("tr");
+    row.innerHTML = '<td colspan="6" class="empty">No courier costs recorded yet.</td>';
+    tbody.appendChild(row);
+    return;
+  }
+
+  [...deliveryCosts]
+    .sort((a, b) => String(b.deliveryDate || "").localeCompare(String(a.deliveryDate || "")))
+    .forEach(item => {
+      const row = document.createElement("tr");
+
+      const values = [
+        item.deliveryDate || "—",
+        item.company || "—",
+        String(item.deliveryCount ?? "—"),
+        money(Number(item.amount || 0)),
+        item.notes || "—"
+      ];
+
+      values.forEach(value => {
+        const cell = document.createElement("td");
+        cell.textContent = value;
+        row.appendChild(cell);
+      });
+
+      const actionCell = document.createElement("td");
+      const deleteButton = document.createElement("button");
+      deleteButton.type = "button";
+      deleteButton.textContent = "Delete";
+      deleteButton.addEventListener("click", () => {
+        GenUI.issueNewTurn("Help me safely add the delete function for this BARQ courier cost record, without changing existing expense code.");
+      });
+
+      actionCell.appendChild(deleteButton);
+      row.appendChild(actionCell);
+      tbody.appendChild(row);
+    });
+}
+ async function loadDeliveryCosts() {
+  try {
+    const snapshot = await getDocs(collection(db, "deliveryCosts"));
+
+    deliveryCosts = snapshot.docs.map(item => ({
+      id: item.id,
+      ...item.data()
+    }));
+
+    renderDeliveryCosts();
+    setDeliveryCostMessage("Courier costs loaded successfully.");
+  } catch (error) {
+    console.error("Courier costs error:", error);
+    setDeliveryCostMessage(
+      "Could not load courier costs. Check Firestore permissions.",
+      true
+    );
+  }
+}
+$("delivery-cost-form").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  if (!authorizedUid) {
+    setDeliveryCostMessage("Please log in as an admin first.", true);
+    return;
+  }
+
+  const company = $("delivery-company").value.trim();
+  const deliveryDate = $("delivery-date").value;
+  const deliveryCount = Number($("delivery-count").value);
+  const amount = Number($("delivery-amount").value);
+  const notes = $("delivery-notes").value.trim();
+  const button = $("save-delivery-cost");
+
+  if (
+    !company ||
+    !deliveryDate ||
+    !Number.isInteger(deliveryCount) ||
+    deliveryCount < 1 ||
+    !Number.isFinite(amount) ||
+    amount <= 0
+  ) {
+    setDeliveryCostMessage("Please enter valid delivery details.", true);
+    return;
+  }
+
+  button.disabled = true;
+  setDeliveryCostMessage("Saving courier cost...");
+
+  try {
+    await addDoc(collection(db, "deliveryCosts"), {
+      company,
+      deliveryDate,
+      deliveryCount,
+      amount,
+      notes,
+      createdBy: authorizedUid,
+      createdAt: serverTimestamp()
+    });
+
+    $("delivery-cost-form").reset();
+    await loadDeliveryCosts();
+    setDeliveryCostMessage("Courier cost saved successfully.");
+  } catch (error) {
+    console.error("Save courier cost error:", error);
+    setDeliveryCostMessage(
+      "Could not save. Firestore permissions may need updating.",
+      true
+    );
+  } finally {
+    button.disabled = false;
+  }
+}); 
 function renderChart(){
  const chart=$("sales-chart");chart.replaceChildren();
  const byDay=new Map();
@@ -552,6 +750,7 @@ onAuthStateChanged(auth,async user=>{
   else showMessage("Products could not be loaded. Check Firestore permissions and the browser console.");
   render();
   await loadExpenses(); 
+  await loadDeliveryCosts();
   if(results.some(r=>r.status==="rejected"))console.error("Dashboard data load errors:",results.filter(r=>r.status==="rejected"));
  }catch(error){
   console.error("BARQ dashboard error:",error);
