@@ -155,7 +155,99 @@ th{color:var(--muted);font-weight:600}
 </section>
 <section class="card" id="expenses">
 <h2>Sales & Expenses</h2>
-<div class="notice">Expenses are not imported automatically. Add the expense-recording feature only after checking your Firestore security rules and deciding which fields to store.</div>
+
+<div class="notice">
+  Record business expenses here. Only authorized administrators can manage these records.
+</div>
+
+<form id="expense-form" style="display:grid;gap:12px;margin:16px 0;">
+  <label>
+    Expense amount (SAR)
+    <input
+      id="expense-amount"
+      type="number"
+      min="0.01"
+      max="100000000"
+      step="0.01"
+      required
+      placeholder="e.g. 250.00"
+      style="display:block;width:100%;padding:11px;margin-top:6px;border:1px solid var(--line);border-radius:8px;"
+    >
+  </label>
+
+  <label>
+    Category
+    <select
+      id="expense-category"
+      required
+      style="display:block;width:100%;padding:11px;margin-top:6px;"
+    >
+      <option value="">Choose a category</option>
+      <option value="Shipping">Shipping &amp; Delivery</option>
+      <option value="Packaging">Packaging</option>
+      <option value="Marketing">Marketing &amp; Advertising</option>
+      <option value="Inventory">Inventory &amp; Supplies</option>
+      <option value="Rent">Rent &amp; Utilities</option>
+      <option value="Salaries">Salaries &amp; Staff</option>
+      <option value="Other">Other</option>
+    </select>
+  </label>
+
+  <label>
+    Expense date
+    <input
+      id="expense-date"
+      type="date"
+      required
+      style="display:block;width:100%;padding:11px;margin-top:6px;border:1px solid var(--line);border-radius:8px;"
+    >
+  </label>
+
+  <label>
+    Description
+    <input
+      id="expense-description"
+      type="text"
+      maxlength="500"
+      placeholder="e.g. Delivery payment"
+      required
+      style="display:block;width:100%;padding:11px;margin-top:6px;border:1px solid var(--line);border-radius:8px;"
+    >
+  </label>
+
+  <button
+    id="save-expense"
+    type="submit"
+    class="primary-link"
+    style="border:0;"
+  >
+    + Save Expense
+  </button>
+
+  <p id="expense-message" role="status" aria-live="polite"></p>
+</form>
+
+<h3>Recorded Expenses</h3>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Amount</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="expense-list">
+      <tr>
+        <td colspan="5" class="empty">Expenses will appear here.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 <div style="height:12px"></div>
 <div class="metric-label">Recorded Sales</div><div class="metric-value" id="finance-sales">—</div>
 <div class="metric-label">Recorded Expenses</div><div class="metric-value" id="finance-expenses">SAR 0.00</div>
