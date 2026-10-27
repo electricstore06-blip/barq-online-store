@@ -359,7 +359,13 @@ function renderExpenses() {
     (sum, expense) => sum + Number(expense.amount || 0),
     0
   );
+const expensesNote = $("expenses-note");
 
+if (expensesNote) {
+  expensesNote.textContent = expenses.length
+    ? `${expenses.length} recorded expense${expenses.length === 1 ? "" : "s"}`
+    : "No expenses recorded yet";
+}
   $("total-expenses").textContent = money(total);
   $("finance-expenses").textContent = money(total);
   $("net-profit").textContent = money(
