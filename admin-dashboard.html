@@ -450,7 +450,9 @@ if (expensesNote) {
   $("total-expenses").textContent = money(total);
   $("finance-expenses").textContent = money(total);
   $("net-profit").textContent = money(
-    orders.reduce((sum, order) => sum + getTotal(order), 0) - total
+    orders.reduce((sum, order) => sum + getTotal(order), 0)
+    - total
+    - deliveryCosts.reduce((sum, cost) => sum + Number(cost.amount || 0), 0)
   );
   $("finance-balance").textContent = $("net-profit").textContent;
 
