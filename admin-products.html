@@ -148,7 +148,32 @@
             <section id="product-list-section" hidden>
                 <h3>Existing Products</h3>
                 <div id="products-container">Loading products...</div>
-            </section>
+            </section> 
+           
+<section id="customer-reviews-section" hidden>
+    <h3>Customer Reviews</h3>
+
+    <p>Review customer submissions before publishing them.</p>
+
+    <label for="review-status-filter">Filter reviews:</label>
+    <select id="review-status-filter">
+        <option value="pending">Pending approval</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+        <option value="all">All reviews</option>
+    </select>
+
+    <button id="refresh-reviews-btn" type="button">
+        Refresh Reviews
+    </button>
+
+    <p id="reviews-message" role="status"></p>
+
+    <div id="customer-reviews-container">
+        Loading reviews...
+    </div>
+</section>
+ 
         </main>
     </div>
 
