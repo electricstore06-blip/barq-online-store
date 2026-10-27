@@ -2,251 +2,307 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BARQ | Admin Dashboard</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f6f8;
-      color: #171717;
-    }
-
-    #access-check {
-      max-width: 600px;
-      margin: 80px auto;
-      padding: 30px 20px;
-      text-align: center;
-    }
-
-    #access-check h2 {
-      margin-bottom: 12px;
-    }
-
-    #access-check p {
-      color: #555;
-      line-height: 1.6;
-    }
-
-    .store-link {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 12px 20px;
-      background: #111;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-    }
-
-    #admin-content[hidden],
-    #access-check[hidden] {
-      display: none !important;
-    }
-
-    header {
-      background: #111;
-      color: white;
-      padding: 22px 24px;
-    }
-
-    header h1 {
-      margin: 0 0 6px;
-      font-size: 26px;
-    }
-
-    header p {
-      margin: 0;
-      color: #ccc;
-      font-size: 14px;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 10px;
-      padding: 16px 20px;
-      background: white;
-      border-bottom: 1px solid #ddd;
-      flex-wrap: wrap;
-    }
-
-    .tabs button {
-      padding: 12px 20px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      background: white;
-      color: #222;
-      cursor: pointer;
-      font-size: 15px;
-      font-weight: bold;
-    }
-
-    .tabs button.active {
-      background: #111;
-      color: white;
-      border-color: #111;
-    }
-
-    main {
-      padding: 18px;
-    }
-
-    #admin-frame {
-      display: block;
-      width: 100%;
-      height: 78vh;
-      min-height: 600px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      background: white;
-    }
-
-    @media (max-width: 600px) {
-      header {
-        padding: 18px;
-      }
-
-      .tabs {
-        padding: 12px;
-        gap: 8px;
-      }
-
-      .tabs button {
-        flex: 1;
-        padding: 12px 10px;
-        font-size: 13px;
-      }
-
-      main {
-        padding: 8px;
-      }
-
-      #admin-frame {
-        min-height: 650px;
-        height: 78vh;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BARQ | Admin Dashboard</title>
+<style>
+:root{--ink:#201d19;--gold:#c5a267;--cream:#f7f3ec;--panel:#fffdfa;--muted:#777166;--line:#e9e1d5;--green:#238454;--red:#c94747}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,Arial,sans-serif}
+[hidden]{display:none!important}
+button,input,select{font:inherit}
+button,a{transition:.2s}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer}
+.layout{min-height:100vh;display:grid;grid-template-columns:235px minmax(0,1fr)}
+.sidebar{background:#171613;color:#fff;padding:24px 13px;display:flex;flex-direction:column;gap:22px}
+.brand{padding:0 12px 22px;border-bottom:1px solid #37332b}
+.brand strong{font-family:Georgia,serif;font-size:28px;letter-spacing:4px}
+.brand small{display:block;color:#c9b184;font-size:10px;letter-spacing:3px;margin-left:39px}
+.nav{display:grid;gap:5px}
+.nav a{padding:13px 12px;border-radius:9px;font-size:13px;display:flex;gap:11px;align-items:center}
+.nav a:hover,.nav a.active{background:#423727;color:#f1d6a1}
+.nav .symbol{width:20px;text-align:center;font-size:17px}
+.sidebar-note{margin-top:auto;padding:17px;border:1px solid #675237;border-radius:12px;color:#e9d6b2;font-family:Georgia,serif;line-height:1.6}
+.sidebar-note small{display:block;color:#d4cbbd;font:12px Arial;margin-top:8px}
+main{min-width:0}
+.topbar{min-height:75px;background:#fffdfa;border-bottom:1px solid var(--line);padding:15px 25px;display:flex;align-items:center;gap:18px}
+.search-wrap{flex:1;position:relative;max-width:720px}
+.search-wrap input{width:100%;padding:13px 15px 13px 42px;border:1px solid var(--line);border-radius:10px;background:white;outline-color:var(--gold)}
+.search-icon{position:absolute;left:14px;top:12px;font-size:19px}
+.admin-user{margin-left:auto;font-size:13px;white-space:nowrap}
+.content{padding:25px;max-width:1800px;margin:auto}
+.welcome{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+h1,h2,h3,p{margin-top:0}
+h1{font: bold 28px Georgia,serif;margin-bottom:7px}
+h2{font: bold 19px Georgia,serif;margin-bottom:18px}
+h3{font-size:14px}
+.subtitle{font-size:13px;color:var(--muted)}
+.grid{display:grid;gap:14px}
+.metrics{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:19px;min-width:0;box-shadow:0 3px 12px #32240a05}
+.metric-label{color:var(--muted);font-size:12px}
+.metric-value{font: bold 26px Georgia,serif;margin:12px 0 7px;overflow-wrap:anywhere}
+.metric-icon{float:right;width:39px;height:39px;border-radius:50%;background:#f0e5d1;display:grid;place-items:center;font-size:19px}
+.metric-note{font-size:11px;color:var(--muted)}
+.green{color:var(--green)}.red{color:var(--red)}
+.two-col{grid-template-columns:minmax(0,1.5fr) minmax(270px,1fr);margin-bottom:16px}
+.three-col{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:16px}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.section-head h2{margin-bottom:14px}
+select{padding:8px;border:1px solid var(--line);border-radius:8px;background:white;color:var(--ink);max-width:100%}
+.chart{height:190px;display:flex;align-items:flex-end;gap:10px;padding:15px 5px 25px;border-bottom:1px solid var(--line);background:repeating-linear-gradient(to bottom,transparent 0,transparent 46px,#eee8de 47px,#eee8de 48px)}
+.chart-column{flex:1;min-width:0;height:100%;display:flex;align-items:flex-end;justify-content:center;gap:4px;position:relative}
+.bar{width:36%;max-width:24px;border-radius:4px 4px 0 0;background:#25231f;min-height:2px}
+.bar.expense{background:#d9b87e}
+.chart-column small{position:absolute;top:calc(100% + 7px);font-size:9px;color:var(--muted)}
+.legend{display:flex;gap:15px;justify-content:center;font-size:11px;color:var(--muted);margin-top:18px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;background:#25231f}
+.dot.gold{background:#d9b87e}
+.status-list{display:grid;gap:15px}
+.status-row{display:flex;align-items:center;justify-content:space-between;font-size:12px;gap:10px}
+.pill{font-size:10px;padding:5px 8px;border-radius:20px;background:#f0e8db;white-space:nowrap}
+.pill.green{background:#e0f2e6}.pill.red{background:#fae6e3}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{text-align:left;padding:13px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--muted);font-weight:600}
+.empty{text-align:center;padding:25px;color:var(--muted)}
+.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.action{border:1px solid var(--line);border-radius:9px;background:#fffdfa;padding:16px 8px;text-align:center;font-size:12px}
+.action:hover{border-color:var(--gold);background:#faf4e9}
+.action span{display:block;font-size:22px;margin-bottom:8px}
+.notice{border:1px solid #ead9b8;background:#fbf4e7;padding:12px;border-radius:9px;color:#69502d;font-size:12px;line-height:1.5}
+.primary-link{display:inline-block;background:#211e19;color:white;border-radius:8px;padding:10px 13px;font-size:12px}
+.primary-link:hover{background:#493a25}
+.footer-note{font-size:11px;color:var(--muted);margin-top:18px;line-height:1.6}
+#access-check{max-width:500px;margin:100px auto;text-align:center;padding:25px}
+#access-message{line-height:1.6;color:var(--muted)}
+.mobile-menu{display:none}
+@media(max-width:1150px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.two-col{grid-template-columns:1fr}.three-col{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.layout{grid-template-columns:1fr}.sidebar{padding:12px;gap:10px}.brand{padding:5px 8px 12px}.brand strong{font-size:23px}.brand small{margin-left:32px}.nav{display:flex;overflow-x:auto}.nav a{white-space:nowrap;padding:10px}.nav .symbol{width:auto}.sidebar-note{display:none}.topbar{padding:12px;flex-wrap:wrap}.admin-user{font-size:11px}.content{padding:13px}.welcome{align-items:flex-start;flex-direction:column}.metrics{gap:9px}.card{padding:14px}.metric-value{font-size:22px}.three-col{grid-template-columns:1fr}.chart{gap:5px}.metric-icon{width:32px;height:32px}}
+</style>
 </head>
-
 <body>
-  <section id="access-check" role="status">
-    <h2>⚡ BARQ Admin</h2>
-    <p id="access-message">Checking your account permissions...</p>
-    <a class="store-link" href="index.html">Return to Store</a>
-  </section>
+<section id="access-check" role="status">
+<h1>⚡ BARQ Admin</h1>
+<p id="access-message">Checking your administrator permissions...</p>
+<a class="primary-link" href="index.html">Return to Store</a>
+</section>
 
-  <div id="admin-content" hidden>
-    <header>
-      <h1>⚡ BARQ Admin</h1>
-      <p>Manage your online store in one place</p>
-    </header>
+<div id="admin-content" class="layout" hidden>
+<aside class="sidebar">
+<div class="brand"><strong>⚡ BARQ</strong><small>ONLINE STORE</small></div>
+<nav class="nav" aria-label="Admin navigation">
+<a class="active" href="#dashboard"><span class="symbol">⌂</span>Dashboard</a>
+<a href="admin-orders.html"><span class="symbol">▣</span>Orders</a>
+<a href="admin-orders.html"><span class="symbol">♧</span>Delivery & Delays</a>
+<a href="admin-orders.html"><span class="symbol">↶</span>Returns & Replacements</a>
+<a href="admin-products.html"><span class="symbol">◇</span>Products & Inventory</a>
+<a href="admin-reviews.html"><span class="symbol">☆</span>Customer Reviews</a>
+<a href="admin-orders.html"><span class="symbol">♙</span>Customers / Order History</a>
+<a href="#staff"><span class="symbol">♧</span>Staff & Drivers</a>
+<a href="#reports"><span class="symbol">▥</span>Reports & Analytics</a>
+<a href="#expenses"><span class="symbol">＄</span>Expenses & Profit</a>
+</nav>
+<div class="sidebar-note">BARQ<br>Beauty in Every Order<small>Premium cosmetics, skincare and more.</small></div>
+</aside>
 
-    <nav class="tabs" aria-label="Admin sections">
-      <button class="active" data-page="admin-products.html">
-        Products
-      </button>
+<main id="dashboard">
+<div class="topbar">
+<div class="search-wrap"><span class="search-icon">⌕</span><input id="global-search" type="search" placeholder="Search orders, customers, products or tracking number..." aria-label="Search dashboard"></div>
+<div class="admin-user">⚡ BARQ <span style="color:#777">· Administrator</span></div>
+</div>
 
-      <button data-page="admin-orders.html">
-        Orders
-      </button>
+<div class="content">
+<div class="welcome">
+<div><h1>Welcome to BARQ, Admin</h1><p class="subtitle">Your store overview at a glance.</p></div>
+<div class="subtitle" id="last-updated">Loading store data...</div>
+</div>
 
-      <button data-page="admin-reviews.html">
-        Customer Reviews
-      </button>
-    </nav>
+<div id="dashboard-message" class="notice" role="status" hidden></div>
 
-    <main>
-      <iframe
-        id="admin-frame"
-        title="BARQ Admin Management"
-      ></iframe>
-    </main>
-  </div>
+<div class="grid metrics">
+<div class="card"><span class="metric-icon">＄</span><div class="metric-label">Total Sales</div><div class="metric-value" id="total-sales">—</div><div class="metric-note">Based on recorded orders</div></div>
+<div class="card"><span class="metric-icon">▣</span><div class="metric-label">Total Orders</div><div class="metric-value" id="total-orders">—</div><div class="metric-note">Orders in Firebase</div></div>
+<div class="card"><span class="metric-icon">◷</span><div class="metric-label">Pending Orders</div><div class="metric-value" id="pending-orders">—</div><div class="metric-note">Awaiting completion</div></div>
+<div class="card"><span class="metric-icon">♧</span><div class="metric-label">Delivery Delays</div><div class="metric-value" id="delayed-orders">—</div><div class="metric-note">Requires status/date data</div></div>
+</div>
 
-  <script type="module">
-    import { auth, db } from "./firebase-config.js";
+<div class="grid three-col">
+<div class="card"><div class="metric-label">Total Expenses</div><div class="metric-value" id="total-expenses">SAR 0.00</div><div class="metric-note">No expenses recorded yet</div></div>
+<div class="card"><div class="metric-label">Net Operating Balance</div><div class="metric-value" id="net-profit">—</div><div class="metric-note">Sales minus recorded expenses; not full accounting profit</div></div>
+<div class="card"><div class="metric-label">Products</div><div class="metric-value" id="total-products">—</div><div class="metric-note">Active catalog records</div></div>
+</div>
 
-    import {
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+<div class="grid two-col">
+<section class="card">
+<div class="section-head"><h2>Sales Overview</h2><span class="pill">Recorded orders</span></div>
+<div class="chart" id="sales-chart" aria-label="Recent sales chart"></div>
+<div class="legend"><span><i class="dot"></i>Sales by order date</span></div>
+<p class="footer-note">Chart groups order totals by date when a usable order date is available.</p>
+</section>
+<section class="card">
+<h2>Order Status</h2>
+<div class="status-list" id="status-list"><div class="empty">Loading orders...</div></div>
+</section>
+</div>
 
-    import {
-      doc,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<div class="grid two-col">
+<section class="card">
+<div class="section-head"><h2>Recent Orders</h2><a class="primary-link" href="admin-orders.html">Manage Orders ↗</a></div>
+<div class="table-wrap"><table><thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th></tr></thead><tbody id="recent-orders"><tr><td colspan="4" class="empty">Loading orders...</td></tr></tbody></table></div>
+</section>
+<section class="card" id="expenses">
+<h2>Sales & Expenses</h2>
+<div class="notice">Expenses are not imported automatically. Add the expense-recording feature only after checking your Firestore security rules and deciding which fields to store.</div>
+<div style="height:12px"></div>
+<div class="metric-label">Recorded Sales</div><div class="metric-value" id="finance-sales">—</div>
+<div class="metric-label">Recorded Expenses</div><div class="metric-value" id="finance-expenses">SAR 0.00</div>
+<div class="metric-label">Sales less expenses</div><div class="metric-value" id="finance-balance">—</div>
+</section>
+</div>
 
-    const accessCheck = document.getElementById("access-check");
-    const accessMessage = document.getElementById("access-message");
-    const adminContent = document.getElementById("admin-content");
-    const frame = document.getElementById("admin-frame");
-    const tabButtons = document.querySelectorAll(".tabs button");
+<div class="grid two-col">
+<section class="card">
+<h2>Quick Actions</h2>
+<div class="actions">
+<a class="action" href="admin-products.html"><span>＋</span>Add / Manage Products</a>
+<a class="action" href="admin-orders.html"><span>▣</span>Manage Orders</a>
+<a class="action" href="admin-orders.html"><span>♧</span>Delivery Management</a>
+<a class="action" href="admin-orders.html"><span>↶</span>Returns & Replacements</a>
+<a class="action" href="admin-reviews.html"><span>☆</span>Manage Reviews</a>
+<a class="action" href="#expenses"><span>＄</span>Financial Overview</a>
+</div>
+</section>
+<section class="card">
+<h2>Dashboard Notes</h2>
+<div class="status-list">
+<div class="notice">Order totals are taken from saved order documents. Confirm whether cancelled/refunded orders should be excluded from your sales accounting.</div>
+<div class="notice">Delivery delay counts can only be reliable when orders have a delivery status and expected delivery date.</div>
+<div class="notice">Staff, driver assignments, replacements, expense entry and notifications require dedicated features and verified permissions before activation.</div>
+</div>
+</section>
+</div>
+<p class="footer-note">BARQ Admin · Keep your existing Firebase permissions enabled. Financial figures on this page are operational summaries, not audited accounting statements.</p>
+</div>
+</main>
+</div>
 
-    let checkInProgress = false;
+<script type="module">
+import {auth,db} from "./firebase-config.js";
+import {onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {doc,getDoc,collection,getDocs} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    onAuthStateChanged(auth, async (user) => {
-      if (checkInProgress) return;
-      checkInProgress = true;
+const $=id=>document.getElementById(id);
+const money=n=>"SAR "+(Number.isFinite(n)?n:0).toLocaleString("en-SA",{minimumFractionDigits:2,maximumFractionDigits:2});
+const norm=s=>String(s??"").trim().toLowerCase();
+let orders=[],products=[],authorizedUid=null;
 
-      adminContent.hidden = true;
-      accessCheck.hidden = false;
-      accessMessage.textContent = "Checking your account permissions...";
-
-      try {
-        if (!user) {
-          accessMessage.textContent =
-            "Please log in with your administrator account to access this page.";
-          checkInProgress = false;
-          return;
-        }
-
-        const adminSnapshot = await getDoc(
-          doc(db, "admins", user.uid)
-        );
-
-        if (
-          !adminSnapshot.exists() ||
-          adminSnapshot.data().role !== "admin"
-        ) {
-          accessMessage.textContent =
-            "Access denied. This page is only available to administrators.";
-          checkInProgress = false;
-          return;
-        }
-
-        // Only show the dashboard after administrator access is confirmed.
-        adminContent.hidden = false;
-        accessCheck.hidden = true;
-
-        // Load the first admin page only after authorization.
-        frame.src = "admin-products.html";
-
-        tabButtons.forEach((button) => {
-          button.addEventListener("click", () => {
-            frame.src = button.dataset.page;
-
-            tabButtons.forEach((tab) => {
-              tab.classList.remove("active");
-            });
-
-            button.classList.add("active");
-          });
-        });
-      } catch (error) {
-        console.error("Admin dashboard access error:", error);
-
-        accessMessage.textContent =
-          "Unable to verify administrator access. Please refresh the page or try again later.";
-      } finally {
-        checkInProgress = false;
-      }
-    });
-  </script>
+function showMessage(text){
+ const el=$("dashboard-message");
+ el.textContent=text;
+ el.hidden=false;
+}
+function getStatus(o){return String(o.status||o.orderStatus||"Unknown").trim();}
+function getTotal(o){const n=Number(o.total??o.grandTotal??o.amount??0);return Number.isFinite(n)&&n>=0?n:0;}
+function getDate(o){
+ const raw=o.date??o.createdAt??o.orderDate??o.timestamp;
+ if(!raw)return null;
+ if(typeof raw.toDate==="function")return raw.toDate();
+ const d=new Date(raw);
+ return Number.isNaN(d.getTime())?null:d;
+}
+function render(){
+ const sales=orders.reduce((sum,o)=>sum+getTotal(o),0);
+ const pending=orders.filter(o=>/new|pending|processing|confirmed|packed/i.test(getStatus(o))).length;
+ const delayed=orders.filter(o=>/delay|failed delivery|delivery failed/i.test(getStatus(o))).length;
+ $("total-sales").textContent=money(sales);
+ $("total-orders").textContent=orders.length.toLocaleString();
+ $("pending-orders").textContent=pending.toLocaleString();
+ $("delayed-orders").textContent=delayed.toLocaleString();
+ $("total-products").textContent=products.length.toLocaleString();
+ $("total-expenses").textContent="Not recorded";
+ $("finance-expenses").textContent="Not recorded";
+ $("net-profit").textContent="Not available";
+ $("finance-sales").textContent=money(sales);
+ $("finance-balance").textContent="Not available";
+ $("last-updated").textContent="Updated "+new Date().toLocaleString();
+ const statusCounts={};
+ orders.forEach(o=>{const s=getStatus(o);statusCounts[s]=(statusCounts[s]||0)+1;});
+ const statusList=$("status-list");
+ statusList.replaceChildren();
+ const statusEntries=Object.entries(statusCounts).sort((a,b)=>b[1]-a[1]);
+ if(!statusEntries.length){statusList.innerHTML='<div class="empty">No orders found.</div>';}
+ statusEntries.slice(0,8).forEach(([status,count])=>{
+  const row=document.createElement("div");row.className="status-row";
+  const label=document.createElement("span");label.textContent=status;
+  const value=document.createElement("strong");value.textContent=count+" ("+Math.round(count/Math.max(orders.length,1)*100)+"%)";
+  row.append(label,value);statusList.append(row);
+ });
+ const recent=$("recent-orders");recent.replaceChildren();
+ [...orders].sort((a,b)=>(getDate(b)?.getTime()||0)-(getDate(a)?.getTime()||0)).slice(0,8).forEach(o=>{
+  const tr=document.createElement("tr");
+  const cells=[o.orderNumber||o.id||"Order",o.customerName||o.fullName||o.name||"Customer",money(getTotal(o)),getStatus(o)];
+  cells.forEach((v,i)=>{const td=document.createElement("td");td.textContent=String(v);if(i===3){const pill=document.createElement("span");pill.className="pill "+(/delay|cancel|fail/i.test(String(v))?"red":/deliver/i.test(String(v))?"green":"");pill.textContent=String(v);td.replaceChildren(pill);}tr.append(td);});
+  recent.append(tr);
+ });
+ if(!recent.children.length)recent.innerHTML='<tr><td colspan="4" class="empty">No orders found.</td></tr>';
+ renderChart();
+}
+function renderChart(){
+ const chart=$("sales-chart");chart.replaceChildren();
+ const byDay=new Map();
+ orders.forEach(o=>{const d=getDate(o);if(!d)return;const key=d.toLocaleDateString("en",{day:"2-digit",month:"short"});byDay.set(key,(byDay.get(key)||0)+getTotal(o));});
+ const days=[...byDay.entries()].slice(-7);
+ if(!days.length){chart.textContent="Order dates are not available for the chart.";return;}
+ const max=Math.max(...days.map(x=>x[1]),1);
+ days.forEach(([day,total])=>{
+  const col=document.createElement("div");col.className="chart-column";
+  const bar=document.createElement("div");bar.className="bar";bar.style.height=Math.max(3,total/max*100)+"%";bar.title=day+": "+money(total);
+  const label=document.createElement("small");label.textContent=day;
+  col.append(bar,label);chart.append(col);
+ });
+}
+$("global-search").addEventListener("input",event=>{
+ const q=norm(event.target.value);
+ const filtered=orders.filter(o=>[o.orderNumber,o.id,o.customerName,o.fullName,o.phone,o.email,o.address,o.trackingNumber,o.status].some(v=>norm(v).includes(q)));
+ if(!q){render();return;}
+ $("total-orders").textContent=filtered.length+" matches";
+ const recent=$("recent-orders");recent.replaceChildren();
+ filtered.slice(0,20).forEach(o=>{
+  const tr=document.createElement("tr");
+  [o.orderNumber||o.id||"Order",o.customerName||o.fullName||"Customer",money(getTotal(o)),getStatus(o)].forEach(v=>{const td=document.createElement("td");td.textContent=String(v);tr.append(td);});
+  recent.append(tr);
+ });
+ if(!recent.children.length)recent.innerHTML='<tr><td colspan="4" class="empty">No matching orders.</td></tr>';
+});
+onAuthStateChanged(auth,async user=>{
+ $("admin-content").hidden=true;
+ $("access-check").hidden=false;
+ if(!user){$("access-message").textContent="Please sign in with your administrator account.";return;}
+ try{
+  const adminSnap=await getDoc(doc(db,"admins",user.uid));
+  if(!adminSnap.exists()||adminSnap.data().role!=="admin"){
+   $("access-message").textContent="Access denied. Administrator access is required.";return;
+  }
+  authorizedUid=user.uid;
+  $("access-check").hidden=true;
+  $("admin-content").hidden=false;
+  const results=await Promise.allSettled([getDocs(collection(db,"orders")),getDocs(collection(db,"products"))]);
+  if(results[0].status==="fulfilled")orders=results[0].value.docs.map(d=>({id:d.id,...d.data()}));
+  else showMessage("Orders could not be loaded. Check Firestore permissions and the browser console.");
+  if(results[1].status==="fulfilled")products=results[1].value.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.active!==false);
+  else showMessage("Products could not be loaded. Check Firestore permissions and the browser console.");
+  render();
+  if(results.some(r=>r.status==="rejected"))console.error("Dashboard data load errors:",results.filter(r=>r.status==="rejected"));
+ }catch(error){
+  console.error("BARQ dashboard error:",error);
+  $("access-message").textContent="Unable to verify administrator access. Check your Firebase connection and try again.";
+  $("access-check").hidden=false;
+  $("admin-content").hidden=true;
+ }
+});
+</script>
 </body>
 </html>
-
