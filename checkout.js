@@ -1,5 +1,5 @@
 // ==========================================
-// BARQ CHECKOUT — CUSTOMER ACCOUNT LINKING
+// BARQ CHECKOUT — IMPROVED & VALIDATED
 // ==========================================
 
 import { auth, db } from "./firebase-config.js";
@@ -17,17 +17,20 @@ import {
 // CART
 // ==========================================
 
-let cart = [];
+function readCart() {
+    try {
+        const saved = JSON.parse(
+            localStorage.getItem("barqCart") || "[]"
+        );
 
-try {
-    const savedCart = JSON.parse(
-        localStorage.getItem("barqCart") || "[]"
-    );
-
-    cart = Array.isArray(savedCart) ? savedCart : [];
-} catch (error) {
-    console.error("Could not read cart:", error);
+        return Array.isArray(saved) ? saved : [];
+    } catch (error) {
+        console.error("Could not read BARQ cart:", error);
+        return [];
+    }
 }
+
+let cart = readCart();
 
 // ==========================================
 // PAGE ELEMENTS
@@ -37,40 +40,126 @@ const orderItems = document.getElementById("order-items");
 const subtotalElement = document.getElementById("subtotal");
 const deliveryElement = document.getElementById("delivery");
 const totalElement = document.getElementById("total");
-const placeOrderButton = document.getElementById("place-order-btn");
-const checkoutMessage = document.getElementById("checkout-message");
 
-const locationButton = document.getElementById("get-location-btn");
-const locationStatus = document.getElementById("location-status");
-const latitudeInput = document.getElementById("latitude");
-const longitudeInput = document.getElementById("longitude");
-const accuracyInput = document.getElementById("location-accuracy");
+const placeOrderButton =
+    document.getElementById("place-order-btn");
+
+const checkoutMessage =
+    document.getElementById("checkout-message");
+
+const locationButton =
+    document.getElementById("get-location-btn");
+
+const locationStatus =
+    document.getElementById("location-status");
+
+const latitudeInput =
+    document.getElementById("latitude");
+
+const longitudeInput =
+    document.getElementById("longitude");
+
+const accuracyInput =
+    document.getElementById("location-accuracy");
 
 // ==========================================
-// CURRENT CUSTOMER
+// CUSTOMER AUTHENTICATION
 // ==========================================
 
 let currentUser = null;
 let authReady = false;
+let submittingOrder = false;
 
-onAuthStateChanged(auth, user => {
-    currentUser = user;
-    authReady = true;
+onAuthStateChanged(
+    auth,
+    user => {
+        currentUser = user;
+        authReady = true;
 
-    if (!user) {
-        console.log("BARQ Checkout: Customer is not signed in.");
-    } else {
-        console.log("BARQ Checkout: Customer authenticated.");
+        console.log(
+            user
+                ? "BARQ Checkout: Customer authenticated."
+                : "BARQ Checkout: Customer not signed in."
+        );
+    },
+    error => {
+        console.error("Authentication check failed:", error);
+        authReady = true;
+        currentUser = null;
+        showMessage(
+            "Unable to verify your account. Please refresh the page."
+        );
     }
-});
+);
 
 // ==========================================
-// TOTALS
+// MESSAGES
 // ==========================================
 
-let subtotal = 0;
-let delivery = 0;
-let total = 0;
+function showMessage(message) {
+    if (checkoutMessage) {
+        checkoutMessage.textContent = message;
+    }
+}
+
+function formatSAR(amount) {
+    return `SAR ${amount.toFixed(2)}`;
+}
+
+// ==========================================
+// CART VALIDATION & TOTALS
+// ==========================================
+
+function validateCart(items) {
+    if (!Array.isArray(items) || items.length === 0) {
+        return "Your cart is empty.";
+    }
+
+    for (const item of items) {
+        if (!item || typeof item !== "object") {
+            return "Your cart contains an invalid item. Please update your cart.";
+        }
+
+        const price = Number(item.price);
+        const quantity = Number(item.quantity);
+
+        if (
+            !Number.isFinite(price) ||
+            price < 0 ||
+            !Number.isSafeInteger(Math.round(price * 100))
+        ) {
+            return "A product has an invalid price. Please update your cart.";
+        }
+
+        if (
+            !Number.isSafeInteger(quantity) ||
+            quantity < 1 ||
+            quantity > 999
+        ) {
+            return "A product has an invalid quantity. Please update your cart.";
+        }
+    }
+
+    return "";
+}
+
+function calculateTotals(items) {
+    const subtotalHalalas = items.reduce((sum, item) => {
+        const priceHalalas = Math.round(
+            Number(item.price) * 100
+        );
+
+        return sum + priceHalalas * Number(item.quantity);
+    }, 0);
+
+    const deliveryHalalas = subtotalHalalas > 0 ? 1500 : 0;
+
+    return {
+        subtotal: subtotalHalalas / 100,
+        delivery: deliveryHalalas / 100,
+        total: (subtotalHalalas + deliveryHalalas) / 100
+    };
+}
 
 // ==========================================
 // DISPLAY ORDER
@@ -80,24 +169,36 @@ function displayOrder() {
     if (!orderItems) return;
 
     orderItems.replaceChildren();
-    subtotal = 0;
 
-    if (cart.length === 0) {
-        orderItems.textContent = "Your cart is empty.";
+    cart = readCart();
 
-        if (subtotalElement) subtotalElement.textContent = "SAR 0.00";
-        if (deliveryElement) deliveryElement.textContent = "SAR 0.00";
-        if (totalElement) totalElement.textContent = "SAR 0.00";
+    const cartError = validateCart(cart);
+
+    if (cartError) {
+        orderItems.textContent = cartError;
+        updateTotals({
+            subtotal: 0,
+            delivery: 0,
+            total: 0
+        });
+
+        if (placeOrderButton) {
+            placeOrderButton.disabled = true;
+        }
 
         return;
     }
 
-    cart.forEach(item => {
-        const itemPrice = Math.max(0, Number(item.price) || 0);
-        const itemQuantity = Math.max(0, Number(item.quantity) || 0);
-        const itemTotal = itemPrice * itemQuantity;
+    if (placeOrderButton) {
+        placeOrderButton.disabled = false;
+    }
 
-        subtotal += itemTotal;
+    const totals = calculateTotals(cart);
+
+    cart.forEach(item => {
+        const itemTotal =
+            Math.round(Number(item.price) * 100) *
+            Number(item.quantity) / 100;
 
         const itemDiv = document.createElement("div");
         itemDiv.className = "order-item";
@@ -105,38 +206,52 @@ function displayOrder() {
         const details = document.createElement("div");
 
         const name = document.createElement("strong");
-        name.textContent = item.name || "Product";
+        name.textContent = String(item.name || "Product");
 
         const quantity = document.createElement("p");
-        quantity.textContent = `Quantity: ${itemQuantity}`;
+        quantity.textContent = `Quantity: ${item.quantity}`;
 
-        details.append(name, quantity);
+        if (item.size) {
+            const size = document.createElement("p");
+            size.textContent = `Size: ${String(item.size)}`;
+            details.appendChild(size);
+        }
+
+        if (item.color) {
+            const color = document.createElement("p");
+            color.textContent = `Color: ${String(item.color)}`;
+            details.appendChild(color);
+        }
+
+        details.prepend(name);
+        details.appendChild(quantity);
 
         const price = document.createElement("div");
-        price.textContent = `SAR ${itemTotal.toFixed(2)}`;
+        price.textContent = formatSAR(itemTotal);
 
         itemDiv.append(details, price);
         orderItems.appendChild(itemDiv);
     });
 
-    delivery = subtotal > 0 ? 15 : 0;
-    total = subtotal + delivery;
+    updateTotals(totals);
+}
 
+function updateTotals(totals) {
     if (subtotalElement) {
-        subtotalElement.textContent = `SAR ${subtotal.toFixed(2)}`;
+        subtotalElement.textContent = formatSAR(totals.subtotal);
     }
 
     if (deliveryElement) {
-        deliveryElement.textContent = `SAR ${delivery.toFixed(2)}`;
+        deliveryElement.textContent = formatSAR(totals.delivery);
     }
 
     if (totalElement) {
-        totalElement.textContent = `SAR ${total.toFixed(2)}`;
+        totalElement.textContent = formatSAR(totals.total);
     }
 }
 
 // ==========================================
-// CUSTOMER LOCATION — OPTIONAL
+// OPTIONAL CUSTOMER LOCATION
 // ==========================================
 
 if (locationButton) {
@@ -144,37 +259,37 @@ if (locationButton) {
         if (!navigator.geolocation) {
             if (locationStatus) {
                 locationStatus.textContent =
-                    "Location is not supported by this browser.";
+                    "Location is not supported. Enter your address instead.";
             }
             return;
         }
 
-        if (locationStatus) {
-            locationStatus.textContent = "Getting your location...";
-        }
-
         locationButton.disabled = true;
+
+        if (locationStatus) {
+            locationStatus.textContent =
+                "Getting your location...";
+        }
 
         navigator.geolocation.getCurrentPosition(
             position => {
-                if (latitudeInput) {
-                    latitudeInput.value = position.coords.latitude;
-                }
+                latitudeInput.value =
+                    String(position.coords.latitude);
 
-                if (longitudeInput) {
-                    longitudeInput.value = position.coords.longitude;
-                }
+                longitudeInput.value =
+                    String(position.coords.longitude);
 
-                if (accuracyInput) {
-                    accuracyInput.value = position.coords.accuracy;
-                }
+                accuracyInput.value =
+                    String(position.coords.accuracy);
 
                 if (locationStatus) {
                     locationStatus.textContent =
                         "✓ Location selected successfully";
                 }
 
-                locationButton.textContent = "📍 Location Selected";
+                locationButton.textContent =
+                    "📍 Location Selected";
+
                 locationButton.disabled = false;
             },
             error => {
@@ -182,7 +297,7 @@ if (locationButton) {
 
                 if (locationStatus) {
                     locationStatus.textContent =
-                        "Unable to get your location. You can continue using your address.";
+                        "Unable to get your location. You can enter your address instead.";
                 }
 
                 locationButton.disabled = false;
@@ -197,161 +312,169 @@ if (locationButton) {
 }
 
 // ==========================================
+// CUSTOMER INFORMATION VALIDATION
+// ==========================================
+
+function getCustomerDetails() {
+    const fullName =
+        document.getElementById("full-name")?.value.trim() || "";
+
+    const phone =
+        document.getElementById("phone")?.value.trim() || "";
+
+    const email =
+        document.getElementById("email")?.value.trim() || "";
+
+    const address =
+        document.getElementById("address")?.value.trim() || "";
+
+    const paymentElement =
+        document.querySelector('input[name="payment"]:checked');
+
+    if (fullName.length < 2 || fullName.length > 100) {
+        throw new Error("Please enter your full name.");
+    }
+
+    if (!/^05\d{8}$/.test(phone)) {
+        throw new Error(
+            "Please enter a valid Saudi phone number, such as 05xxxxxxxx."
+        );
+    }
+
+    if (
+        email.length > 254 ||
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    ) {
+        throw new Error("Please enter a valid email address.");
+    }
+
+    if (address.length < 5 || address.length > 1000) {
+        throw new Error("Please enter your complete delivery address.");
+    }
+
+    if (!paymentElement) {
+        throw new Error("Please select a payment method.");
+    }
+
+    return {
+        fullName,
+        phone,
+        email,
+        address,
+        paymentMethod: paymentElement.value
+    };
+}
+
+// ==========================================
 // PLACE ORDER
 // ==========================================
 
 if (placeOrderButton) {
     placeOrderButton.addEventListener("click", async () => {
-        if (checkoutMessage) {
-            checkoutMessage.textContent = "";
-        }
+        // Prevent simultaneous submissions.
+        if (submittingOrder) return;
 
-        // Wait until Firebase confirms the authentication state.
+        showMessage("");
+
         if (!authReady) {
-            if (checkoutMessage) {
-                checkoutMessage.textContent =
-                    "Checking your account. Please try again in a moment.";
-            }
+            showMessage(
+                "Checking your account. Please try again shortly."
+            );
             return;
         }
 
-        // Customers must sign in before placing an order.
         if (!currentUser) {
-            if (checkoutMessage) {
-                checkoutMessage.textContent =
-                    "Please sign in to your BARQ account before placing your order.";
-            }
+            showMessage(
+                "Please sign in to your BARQ account before placing your order."
+            );
             return;
         }
 
-        if (cart.length === 0) {
-            if (checkoutMessage) {
-                checkoutMessage.textContent = "Your cart is empty.";
-            }
+        // Reload the latest browser cart before checking it.
+        cart = readCart();
+
+        const cartError = validateCart(cart);
+
+        if (cartError) {
+            showMessage(cartError);
+            displayOrder();
             return;
         }
 
-        const fullName =
-            document.getElementById("full-name")?.value.trim() || "";
+        let customer;
 
-        const phone =
-            document.getElementById("phone")?.value.trim() || "";
-
-        const email =
-            document.getElementById("email")?.value.trim() || "";
-
-        const address =
-            document.getElementById("address")?.value.trim() || "";
-
-        const paymentElement =
-            document.querySelector('input[name="payment"]:checked');
-
-        const latitude = latitudeInput?.value || "";
-        const longitude = longitudeInput?.value || "";
-        const locationAccuracy = accuracyInput?.value || "";
-
-        if (!fullName) {
-            if (checkoutMessage) {
-                checkoutMessage.textContent =
-                    "Please enter your full name.";
-            }
+        try {
+            customer = getCustomerDetails();
+        } catch (error) {
+            showMessage(error.message);
             return;
         }
 
-        if (!/^05\d{8}$/.test(phone)) {
-            if (checkoutMessage) {
-                checkoutMessage.textContent =
-                    "Please enter a valid Saudi phone number.";
-            }
-            return;
-        }
-
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            if (checkoutMessage) {
-                checkoutMessage.textContent =
-                    "Please enter a valid email address.";
-            }
-            return;
-        }
-
-        if (!address) {
-            if (checkoutMessage) {
-                checkoutMessage.textContent =
-                    "Please enter your delivery address.";
-            }
-            return;
-        }
-
-        if (!paymentElement) {
-            if (checkoutMessage) {
-                checkoutMessage.textContent =
-                    "Please select a payment method.";
-            }
-            return;
-        }
-
-        // Prevent duplicate submissions.
+        submittingOrder = true;
         placeOrderButton.disabled = true;
         placeOrderButton.textContent = "Processing Order...";
 
         try {
-            // Recalculate totals.
-            subtotal = cart.reduce((sum, item) => {
-                const price = Math.max(0, Number(item.price) || 0);
-                const quantity = Math.max(0, Number(item.quantity) || 0);
-                return sum + price * quantity;
-            }, 0);
+            const totals = calculateTotals(cart);
 
-            delivery = subtotal > 0 ? 15 : 0;
-            total = subtotal + delivery;
+            const latitude = latitudeInput?.value || "";
+            const longitude = longitudeInput?.value || "";
+            const locationAccuracy = accuracyInput?.value || "";
 
-            const orderNumber =
-                "BARQ" +
-                Math.floor(100000 + Math.random() * 900000);
-
-            // Link this order to the authenticated Firebase user.
+            // Preserve the existing order document fields.
             const orderData = {
                 customerUid: currentUser.uid,
-                orderNumber,
-                customerName: fullName,
-                phone,
-                email,
-                address,
+
+                orderNumber:
+                    "BARQ" +
+                    Date.now().toString().slice(-8),
+
+                customerName: customer.fullName,
+                phone: customer.phone,
+                email: customer.email,
+                address: customer.address,
 
                 latitude: latitude ? Number(latitude) : null,
                 longitude: longitude ? Number(longitude) : null,
-                locationAccuracy: Number(locationAccuracy || 0),
+                locationAccuracy: locationAccuracy
+                    ? Number(locationAccuracy)
+                    : 0,
 
-                paymentMethod: paymentElement.value,
-productIds: [
-    ...new Set(
-        cart.map(item => String(item.productId || ""))
-            .filter(Boolean)
-    )
-],
+                paymentMethod: customer.paymentMethod,
+
+                productIds: [
+                    ...new Set(
+                        cart
+                            .map(item => String(item.productId || ""))
+                            .filter(Boolean)
+                    )
+                ],
+
                 items: cart.map(item => ({
                     productId: String(item.productId || ""),
                     name: String(item.name || "Product"),
                     brand: String(item.brand || ""),
-                    price: Math.max(0, Number(item.price) || 0),
-                    quantity: Math.max(1, Number(item.quantity) || 1),
+                    price: Number(item.price),
+                    quantity: Number(item.quantity),
                     color: String(item.color || ""),
                     size: String(item.size || "")
                 })),
 
-                subtotal,
-                delivery,
-                total,
+                subtotal: totals.subtotal,
+                delivery: totals.delivery,
+                total: totals.total,
+
                 status: "Pending",
                 date: new Date().toISOString()
             };
 
+            // Save the order first. Do not clear the cart if saving fails.
             const orderRef = await addDoc(
                 collection(db, "orders"),
                 orderData
             );
 
-            // Save this order on the current browser for the success page.
+            // Keep compatibility with the existing success page.
             localStorage.setItem(
                 "barqOrder",
                 JSON.stringify({
@@ -362,25 +485,32 @@ productIds: [
 
             localStorage.setItem(
                 "barqOrderTotal",
-                total.toFixed(2)
+                totals.total.toFixed(2)
             );
 
             localStorage.setItem("barqOrderId", orderRef.id);
-            localStorage.setItem("barqCustomerEmail", email);
-            localStorage.setItem("barqCustomerName", fullName);
+            localStorage.setItem(
+                "barqCustomerEmail",
+                customer.email
+            );
+            localStorage.setItem(
+                "barqCustomerName",
+                customer.fullName
+            );
 
-            // Clear cart after Firebase successfully saves the order.
+            // Clear the cart only after Firebase confirms the save.
             localStorage.removeItem("barqCart");
 
             window.location.href = "order-success.html";
+
         } catch (error) {
-            console.error("Order submission error:", error);
+            console.error("BARQ order submission error:", error);
 
-            if (checkoutMessage) {
-                checkoutMessage.textContent =
-                    "Unable to place your order. Please try again.";
-            }
+            showMessage(
+                "Unable to confirm your order. Please check your order history before trying again."
+            );
 
+            submittingOrder = false;
             placeOrderButton.disabled = false;
             placeOrderButton.textContent = "Place Order";
         }
@@ -388,7 +518,8 @@ productIds: [
 }
 
 // ==========================================
-// START
+// START CHECKOUT
 // ==========================================
 
 displayOrder();
+
