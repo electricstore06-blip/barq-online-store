@@ -342,6 +342,164 @@ function render(){
  if(!recent.children.length)recent.innerHTML='<tr><td colspan="4" class="empty">No orders found.</td></tr>';
  renderChart();
 }
+
+let expenses = [];
+
+function setExpenseMessage(message, isError = false) {
+  const el = $("expense-message");
+  el.textContent = message;
+  el.style.color = isError ? "var(--red)" : "var(--green)";
+}
+
+function renderExpenses() {
+  const tbody = $("expense-list");
+  tbody.replaceChildren();
+
+  const total = expenses.reduce(
+    (sum, expense) => sum + Number(expense.amount || 0),
+    0
+  );
+
+  $("total-expenses").textContent = money(total);
+  $("finance-expenses").textContent = money(total);
+  $("net-profit").textContent = money(
+    orders.reduce((sum, order) => sum + getTotal(order), 0) - total
+  );
+  $("finance-balance").textContent = $("net-profit").textContent;
+
+  if (!expenses.length) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 5;
+    td.className = "empty";
+    td.textContent = "No expenses recorded yet.";
+    tr.append(td);
+    tbody.append(tr);
+    return;
+  }
+
+  [...expenses]
+    .sort((a, b) => String(b.expenseDate).localeCompare(String(a.expenseDate)))
+    .forEach(expense => {
+      const tr = document.createElement("tr");
+
+      [
+        expense.expenseDate || "",
+        expense.category || "",
+        expense.description || "",
+        money(Number(expense.amount) || 0)
+      ].forEach(value => {
+        const td = document.createElement("td");
+        td.textContent = String(value);
+        tr.append(td);
+      });
+
+      const actionCell = document.createElement("td");
+      const deleteButton = document.createElement("button");
+      deleteButton.type = "button";
+      deleteButton.textContent = "Delete";
+      deleteButton.className = "primary-link";
+      deleteButton.style.background = "var(--red)";
+
+      deleteButton.addEventListener("click", async () => {
+        if (!confirm("Delete this expense record?")) return;
+
+        deleteButton.disabled = true;
+
+        try {
+          await deleteDoc(doc(db, "expenses", expense.id));
+          expenses = expenses.filter(item => item.id !== expense.id);
+          renderExpenses();
+          setExpenseMessage("Expense deleted successfully.");
+        } catch (error) {
+          console.error("Delete expense error:", error);
+          setExpenseMessage(
+            "Could not delete the expense. Check Firebase permissions.",
+            true
+          );
+          deleteButton.disabled = false;
+        }
+      });
+
+      actionCell.append(deleteButton);
+      tr.append(actionCell);
+      tbody.append(tr);
+    });
+}
+
+async function loadExpenses() {
+  try {
+    const snapshot = await getDocs(collection(db, "expenses"));
+
+    expenses = snapshot.docs.map(item => ({
+      id: item.id,
+      ...item.data()
+    }));
+
+    renderExpenses();
+  } catch (error) {
+    console.error("Load expenses error:", error);
+    setExpenseMessage(
+      "Could not load expenses. Check Firebase permissions.",
+      true
+    );
+  }
+}
+
+$("expense-form").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  if (!authorizedUid) {
+    setExpenseMessage("Administrator access is required.", true);
+    return;
+  }
+
+  const amount = Number($("expense-amount").value);
+  const category = $("expense-category").value;
+  const expenseDate = $("expense-date").value;
+  const description = $("expense-description").value.trim();
+  const button = $("save-expense");
+
+  if (
+    !Number.isFinite(amount) ||
+    amount <= 0 ||
+    amount > 100000000 ||
+    !category ||
+    !expenseDate ||
+    !description ||
+    description.length > 500
+  ) {
+    setExpenseMessage("Please enter valid expense details.", true);
+    return;
+  }
+
+  button.disabled = true;
+  setExpenseMessage("Saving expense...");
+
+  try {
+    await addDoc(collection(db, "expenses"), {
+      amount,
+      category,
+      expenseDate,
+      description,
+      createdBy: authorizedUid,
+      createdAt: serverTimestamp()
+    });
+
+    $("expense-form").reset();
+    await loadExpenses();
+    setExpenseMessage("Expense saved successfully.");
+  } catch (error) {
+    console.error("Save expense error:", error);
+    setExpenseMessage(
+      "Could not save the expense. Check the browser console and Firebase rules.",
+      true
+    );
+  } finally {
+    button.disabled = false;
+  }
+});
+  
 function renderChart(){
  const chart=$("sales-chart");chart.replaceChildren();
  const byDay=new Map();
@@ -387,6 +545,7 @@ onAuthStateChanged(auth,async user=>{
   if(results[1].status==="fulfilled")products=results[1].value.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.active!==false);
   else showMessage("Products could not be loaded. Check Firestore permissions and the browser console.");
   render();
+  await loadExpenses(); 
   if(results.some(r=>r.status==="rejected"))console.error("Dashboard data load errors:",results.filter(r=>r.status==="rejected"));
  }catch(error){
   console.error("BARQ dashboard error:",error);
