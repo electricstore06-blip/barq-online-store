@@ -643,6 +643,7 @@ $("expense-form").addEventListener("submit", async event => {
     }));
 
     renderDeliveryCosts();
+   renderExpenses();
     setDeliveryCostMessage("Courier costs loaded successfully.");
   } catch (error) {
     console.error("Courier costs error:", error);
