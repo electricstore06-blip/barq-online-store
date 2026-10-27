@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BARQ | Admin Dashboard</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f6f8;
+      color: #171717;
+    }
+
+    header {
+      background: #111;
+      color: white;
+      padding: 22px 24px;
+    }
+
+    header h1 {
+      margin: 0 0 6px;
+      font-size: 26px;
+    }
+
+    header p {
+      margin: 0;
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      padding: 16px 20px;
+      background: white;
+      border-bottom: 1px solid #ddd;
+      flex-wrap: wrap;
+    }
+
+    .tabs button {
+      padding: 12px 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: white;
+      color: #222;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .tabs button.active {
+      background: #111;
+      color: white;
+      border-color: #111;
+    }
+
+    main {
+      padding: 18px;
+    }
+
+    #admin-frame {
+      display: block;
+      width: 100%;
+      height: 78vh;
+      min-height: 600px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: white;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 18px;
+      }
+
+      .tabs {
+        padding: 12px;
+        gap: 8px;
+      }
+
+      .tabs button {
+        flex: 1;
+        padding: 12px 10px;
+        font-size: 13px;
+      }
+
+      main {
+        padding: 8px;
+      }
+
+      #admin-frame {
+        min-height: 650px;
+        height: 78vh;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>⚡ BARQ Admin</h1>
+    <p>Manage your online store in one place</p>
+  </header>
+
+  <nav class="tabs" aria-label="Admin sections">
+    <button class="active" data-page="admin-products.html">
+      Products
+    </button>
+
+    <button data-page="admin-orders.html">
+      Orders
+    </button>
+
+    <button data-page="admin-reviews.html">
+      Customer Reviews
+    </button>
+  </nav>
+
+  <main>
+    <iframe
+      id="admin-frame"
+      src="admin-products.html"
+      title="BARQ Admin Management"
+    ></iframe>
+  </main>
+
+  <script>
+    const frame = document.getElementById("admin-frame");
+    const tabButtons = document.querySelectorAll(".tabs button");
+
+    tabButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const page = button.dataset.page;
+
+        frame.src = page;
+
+        tabButtons.forEach((tab) => {
+          tab.classList.remove("active");
+        });
+
+        button.classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>
