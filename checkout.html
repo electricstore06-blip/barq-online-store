@@ -1,231 +1,241 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>BARQ Checkout</title>
-
+    <meta name="theme-color" content="#f6f1e8">
+    <title>BARQ | Secure Checkout</title>
     <link rel="stylesheet" href="checkout.css">
-
     <script type="module" src="checkout.js"></script>
-
 </head>
 
 <body>
+    <header class="checkout-header">
+        <a href="index.html" class="brand" aria-label="BARQ home">
+            <span class="brand-mark">⚡</span>
+            <span class="brand-name">BARQ</span>
+            <span class="brand-divider"></span>
+            <span class="brand-subtitle">ONLINE STORE</span>
+        </a>
 
-    <div class="checkout-page">
+        <div class="secure-label">
+            <span class="secure-icon">✓</span>
+            Secure Checkout
+        </div>
+    </header>
 
-        <h1>BARQ Checkout</h1>
+    <main class="checkout-page">
+        <div class="page-heading">
+            <p class="eyebrow">A LITTLE LUXURY, ON ITS WAY</p>
+            <h1>Checkout</h1>
+            <p class="page-description">
+                Complete your details to place your order.
+            </p>
+            <div class="checkout-steps">
+                <span class="step completed"><span>1</span> Cart</span>
+                <span class="step-line"></span>
+                <span class="step active"><span>2</span> Checkout</span>
+                <span class="step-line"></span>
+                <span class="step"><span>3</span> Confirmation</span>
+            </div>
+        </div>
 
-        <div class="checkout-box">
+        <div class="checkout-layout">
 
-            <!-- ORDER SUMMARY -->
+            <!-- LEFT: CUSTOMER DETAILS -->
+            <section class="checkout-form-panel">
+                <section class="form-section">
+                    <div class="section-heading">
+                        <span class="section-number">01</span>
+                        <div>
+                            <h2>Customer information</h2>
+                            <p>Tell us where to send your order.</p>
+                        </div>
+                    </div>
 
-            <div class="order-summary">
+                    <div class="form-grid">
+                        <div class="form-field full-width">
+                            <label for="full-name">Full name <span>*</span></label>
+                            <input
+                                type="text"
+                                id="full-name"
+                                name="full-name"
+                                placeholder="Enter your full name"
+                                autocomplete="name"
+                                required
+                            >
+                        </div>
 
-                <h2>Order Summary</h2>
+                        <div class="form-field">
+                            <label for="phone">Phone number <span>*</span></label>
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                placeholder="05xxxxxxxx"
+                                autocomplete="tel"
+                                inputmode="tel"
+                                required
+                            >
+                            <small>Enter your Saudi mobile number.</small>
+                        </div>
 
-                <div id="order-items"></div>
+                        <div class="form-field">
+                            <label for="email">Email address <span>*</span></label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-field full-width">
+                            <label for="address">Delivery address <span>*</span></label>
+                            <textarea
+                                id="address"
+                                name="address"
+                                placeholder="Building, street, district, city..."
+                                autocomplete="street-address"
+                                required
+                            ></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="form-section location-section">
+                    <div class="section-heading">
+                        <span class="section-number">02</span>
+                        <div>
+                            <h2>Delivery location</h2>
+                            <p>Help the courier find you more easily.</p>
+                        </div>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="get-location-btn"
+                        class="location-btn"
+                    >
+                        <span aria-hidden="true">⌖</span>
+                        Use my current location
+                    </button>
+
+                    <div id="location-status" class="location-status" aria-live="polite">
+                        Location not selected. You can enter your address above.
+                    </div>
+
+                    <input type="hidden" id="latitude" name="latitude">
+                    <input type="hidden" id="longitude" name="longitude">
+                    <input type="hidden" id="location-accuracy" name="location-accuracy">
+                </section>
+
+                <section class="form-section payment-section">
+                    <div class="section-heading">
+                        <span class="section-number">03</span>
+                        <div>
+                            <h2>Payment method</h2>
+                            <p>Choose your preferred payment option.</p>
+                        </div>
+                    </div>
+
+                    <div class="payment-options">
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="Mada" required>
+                            <span class="payment-radio"></span>
+                            <span class="payment-symbol mada-symbol">mada</span>
+                            <span class="payment-copy">
+                                <strong>Mada</strong>
+                                <small>Saudi debit cards</small>
+                            </span>
+                            <span class="payment-check">✓</span>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="Visa / Mastercard">
+                            <span class="payment-radio"></span>
+                            <span class="payment-symbol card-symbol">▰</span>
+                            <span class="payment-copy">
+                                <strong>Visa / Mastercard</strong>
+                                <small>Credit or debit card</small>
+                            </span>
+                            <span class="payment-check">✓</span>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="Apple Pay">
+                            <span class="payment-radio"></span>
+                            <span class="payment-symbol apple-symbol">●</span>
+                            <span class="payment-copy">
+                                <strong>Apple Pay</strong>
+                                <small>Pay using your Apple device</small>
+                            </span>
+                            <span class="payment-check">✓</span>
+                        </label>
+                    </div>
+
+                    <p class="payment-note">
+                        <span aria-hidden="true">ⓘ</span>
+                        Payment processing depends on the payment service configured
+                        by BARQ. Selecting a method here does not charge your card.
+                    </p>
+                </section>
+            </section>
+
+            <!-- RIGHT: ORDER SUMMARY -->
+            <aside class="order-summary">
+                <div class="summary-heading">
+                    <div>
+                        <p class="eyebrow">YOUR SELECTION</p>
+                        <h2>Order summary</h2>
+                    </div>
+                    <span class="summary-bag" aria-hidden="true">♧</span>
+                </div>
+
+                <div id="order-items" aria-live="polite"></div>
+
+                <div class="summary-divider"></div>
 
                 <div class="summary-row">
-
                     <span>Subtotal</span>
-
-                    <span id="subtotal">
-                        SAR 0.00
-                    </span>
-
+                    <span id="subtotal">SAR 0.00</span>
                 </div>
 
                 <div class="summary-row">
-
                     <span>Delivery</span>
-
-                    <span id="delivery">
-                        SAR 0.00
-                    </span>
-
+                    <span id="delivery">SAR 0.00</span>
                 </div>
 
                 <div class="summary-total">
-
                     <span>Total</span>
-
-                    <strong id="total">
-                        SAR 0.00
-                    </strong>
-
+                    <strong id="total">SAR 0.00</strong>
                 </div>
 
-            </div>
+                <p class="tax-note">
+                    Final order total is shown in Saudi riyals (SAR).
+                </p>
 
+                <button type="button" id="place-order-btn" class="place-order-btn">
+                    Place order <span aria-hidden="true">→</span>
+                </button>
 
-            <!-- CUSTOMER INFORMATION -->
+                <div id="checkout-message" role="status" aria-live="polite"></div>
 
-            <h2 class="customer-title">
-                Customer Information
-            </h2>
+                <div class="summary-assurances">
+                    <div><span>✓</span> Your order details are submitted securely</div>
+                    <div><span>✓</span> Delivery details included with your order</div>
+                </div>
 
-
-            <label for="full-name">
-                Full Name
-            </label>
-
-            <input
-                type="text"
-                id="full-name"
-                name="full-name"
-                placeholder="Enter your name"
-            >
-
-
-            <label for="phone">
-                Phone Number
-            </label>
-
-            <input
-                type="tel"
-                id="phone"
-                name="phone"
-                placeholder="05xxxxxxxx"
-            >
-
-
-            <label for="email">
-                Email
-            </label>
-
-            <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="example@email.com"
-            >
-
-
-            <label for="address">
-                Delivery Address
-            </label>
-
-            <textarea
-                id="address"
-                name="address"
-                placeholder="Your address"
-            ></textarea>
-
-
-            <!-- CUSTOMER LOCATION -->
-
-            <label>
-                Customer Location
-            </label>
-
-            <button
-                type="button"
-                id="get-location-btn"
-                class="location-btn"
-            >
-                📍 Use My Current Location
-            </button>
-
-            <div
-                id="location-status"
-                class="location-status"
-            >
-                Location not selected
-            </div>
-
-            <input
-                type="hidden"
-                id="latitude"
-                name="latitude"
-            >
-
-            <input
-                type="hidden"
-                id="longitude"
-                name="longitude"
-            >
-
-            <input
-                type="hidden"
-                id="location-accuracy"
-                name="location-accuracy"
-            >
-
-
-            <!-- PAYMENT METHOD -->
-
-            <h2>
-                Payment Method
-            </h2>
-
-
-            <label class="payment-option">
-
-                <input
-                    type="radio"
-                    name="payment"
-                    value="Mada"
-                >
-
-                <span>
-                    Mada
-                </span>
-
-            </label>
-
-
-            <label class="payment-option">
-
-                <input
-                    type="radio"
-                    name="payment"
-                    value="Visa / Mastercard"
-                >
-
-                <span>
-                    Visa / Mastercard
-                </span>
-
-            </label>
-
-
-            <label class="payment-option">
-
-                <input
-                    type="radio"
-                    name="payment"
-                    value="Apple Pay"
-                >
-
-                <span>
-                    Apple Pay
-                </span>
-
-            </label>
-
-
-            <!-- PLACE ORDER -->
-
-            <button
-                type="button"
-                id="place-order-btn"
-            >
-                Place Order
-            </button>
-
-
-            <div id="checkout-message"></div>
-
+                <a href="index.html" class="continue-shopping">← Continue shopping</a>
+            </aside>
         </div>
 
-    </div>
-
+        <p class="checkout-footer-note">
+            BARQ ONLINE STORE <span>·</span> THANK YOU FOR SHOPPING WITH US
+        </p>
+    </main>
 </body>
-
 </html>
