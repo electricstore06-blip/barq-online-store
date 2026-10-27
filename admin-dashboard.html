@@ -284,7 +284,7 @@ th{color:var(--muted);font-weight:600}
 <script type="module">
 import {auth,db} from "./firebase-config.js";
 import {onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {doc,getDoc,collection,getDocs} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+ import {   doc,   getDoc,   collection,   getDocs,   addDoc,   deleteDoc,   serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const $=id=>document.getElementById(id);
 const money=n=>"SAR "+(Number.isFinite(n)?n:0).toLocaleString("en-SA",{minimumFractionDigits:2,maximumFractionDigits:2});
