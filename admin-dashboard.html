@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,6 +16,37 @@
       font-family: Arial, sans-serif;
       background: #f5f6f8;
       color: #171717;
+    }
+
+    #access-check {
+      max-width: 600px;
+      margin: 80px auto;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    #access-check h2 {
+      margin-bottom: 12px;
+    }
+
+    #access-check p {
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .store-link {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 12px 20px;
+      background: #111;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+    }
+
+    #admin-content[hidden],
+    #access-check[hidden] {
+      display: none !important;
     }
 
     header {
@@ -104,50 +135,118 @@
 </head>
 
 <body>
-  <header>
-    <h1>⚡ BARQ Admin</h1>
-    <p>Manage your online store in one place</p>
-  </header>
+  <section id="access-check" role="status">
+    <h2>⚡ BARQ Admin</h2>
+    <p id="access-message">Checking your account permissions...</p>
+    <a class="store-link" href="index.html">Return to Store</a>
+  </section>
 
-  <nav class="tabs" aria-label="Admin sections">
-    <button class="active" data-page="admin-products.html">
-      Products
-    </button>
+  <div id="admin-content" hidden>
+    <header>
+      <h1>⚡ BARQ Admin</h1>
+      <p>Manage your online store in one place</p>
+    </header>
 
-    <button data-page="admin-orders.html">
-      Orders
-    </button>
+    <nav class="tabs" aria-label="Admin sections">
+      <button class="active" data-page="admin-products.html">
+        Products
+      </button>
 
-    <button data-page="admin-reviews.html">
-      Customer Reviews
-    </button>
-  </nav>
+      <button data-page="admin-orders.html">
+        Orders
+      </button>
 
-  <main>
-    <iframe
-      id="admin-frame"
-      src="admin-products.html"
-      title="BARQ Admin Management"
-    ></iframe>
-  </main>
+      <button data-page="admin-reviews.html">
+        Customer Reviews
+      </button>
+    </nav>
 
-  <script>
+    <main>
+      <iframe
+        id="admin-frame"
+        title="BARQ Admin Management"
+      ></iframe>
+    </main>
+  </div>
+
+  <script type="module">
+    import { auth, db } from "./firebase-config.js";
+
+    import {
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+      doc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const accessCheck = document.getElementById("access-check");
+    const accessMessage = document.getElementById("access-message");
+    const adminContent = document.getElementById("admin-content");
     const frame = document.getElementById("admin-frame");
     const tabButtons = document.querySelectorAll(".tabs button");
 
-    tabButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const page = button.dataset.page;
+    let checkInProgress = false;
 
-        frame.src = page;
+    onAuthStateChanged(auth, async (user) => {
+      if (checkInProgress) return;
+      checkInProgress = true;
 
-        tabButtons.forEach((tab) => {
-          tab.classList.remove("active");
+      adminContent.hidden = true;
+      accessCheck.hidden = false;
+      accessMessage.textContent = "Checking your account permissions...";
+
+      try {
+        if (!user) {
+          accessMessage.textContent =
+            "Please log in with your administrator account to access this page.";
+          checkInProgress = false;
+          return;
+        }
+
+        const adminSnapshot = await getDoc(
+          doc(db, "admins", user.uid)
+        );
+
+        if (
+          !adminSnapshot.exists() ||
+          adminSnapshot.data().role !== "admin"
+        ) {
+          accessMessage.textContent =
+            "Access denied. This page is only available to administrators.";
+          checkInProgress = false;
+          return;
+        }
+
+        // Only show the dashboard after administrator access is confirmed.
+        adminContent.hidden = false;
+        accessCheck.hidden = true;
+
+        // Load the first admin page only after authorization.
+        frame.src = "admin-products.html";
+
+        tabButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            frame.src = button.dataset.page;
+
+            tabButtons.forEach((tab) => {
+              tab.classList.remove("active");
+            });
+
+            button.classList.add("active");
+          });
         });
+      } catch (error) {
+        console.error("Admin dashboard access error:", error);
 
-        button.classList.add("active");
-      });
+        accessMessage.textContent =
+          "Unable to verify administrator access. Please refresh the page or try again later.";
+      } finally {
+        checkInProgress = false;
+      }
     });
   </script>
 </body>
 </html>
+```
