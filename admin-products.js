@@ -130,21 +130,10 @@ function parseSizePrices(value, sizes) {
             };
         }
 
-        const size = parts[0].trim();
-     const priceText = priceInput.value.trim();
-const price = Number(priceText);
+           const size = parts[0].trim();
+        const priceText = priceInput.value.trim();
+        const price = Number(priceText);
 
-const stockText = stockInput.value.trim();
-const stock = Number(stockText);
-
-if (
-    stockText === "" ||
-    !Number.isSafeInteger(stock) ||
-    stock < 0
-) {
-    showMessage("Please enter a whole stock quantity of 0 or more.");
-    return;
-}
         if (
             !size ||
             priceText === "" ||
@@ -179,8 +168,6 @@ if (
         prices: sizePrices
     };
 }
-
-
 
 // ==========================================
 // FORMAT SIZE PRICES FOR EDITING
@@ -472,9 +459,10 @@ function editProduct(id, product) {
     });
 }
 
-// ==========================================
-// SAVE OR UPDATE PRODUCT
-// ==========================================
+
+ // ==========================================
+ // SAVE OR UPDATE PRODUCT
+ // ==========================================
 
 form.addEventListener("submit", async event => {
     event.preventDefault();
@@ -489,8 +477,22 @@ form.addEventListener("submit", async event => {
     const category = categoryInput.value.trim();
     const description = descriptionInput.value.trim();
     const image = getSecureImageUrl(imageInput.value);
+
     const priceText = priceInput.value.trim();
     const price = Number(priceText);
+
+    // Validate stock quantity
+    const stockText = stockInput.value.trim();
+    const stock = Number(stockText);
+
+    if (
+        stockText === "" ||
+        !Number.isSafeInteger(stock) ||
+        stock < 0
+    ) {
+        showMessage("Please enter a whole stock quantity of 0 or more.");
+        return;
+    }
 
     const colors = splitOptions(colorsInput.value);
     const sizes = splitOptions(sizesInput.value);
