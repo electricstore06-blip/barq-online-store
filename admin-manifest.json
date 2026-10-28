@@ -1,0 +1,26 @@
+
+{
+  "id": "./admin-manifest.json",
+  "name": "BARQ Admin",
+  "short_name": "BARQ Admin",
+  "description": "BARQ Online Store Administration",
+  "start_url": "./admin-dashboard.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#111111",
+  "icons": [
+    {
+      "src": "./barq-driver-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./barq-driver-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
