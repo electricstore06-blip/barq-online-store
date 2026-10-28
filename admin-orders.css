@@ -352,95 +352,97 @@ body {
 }
 
 
+
 /* =========================================
-   MOBILE
+   MOBILE - RESPONSIVE ORDERS PAGE
 ========================================= */
 
 @media (max-width: 700px) {
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
 
     .admin-header {
-        padding: 20px;
-
+        width: 100%;
+        padding: 15px;
         flex-direction: column;
-
         align-items: flex-start;
-
-        gap: 15px;
-    }
-
-
-    .admin-content {
-        padding: 25px 15px;
-    }
-
-
-    .orders-header {
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 15px;
-    }
-
-
-    .order-card {
-        padding: 20px;
-    }
-
-
-    .order-card-header {
-        flex-direction: column;
-
-        align-items: flex-start;
-
         gap: 12px;
     }
 
+    .admin-content {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        padding: 18px 12px;
+    }
+
+    .orders-header {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .order-card {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        padding: 15px;
+        overflow-wrap: anywhere;
+    }
+
+    .order-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
 
     #refresh-btn {
         width: 100%;
+        min-height: 44px;
     }
 
-}
-/* STATUS BOX COLORS */
+    input,
+    select,
+    textarea,
+    button {
+        max-width: 100%;
+        font-size: 14px;
+    }
 
-.status-select.pending {
-    background: #fff3cd;
-    color: #856404;
-}
+    .status-select {
+        width: 100%;
+        min-height: 40px;
+    }
 
-.status-select.processing {
-    background: #cfe2ff;
-    color: #084298;
-}
-
-.status-select.shipped {
-    background: #e2d9f3;
-    color: #432874;
-}
-
-.status-select.out-for-delivery {
-    background: #ffe5b4;
-    color: #8a4b00;
+    img {
+        max-width: 100%;
+        height: auto;
+    }
 }
 
-.status-select.delivered {
-    background: #d1e7dd;
-    color: #0f5132;
+/* =========================================
+   VERY SMALL PHONES
+========================================= */
+
+@media (max-width: 380px) {
+    .admin-header {
+        padding: 12px;
+    }
+
+    .admin-content {
+        padding: 12px 9px;
+    }
+
+    .order-card {
+        padding: 12px;
+    }
 }
 
-.status-select.delivery-delayed {
-    background: #f8d7da;
-    color: #842029;
-}
-
-.status-select.replacement-requested,
-.status-select.replacement-approved {
-    background: #e7d8c9;
-    color: #664d03;
-}
-
-.status-select.cancelled {
-    background: #f8d7da;
-    color: #842029;
-}
