@@ -469,8 +469,10 @@ async function handleReviewSubmit(event) {
   `${auth.currentUser.uid}_${currentProductId}`
 );
 
+
 await setDoc(reviewRef, {
   userId: auth.currentUser.uid,
+  customerUid: auth.currentUser.uid,
   orderId,
   productId: currentProductId,
   rating,
@@ -479,7 +481,8 @@ await setDoc(reviewRef, {
   verifiedPurchase: true,
   createdAt: serverTimestamp(),
   updatedAt: serverTimestamp()
-}); 
+});
+
 
     reviewSection.querySelector(
       "#barq-review-comment"
