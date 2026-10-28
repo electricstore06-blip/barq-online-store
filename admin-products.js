@@ -133,6 +133,17 @@ function parseSizePrices(value, sizes) {
            const size = parts[0].trim();
         const priceText = priceInput.value.trim();
         const price = Number(priceText);
+        const stockText = stockInput.value.trim();
+const stock = Number(stockText);
+
+if (
+    stockText === "" ||
+    !Number.isSafeInteger(stock) ||
+    stock < 0
+) {
+    showMessage("Please enter a whole stock quantity of 0 or more.");
+    return;
+}
 
         if (
             !size ||
