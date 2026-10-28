@@ -115,15 +115,10 @@ function splitOptions(value) {
 
 function parseSizePrices(value, sizes) {
     const sizePrices = {};
-
-    if (!value.trim()) {
-        return {
-            valid: true,
-            prices: sizePrices
-        };
-    }
-
-    const entries = value.split(",");
+    const entries = value
+        .split(",")
+        .map(entry => entry.trim())
+        .filter(Boolean);
 
     for (const entry of entries) {
         const parts = entry.split(":");
@@ -131,26 +126,20 @@ function parseSizePrices(value, sizes) {
         if (parts.length !== 2) {
             return {
                 valid: false,
-                error: `Invalid size price "${entry}". Use the format 30ml:79.`
+                error: `Invalid size price "${entry}". Use the format Size:Price.`
             };
         }
 
         const size = parts[0].trim();
         const priceText = parts[1].trim();
         const price = Number(priceText);
-const stockText = stockInput.value.trim();
-const stock = Number(stockText);
 
-if (
-    stockText === "" ||
-    !Number.isSafeInteger(stock) ||
-    stock < 0
-) {
-    showMessage("Please enter a whole stock quantity of 0 or more.");
-    return;
-}
-        if (!size || priceText === "" ||
-            !Number.isFinite(price) || price < 0) {
+        if (
+            !size ||
+            priceText === "" ||
+            !Number.isFinite(price) ||
+            price < 0
+        ) {
             return {
                 valid: false,
                 error: `Invalid price for "${size || entry}". Enter a valid price of 0 or more.`
@@ -179,6 +168,8 @@ if (
         prices: sizePrices
     };
 }
+
+
 
 // ==========================================
 // FORMAT SIZE PRICES FOR EDITING
