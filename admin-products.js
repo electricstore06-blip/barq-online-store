@@ -50,6 +50,7 @@ const descriptionInput = document.getElementById("product-description");
 const colorsInput = document.getElementById("product-colors");
 const sizesInput = document.getElementById("product-sizes");
 const sizePricesInput = document.getElementById("product-size-prices");
+const stockInput = document.getElementById("product-stock");
 const activeInput = document.getElementById("product-active");
 const imagePreview = document.getElementById("image-preview");
 
@@ -137,7 +138,17 @@ function parseSizePrices(value, sizes) {
         const size = parts[0].trim();
         const priceText = parts[1].trim();
         const price = Number(priceText);
+const stockText = stockInput.value.trim();
+const stock = Number(stockText);
 
+if (
+    stockText === "" ||
+    !Number.isSafeInteger(stock) ||
+    stock < 0
+) {
+    showMessage("Please enter a whole stock quantity of 0 or more.");
+    return;
+}
         if (!size || priceText === "" ||
             !Number.isFinite(price) || price < 0) {
             return {
@@ -265,6 +276,16 @@ function createProductCard(id, product) {
     const status = document.createElement("p");
     status.textContent =
         product.active === false ? "Hidden from store" : "Active";
+    const stockInformation = document.createElement("p");
+const stockQuantity = Number.isSafeInteger(product.stock) && product.stock >= 0
+    ? product.stock
+    : 0;
+
+stockInformation.textContent = `Stock: ${stockQuantity} units`;
+
+if (stockQuantity === 0) {
+    stockInformation.textContent += " — Out of stock";
+}
 
     const sizeInformation = document.createElement("p");
 
@@ -331,16 +352,17 @@ function createProductCard(id, product) {
 
     actions.append(editButton, deleteButton);
 
-    card.append(
-        image,
-        name,
-        brand,
-        price,
-        category,
-        status,
-        sizeInformation,
-        actions
-    );
+  card.append(
+    image,
+    name,
+    brand,
+    price,
+    category,
+    status,
+    stockInformation,
+    sizeInformation,
+    actions
+);
 
     return card;
 }
@@ -404,6 +426,7 @@ function editProduct(id, product) {
     nameInput.value = product.name || "";
     brandInput.value = product.brand || "";
     priceInput.value = product.price ?? "";
+    stockInput.value = product.stock ?? 0;
     categoryInput.value = product.category || "";
     imageInput.value = product.image || "";
     descriptionInput.value = product.description || "";
@@ -503,6 +526,7 @@ form.addEventListener("submit", async event => {
         name,
         brand,
         price,
+        stock,
         category,
         image,
         description,
