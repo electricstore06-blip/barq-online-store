@@ -213,22 +213,135 @@ h3 {
     display: none !important;
 }
 
+
 @media (max-width: 600px) {
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
     .admin-header {
-        padding: 18px;
+        padding: 16px 14px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .admin-header h1 {
+        font-size: 22px;
+        overflow-wrap: anywhere;
     }
 
     .admin-content {
-        padding: 20px 12px;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        padding: 16px 10px;
+    }
+
+    .products-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .products-header button,
+    .products-header a {
+        width: 100%;
+        text-align: center;
+    }
+
+    #admin-message {
+        overflow-wrap: anywhere;
     }
 
     #product-form-section,
     #product-list-section {
-        padding: 16px;
+        width: 100%;
+        min-width: 0;
+        padding: 14px;
+        margin-top: 16px;
+        border-radius: 12px;
     }
 
-    .products-header {
-        align-items: flex-start;
+    #product-form {
+        width: 100%;
+        min-width: 0;
+    }
+
+    #product-form input:not([type="checkbox"]),
+    #product-form textarea {
+        width: 100%;
+        min-width: 0;
+        font-size: 16px;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+    }
+
+    .form-buttons button {
+        width: 100%;
+        min-height: 44px;
+    }
+
+    #image-preview {
+        max-width: 100%;
+        height: auto;
+    }
+
+    #products-container {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .product-card {
+        width: 100%;
+        min-width: 0;
+        padding: 12px;
+    }
+
+    .product-card img {
+        height: 180px;
+    }
+
+    .product-card .product-actions {
+        flex-direction: column;
+    }
+
+    .product-card .product-actions button {
+        width: 100%;
+        min-height: 44px;
+        flex: auto;
+    }
+
+    button,
+    .products-header a {
+        min-height: 44px;
     }
 }
-```
+
+@media (max-width: 380px) {
+    .admin-content {
+        padding: 12px 8px;
+    }
+
+    #product-form-section,
+    #product-list-section {
+        padding: 11px;
+    }
+
+    .product-card {
+        padding: 10px;
+    }
+
+    .product-card img {
+        height: 150px;
+    }
+}
+
