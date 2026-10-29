@@ -241,9 +241,19 @@
   </div>
 
   <!-- EXISTING SCRIPTS -->
-  <script src="i18n.js"></script>
-  <script type="module" src="script.js"></script>
-  <script type="module" src="auth.js"></script>
+<script src="i18n.js"></script>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const container = document.getElementById("languageSelector");
+
+    if (container && window.barqMountLanguageSelector) {
+      window.barqMountLanguageSelector(container);
+    }
+  });
+</script>
+
+<script type="module" src="script.js"></script>
+<script type="module" src="auth.js"></script>
 </body>
 </html>
