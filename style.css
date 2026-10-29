@@ -1401,3 +1401,56 @@ img {
         font-size: 27px;
     }
 }
+
+/* BARQ — Popular Brands Layout Fix */
+.brands {
+  padding: 35px 5%;
+  text-align: center;
+  overflow: hidden;
+}
+
+.brands h2 {
+  margin: 0 0 24px;
+}
+
+.brand-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.brand-list span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  min-height: 44px;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  color: #222;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+html[dir="rtl"] .brand-list {
+  direction: rtl;
+}
+
+@media (max-width: 600px) {
+  .brand-list {
+    gap: 10px;
+  }
+
+  .brand-list span {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}
