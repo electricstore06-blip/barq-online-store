@@ -407,7 +407,7 @@ const BARQ_TRANSLATIONS = {
         loadingOrders: "ஆர்டர்கள் ஏற்றப்படுகின்றன...",
         noOrders: "ஆர்டர்கள் எதுவும் கிடைக்கவில்லை.",
         customerInformation: "வாடிக்கையாளர் தகவல்",
-        products: "தயாரிப்புகள்",
+        products: "தயாரிப்புகள்"
         payment: "கட்டணம்",
         status: "நிலை",
         pending: "நிலுவையில்",
