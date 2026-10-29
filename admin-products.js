@@ -54,6 +54,39 @@ const stockInput = document.getElementById("product-stock");
 const activeInput = document.getElementById("product-active");
 const imagePreview = document.getElementById("image-preview");
 
+const additionalImagesContainer = document.getElementById(
+    "additional-images-container"
+);
+
+const addProductImageBtn = document.getElementById(
+    "add-product-image-btn"
+);
+
+if (additionalImagesContainer && addProductImageBtn) {
+    addProductImageBtn.addEventListener("click", () => {
+        const row = document.createElement("div");
+        row.className = "additional-image-row";
+
+        const input = document.createElement("input");
+        input.type = "url";
+        input.className = "additional-product-image-url";
+        input.placeholder = "https://example.com/product-image.jpg";
+        input.setAttribute("aria-label", "Additional product image URL");
+
+        const removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.textContent = "Remove";
+
+        removeButton.addEventListener("click", () => {
+            row.remove();
+        });
+
+        row.appendChild(input);
+        row.appendChild(removeButton);
+        additionalImagesContainer.appendChild(row);
+    });
+}
+
 const formTitle = document.getElementById("form-title");
 const saveButton = document.getElementById("save-product-btn");
 const cancelButton = document.getElementById("cancel-edit-btn");
