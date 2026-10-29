@@ -1,6 +1,8 @@
-// ==========================================
-// BARQ STORE MAIN SCRIPT
-// ==========================================
+
+ // ==========================================
+ // BARQ STORE MAIN SCRIPT
+ // Corrected product display + language support
+ // ==========================================
 
 import { db } from "./firebase-config.js";
 
@@ -14,41 +16,40 @@ import {
 // ==========================================
 
 let productsData = [];
-
 let cart = [];
 
 try {
     const savedCart = JSON.parse(
         localStorage.getItem("barqCart") || "[]"
     );
-
     cart = Array.isArray(savedCart) ? savedCart : [];
 } catch (error) {
     console.error("Could not read saved cart:", error);
     cart = [];
 }
 
-// Search state: keep search results separate from category products.
 let currentCategory = null;
 let searchRequest = 0;
 
+const searchInput = document.getElementById("searchInput");
+const searchResultsSection = document.getElementById("searchResultsSection");
+const searchResultsContainer = document.getElementById("searchResultsContainer");
+
 // ==========================================
-// HELPERS
+// TRANSLATION HELPERS
 // ==========================================
 
-function escapeHTML(value) {
-    return String(value ?? "").replace(/[&<>"']/g, character => {
-        const entities = {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#39;"
-        };
-
-        return entities[character];
-    });
+function tr(key, fallback) {
+    if (typeof window.barqTranslate === "function") {
+        const result = window.barqTranslate(key);
+        if (result && result !== key) return result;
+    }
+    return fallback;
 }
+
+// ==========================================
+// PRODUCT HELPERS
+// ==========================================
 
 function getProductPrice(product, size = "") {
     const sizePrices = product.sizePrices || {};
@@ -58,7 +59,6 @@ function getProductPrice(product, size = "") {
         Object.prototype.hasOwnProperty.call(sizePrices, size)
     ) {
         const specificPrice = Number(sizePrices[size]);
-
         if (Number.isFinite(specificPrice) && specificPrice >= 0) {
             return specificPrice;
         }
@@ -93,123 +93,11 @@ function getCategoryAliases(category) {
 }
 
 // ==========================================
-// LOAD PRODUCTS FROM FIREBASE
-// ==========================================
-
-async function loadProducts() {
-    console.log("BARQ: Loading products...");
-
-    const container = document.querySelector(
-        "#products .product-container"
-    );
-
-    if (container) {
-        container.innerHTML = "<p>Loading products...</p>";
-    }
-
-    try {
-        const snapshot = await getDocs(
-            collection(db, "products")
-        );
-
-        productsData = [];
-
-        snapshot.forEach(documentSnapshot => {
-            const product = {
-                id: documentSnapshot.id,
-                ...documentSnapshot.data()
-            };
-
-            // Keep inactive products out of the public store.
-            if (product.active === false) {
-                return;
-            }
-
-            productsData.push(product);
-        });
-
-        console.log("BARQ: Products loaded:", productsData.length);
-
-        // Show all products initially.
-        currentCategory = null;
-        displayProducts(productsData);
-
-        // Refresh any active search after loading.
-        if (searchInput && searchInput.value.trim()) {
-            renderSearchResults(searchInput.value);
-        }
-    } catch (error) {
-        console.error("Firebase Products Error:", error);
-
-        if (container) {
-            container.innerHTML = `
-                <p class="no-products">
-                    Unable to load products. Please refresh the page.
-                </p>
-            `;
-        }
-
-        if (searchResultsContainer && searchInput?.value.trim()) {
-            searchResultsContainer.innerHTML = `
-                <p class="no-search-results">
-                    Products could not be loaded. Please try again.
-                </p>
-            `;
-        }
-    }
-}
-
-// ==========================================
 // DISPLAY PRODUCT CARDS
+// IMPORTANT: These are separate functions.
 // ==========================================
-
 
 function createProductCard(product) {
-    
-function displayProducts(products) {
-    const container = document.querySelector(
-        "#products .product-container"
-    );
-
-    if (!container) {
-        console.error(
-            'BARQ: Could not find "#products .product-container".'
-        );
-        return;
-    }
-
-    container.replaceChildren();
-
-    if (!Array.isArray(products) || products.length === 0) {
-        const message = document.createElement("p");
-        message.className = "no-products";
-
-        const key = currentCategory
-            ? "noProductsInCategory"
-            : "noProducts";
-
-        message.textContent =
-            typeof window.barqTranslate === "function"
-                ? window.barqTranslate(key)
-                : currentCategory
-                    ? "No products found in this category."
-                    : "No products available right now.";
-
-        container.appendChild(message);
-        return;
-    }
-
-    const fragment = document.createDocumentFragment();
-
-    products.forEach(product => {
-        fragment.appendChild(createProductCard(product));
-    });
-
-    container.appendChild(fragment);
-
-    console.log("BARQ: Products displayed:", products.length);
-}
-
     const card = document.createElement("div");
     card.className = "product";
 
@@ -217,11 +105,6 @@ function displayProducts(products) {
     productArea.className = "product-click";
     productArea.tabIndex = 0;
     productArea.setAttribute("role", "link");
-
-    const translate = (key) =>
-        typeof window.barqTranslate === "function"
-            ? window.barqTranslate(key)
-            : key;
 
     productArea.setAttribute(
         "aria-label",
@@ -257,7 +140,7 @@ function displayProducts(products) {
     if (availablePrices.length) {
         const lowestPrice = Math.min(basePrice, ...availablePrices);
         price.textContent =
-            `${translate("from")} ${lowestPrice.toFixed(2)} SAR`;
+            `${tr("from", "From")} ${lowestPrice.toFixed(2)} SAR`;
     } else {
         price.textContent = `${basePrice.toFixed(2)} SAR`;
     }
@@ -281,7 +164,7 @@ function displayProducts(products) {
 
     const button = document.createElement("button");
     button.className = "add-btn";
-    button.textContent = translate("viewOptions");
+    button.textContent = tr("viewOptions", "View Options");
 
     button.addEventListener("click", event => {
         event.stopPropagation();
@@ -289,22 +172,109 @@ function displayProducts(products) {
     });
 
     card.append(productArea, button);
-
     return card;
 }
 
+function displayProducts(products) {
+    const container = document.querySelector(
+        "#products .product-container"
+    );
+
+    if (!container) {
+        console.error(
+            'BARQ: Could not find "#products .product-container".'
+        );
+        return;
+    }
+
+    container.replaceChildren();
+
+    if (!Array.isArray(products) || products.length === 0) {
+        const message = document.createElement("p");
+        message.className = "no-products";
+
+        message.textContent = currentCategory
+            ? tr("noProductsInCategory", "No products found in this category.")
+            : tr("noProducts", "No products available right now.");
+
+        container.appendChild(message);
+        return;
+    }
+
+    const fragment = document.createDocumentFragment();
+
+    products.forEach(product => {
+        fragment.appendChild(createProductCard(product));
+    });
+
+    container.appendChild(fragment);
+
+    console.log("BARQ: Products displayed:", products.length);
+}
+
+// ==========================================
+// LOAD PRODUCTS FROM FIREBASE
+// ==========================================
+
+async function loadProducts() {
+    console.log("BARQ: Loading products...");
+
+    const container = document.querySelector(
+        "#products .product-container"
+    );
+
+    if (container) {
+        container.textContent = tr("loading", "Loading...");
+    }
+
+    try {
+        const snapshot = await getDocs(collection(db, "products"));
+
+        productsData = [];
+
+        snapshot.forEach(documentSnapshot => {
+            const product = {
+                id: documentSnapshot.id,
+                ...documentSnapshot.data()
+            };
+
+            if (product.active === false) return;
+
+            productsData.push(product);
+        });
+
+        console.log("BARQ: Products loaded:", productsData.length);
+
+        currentCategory = null;
+        displayProducts(productsData);
+
+        if (searchInput && searchInput.value.trim()) {
+            renderSearchResults(searchInput.value);
+        }
+    } catch (error) {
+        console.error("Firebase Products Error:", error);
+
+        if (container) {
+            const message = document.createElement("p");
+            message.className = "no-products";
+            message.textContent =
+                "Unable to load products. Please refresh the page.";
+            container.replaceChildren(message);
+        }
+
+        if (searchResultsContainer && searchInput?.value.trim()) {
+            const message = document.createElement("p");
+            message.className = "no-search-results";
+            message.textContent =
+                "Products could not be loaded. Please try again.";
+            searchResultsContainer.replaceChildren(message);
+        }
+    }
+}
 
 // ==========================================
 // SEARCH
 // ==========================================
-
-const searchInput = document.getElementById("searchInput");
-const searchResultsSection = document.getElementById(
-    "searchResultsSection"
-);
-const searchResultsContainer = document.getElementById(
-    "searchResultsContainer"
-);
 
 function renderSearchResults(searchTerm) {
     const value = String(searchTerm || "").trim().toLowerCase();
@@ -319,10 +289,7 @@ function renderSearchResults(searchTerm) {
         }
 
         const productsSection = document.getElementById("products");
-
-        if (productsSection) {
-            productsSection.style.display = "";
-        }
+        if (productsSection) productsSection.style.display = "";
 
         if (currentCategory) {
             displayProducts(
@@ -343,9 +310,7 @@ function renderSearchResults(searchTerm) {
         const name = String(product.name || "").toLowerCase();
         const brand = String(product.brand || "").toLowerCase();
         const category = getProductCategory(product);
-        const description = String(
-            product.description || ""
-        ).toLowerCase();
+        const description = String(product.description || "").toLowerCase();
 
         return (
             name.includes(value) ||
@@ -355,7 +320,6 @@ function renderSearchResults(searchTerm) {
         );
     });
 
-    // Use a separate search-results section if the HTML provides one.
     if (searchResultsSection && searchResultsContainer) {
         searchResultsSection.hidden = false;
         searchResultsContainer.replaceChildren();
@@ -365,7 +329,6 @@ function renderSearchResults(searchTerm) {
             message.className = "no-search-results";
             message.textContent =
                 "No products found. Try another product name or brand.";
-
             searchResultsContainer.appendChild(message);
         } else {
             const fragment = document.createDocumentFragment();
@@ -377,13 +340,9 @@ function renderSearchResults(searchTerm) {
             searchResultsContainer.appendChild(fragment);
         }
 
-        // IMPORTANT:
-        // Do not call scrollIntoView while the user types.
-        // That was making the interface jump.
         return;
     }
 
-    // Fallback if no separate search-results section exists.
     displayProducts(results);
 }
 
@@ -391,14 +350,10 @@ if (searchInput) {
     searchInput.addEventListener("input", () => {
         const requestNumber = ++searchRequest;
 
-        // Debounce rendering slightly so rapid typing feels smooth.
         window.clearTimeout(searchInput._barqSearchTimer);
 
         searchInput._barqSearchTimer = window.setTimeout(() => {
-            if (requestNumber !== searchRequest) {
-                return;
-            }
-
+            if (requestNumber !== searchRequest) return;
             renderSearchResults(searchInput.value);
         }, 100);
     });
@@ -412,13 +367,11 @@ document.querySelectorAll(".beauty-category-card").forEach(card => {
     card.addEventListener("click", event => {
         event.preventDefault();
 
-        const category = String(
-            card.dataset.category || ""
-        ).trim().toLowerCase();
+        const category = String(card.dataset.category || "")
+            .trim()
+            .toLowerCase();
 
-        if (!category) {
-            return;
-        }
+        if (!category) return;
 
         currentCategory = category;
 
@@ -445,7 +398,6 @@ document.querySelectorAll(".beauty-category-card").forEach(card => {
         productsSection.style.display = "";
 
         const aliases = getCategoryAliases(category);
-
         const filteredProducts = productsData.filter(product =>
             aliases.includes(getProductCategory(product))
         );
@@ -461,8 +413,6 @@ document.querySelectorAll(".beauty-category-card").forEach(card => {
 
         displayProducts(filteredProducts);
 
-        // Scroll only after the customer clicks a category,
-        // never on every search keystroke.
         productsSection.scrollIntoView({
             behavior: "smooth",
             block: "start"
@@ -476,10 +426,7 @@ document.querySelectorAll(".beauty-category-card").forEach(card => {
 
 function saveCart() {
     try {
-        localStorage.setItem(
-            "barqCart",
-            JSON.stringify(cart)
-        );
+        localStorage.setItem("barqCart", JSON.stringify(cart));
     } catch (error) {
         console.error("Could not save cart:", error);
         alert("Unable to save your cart. Please check browser storage.");
@@ -497,15 +444,11 @@ function addToCart(
 ) {
     const selectedPrice = Number(price);
 
-    if (
-        !Number.isFinite(selectedPrice) ||
-        selectedPrice < 0
-    ) {
+    if (!Number.isFinite(selectedPrice) || selectedPrice < 0) {
         alert("Invalid product price.");
         return;
     }
 
-    // Match the same product, color, size, and price.
     const existing = cart.find(item =>
         item.productId === id &&
         String(item.color || "") === String(color || "") &&
@@ -514,10 +457,8 @@ function addToCart(
     );
 
     if (existing) {
-        existing.quantity = Math.max(
-            1,
-            Number(existing.quantity) || 1
-        ) + 1;
+        existing.quantity =
+            Math.max(1, Number(existing.quantity) || 1) + 1;
     } else {
         cart.push({
             productId: id,
@@ -533,7 +474,6 @@ function addToCart(
 
     saveCart();
     updateCart();
-
     alert("Added to cart ✅");
 }
 
@@ -553,15 +493,8 @@ function updateCart() {
         itemsElement.replaceChildren();
 
         cart.forEach((item, index) => {
-            const quantity = Math.max(
-                0,
-                Number(item.quantity) || 0
-            );
-
-            const price = Math.max(
-                0,
-                Number(item.price) || 0
-            );
+            const quantity = Math.max(0, Number(item.quantity) || 0);
+            const price = Math.max(0, Number(item.price) || 0);
 
             total += price * quantity;
             quantityTotal += quantity;
@@ -573,29 +506,20 @@ function updateCart() {
             name.textContent = item.name || "Product";
 
             const optionDetails = document.createElement("p");
-
             const optionLabels = [];
 
-            if (item.color) {
-                optionLabels.push(`Color: ${item.color}`);
-            }
-
-            if (item.size) {
-                optionLabels.push(`Size: ${item.size}`);
-            }
+            if (item.color) optionLabels.push(`Color: ${item.color}`);
+            if (item.size) optionLabels.push(`Size: ${item.size}`);
 
             optionDetails.textContent = optionLabels.join(" | ");
 
             const priceElement = document.createElement("p");
-            priceElement.textContent =
-                `${price.toFixed(2)} SAR each`;
+            priceElement.textContent = `${price.toFixed(2)} SAR each`;
 
             const decreaseButton = document.createElement("button");
             decreaseButton.type = "button";
             decreaseButton.textContent = "-";
-            decreaseButton.addEventListener("click", () => {
-                decreaseQuantity(index);
-            });
+            decreaseButton.addEventListener("click", () => decreaseQuantity(index));
 
             const quantityElement = document.createElement("span");
             quantityElement.textContent = ` ${quantity} `;
@@ -603,22 +527,16 @@ function updateCart() {
             const increaseButton = document.createElement("button");
             increaseButton.type = "button";
             increaseButton.textContent = "+";
-            increaseButton.addEventListener("click", () => {
-                increaseQuantity(index);
-            });
+            increaseButton.addEventListener("click", () => increaseQuantity(index));
 
             const removeButton = document.createElement("button");
             removeButton.type = "button";
-            removeButton.textContent = "Remove";
-            removeButton.addEventListener("click", () => {
-                removeCart(index);
-            });
+            removeButton.textContent = tr("remove", "Remove");
+            removeButton.addEventListener("click", () => removeCart(index));
 
             row.append(name);
 
-            if (optionLabels.length) {
-                row.append(optionDetails);
-            }
+            if (optionLabels.length) row.append(optionDetails);
 
             row.append(
                 priceElement,
@@ -631,32 +549,21 @@ function updateCart() {
             itemsElement.appendChild(row);
         });
     } else {
-        // Keep totals correct even on pages without cart markup.
         cart.forEach(item => {
             total +=
                 Math.max(0, Number(item.price) || 0) *
                 Math.max(0, Number(item.quantity) || 0);
 
-            quantityTotal += Math.max(
-                0,
-                Number(item.quantity) || 0
-            );
+            quantityTotal += Math.max(0, Number(item.quantity) || 0);
         });
     }
 
-    if (totalElement) {
-        totalElement.textContent = total.toFixed(2);
-    }
-
-    if (countElement) {
-        countElement.textContent = String(quantityTotal);
-    }
+    if (totalElement) totalElement.textContent = total.toFixed(2);
+    if (countElement) countElement.textContent = String(quantityTotal);
 }
 
 function increaseQuantity(index) {
-    if (!cart[index]) {
-        return;
-    }
+    if (!cart[index]) return;
 
     cart[index].quantity =
         Math.max(1, Number(cart[index].quantity) || 1) + 1;
@@ -666,28 +573,20 @@ function increaseQuantity(index) {
 }
 
 function decreaseQuantity(index) {
-    if (!cart[index]) {
-        return;
-    }
+    if (!cart[index]) return;
 
-    cart[index].quantity =
-        (Number(cart[index].quantity) || 1) - 1;
+    cart[index].quantity = (Number(cart[index].quantity) || 1) - 1;
 
-    if (cart[index].quantity <= 0) {
-        cart.splice(index, 1);
-    }
+    if (cart[index].quantity <= 0) cart.splice(index, 1);
 
     saveCart();
     updateCart();
 }
 
 function removeCart(index) {
-    if (!Number.isInteger(index) || !cart[index]) {
-        return;
-    }
+    if (!Number.isInteger(index) || !cart[index]) return;
 
     cart.splice(index, 1);
-
     saveCart();
     updateCart();
 }
@@ -698,20 +597,13 @@ function removeCart(index) {
 
 function openCart() {
     const box = document.getElementById("cartBox");
-
-    if (box) {
-        box.style.display = "block";
-    }
-
+    if (box) box.style.display = "block";
     updateCart();
 }
 
 function closeCart() {
     const box = document.getElementById("cartBox");
-
-    if (box) {
-        box.style.display = "none";
-    }
+    if (box) box.style.display = "none";
 }
 
 // ==========================================
@@ -733,30 +625,41 @@ function checkout() {
 
 function toggleMenu() {
     const menu = document.getElementById("mainNav");
-
-    if (menu) {
-        menu.classList.toggle("active");
-    }
+    if (menu) menu.classList.toggle("active");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const links = document.querySelectorAll("#mainNav a");
-
-    links.forEach(link => {
+    document.querySelectorAll("#mainNav a").forEach(link => {
         link.addEventListener("click", () => {
             const menu = document.getElementById("mainNav");
-
-            if (menu) {
-                menu.classList.remove("active");
-            }
+            if (menu) menu.classList.remove("active");
         });
     });
 
     const menuButton = document.getElementById("menuButton");
+    if (menuButton) menuButton.addEventListener("click", toggleMenu);
+});
 
-    if (menuButton) {
-        menuButton.addEventListener("click", toggleMenu);
+// ==========================================
+// REFRESH VISIBLE PRODUCT TEXT ON LANGUAGE CHANGE
+// ==========================================
+
+document.addEventListener("barq:languageChanged", () => {
+    if (searchInput && searchInput.value.trim()) {
+        renderSearchResults(searchInput.value);
+    } else if (currentCategory) {
+        displayProducts(
+            productsData.filter(product =>
+                getCategoryAliases(currentCategory).includes(
+                    getProductCategory(product)
+                )
+            )
+        );
+    } else {
+        displayProducts(productsData);
     }
+
+    updateCart();
 });
 
 // ==========================================
