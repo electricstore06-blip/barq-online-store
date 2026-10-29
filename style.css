@@ -1483,3 +1483,17 @@ html[dir="rtl"] .brand-list {
   white-space: nowrap;
   box-sizing: border-box;
 }
+
+/* BARQ — Final Popular Brands Spacing Fix */
+#brands .brand-list {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+#brands .brand-list > span {
+  display: inline-flex !important;
+  margin: 0 !important;
+}
