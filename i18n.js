@@ -18,8 +18,6 @@ const BARQ_LANGUAGES = {
     fr: { name: "Français", dir: "ltr" }
 };
 
-/* Add this key inside each language object in
-   BARQ_EXTRA_TRANSLATIONS. Do not create a second object. */
 
 ar: {
   topBar: "🚚 شحن مجاني | ❤️ منتجات أصلية | 🔒 دفع آمن"
