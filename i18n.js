@@ -738,11 +738,20 @@ function barqApplyLanguage(language = barqGetLanguage()) {
         element.setAttribute("aria-label", barqTranslate(key, language));
     });
 
-    document.querySelectorAll("[data-barq-language-selector]").forEach((selector) => {
-        if (selector.value !== language) {
-            selector.value = language;
-        }
+  document.querySelectorAll("[data-barq-language-selector]").forEach((selector) => {
+    if (selector.value !== language) {
+        selector.value = language;
+    }
+});
+
+document.querySelectorAll("[data-barq-language-control] .barq-language-label")
+    .forEach((label) => {
+        label.textContent = barqTranslate("language", language);
     });
+
+document.querySelectorAll("[data-barq-language-selector]").forEach((selector) => {
+    selector.setAttribute("aria-label", barqTranslate("language", language));
+});
 
     document.dispatchEvent(
         new CustomEvent("barq:languageChanged", {
