@@ -24,37 +24,30 @@
 
     <button class="menu-toggle" type="button" onclick="toggleMenu()">☰</button>
 
-    <nav id="mainNav">
-      <a href="index.html">Home</a>
-      <a href="#products">Shop</a>
-      <a href="#beauty-categories">Categories</a>
-      <a href="#offers">Offers</a>
-      <a href="orders.html">My Orders</a>
-      <a href="#" onclick="openCart(); return false;">
-        🛒 Cart <span id="cartCount">0</span>
-      </a>
-    
-<a id="accountLink" href="#" onclick="openLogin(); return false;">🔐 Account</a>
-<a id="logoutLink" href="#" onclick="logout(); return false;" hidden>Logout</a>
-       <div id="languageSelector"></div>    
+  
+<nav id="mainNav">
+  <a href="index.html" data-i18n="home">Home</a>
+  <a href="#products" data-i18n="shop">Shop</a>
+  <a href="#beauty-categories" data-i18n="categories">Categories</a>
+  <a href="#offers" data-i18n="offers">Offers</a>
+  <a href="orders.html" data-i18n="myOrders">My Orders</a>
 
-    </nav>
-  </header>
+  <a href="#" onclick="openCart(); return false;">
+    🛒 <span data-i18n="cart">Cart</span>
+    <span id="cartCount">0</span>
+  </a>
 
-  <!-- SEARCH -->
-  <section class="search-area">
-    <input
-      id="searchInput"
-      type="text"
-      placeholder="Search products, brands and categories..."
-      aria-label="Search products">
-  </section>
+  <a id="accountLink" href="#" onclick="openLogin(); return false;">
+    🔐 <span data-i18n="login">Account</span>
+  </a>
 
-  <!-- SEARCH RESULTS -->
-  <section id="searchResultsSection" class="products" hidden>
-    <h2>Search Results</h2>
-    <p class="products-subtitle">Products matching your search</p>
-    <div id="searchResultsContainer" class="product-container"></div>
+  <a id="logoutLink" href="#" onclick="logout(); return false;" hidden>
+    <span data-i18n="logout">Logout</span>
+  </a>
+
+  <div id="languageSelector"></div>
+</nav>
+archResultsContainer" class="product-container"></div>
   </section>
 
   <!-- HERO BANNER -->
