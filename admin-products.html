@@ -22,8 +22,11 @@
                 <a href="admin-orders.html">View Orders</a>
             </div>
 
-            <div id="admin-message">Checking admin access...</div>
+            <div id="admin-message" role="status">
+                Checking admin access...
+            </div>
 
+            <!-- ADD / EDIT PRODUCT -->
             <section id="product-form-section" hidden>
                 <h3 id="form-title">Add New Product</h3>
 
@@ -56,30 +59,34 @@
                     >
 
                     <small>
-                        Base price is used when the product has no size-specific prices.
+                        Base price is used when the product has no
+                        size-specific prices.
                     </small>
-<label for="product-stock">Stock Quantity *</label>
-<input
-    id="product-stock"
-    type="number"
-    min="0"
-    step="1"
-    required
-    value="0"
-    placeholder="Example: 25"
->
 
-<small>
-    Enter the number of units currently available in stock.
-</small>
+                    <label for="product-stock">Stock Quantity *</label>
+                    <input
+                        id="product-stock"
+                        type="number"
+                        min="0"
+                        step="1"
+                        required
+                        value="0"
+                        placeholder="Example: 25"
+                    >
+
+                    <small>
+                        Enter the number of units currently available.
+                    </small>
+
                     <label for="product-category">Category</label>
                     <input
                         id="product-category"
                         maxlength="100"
-                        placeholder="Example: Electronics"
+                        placeholder="Example: Skincare"
                     >
 
-                    <label for="product-image">Product Image URL *</label>
+                    <!-- MAIN PRODUCT IMAGE -->
+                    <label for="product-image">Main Product Image URL *</label>
                     <input
                         id="product-image"
                         type="url"
@@ -88,12 +95,31 @@
                     >
 
                     <div class="image-preview-box">
-                        <p>Image preview</p>
+                        <p>Main image preview</p>
                         <img
                             id="image-preview"
-                            alt="Product preview"
+                            alt="Main product image preview"
                             hidden
                         >
+                    </div>
+
+                    <!-- ADDITIONAL PRODUCT IMAGES -->
+                    <div class="additional-images-section">
+                        <h4>Additional Product Images</h4>
+
+                        <p>
+                            Add images showing different angles, packaging,
+                            or product details. Use HTTPS image URLs.
+                        </p>
+
+                        <div id="additional-images-container"></div>
+
+                        <button
+                            id="add-product-image-btn"
+                            type="button"
+                        >
+                            + Add Another Image
+                        </button>
                     </div>
 
                     <label for="product-description">Description</label>
@@ -116,9 +142,7 @@
                         placeholder="30ml, 50ml, 100ml"
                     >
 
-                    <small>
-                        Enter sizes separated by commas.
-                    </small>
+                    <small>Enter sizes separated by commas.</small>
 
                     <label for="product-size-prices">
                         Size Prices (SAR)
@@ -158,35 +182,43 @@
                 </form>
             </section>
 
+            <!-- EXISTING PRODUCTS -->
             <section id="product-list-section" hidden>
                 <h3>Existing Products</h3>
-                <div id="products-container">Loading products...</div>
-            </section> 
-           
-<section id="customer-reviews-section" hidden>
-    <h3>Customer Reviews</h3>
+                <div id="products-container">
+                    Loading products...
+                </div>
+            </section>
 
-    <p>Review customer submissions before publishing them.</p>
+            <!-- CUSTOMER REVIEWS -->
+            <section id="customer-reviews-section" hidden>
+                <h3>Customer Reviews</h3>
 
-    <label for="review-status-filter">Filter reviews:</label>
-    <select id="review-status-filter">
-        <option value="pending">Pending approval</option>
-        <option value="approved">Approved</option>
-        <option value="rejected">Rejected</option>
-        <option value="all">All reviews</option>
-    </select>
+                <p>
+                    Review customer submissions before publishing them.
+                </p>
 
-    <button id="refresh-reviews-btn" type="button">
-        Refresh Reviews
-    </button>
+                <label for="review-status-filter">
+                    Filter reviews:
+                </label>
 
-    <p id="reviews-message" role="status"></p>
+                <select id="review-status-filter">
+                    <option value="pending">Pending approval</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="all">All reviews</option>
+                </select>
 
-    <div id="customer-reviews-container">
-        Loading reviews...
-    </div>
-</section>
- 
+                <button id="refresh-reviews-btn" type="button">
+                    Refresh Reviews
+                </button>
+
+                <p id="reviews-message" role="status"></p>
+
+                <div id="customer-reviews-container">
+                    Loading reviews...
+                </div>
+            </section>
         </main>
     </div>
 
