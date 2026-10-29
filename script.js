@@ -1,7 +1,7 @@
 
  // ==========================================
  // BARQ STORE MAIN SCRIPT
- // Corrected product display + language support
+ // Product display + Firebase + cart + language support
  // ==========================================
 
 import { db } from "./firebase-config.js";
@@ -24,19 +24,22 @@ try {
     );
     cart = Array.isArray(savedCart) ? savedCart : [];
 } catch (error) {
-    console.error("Could not read saved cart:", error);
+    console.error("BARQ: Could not read saved cart:", error);
     cart = [];
 }
 
 let currentCategory = null;
 let searchRequest = 0;
+let searchTimer = null;
 
 const searchInput = document.getElementById("searchInput");
-const searchResultsSection = document.getElementById("searchResultsSection");
-const searchResultsContainer = document.getElementById("searchResultsContainer");
+const searchResultsSection =
+    document.getElementById("searchResultsSection");
+const searchResultsContainer =
+    document.getElementById("searchResultsContainer");
 
 // ==========================================
-// TRANSLATION HELPERS
+// TRANSLATION HELPER
 // ==========================================
 
 function tr(key, fallback) {
@@ -44,6 +47,7 @@ function tr(key, fallback) {
         const result = window.barqTranslate(key);
         if (result && result !== key) return result;
     }
+
     return fallback;
 }
 
@@ -59,7 +63,11 @@ function getProductPrice(product, size = "") {
         Object.prototype.hasOwnProperty.call(sizePrices, size)
     ) {
         const specificPrice = Number(sizePrices[size]);
-        if (Number.isFinite(specificPrice) && specificPrice >= 0) {
+
+        if (
+            Number.isFinite(specificPrice) &&
+            specificPrice >= 0
+        ) {
             return specificPrice;
         }
     }
@@ -72,7 +80,9 @@ function getProductPrice(product, size = "") {
 }
 
 function getProductCategory(product) {
-    return String(product.category || "").trim().toLowerCase();
+    return String(product.category || "")
+        .trim()
+        .toLowerCase();
 }
 
 function getCategoryAliases(category) {
@@ -93,8 +103,7 @@ function getCategoryAliases(category) {
 }
 
 // ==========================================
-// DISPLAY PRODUCT CARDS
-// IMPORTANT: These are separate functions.
+// CREATE ONE PRODUCT CARD
 // ==========================================
 
 function createProductCard(product) {
@@ -133,12 +142,17 @@ function createProductCard(product) {
 
     const basePrice = getProductPrice(product);
     const sizePrices = product.sizePrices || {};
+
     const availablePrices = Object.values(sizePrices)
         .map(Number)
         .filter(value => Number.isFinite(value) && value >= 0);
 
-    if (availablePrices.length) {
-        const lowestPrice = Math.min(basePrice, ...availablePrices);
+    if (availablePrices.length > 0) {
+        const lowestPrice = Math.min(
+            basePrice,
+            ...availablePrices
+        );
+
         price.textContent =
             `${tr("from", "From")} ${lowestPrice.toFixed(2)} SAR`;
     } else {
@@ -163,6 +177,7 @@ function createProductCard(product) {
     });
 
     const button = document.createElement("button");
+    button.type = "button";
     button.className = "add-btn";
     button.textContent = tr("viewOptions", "View Options");
 
@@ -172,8 +187,14 @@ function createProductCard(product) {
     });
 
     card.append(productArea, button);
+
     return card;
 }
+
+// ==========================================
+// DISPLAY PRODUCTS
+// This function is separate from createProductCard.
+// ==========================================
 
 function displayProducts(products) {
     const container = document.querySelector(
@@ -194,8 +215,14 @@ function displayProducts(products) {
         message.className = "no-products";
 
         message.textContent = currentCategory
-            ? tr("noProductsInCategory", "No products found in this category.")
-            : tr("noProducts", "No products available right now.");
+            ? tr(
+                "noProductsInCategory",
+                "No products found in this category."
+            )
+            : tr(
+                "noProducts",
+                "No products available right now."
+            );
 
         container.appendChild(message);
         return;
@@ -228,14 +255,16 @@ async function loadProducts() {
     }
 
     try {
-        const snapshot = await getDocs(collection(db, "products"));
+        const snapshot = await getDocs(
+            collection(db, "products")
+        );
 
         productsData = [];
 
         snapshot.forEach(documentSnapshot => {
             const product = {
-                id: documentSnapshot.id,
-                ...documentSnapshot.data()
+                ...documentSnapshot.data(),
+                id: documentSnapshot.id
             };
 
             if (product.active === false) return;
@@ -243,7 +272,10 @@ async function loadProducts() {
             productsData.push(product);
         });
 
-        console.log("BARQ: Products loaded:", productsData.length);
+        console.log(
+            "BARQ: Products loaded:",
+            productsData.length
+        );
 
         currentCategory = null;
         displayProducts(productsData);
@@ -259,14 +291,19 @@ async function loadProducts() {
             message.className = "no-products";
             message.textContent =
                 "Unable to load products. Please refresh the page.";
+
             container.replaceChildren(message);
         }
 
-        if (searchResultsContainer && searchInput?.value.trim()) {
+        if (
+            searchResultsContainer &&
+            searchInput?.value.trim()
+        ) {
             const message = document.createElement("p");
             message.className = "no-search-results";
             message.textContent =
                 "Products could not be loaded. Please try again.";
+
             searchResultsContainer.replaceChildren(message);
         }
     }
@@ -277,7 +314,9 @@ async function loadProducts() {
 // ==========================================
 
 function renderSearchResults(searchTerm) {
-    const value = String(searchTerm || "").trim().toLowerCase();
+    const value = String(searchTerm || "")
+        .trim()
+        .toLowerCase();
 
     if (!value) {
         if (searchResultsSection) {
@@ -288,15 +327,19 @@ function renderSearchResults(searchTerm) {
             searchResultsContainer.replaceChildren();
         }
 
-        const productsSection = document.getElementById("products");
-        if (productsSection) productsSection.style.display = "";
+        const productsSection =
+            document.getElementById("products");
+
+        if (productsSection) {
+            productsSection.style.display = "";
+        }
 
         if (currentCategory) {
+            const aliases = getCategoryAliases(currentCategory);
+
             displayProducts(
                 productsData.filter(product =>
-                    getCategoryAliases(currentCategory).includes(
-                        getProductCategory(product)
-                    )
+                    aliases.includes(getProductCategory(product))
                 )
             );
         } else {
@@ -310,7 +353,9 @@ function renderSearchResults(searchTerm) {
         const name = String(product.name || "").toLowerCase();
         const brand = String(product.brand || "").toLowerCase();
         const category = getProductCategory(product);
-        const description = String(product.description || "").toLowerCase();
+        const description = String(
+            product.description || ""
+        ).toLowerCase();
 
         return (
             name.includes(value) ||
@@ -329,6 +374,7 @@ function renderSearchResults(searchTerm) {
             message.className = "no-search-results";
             message.textContent =
                 "No products found. Try another product name or brand.";
+
             searchResultsContainer.appendChild(message);
         } else {
             const fragment = document.createDocumentFragment();
@@ -350,10 +396,11 @@ if (searchInput) {
     searchInput.addEventListener("input", () => {
         const requestNumber = ++searchRequest;
 
-        window.clearTimeout(searchInput._barqSearchTimer);
+        window.clearTimeout(searchTimer);
 
-        searchInput._barqSearchTimer = window.setTimeout(() => {
+        searchTimer = window.setTimeout(() => {
             if (requestNumber !== searchRequest) return;
+
             renderSearchResults(searchInput.value);
         }, 100);
     });
@@ -377,7 +424,8 @@ document.querySelectorAll(".beauty-category-card").forEach(card => {
 
         if (searchInput) {
             searchInput.value = "";
-            window.clearTimeout(searchInput._barqSearchTimer);
+            window.clearTimeout(searchTimer);
+            searchRequest++;
         }
 
         if (searchResultsSection) {
@@ -388,7 +436,8 @@ document.querySelectorAll(".beauty-category-card").forEach(card => {
             searchResultsContainer.replaceChildren();
         }
 
-        const productsSection = document.getElementById("products");
+        const productsSection =
+            document.getElementById("products");
 
         if (!productsSection) {
             console.error("BARQ: Products section not found.");
@@ -398,6 +447,7 @@ document.querySelectorAll(".beauty-category-card").forEach(card => {
         productsSection.style.display = "";
 
         const aliases = getCategoryAliases(category);
+
         const filteredProducts = productsData.filter(product =>
             aliases.includes(getProductCategory(product))
         );
@@ -421,17 +471,27 @@ document.querySelectorAll(".beauty-category-card").forEach(card => {
 });
 
 // ==========================================
-// CART SYSTEM
+// CART STORAGE
 // ==========================================
 
 function saveCart() {
     try {
-        localStorage.setItem("barqCart", JSON.stringify(cart));
+        localStorage.setItem(
+            "barqCart",
+            JSON.stringify(cart)
+        );
     } catch (error) {
-        console.error("Could not save cart:", error);
-        alert("Unable to save your cart. Please check browser storage.");
+        console.error("BARQ: Could not save cart:", error);
+
+        alert(
+            "Unable to save your cart. Please check browser storage."
+        );
     }
 }
+
+// ==========================================
+// ADD TO CART
+// ==========================================
 
 function addToCart(
     id,
@@ -444,7 +504,10 @@ function addToCart(
 ) {
     const selectedPrice = Number(price);
 
-    if (!Number.isFinite(selectedPrice) || selectedPrice < 0) {
+    if (
+        !Number.isFinite(selectedPrice) ||
+        selectedPrice < 0
+    ) {
         alert("Invalid product price.");
         return;
     }
@@ -474,11 +537,12 @@ function addToCart(
 
     saveCart();
     updateCart();
+
     alert("Added to cart ✅");
 }
 
 // ==========================================
-// CART DISPLAY
+// UPDATE CART DISPLAY
 // ==========================================
 
 function updateCart() {
@@ -491,75 +555,95 @@ function updateCart() {
 
     if (itemsElement) {
         itemsElement.replaceChildren();
-
-        cart.forEach((item, index) => {
-            const quantity = Math.max(0, Number(item.quantity) || 0);
-            const price = Math.max(0, Number(item.price) || 0);
-
-            total += price * quantity;
-            quantityTotal += quantity;
-
-            const row = document.createElement("div");
-            row.className = "cart-item";
-
-            const name = document.createElement("b");
-            name.textContent = item.name || "Product";
-
-            const optionDetails = document.createElement("p");
-            const optionLabels = [];
-
-            if (item.color) optionLabels.push(`Color: ${item.color}`);
-            if (item.size) optionLabels.push(`Size: ${item.size}`);
-
-            optionDetails.textContent = optionLabels.join(" | ");
-
-            const priceElement = document.createElement("p");
-            priceElement.textContent = `${price.toFixed(2)} SAR each`;
-
-            const decreaseButton = document.createElement("button");
-            decreaseButton.type = "button";
-            decreaseButton.textContent = "-";
-            decreaseButton.addEventListener("click", () => decreaseQuantity(index));
-
-            const quantityElement = document.createElement("span");
-            quantityElement.textContent = ` ${quantity} `;
-
-            const increaseButton = document.createElement("button");
-            increaseButton.type = "button";
-            increaseButton.textContent = "+";
-            increaseButton.addEventListener("click", () => increaseQuantity(index));
-
-            const removeButton = document.createElement("button");
-            removeButton.type = "button";
-            removeButton.textContent = tr("remove", "Remove");
-            removeButton.addEventListener("click", () => removeCart(index));
-
-            row.append(name);
-
-            if (optionLabels.length) row.append(optionDetails);
-
-            row.append(
-                priceElement,
-                decreaseButton,
-                quantityElement,
-                increaseButton,
-                removeButton
-            );
-
-            itemsElement.appendChild(row);
-        });
-    } else {
-        cart.forEach(item => {
-            total +=
-                Math.max(0, Number(item.price) || 0) *
-                Math.max(0, Number(item.quantity) || 0);
-
-            quantityTotal += Math.max(0, Number(item.quantity) || 0);
-        });
     }
 
-    if (totalElement) totalElement.textContent = total.toFixed(2);
-    if (countElement) countElement.textContent = String(quantityTotal);
+    cart.forEach((item, index) => {
+        const quantity = Math.max(
+            0,
+            Number(item.quantity) || 0
+        );
+
+        const price = Math.max(
+            0,
+            Number(item.price) || 0
+        );
+
+        total += price * quantity;
+        quantityTotal += quantity;
+
+        if (!itemsElement) return;
+
+        const row = document.createElement("div");
+        row.className = "cart-item";
+
+        const name = document.createElement("b");
+        name.textContent = item.name || "Product";
+
+        const optionDetails = document.createElement("p");
+        const optionLabels = [];
+
+        if (item.color) {
+            optionLabels.push(`Color: ${item.color}`);
+        }
+
+        if (item.size) {
+            optionLabels.push(`Size: ${item.size}`);
+        }
+
+        optionDetails.textContent = optionLabels.join(" | ");
+
+        const priceElement = document.createElement("p");
+        priceElement.textContent =
+            `${price.toFixed(2)} SAR each`;
+
+        const decreaseButton = document.createElement("button");
+        decreaseButton.type = "button";
+        decreaseButton.textContent = "-";
+        decreaseButton.addEventListener("click", () =>
+            decreaseQuantity(index)
+        );
+
+        const quantityElement = document.createElement("span");
+        quantityElement.textContent = ` ${quantity} `;
+
+        const increaseButton = document.createElement("button");
+        increaseButton.type = "button";
+        increaseButton.textContent = "+";
+        increaseButton.addEventListener("click", () =>
+            increaseQuantity(index)
+        );
+
+        const removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.textContent = tr("remove", "Remove");
+        removeButton.addEventListener("click", () =>
+            removeCart(index)
+        );
+
+        row.append(name);
+
+        if (optionLabels.length > 0) {
+            row.append(optionDetails);
+        }
+
+        row.append(
+            priceElement,
+            decreaseButton,
+            quantityElement,
+            increaseButton,
+            removeButton
+        );
+
+        itemsElement.appendChild(row);
+    });
+
+    if (totalElement) {
+        totalElement.textContent = total.toFixed(2);
+    }
+
+    if (countElement) {
+        countElement.textContent = String(quantityTotal);
+    }
 }
 
 function increaseQuantity(index) {
@@ -575,9 +659,12 @@ function increaseQuantity(index) {
 function decreaseQuantity(index) {
     if (!cart[index]) return;
 
-    cart[index].quantity = (Number(cart[index].quantity) || 1) - 1;
+    cart[index].quantity =
+        (Number(cart[index].quantity) || 1) - 1;
 
-    if (cart[index].quantity <= 0) cart.splice(index, 1);
+    if (cart[index].quantity <= 0) {
+        cart.splice(index, 1);
+    }
 
     saveCart();
     updateCart();
@@ -587,23 +674,31 @@ function removeCart(index) {
     if (!Number.isInteger(index) || !cart[index]) return;
 
     cart.splice(index, 1);
+
     saveCart();
     updateCart();
 }
 
 // ==========================================
-// CART OPEN / CLOSE
+// OPEN / CLOSE CART
 // ==========================================
 
 function openCart() {
     const box = document.getElementById("cartBox");
-    if (box) box.style.display = "block";
+
+    if (box) {
+        box.style.display = "block";
+    }
+
     updateCart();
 }
 
 function closeCart() {
     const box = document.getElementById("cartBox");
-    if (box) box.style.display = "none";
+
+    if (box) {
+        box.style.display = "none";
+    }
 }
 
 // ==========================================
@@ -625,34 +720,43 @@ function checkout() {
 
 function toggleMenu() {
     const menu = document.getElementById("mainNav");
-    if (menu) menu.classList.toggle("active");
+
+    if (menu) {
+        menu.classList.toggle("active");
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("#mainNav a").forEach(link => {
         link.addEventListener("click", () => {
             const menu = document.getElementById("mainNav");
-            if (menu) menu.classList.remove("active");
+
+            if (menu) {
+                menu.classList.remove("active");
+            }
         });
     });
 
     const menuButton = document.getElementById("menuButton");
-    if (menuButton) menuButton.addEventListener("click", toggleMenu);
+
+    if (menuButton) {
+        menuButton.addEventListener("click", toggleMenu);
+    }
 });
 
 // ==========================================
-// REFRESH VISIBLE PRODUCT TEXT ON LANGUAGE CHANGE
+// LANGUAGE CHANGE
 // ==========================================
 
 document.addEventListener("barq:languageChanged", () => {
     if (searchInput && searchInput.value.trim()) {
         renderSearchResults(searchInput.value);
     } else if (currentCategory) {
+        const aliases = getCategoryAliases(currentCategory);
+
         displayProducts(
             productsData.filter(product =>
-                getCategoryAliases(currentCategory).includes(
-                    getProductCategory(product)
-                )
+                aliases.includes(getProductCategory(product))
             )
         );
     } else {
