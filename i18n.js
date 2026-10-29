@@ -464,11 +464,9 @@ const BARQ_TRANSLATIONS = {
 /* =========================================
    BARQ STORE PAGE TRANSLATIONS
 ========================================= */
-
 const BARQ_EXTRA_TRANSLATIONS = {
-   en: {
-    topBar: "🚚 Free Shipping | ❤️ Authentic Products | 🔒 Secure Payment",
-    heroEyebrow: "BEAUTY, STYLE & MORE",
+    en: {
+        topBar: "🚚 Free Shipping | ❤️ Authentic Products | 🔒 Secure Payment",
         heroEyebrow: "BEAUTY, STYLE & MORE",
         heroTitle: "Discover Your Beauty",
         heroSubtitle: "Your Style, Your Confidence",
@@ -491,7 +489,8 @@ const BARQ_EXTRA_TRANSLATIONS = {
         remove: "Remove"
     },
 
-    ar: {
+     ar: {
+        topBar: "🚚 شحن مجاني | ❤️ منتجات أصلية | 🔒 دفع آمن",
         heroEyebrow: "الجمال والأناقة والمزيد",
         heroTitle: "اكتشفي جمالك",
         heroSubtitle: "أناقتك، ثقتك بنفسك",
@@ -512,7 +511,7 @@ const BARQ_EXTRA_TRANSLATIONS = {
         from: "ابتداءً من",
         noProductsInCategory: "لا توجد منتجات في هذه الفئة.",
         remove: "إزالة"
-    },
+    },  
 
     ur: {
         heroEyebrow: "خوبصورتی، انداز اور بہت کچھ",
