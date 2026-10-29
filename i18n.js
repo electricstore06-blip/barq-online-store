@@ -19,46 +19,6 @@ const BARQ_LANGUAGES = {
 };
 
 
-ar: {
-  topBar: "🚚 شحن مجاني | ❤️ منتجات أصلية | 🔒 دفع آمن"
-},
-
-en: {
-  topBar: "🚚 Free Shipping | ❤️ Authentic Products | 🔒 Secure Payment"
-},
-
-ur: {
-  topBar: "🚚 مفت شپنگ | ❤️ اصل مصنوعات | 🔒 محفوظ ادائیگی"
-},
-
-hi: {
-  topBar: "🚚 मुफ़्त शिपिंग | ❤️ असली उत्पाद | 🔒 सुरक्षित भुगतान"
-},
-
-bn: {
-  topBar: "🚚 বিনামূল্যে শিপিং | ❤️ আসল পণ্য | 🔒 নিরাপদ পেমেন্ট"
-},
-
-fil: {
-  topBar: "🚚 Libreng Shipping | ❤️ Orihinal na Produkto | 🔒 Ligtas na Pagbabayad"
-},
-
-id: {
-  topBar: "🚚 Gratis Ongkir | ❤️ Produk Asli | 🔒 Pembayaran Aman"
-},
-
-ml: {
-  topBar: "🚚 സൗജന്യ ഡെലിവറി | ❤️ യഥാർത്ഥ ഉൽപ്പന്നങ്ങൾ | 🔒 സുരക്ഷിത പേയ്‌മെന്റ്"
-},
-
-ta: {
-  topBar: "🚚 இலவச டெலிவரி | ❤️ உண்மையான தயாரிப்புகள் | 🔒 பாதுகாப்பான கட்டணம்"
-},
-
-fr: {
-  topBar: "🚚 Livraison gratuite | ❤️ Produits authentiques | 🔒 Paiement sécurisé"
-}
-
 const BARQ_TRANSLATIONS = {
     en: {
         home: "Home",
