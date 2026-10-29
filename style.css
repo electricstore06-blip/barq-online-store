@@ -1454,3 +1454,32 @@ html[dir="rtl"] .brand-list {
     font-size: 13px;
   }
 }
+
+/* BARQ — Popular Brands Fix */
+.brands .brand-list {
+  display: flex !important;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 14px !important;
+  max-width: 1100px;
+  margin: 20px auto 0;
+}
+
+.brands .brand-list span {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  min-height: 44px;
+  margin: 0;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  color: #222;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
