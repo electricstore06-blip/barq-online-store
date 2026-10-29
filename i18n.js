@@ -466,7 +466,9 @@ const BARQ_TRANSLATIONS = {
 ========================================= */
 
 const BARQ_EXTRA_TRANSLATIONS = {
-    en: {
+   en: {
+    topBar: "🚚 Free Shipping | ❤️ Authentic Products | 🔒 Secure Payment",
+    heroEyebrow: "BEAUTY, STYLE & MORE",
         heroEyebrow: "BEAUTY, STYLE & MORE",
         heroTitle: "Discover Your Beauty",
         heroSubtitle: "Your Style, Your Confidence",
