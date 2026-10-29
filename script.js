@@ -165,6 +165,51 @@ async function loadProducts() {
 
 
 function createProductCard(product) {
+    
+function displayProducts(products) {
+    const container = document.querySelector(
+        "#products .product-container"
+    );
+
+    if (!container) {
+        console.error(
+            'BARQ: Could not find "#products .product-container".'
+        );
+        return;
+    }
+
+    container.replaceChildren();
+
+    if (!Array.isArray(products) || products.length === 0) {
+        const message = document.createElement("p");
+        message.className = "no-products";
+
+        const key = currentCategory
+            ? "noProductsInCategory"
+            : "noProducts";
+
+        message.textContent =
+            typeof window.barqTranslate === "function"
+                ? window.barqTranslate(key)
+                : currentCategory
+                    ? "No products found in this category."
+                    : "No products available right now.";
+
+        container.appendChild(message);
+        return;
+    }
+
+    const fragment = document.createDocumentFragment();
+
+    products.forEach(product => {
+        fragment.appendChild(createProductCard(product));
+    });
+
+    container.appendChild(fragment);
+
+    console.log("BARQ: Products displayed:", products.length);
+}
+
     const card = document.createElement("div");
     card.className = "product";
 
