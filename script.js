@@ -163,6 +163,7 @@ async function loadProducts() {
 // DISPLAY PRODUCT CARDS
 // ==========================================
 
+
 function createProductCard(product) {
     const card = document.createElement("div");
     card.className = "product";
@@ -171,6 +172,12 @@ function createProductCard(product) {
     productArea.className = "product-click";
     productArea.tabIndex = 0;
     productArea.setAttribute("role", "link");
+
+    const translate = (key) =>
+        typeof window.barqTranslate === "function"
+            ? window.barqTranslate(key)
+            : key;
+
     productArea.setAttribute(
         "aria-label",
         `View ${product.name || "product"} details`
@@ -204,7 +211,8 @@ function createProductCard(product) {
 
     if (availablePrices.length) {
         const lowestPrice = Math.min(basePrice, ...availablePrices);
-        price.textContent = `From ${lowestPrice.toFixed(2)} SAR`;
+        price.textContent =
+            `${translate("from")} ${lowestPrice.toFixed(2)} SAR`;
     } else {
         price.textContent = `${basePrice.toFixed(2)} SAR`;
     }
@@ -228,10 +236,8 @@ function createProductCard(product) {
 
     const button = document.createElement("button");
     button.className = "add-btn";
-    button.textContent = "View Options";
+    button.textContent = translate("viewOptions");
 
-    // Products with color or size choices should be selected
-    // on their detail page before being added to the cart.
     button.addEventListener("click", event => {
         event.stopPropagation();
         openProductDetails();
@@ -242,41 +248,6 @@ function createProductCard(product) {
     return card;
 }
 
-function displayProducts(products) {
-    const container = document.querySelector(
-        "#products .product-container"
-    );
-
-    if (!container) {
-        console.error(
-            'BARQ: Could not find "#products .product-container".'
-        );
-        return;
-    }
-
-    container.replaceChildren();
-
-    if (!Array.isArray(products) || products.length === 0) {
-        const message = document.createElement("p");
-        message.className = "no-products";
-        message.textContent = currentCategory
-            ? "No products found in this category."
-            : "No products available right now.";
-
-        container.appendChild(message);
-        return;
-    }
-
-    const fragment = document.createDocumentFragment();
-
-    products.forEach(product => {
-        fragment.appendChild(createProductCard(product));
-    });
-
-    container.appendChild(fragment);
-
-    console.log("BARQ: Products displayed:", products.length);
-}
 
 // ==========================================
 // SEARCH
