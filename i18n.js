@@ -140,47 +140,32 @@ const BARQ_TRANSLATIONS = {
         language: "اللغة"
     },
 
-    ur: {
-        home: "ہوم",
-        shop: "خریداری",
-        categories: "اقسام",
-        offers: "آفرز",
-        myOrders: "میرے آرڈرز",
-        cart: "کارٹ",
-        login: "لاگ اِن",
-        logout: "لاگ آؤٹ",
-        search: "مصنوعات، برانڈز اور اقسام تلاش کریں...",
-        searchResults: "تلاش کے نتائج",
-        featuredProducts: "نمایاں مصنوعات",
-        viewOptions: "اختیارات دیکھیں",
-        addToCart: "کارٹ میں شامل کریں",
-        checkout: "چیک آؤٹ",
-        continueShopping: "خریداری جاری رکھیں",
-        loading: "لوڈ ہو رہا ہے...",
-        noProducts: "فی الحال کوئی مصنوعات دستیاب نہیں۔",
-        customerReviews: "صارفین کے جائزے",
-        submitReview: "جائزہ جمع کریں",
-        customerOrders: "صارفین کے آرڈرز",
-        refreshOrders: "آرڈرز ریفریش کریں",
-        loadingOrders: "آرڈرز لوڈ ہو رہے ہیں...",
-        noOrders: "کوئی آرڈر نہیں ملا۔",
-        customerInformation: "صارف کی معلومات",
-        products: "مصنوعات",
-        payment: "ادائیگی",
-        status: "حیثیت",
-        pending: "زیرِ انتظار",
-        processing: "زیرِ کارروائی",
-        shipped: "بھیج دیا گیا",
-        outForDelivery: "ترسیل کے لیے روانہ",
-        delivered: "ڈیلیور ہو گیا",
-        deliveryDelayed: "ترسیل میں تاخیر",
-        replacementRequested: "تبدیلی کی درخواست",
-        replacementApproved: "تبدیلی منظور",
-        cancelled: "منسوخ",
-        language: "زبان"
+      ur: {
+        topBar: "🚚 مفت شپنگ | ❤️ اصل مصنوعات | 🔒 محفوظ ادائیگی",
+        heroEyebrow: "خوبصورتی، انداز اور بہت کچھ",
+        heroTitle: "اپنی خوبصورتی دریافت کریں",
+        heroSubtitle: "آپ کا انداز، آپ کا اعتماد",
+        heroDescription: "BARQ پر خوبصورتی، جلد کی دیکھ بھال، خوشبوئیں اور فیشن کی مصنوعات دریافت کریں۔",
+        shopNow: "ابھی خریداری کریں",
+        categoryEyebrow: "ہمارا مجموعہ دیکھیں",
+        shopByCategory: "قسم کے لحاظ سے خریداری",
+        categoryDescription: "ہر قسم میں اپنی پسندیدہ مصنوعات تلاش کریں۔",
+        makeup: "میک اپ",
+        skincare: "جلد کی دیکھ بھال",
+        perfume: "خوشبوئیں",
+        haircare: "بالوں کی دیکھ بھال",
+        fashion: "فیشن اور لوازمات",
+        popularBrands: "مقبول برانڈز",
+        featuredDescription: "روزمرہ ضروریات کے لیے منتخب کردہ مصنوعات دریافت کریں۔",
+        deals: "خصوصی پیشکشیں",
+        dealsDescription: "BARQ پر بہترین مصنوعات اور خاص قیمتوں سے فائدہ اٹھائیں۔",
+        from: "سے شروع",
+        noProductsInCategory: "اس قسم میں کوئی مصنوعات نہیں ملیں۔",
+        remove: "ہٹائیں"
     },
 
     hi: {
+        topBar: "🚚 मुफ़्त शिपिंग | ❤️ असली उत्पाद | 🔒 सुरक्षित भुगतान",
         home: "होम",
         shop: "खरीदारी",
         categories: "श्रेणियाँ",
@@ -221,6 +206,7 @@ const BARQ_TRANSLATIONS = {
     },
 
     bn: {
+        topBar: "🚚 বিনামূল্যে শিপিং | ❤️ আসল পণ্য | 🔒 নিরাপদ পেমেন্ট",
         home: "হোম",
         shop: "কেনাকাটা",
         categories: "বিভাগ",
@@ -261,6 +247,7 @@ const BARQ_TRANSLATIONS = {
     },
 
     fil: {
+        topBar: "🚚 Libreng Shipping | ❤️ Orihinal na Produkto | 🔒 Ligtas na Pagbabayad",
         home: "Home",
         shop: "Mamili",
         categories: "Mga Kategorya",
@@ -299,8 +286,8 @@ const BARQ_TRANSLATIONS = {
         cancelled: "Kinansela",
         language: "Wika"
     },
-
     id: {
+        topBar: "🚚 Gratis Ongkir | ❤️ Produk Asli | 🔒 Pembayaran Aman",
         home: "Beranda",
         shop: "Belanja",
         categories: "Kategori",
@@ -338,9 +325,9 @@ const BARQ_TRANSLATIONS = {
         replacementApproved: "Penggantian Disetujui",
         cancelled: "Dibatalkan",
         language: "Bahasa"
-    },
-
+    },  
     ml: {
+        topBar: "🚚 സൗജന്യ ഡെലിവറി | ❤️ യഥാർത്ഥ ഉൽപ്പന്നങ്ങൾ | 🔒 സുരക്ഷിത പേയ്‌മെന്റ്",
         home: "ഹോം",
         shop: "ഷോപ്പ്",
         categories: "വിഭാഗങ്ങൾ",
@@ -378,9 +365,10 @@ const BARQ_TRANSLATIONS = {
         replacementApproved: "മാറ്റിസ്ഥാപിക്കൽ അംഗീകരിച്ചു",
         cancelled: "റദ്ദാക്കി",
         language: "ഭാഷ"
-    },
+    },    
 
-    ta: {
+     ta: {
+        topBar: "🚚 இலவச ஷிப்பிங் | ❤️ அசல் தயாரிப்புகள் | 🔒 பாதுகாப்பான கட்டணம்",
         home: "முகப்பு",
         shop: "கடை",
         categories: "வகைகள்",
@@ -405,7 +393,7 @@ const BARQ_TRANSLATIONS = {
         loadingOrders: "ஆர்டர்கள் ஏற்றப்படுகின்றன...",
         noOrders: "ஆர்டர்கள் எதுவும் கிடைக்கவில்லை.",
         customerInformation: "வாடிக்கையாளர் தகவல்",
-        products: "தயாரிப்புகள்"
+        products: "தயாரிப்புகள்",
         payment: "கட்டணம்",
         status: "நிலை",
         pending: "நிலுவையில்",
@@ -419,8 +407,8 @@ const BARQ_TRANSLATIONS = {
         cancelled: "ரத்து செய்யப்பட்டது",
         language: "மொழி"
     },
-
     fr: {
+        topBar: "🚚 Livraison gratuite | ❤️ Produits authentiques | 🔒 Paiement sécurisé",
         home: "Accueil",
         shop: "Boutique",
         categories: "Catégories",
@@ -460,6 +448,7 @@ const BARQ_TRANSLATIONS = {
         language: "Langue"
     }
 };
+   
 
 /* =========================================
    BARQ STORE PAGE TRANSLATIONS
