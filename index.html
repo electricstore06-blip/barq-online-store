@@ -1,5 +1,6 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +12,7 @@
 <body>
 
   <!-- TOP BAR -->
-  <div class="top-bar">
+  <div class="top-bar" data-i18n="topBar">
     🚚 Free Shipping | ❤️ Authentic Products | 🔒 Secure Payment
   </div>
 
@@ -22,124 +23,132 @@
       <span>ONLINE STORE</span>
     </div>
 
-    <button class="menu-toggle" type="button" onclick="toggleMenu()">☰</button>
+    <button
+      class="menu-toggle"
+      id="menuButton"
+      type="button"
+      aria-label="Toggle navigation"
+      onclick="toggleMenu()">☰</button>
 
-  
-<nav id="mainNav">
-  <a href="index.html" data-i18n="home">Home</a>
-  <a href="#products" data-i18n="shop">Shop</a>
-  <a href="#beauty-categories" data-i18n="categories">Categories</a>
-  <a href="#offers" data-i18n="offers">Offers</a>
-  <a href="orders.html" data-i18n="myOrders">My Orders</a>
+    <nav id="mainNav">
+      <a href="index.html" data-i18n="home">Home</a>
+      <a href="#products" data-i18n="shop">Shop</a>
+      <a href="#beauty-categories" data-i18n="categories">Categories</a>
+      <a href="#offers" data-i18n="offers">Offers</a>
+      <a href="orders.html" data-i18n="myOrders">My Orders</a>
 
-  <a href="#" onclick="openCart(); return false;">
-    🛒 <span data-i18n="cart">Cart</span>
-    <span id="cartCount">0</span>
-  </a>
+      <a href="#" onclick="openCart(); return false;">
+        🛒 <span data-i18n="cart">Cart</span>
+        <span id="cartCount">0</span>
+      </a>
 
-  <a id="accountLink" href="#" onclick="openLogin(); return false;">
-    🔐 <span data-i18n="login">Account</span>
-  </a>
+      <a id="accountLink" href="#" onclick="openLogin(); return false;">
+        🔐 <span data-i18n="login">Account</span>
+      </a>
 
-  <a id="logoutLink" href="#" onclick="logout(); return false;" hidden>
-    <span data-i18n="logout">Logout</span>
-  </a>
+      <a id="logoutLink" href="#" onclick="logout(); return false;" hidden>
+        <span data-i18n="logout">Logout</span>
+      </a>
 
-  <div id="languageSelector"></div>
-</nav>
-archResultsContainer" class="product-container"></div>
-  </section>
+      <div id="languageSelector"></div>
+    </nav>
+  </header>
 
   <!-- HERO BANNER -->
   <section class="barq-banner">
     <div>
-      <p class="small">BARQ BEAUTY &amp; FASHION</p>
+      <p class="small" data-i18n="heroEyebrow">BARQ BEAUTY &amp; FASHION</p>
 
       <h1>
-        Everything You Love,
+        <span data-i18n="heroTitle">Everything You Love,</span>
         <br>
-        <span>Delivered Fast</span>
+        <span data-i18n="heroSubtitle">Delivered Fast</span>
       </h1>
 
-      <p>
+      <p data-i18n="heroDescription">
         Premium beauty, cosmetics and lifestyle products at your fingertips.
       </p>
 
       <button
         type="button"
+        data-i18n="shopNow"
         onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
         Shop Now →
       </button>
     </div>
 
     <img
-      src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1000&q=85"
+      src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&amp;fit=crop&amp;w=1000&amp;q=85"
       alt="BARQ beauty and cosmetics collection">
   </section>
 
-  <!-- LUXURY BEAUTY CATEGORIES -->
+  <!-- BEAUTY CATEGORIES -->
   <section id="beauty-categories" class="beauty-categories">
 
     <div class="category-heading">
-      <span class="category-eyebrow">DISCOVER YOUR FAVORITES</span>
-      <h2>Shop by Category</h2>
-      <p>Find the essentials that make every day feel special.</p>
+      <span class="category-eyebrow" data-i18n="categoryEyebrow">
+        DISCOVER YOUR FAVORITES
+      </span>
+      <h2 data-i18n="shopByCategory">Shop by Category</h2>
+      <p data-i18n="categoryDescription">
+        Find the essentials that make every day feel special.
+      </p>
     </div>
 
     <div class="beauty-category-grid">
 
       <a href="#products" class="beauty-category-card" data-category="makeup">
         <img
-          src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80"
+          src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
           alt="Makeup products"
           loading="lazy">
         <div class="beauty-category-info">
-          <h3>Makeup</h3>
-          <span>Shop Now →</span>
+          <h3 data-i18n="makeup">Makeup</h3>
+          <span data-i18n="shopNow">Shop Now →</span>
         </div>
       </a>
 
       <a href="#products" class="beauty-category-card" data-category="skincare">
         <img
-          src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=600&q=80"
+          src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
           alt="Skincare products"
           loading="lazy">
         <div class="beauty-category-info">
-          <h3>Skincare</h3>
-          <span>Shop Now →</span>
+          <h3 data-i18n="skincare">Skincare</h3>
+          <span data-i18n="shopNow">Shop Now →</span>
         </div>
       </a>
 
       <a href="#products" class="beauty-category-card" data-category="perfume">
         <img
-          src="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=600&q=80"
+          src="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
           alt="Perfume bottles"
           loading="lazy">
         <div class="beauty-category-info">
-          <h3>Perfume</h3>
-          <span>Shop Now →</span>
+          <h3 data-i18n="perfume">Perfume</h3>
+          <span data-i18n="shopNow">Shop Now →</span>
         </div>
       </a>
 
       <a href="#products" class="beauty-category-card" data-category="haircare">
         <img
-          src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80"
+          src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
           alt="Haircare and beauty"
           loading="lazy">
         <div class="beauty-category-info">
-          <h3>Haircare</h3>
-          <span>Shop Now →</span>
+          <h3 data-i18n="haircare">Haircare</h3>
+          <span data-i18n="shopNow">Shop Now →</span>
         </div>
       </a>
 
       <a href="#products" class="beauty-category-card" data-category="fashion">
         <img
-          src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=600&q=80"
+          src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
           alt="Fashion and accessories"
           loading="lazy">
         <div class="beauty-category-info">
-          <h3>Fashion &amp; Accessories</h3>
-          <span>Shop Now →</span>
+          <h3 data-i18n="fashion">Fashion &amp; Accessories</h3>
+          <span data-i18n="shopNow">Shop Now →</span>
         </div>
       </a>
 
@@ -148,7 +157,7 @@ archResultsContainer" class="product-container"></div>
 
   <!-- POPULAR BRANDS -->
   <section id="brands" class="brands">
-    <h2>Popular Brands</h2>
+    <h2 data-i18n="popularBrands">Popular Brands</h2>
 
     <div class="brand-list">
       <span>Maybelline</span>
@@ -162,15 +171,21 @@ archResultsContainer" class="product-container"></div>
 
   <!-- FIREBASE PRODUCTS -->
   <section id="products" class="products">
-    <h2>Featured Products</h2>
-    <p class="products-subtitle">Discover your next favorite product</p>
+    <h2 data-i18n="featuredProducts">Featured Products</h2>
+    <p class="products-subtitle" data-i18n="featuredDescription">
+      Discover your next favorite product
+    </p>
+
+    <!-- Firebase products are rendered here by script.js -->
     <div class="product-container"></div>
   </section>
 
   <!-- OFFERS -->
   <section id="offers" class="offers">
-    <h2>BARQ Deals</h2>
-    <p>Special offers and discounts coming soon.</p>
+    <h2 data-i18n="deals">BARQ Deals</h2>
+    <p data-i18n="dealsDescription">
+      Special offers and discounts coming soon.
+    </p>
   </section>
 
   <!-- CONTACT -->
@@ -178,16 +193,17 @@ archResultsContainer" class="product-container"></div>
 
   <!-- SHOPPING CART -->
   <div id="cartBox" class="cart-box">
-    <h2>Your Cart</h2>
+    <h2 data-i18n="yourCart">Your Cart</h2>
 
     <div id="cartItems"></div>
 
     <h3>
-      Total: <span id="cartTotal">0</span> SAR
+      <span data-i18n="total">Total:</span>
+      <span id="cartTotal">0</span> SAR
     </h3>
 
-    <button type="button" onclick="checkout()">Checkout</button>
-    <button type="button" onclick="closeCart()">Close</button>
+    <button type="button" data-i18n="checkout" onclick="checkout()">Checkout</button>
+    <button type="button" data-i18n="close" onclick="closeCart()">Close</button>
   </div>
 
   <!-- LOGIN -->
@@ -198,55 +214,56 @@ archResultsContainer" class="product-container"></div>
         class="login-close"
         type="button"
         onclick="closeLogin()"
-        aria-label="Close login">
-        ×
+        aria-label="Close login">×</button>
+
+      <h2 data-i18n="accountTitle">BARQ Account</h2>
+      <p data-i18n="accountDescription">Login or create your customer account</p>
+
+      <input
+        id="loginEmail"
+        type="email"
+        placeholder="Email"
+        data-i18n-placeholder="email"
+        autocomplete="email">
+
+      <input
+        id="loginPassword"
+        type="password"
+        placeholder="Password"
+        data-i18n-placeholder="password"
+        autocomplete="current-password">
+
+      <button id="loginButton" type="button" data-i18n="login">Login</button>
+      <button id="registerButton" type="button" data-i18n="createAccount">Create Account</button>
+
+      <button id="facebookLoginButton" type="button" data-i18n="facebookLogin">
+        Continue with Facebook
       </button>
 
-<h2>BARQ Account</h2>
-<p>Login or create your customer account</p>
+      <button id="googleLoginButton" type="button" data-i18n="googleLogin">
+        Continue with Google
+      </button>
 
-<input
-  id="loginEmail"
-  type="email"
-  placeholder="Email"
-  autocomplete="email"
->
-
-<input
-  id="loginPassword"
-  type="password"
-  placeholder="Password"
-  autocomplete="current-password"
->
-
-<button id="loginButton" type="button">Login</button>
-
-<button id="registerButton" type="button">Create Account</button>
-
-<button id="facebookLoginButton" type="button">
-  Continue with Facebook
-</button>
-<button id="googleLoginButton" type="button">
-  Continue with Google
-</button>
-<p id="loginMessage" role="status" aria-live="polite"></p>    
+      <p id="loginMessage" role="status" aria-live="polite"></p>
     </div>
   </div>
 
-  <!-- EXISTING SCRIPTS -->
-<script src="i18n.js"></script>
+  <!-- LANGUAGE SYSTEM -->
+  <script src="i18n.js"></script>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const container = document.getElementById("languageSelector");
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const container = document.getElementById("languageSelector");
 
-    if (container && window.barqMountLanguageSelector) {
-      window.barqMountLanguageSelector(container);
-    }
-  });
-</script>
+      if (container && typeof window.barqMountLanguageSelector === "function") {
+        window.barqMountLanguageSelector(container);
+      }
+    });
+  </script>
 
-<script type="module" src="script.js"></script>
-<script type="module" src="auth.js"></script>
+  <!-- EXISTING FIREBASE MODULES -->
+  <script type="module" src="script.js"></script>
+  <script type="module" src="auth.js"></script>
+
 </body>
 </html>
