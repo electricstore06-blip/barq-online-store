@@ -100,7 +100,7 @@ const BARQ_TRANSLATIONS = {
         language: "Language"
     },
 
-    ar: {
+    ar: 
         home: "الرئيسية",
         shop: "تسوق",
         categories: "الفئات",
@@ -140,7 +140,7 @@ const BARQ_TRANSLATIONS = {
         language: "اللغة"
     },
 
-      ur: {
+      ur: 
         topBar: "🚚 مفت شپنگ | ❤️ اصل مصنوعات | 🔒 محفوظ ادائیگی",
         heroEyebrow: "خوبصورتی، انداز اور بہت کچھ",
         heroTitle: "اپنی خوبصورتی دریافت کریں",
@@ -164,7 +164,7 @@ const BARQ_TRANSLATIONS = {
         remove: "ہٹائیں"
     },
 
-    hi: {
+    hi: 
         topBar: "🚚 मुफ़्त शिपिंग | ❤️ असली उत्पाद | 🔒 सुरक्षित भुगतान",
         home: "होम",
         shop: "खरीदारी",
@@ -205,7 +205,7 @@ const BARQ_TRANSLATIONS = {
         language: "भाषा"
     },
 
-    bn: {
+    bn:
         topBar: "🚚 বিনামূল্যে শিপিং | ❤️ আসল পণ্য | 🔒 নিরাপদ পেমেন্ট",
         home: "হোম",
         shop: "কেনাকাটা",
@@ -246,7 +246,7 @@ const BARQ_TRANSLATIONS = {
         language: "ভাষা"
     },
 
-    fil: {
+    fil: 
         topBar: "🚚 Libreng Shipping | ❤️ Orihinal na Produkto | 🔒 Ligtas na Pagbabayad",
         home: "Home",
         shop: "Mamili",
@@ -286,7 +286,7 @@ const BARQ_TRANSLATIONS = {
         cancelled: "Kinansela",
         language: "Wika"
     },
-    id: {
+    id: 
         topBar: "🚚 Gratis Ongkir | ❤️ Produk Asli | 🔒 Pembayaran Aman",
         home: "Beranda",
         shop: "Belanja",
@@ -326,7 +326,7 @@ const BARQ_TRANSLATIONS = {
         cancelled: "Dibatalkan",
         language: "Bahasa"
     },  
-    ml: {
+    ml: 
         topBar: "🚚 സൗജന്യ ഡെലിവറി | ❤️ യഥാർത്ഥ ഉൽപ്പന്നങ്ങൾ | 🔒 സുരക്ഷിത പേയ്‌മെന്റ്",
         home: "ഹോം",
         shop: "ഷോപ്പ്",
@@ -367,7 +367,7 @@ const BARQ_TRANSLATIONS = {
         language: "ഭാഷ"
     },    
 
-     ta: {
+     ta: 
         topBar: "🚚 இலவச ஷிப்பிங் | ❤️ அசல் தயாரிப்புகள் | 🔒 பாதுகாப்பான கட்டணம்",
         home: "முகப்பு",
         shop: "கடை",
@@ -407,7 +407,7 @@ const BARQ_TRANSLATIONS = {
         cancelled: "ரத்து செய்யப்பட்டது",
         language: "மொழி"
     },
-    fr: {
+    fr: 
         topBar: "🚚 Livraison gratuite | ❤️ Produits authentiques | 🔒 Paiement sécurisé",
         home: "Accueil",
         shop: "Boutique",
