@@ -100,7 +100,45 @@ const BARQ_TRANSLATIONS = {
         language: "اللغة"
     },
 
-      ur: {
+   
+    ur: {
+        home: "صفحۂ اول",
+        shop: "خریداری",
+        categories: "اقسام",
+        offers: "خصوصی پیشکشیں",
+        myOrders: "میرے آرڈرز",
+        cart: "کارٹ",
+        login: "لاگ اِن",
+        logout: "لاگ آؤٹ",
+        search: "مصنوعات، برانڈز اور اقسام تلاش کریں...",
+        searchResults: "تلاش کے نتائج",
+        featuredProducts: "نمایاں مصنوعات",
+        viewOptions: "اختیارات دیکھیں",
+        addToCart: "کارٹ میں شامل کریں",
+        checkout: "چیک آؤٹ",
+        continueShopping: "خریداری جاری رکھیں",
+        loading: "لوڈ ہو رہا ہے...",
+        noProducts: "فی الحال کوئی مصنوعات دستیاب نہیں۔",
+        customerReviews: "گاہکوں کے جائزے",
+        submitReview: "جائزہ جمع کریں",
+        customerOrders: "گاہکوں کے آرڈرز",
+        refreshOrders: "آرڈرز تازہ کریں",
+        loadingOrders: "آرڈرز لوڈ ہو رہے ہیں...",
+        noOrders: "کوئی آرڈر نہیں ملا۔",
+        customerInformation: "گاہک کی معلومات",
+        products: "مصنوعات",
+        payment: "ادائیگی",
+        status: "حیثیت",
+        pending: "زیرِ انتظار",
+        processing: "زیرِ کارروائی",
+        shipped: "بھیج دیا گیا",
+        outForDelivery: "ترسیل کے لیے روانہ",
+        delivered: "پہنچا دیا گیا",
+        deliveryDelayed: "ترسیل میں تاخیر",
+        replacementRequested: "تبدیلی کی درخواست",
+        replacementApproved: "تبدیلی منظور",
+        cancelled: "منسوخ",
+        language: "زبان",
         topBar: "🚚 مفت شپنگ | ❤️ اصل مصنوعات | 🔒 محفوظ ادائیگی",
         heroEyebrow: "خوبصورتی، انداز اور بہت کچھ",
         heroTitle: "اپنی خوبصورتی دریافت کریں",
@@ -123,6 +161,7 @@ const BARQ_TRANSLATIONS = {
         noProductsInCategory: "اس قسم میں کوئی مصنوعات نہیں ملیں۔",
         remove: "ہٹائیں"
     },
+  
 
     hi: {
         topBar: "🚚 मुफ़्त शिपिंग | ❤️ असली उत्पाद | 🔒 सुरक्षित भुगतान",
