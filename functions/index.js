@@ -1,6 +1,7 @@
 
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { initializeApp } = require("firebase-admin/app");
+const { getAuth } = require("firebase-admin/auth");
 const {
   getFirestore,
   FieldValue
@@ -9,7 +10,7 @@ const {
 initializeApp();
 
 const db = getFirestore();
-
+const adminAuth = getAuth();
 async function requireUser(request) {
   if (!request.auth) {
     throw new HttpsError(
@@ -387,4 +388,119 @@ exports.moderateReview = onCall(async request => {
     status: action === "approve" ? "approved" : "rejected"
   };
 });
+exports.createStaffAccount = onCall(async request => {
+  const adminUid = await requireUser(request);
+  await requireAdmin(adminUid);
 
+  const {
+    name,
+    email,
+    password,
+    role,
+    city,
+    phone
+  } = request.data || {};
+
+  if (
+    typeof name !== "string" ||
+    name.trim().length < 2 ||
+    name.trim().length > 100
+  ) {
+    throw new HttpsError(
+      "invalid-argument",
+      "Please enter a name between 2 and 100 characters."
+    );
+  }
+
+  if (
+    typeof email !== "string" ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+  ) {
+    throw new HttpsError(
+      "invalid-argument",
+      "Please enter a valid email address."
+    );
+  }
+
+  if (
+    typeof password !== "string" ||
+    password.length < 8
+  ) {
+    throw new HttpsError(
+      "invalid-argument",
+      "Password must contain at least 8 characters."
+    );
+  }
+
+  if (!["supervisor", "driver", "staff"].includes(role)) {
+    throw new HttpsError(
+      "invalid-argument",
+      "Role must be supervisor, driver, or staff."
+    );
+  }
+
+  if (
+    typeof city !== "string" ||
+    city.trim().length > 100 ||
+    typeof phone !== "string" ||
+    phone.trim().length > 30
+  ) {
+    throw new HttpsError(
+      "invalid-argument",
+      "City or phone information is invalid."
+    );
+  }
+
+  let newUser;
+
+  try {
+    newUser = await adminAuth.createUser({
+      email: email.trim().toLowerCase(),
+      password,
+      displayName: name.trim()
+    });
+
+    await db.collection("users").doc(newUser.uid).set({
+      uid: newUser.uid,
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      phone: phone.trim(),
+      city: city.trim(),
+      role,
+      active: true,
+      createdAt: FieldValue.serverTimestamp(),
+      createdBy: adminUid
+    });
+
+    return {
+      success: true,
+      uid: newUser.uid,
+      message: "Staff account created successfully."
+    };
+
+  } catch (error) {
+    if (newUser) {
+      await adminAuth.deleteUser(newUser.uid).catch(cleanupError => {
+        console.error("Could not remove incomplete staff login:", cleanupError);
+      });
+    }
+
+    if (error instanceof HttpsError) {
+      throw error;
+    }
+
+    if (error.code === "auth/email-already-exists") {
+      throw new HttpsError(
+        "already-exists",
+        "This email address is already registered."
+      );
+    }
+
+    console.error("Create staff account error:", error);
+
+    throw new HttpsError(
+      "internal",
+      "Could not create the staff account."
+    );
+  }
+});
