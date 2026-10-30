@@ -381,15 +381,16 @@ th{color:var(--muted);font-weight:600}
           <th>Role</th>
           <th>City</th>
           <th>Status</th>
+         <th>Actions</th>
         </tr>
       </thead>
-      <tbody id="staff-list">
-        <tr>
-          <td colspan="4" class="empty">Loading staff accounts...</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+     <tbody id="staff-list">
+  <tr>
+    <td colspan="5" class="empty">Loading staff accounts...</td>
+  </tr>
+</tbody>
+</table>
+</div>
 </section>
 
 <p class="footer-note">BARQ Admin · Keep your existing Firebase permissions enabled. Financial figures on this page are operational summaries, not audited accounting statements.</p>
@@ -400,7 +401,16 @@ th{color:var(--muted);font-weight:600}
 <script type="module">
 import {auth,db} from "./firebase-config.js";
 import {onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
- import {   doc,   getDoc,   collection,   getDocs,   addDoc,   deleteDoc,   serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  doc,
+  getDoc,
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  updateDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const $=id=>document.getElementById(id);
 const money=n=>"SAR "+(Number.isFinite(n)?n:0).toLocaleString("en-SA",{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -408,7 +418,6 @@ const norm=s=>String(s??"").trim().toLowerCase();
 let orders=[],products=[],authorizedUid=null;
 
 let staffMembers = [];
-
 function renderStaff() {
   const tbody = $("staff-list");
   if (!tbody) return;
@@ -418,7 +427,7 @@ function renderStaff() {
   if (staffMembers.length === 0) {
     const row = document.createElement("tr");
     row.innerHTML =
-      '<td colspan="4" class="empty">No staff accounts found.</td>';
+      '<td colspan="5" class="empty">No staff accounts found.</td>';
     tbody.appendChild(row);
     return;
   }
@@ -452,6 +461,105 @@ function renderStaff() {
         row.appendChild(cell);
       });
 
+      const actionsCell = document.createElement("td");
+      const currentRole = norm(member.role);
+
+      function makeButton(label, onClick) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = label;
+        button.style.margin = "3px";
+        button.style.padding = "7px 10px";
+        button.style.cursor = "pointer";
+        button.addEventListener("click", onClick);
+        actionsCell.appendChild(button);
+        return button;
+      }
+
+      makeButton("View Details", () => {
+        alert(
+          "Staff Details\n\n" +
+          "Name: " + (member.name || "—") + "\n" +
+          "Role: " + (member.role || "—") + "\n" +
+          "City: " + (member.city || "—") + "\n" +
+          "Email: " + (member.email || "—") + "\n" +
+          "Phone: " + (member.phone || "—") + "\n" +
+          "Status: " + (member.active === true ? "Active" : "Inactive") + "\n" +
+          "UID: " + (member.uid || member.id || "—")
+        );
+      });
+
+      if (currentRole === "admin") {
+        const protectedText = document.createElement("span");
+        protectedText.textContent = "Protected admin account";
+        actionsCell.appendChild(protectedText);
+      } else if (["supervisor", "driver", "staff"].includes(currentRole)) {
+
+        makeButton("Change Role", async () => {
+          const newRole = prompt(
+            "Enter the new role:\n\nsupervisor\ndriver\nstaff",
+            currentRole
+          );
+
+          if (newRole === null) return;
+
+          const selectedRole = norm(newRole);
+
+          if (!["supervisor", "driver", "staff"].includes(selectedRole)) {
+            alert("Invalid role. Please enter supervisor, driver, or staff.");
+            return;
+          }
+
+          if (selectedRole === currentRole) return;
+
+          if (!confirm("Change this staff member's role to " + selectedRole + "?")) {
+            return;
+          }
+
+          try {
+            await updateDoc(doc(db, "users", member.id), {
+              role: selectedRole,
+              active: member.active === true
+            });
+
+            alert("Staff role updated successfully.");
+            await loadStaff();
+          } catch (error) {
+            console.error("Change staff role error:", error);
+            alert("Could not change the role. Please check Firebase permissions.");
+          }
+        });
+
+        makeButton(
+          member.active === true ? "Deactivate" : "Activate",
+          async () => {
+            const nextActive = member.active !== true;
+            const action = nextActive ? "activate" : "deactivate";
+
+            if (!confirm("Are you sure you want to " + action + " this account?")) {
+              return;
+            }
+
+            try {
+              await updateDoc(doc(db, "users", member.id), {
+                role: currentRole,
+                active: nextActive
+              });
+
+              alert("Staff account status updated successfully.");
+              await loadStaff();
+            } catch (error) {
+              console.error("Update staff status error:", error);
+              alert("Could not update the account status. Please check Firebase permissions.");
+            }
+          }
+        );
+
+      } else {
+        actionsCell.textContent = "No management actions";
+      }
+
+      row.appendChild(actionsCell);
       tbody.appendChild(row);
     });
 }
