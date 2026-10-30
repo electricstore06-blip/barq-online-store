@@ -363,9 +363,87 @@ th{color:var(--muted);font-weight:600}
     </button>
   </div>
 
-<div class="notice">
-  Staff accounts are loaded from Firebase. Use the actions below to view staff details, change roles, and activate or deactivate accounts.
-</div>
+  <div class="notice">
+    Create staff accounts, view staff details, change roles, and activate or deactivate accounts.
+  </div>
+
+  <h3>Create New Staff Account</h3>
+
+  <form id="create-staff-form">
+    <div class="form-grid">
+
+      <div>
+        <label for="staff-name">Full Name</label>
+        <input
+          type="text"
+          id="staff-name"
+          required
+          minlength="2"
+          maxlength="100"
+          placeholder="Enter full name"
+        >
+      </div>
+
+      <div>
+        <label for="staff-email">Email</label>
+        <input
+          type="email"
+          id="staff-email"
+          required
+          placeholder="Enter email address"
+        >
+      </div>
+
+      <div>
+        <label for="staff-password">Password</label>
+        <input
+          type="password"
+          id="staff-password"
+          required
+          minlength="8"
+          placeholder="Minimum 8 characters"
+        >
+      </div>
+
+      <div>
+        <label for="staff-phone">Phone</label>
+        <input
+          type="tel"
+          id="staff-phone"
+          maxlength="30"
+          placeholder="Enter phone number"
+        >
+      </div>
+
+      <div>
+        <label for="staff-city">City</label>
+        <input
+          type="text"
+          id="staff-city"
+          maxlength="100"
+          placeholder="Enter city"
+        >
+      </div>
+
+      <div>
+        <label for="staff-role">Role</label>
+        <select id="staff-role" required>
+          <option value="staff">Staff</option>
+          <option value="driver">Driver</option>
+          <option value="supervisor">Supervisor</option>
+        </select>
+      </div>
+
+    </div>
+
+    <button type="submit" class="primary-link" id="create-staff-btn">
+      Create Staff Account
+    </button>
+  </form>
+
+  <div class="divider"></div>
+
+  <h3>Existing Staff Accounts</h3>
 
   <p id="staff-message" role="status" aria-live="polite">
     Staff accounts have not been loaded yet.
@@ -379,16 +457,17 @@ th{color:var(--muted);font-weight:600}
           <th>Role</th>
           <th>City</th>
           <th>Status</th>
-         <th>Actions</th>
+          <th>Actions</th>
         </tr>
       </thead>
-     <tbody id="staff-list">
-  <tr>
-    <td colspan="5" class="empty">Loading staff accounts...</td>
-  </tr>
-</tbody>
-</table>
-</div>
+
+      <tbody id="staff-list">
+        <tr>
+          <td colspan="5" class="empty">Loading staff accounts...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </section>
 
 <p class="footer-note">BARQ Admin · Keep your existing Firebase permissions enabled. Financial figures on this page are operational summaries, not audited accounting statements.</p>
@@ -400,6 +479,10 @@ th{color:var(--muted);font-weight:600}
 import {auth,db} from "./firebase-config.js";
 import {onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
+  getFunctions,
+  httpsCallable
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+ import {
   doc,
   getDoc,
   collection,
@@ -603,7 +686,45 @@ async function loadStaff() {
 }
 
 $("refresh-staff").addEventListener("click", loadStaff);
+const createStaffForm = $("create-staff-form");
 
+createStaffForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const button = $("create-staff-btn");
+  const message = $("staff-message");
+
+  button.disabled = true;
+  button.textContent = "Creating account...";
+  message.textContent = "Creating staff account...";
+
+  try {
+    const result = await createStaffAccountCall({
+      name: $("staff-name").value.trim(),
+      email: $("staff-email").value.trim(),
+      password: $("staff-password").value,
+      phone: $("staff-phone").value.trim(),
+      city: $("staff-city").value.trim(),
+      role: $("staff-role").value
+    });
+
+    createStaffForm.reset();
+
+    message.textContent =
+      result.data.message || "Staff account created successfully.";
+
+    await loadStaff();
+
+  } catch (error) {
+    console.error("Create staff account error:", error);
+    message.textContent =
+      error.message || "Could not create staff account.";
+
+  } finally {
+    button.disabled = false;
+    button.textContent = "Create Staff Account";
+  }
+});
 function showMessage(text){
  const el=$("dashboard-message");
  el.textContent=text;
@@ -1004,3 +1125,9 @@ await loadStaff();
 </script>
 </body>
 </html>
+const functions = getFunctions(auth.app);
+
+const createStaffAccountCall = httpsCallable(
+  functions,
+  "createStaffAccount"
+);
