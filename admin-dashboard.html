@@ -354,6 +354,44 @@ th{color:var(--muted);font-weight:600}
 </div>
 </section>
 </div>
+ 
+<section class="card" id="staff">
+  <div class="section-head">
+    <h2>Staff & Drivers</h2>
+    <button type="button" class="primary-link" id="refresh-staff">
+      Refresh Staff
+    </button>
+  </div>
+
+  <div class="notice">
+    Staff accounts are loaded from your existing Firebase users collection.
+    This section displays account information only; it does not create or
+    change staff accounts.
+  </div>
+
+  <p id="staff-message" role="status" aria-live="polite">
+    Staff accounts have not been loaded yet.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Role</th>
+          <th>City</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="staff-list">
+        <tr>
+          <td colspan="4" class="empty">Loading staff accounts...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 <p class="footer-note">BARQ Admin · Keep your existing Firebase permissions enabled. Financial figures on this page are operational summaries, not audited accounting statements.</p>
 </div>
 </main>
@@ -368,6 +406,97 @@ const $=id=>document.getElementById(id);
 const money=n=>"SAR "+(Number.isFinite(n)?n:0).toLocaleString("en-SA",{minimumFractionDigits:2,maximumFractionDigits:2});
 const norm=s=>String(s??"").trim().toLowerCase();
 let orders=[],products=[],authorizedUid=null;
+
+let staffMembers = [];
+
+function renderStaff() {
+  const tbody = $("staff-list");
+  if (!tbody) return;
+
+  tbody.replaceChildren();
+
+  if (staffMembers.length === 0) {
+    const row = document.createElement("tr");
+    row.innerHTML =
+      '<td colspan="4" class="empty">No staff accounts found.</td>';
+    tbody.appendChild(row);
+    return;
+  }
+
+  staffMembers
+    .sort((a, b) =>
+      String(a.role || "").localeCompare(String(b.role || ""))
+    )
+    .forEach(member => {
+      const row = document.createElement("tr");
+
+      const values = [
+        member.name || "Unnamed",
+        member.role || "Unassigned",
+        member.city || "—",
+        member.active === true ? "Active" : "Inactive"
+      ];
+
+      values.forEach((value, index) => {
+        const cell = document.createElement("td");
+        cell.textContent = String(value);
+
+        if (index === 3) {
+          const status = document.createElement("span");
+          status.className =
+            member.active === true ? "pill green" : "pill red";
+          status.textContent = String(value);
+          cell.replaceChildren(status);
+        }
+
+        row.appendChild(cell);
+      });
+
+      tbody.appendChild(row);
+    });
+}
+
+async function loadStaff() {
+  const message = $("staff-message");
+  const tbody = $("staff-list");
+
+  if (!authorizedUid) {
+    message.textContent = "Administrator access is required.";
+    return;
+  }
+
+  message.textContent = "Loading staff accounts...";
+
+  try {
+    const snapshot = await getDocs(collection(db, "users"));
+
+    staffMembers = snapshot.docs
+      .map(item => ({
+        id: item.id,
+        ...item.data()
+      }))
+      .filter(member =>
+        ["admin", "supervisor", "driver", "staff"].includes(
+          norm(member.role)
+        )
+      );
+
+    renderStaff();
+
+    message.textContent =
+      `${staffMembers.length} staff account(s) found.`;
+  } catch (error) {
+    console.error("Load staff error:", error);
+
+    staffMembers = [];
+    tbody.replaceChildren();
+
+    message.textContent =
+      "Could not load staff accounts. Check Firebase permissions.";
+  }
+}
+
+$("refresh-staff").addEventListener("click", loadStaff);
 
 function showMessage(text){
  const el=$("dashboard-message");
@@ -755,8 +884,9 @@ onAuthStateChanged(auth,async user=>{
   if(results[1].status==="fulfilled")products=results[1].value.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.active!==false);
   else showMessage("Products could not be loaded. Check Firestore permissions and the browser console.");
   render();
-  await loadExpenses(); 
-  await loadDeliveryCosts();
+await loadExpenses();
+await loadDeliveryCosts();
+await loadStaff();
   if(results.some(r=>r.status==="rejected"))console.error("Dashboard data load errors:",results.filter(r=>r.status==="rejected"));
  }catch(error){
   console.error("BARQ dashboard error:",error);
