@@ -57,35 +57,9 @@ const imagePreview = document.getElementById("image-preview");
 const additionalImagesContainer = document.getElementById(
     "additional-images-container"
 );
-
-const addProductImageBtn = document.getElementById(
+const addProductImageButton = document.getElementById(
     "add-product-image-btn"
 );
-
-if (additionalImagesContainer && addProductImageBtn) {
-    addProductImageBtn.addEventListener("click", () => {
-        const row = document.createElement("div");
-        row.className = "additional-image-row";
-
-        const input = document.createElement("input");
-        input.type = "url";
-        input.className = "additional-product-image-url";
-        input.placeholder = "https://example.com/product-image.jpg";
-        input.setAttribute("aria-label", "Additional product image URL");
-
-        const removeButton = document.createElement("button");
-        removeButton.type = "button";
-        removeButton.textContent = "Remove";
-
-        removeButton.addEventListener("click", () => {
-            row.remove();
-        });
-
-        row.appendChild(input);
-        row.appendChild(removeButton);
-        additionalImagesContainer.appendChild(row);
-    });
-}
 
 const formTitle = document.getElementById("form-title");
 const saveButton = document.getElementById("save-product-btn");
@@ -100,7 +74,9 @@ let productsLoaded = false;
 // ==========================================
 
 function showMessage(text) {
-    message.textContent = text;
+    if (message) {
+        message.textContent = text;
+    }
 }
 
 // ==========================================
@@ -134,21 +110,12 @@ function splitOptions(value) {
 
 // ==========================================
 // PARSE SIZE PRICES
-//
-// Example input:
-// 30ml:79, 50ml:129, 100ml:199
-//
-// Result:
-// {
-//     "30ml": 79,
-//     "50ml": 129,
-//     "100ml": 199
-// }
+// Example: 30ml:79, 50ml:129
 // ==========================================
-
 
 function parseSizePrices(value, sizes) {
     const sizePrices = {};
+
     const entries = value
         .split(",")
         .map(entry => entry.trim())
@@ -203,7 +170,6 @@ function parseSizePrices(value, sizes) {
     };
 }
 
-
 // ==========================================
 // FORMAT SIZE PRICES FOR EDITING
 // ==========================================
@@ -219,28 +185,137 @@ function formatSizePrices(sizePrices) {
 }
 
 // ==========================================
-// IMAGE PREVIEW
+// MAIN IMAGE PREVIEW
 // ==========================================
 
-imageInput.addEventListener("input", () => {
-    const url = getSecureImageUrl(imageInput.value);
+if (imageInput && imagePreview) {
+    imageInput.addEventListener("input", () => {
+        const url = getSecureImageUrl(imageInput.value);
 
-    if (!url) {
-        imagePreview.hidden = true;
-        imagePreview.removeAttribute("src");
-        return;
+        if (!url) {
+            imagePreview.hidden = true;
+            imagePreview.removeAttribute("src");
+            return;
+        }
+
+        imagePreview.onload = () => {
+            imagePreview.hidden = false;
+        };
+
+        imagePreview.onerror = () => {
+            imagePreview.hidden = true;
+        };
+
+        imagePreview.src = url;
+    });
+}
+
+// ==========================================
+// ADDITIONAL PRODUCT IMAGES
+// ==========================================
+
+function addAdditionalImageField(value = "") {
+    if (!additionalImagesContainer) return;
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "additional-image-field";
+
+    const input = document.createElement("input");
+    input.type = "url";
+    input.className = "additional-product-image";
+    input.placeholder = "https://example.com/another-angle.jpg";
+    input.value = value;
+    input.setAttribute("aria-label", "Additional product image URL");
+
+    const preview = document.createElement("img");
+    preview.alt = "Additional product image preview";
+    preview.hidden = true;
+    preview.style.cssText =
+        "max-width:140px;max-height:140px;object-fit:contain;margin-top:8px;";
+
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.textContent = "Remove image";
+
+    function updatePreview() {
+        const url = getSecureImageUrl(input.value);
+
+        if (!url) {
+            preview.hidden = true;
+            preview.removeAttribute("src");
+            return;
+        }
+
+        preview.onload = () => {
+            preview.hidden = false;
+        };
+
+        preview.onerror = () => {
+            preview.hidden = true;
+        };
+
+        preview.src = url;
     }
 
-    imagePreview.onload = () => {
-        imagePreview.hidden = false;
-    };
+    input.addEventListener("input", updatePreview);
 
-    imagePreview.onerror = () => {
-        imagePreview.hidden = true;
-    };
+    removeButton.addEventListener("click", () => {
+        wrapper.remove();
+    });
 
-    imagePreview.src = url;
-});
+    wrapper.append(input, removeButton, preview);
+    additionalImagesContainer.appendChild(wrapper);
+
+    if (value) updatePreview();
+}
+
+if (addProductImageButton) {
+    addProductImageButton.addEventListener("click", () => {
+        addAdditionalImageField();
+    });
+}
+
+function resetAdditionalImages() {
+    if (additionalImagesContainer) {
+        additionalImagesContainer.replaceChildren();
+    }
+}
+
+function getAdditionalImageUrls() {
+    const urls = [];
+
+    if (!additionalImagesContainer) {
+        return { valid: true, images: [] };
+    }
+
+    const inputs = additionalImagesContainer.querySelectorAll(
+        ".additional-product-image"
+    );
+
+    for (const input of inputs) {
+        const value = input.value.trim();
+
+        if (!value) continue;
+
+        const url = getSecureImageUrl(value);
+
+        if (!url) {
+            return {
+                valid: false,
+                error: "Every additional image must use a valid HTTPS URL."
+            };
+        }
+
+        urls.push(url);
+    }
+
+    const mainImage = getSecureImageUrl(imageInput.value);
+
+    return {
+        valid: true,
+        images: [...new Set(urls)].filter(url => url !== mainImage)
+    };
+}
 
 // ==========================================
 // RESET FORM
@@ -248,6 +323,7 @@ imageInput.addEventListener("input", () => {
 
 function resetForm() {
     form.reset();
+    resetAdditionalImages();
 
     productIdInput.value = "";
     activeInput.checked = true;
@@ -300,16 +376,19 @@ function createProductCard(id, product) {
     const status = document.createElement("p");
     status.textContent =
         product.active === false ? "Hidden from store" : "Active";
+
     const stockInformation = document.createElement("p");
-const stockQuantity = Number.isSafeInteger(product.stock) && product.stock >= 0
-    ? product.stock
-    : 0;
 
-stockInformation.textContent = `Stock: ${stockQuantity} units`;
+    const stockQuantity =
+        Number.isSafeInteger(product.stock) && product.stock >= 0
+            ? product.stock
+            : 0;
 
-if (stockQuantity === 0) {
-    stockInformation.textContent += " — Out of stock";
-}
+    stockInformation.textContent = `Stock: ${stockQuantity} units`;
+
+    if (stockQuantity === 0) {
+        stockInformation.textContent += " — Out of stock";
+    }
 
     const sizeInformation = document.createElement("p");
 
@@ -327,7 +406,8 @@ if (stockQuantity === 0) {
             return `${size}: Base price`;
         });
 
-        sizeInformation.textContent = "Size prices: " + details.join(" | ");
+        sizeInformation.textContent =
+            "Size prices: " + details.join(" | ");
     } else {
         sizeInformation.textContent = "No sizes configured.";
     }
@@ -376,17 +456,17 @@ if (stockQuantity === 0) {
 
     actions.append(editButton, deleteButton);
 
-  card.append(
-    image,
-    name,
-    brand,
-    price,
-    category,
-    status,
-    stockInformation,
-    sizeInformation,
-    actions
-);
+    card.append(
+        image,
+        name,
+        brand,
+        price,
+        category,
+        status,
+        stockInformation,
+        sizeInformation,
+        actions
+    );
 
     return card;
 }
@@ -400,7 +480,6 @@ async function loadProducts() {
 
     const loading = document.createElement("p");
     loading.textContent = "Loading products...";
-
     container.appendChild(loading);
 
     try {
@@ -484,543 +563,13 @@ function editProduct(id, product) {
         imagePreview.removeAttribute("src");
     }
 
-    formTitle.textContent = "Edit Product";
-    saveButton.textContent = "Update Product";
-    cancelButton.hidden = false;
-
-    formSection.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
-}
-
-
- // ==========================================
- // SAVE OR UPDATE PRODUCT
- // ==========================================
-
-form.addEventListener("submit", async event => {
-    event.preventDefault();
-
-    if (!currentAdmin) {
-        showMessage("Admin access has not been verified.");
-        return;
-    }
-
-    const name = nameInput.value.trim();
-    const brand = brandInput.value.trim();
-    const category = categoryInput.value.trim();
-    const description = descriptionInput.value.trim();
-    const image = getSecureImageUrl(imageInput.value);
-
-    const priceText = priceInput.value.trim();
-    const price = Number(priceText);
-
-    // Validate stock quantity
-    const stockText = stockInput.value.trim();
-    const stock = Number(stockText);
-
-    if (
-        stockText === "" ||
-        !Number.isSafeInteger(stock) ||
-        stock < 0
-    ) {
-        showMessage("Please enter a whole stock quantity of 0 or more.");
-        return;
-    }
-
-    const colors = splitOptions(colorsInput.value);
-    const sizes = splitOptions(sizesInput.value);
-
-    if (!name) {
-        showMessage("Please enter the product name.");
-        return;
-    }
-
-    if (
-        priceText === "" ||
-        !Number.isFinite(price) ||
-        price < 0
-    ) {
-        showMessage("Please enter a valid base price.");
-        return;
-    }
-
-    if (!image) {
-        showMessage("Please enter a valid HTTPS image URL.");
-        return;
-    }
-
-    const parsedPrices = parseSizePrices(
-        sizePricesInput.value,
-        sizes
-    );
-
-    if (!parsedPrices.valid) {
-        showMessage(parsedPrices.error);
-        return;
-    }
-
-    const productData = {
-        name,
-        brand,
-        price,
-        stock,
-        category,
-        image,
-        description,
-        colors,
-        sizes,
-        sizePrices: parsedPrices.prices,
-        active: activeInput.checked,
-        updatedAt: serverTimestamp(),
-        updatedBy: currentAdmin.uid
-    };
-
-    saveButton.disabled = true;
-    saveButton.textContent = "Saving...";
-
-    showMessage("Saving product...");
-
-    try {
-        const existingId = productIdInput.value;
-
-        if (existingId) {
-            await updateDoc(
-                doc(db, "products", existingId),
-                productData
-            );
-
-            showMessage("Product updated successfully.");
-        } else {
-            await addDoc(
-                collection(db, "products"),
-                {
-                    ...productData,
-                    createdAt: serverTimestamp(),
-                    createdBy: currentAdmin.uid
-                }
-            );
-
-            showMessage("Product added successfully.");
-        }
-
-        resetForm();
-
-        await loadProducts();
-    } catch (error) {
-        console.error("SAVE PRODUCT ERROR:", error);
-
-        showMessage(
-            "Could not save product. Check Firestore security rules and your connection."
-        );
-    } finally {
-        saveButton.disabled = false;
-
-        saveButton.textContent = productIdInput.value
-            ? "Update Product"
-            : "Save Product";
-    }
-});
-
-// ==========================================
-// CANCEL EDITING
-// ==========================================
-
-cancelButton.addEventListener("click", () => {
-    resetForm();
-    showMessage("Editing cancelled.");
-});
-
-// ==========================================
-// LOG OUT
-// ==========================================
-
-logoutButton.addEventListener("click", async () => {
-    logoutButton.disabled = true;
-
-    try {
-        await signOut(auth);
-
-        window.location.href = "index.html";
-    } catch (error) {
-        console.error("LOGOUT ERROR:", error);
-
-        showMessage("Could not log out. Please try again.");
-
-        logoutButton.disabled = false;
-    }
-});
-
-/* ==========================================
-   CUSTOMER REVIEW MANAGEMENT
-========================================== */
-
-function setReviewsMessage(text, isError = false) {
-    reviewsMessage.textContent = text;
-    reviewsMessage.style.color = isError ? "#b00020" : "#176b36";
-}
-
-function formatReviewDate(timestamp) {
-    if (!timestamp || typeof timestamp.toDate !== "function") {
-        return "Date unavailable";
-    }
-
-    return timestamp.toDate().toLocaleString();
-}
-
-async function loadCustomerReviews() {
-    if (!currentAdmin) return;
-
-    reviewsContainer.replaceChildren();
-
-    const loading = document.createElement("p");
-    loading.textContent = "Loading customer reviews...";
-    reviewsContainer.appendChild(loading);
-
-    setReviewsMessage("");
-
-    try {
-        // Load reviews and products for their display names.
-        const [reviewSnapshot, productSnapshot] = await Promise.all([
-            getDocs(collection(db, "productReviews")),
-            getDocs(collection(db, "products"))
-        ]);
-
-        const productNames = new Map();
-
-        productSnapshot.forEach(productDoc => {
-            const product = productDoc.data();
-            productNames.set(
-                productDoc.id,
-                product.name || "Unnamed product"
-            );
-        });
-
-        const selectedStatus = reviewStatusFilter.value;
-
-        const reviews = reviewSnapshot.docs
-            .map(reviewDoc => ({
-                id: reviewDoc.id,
-                ...reviewDoc.data()
-            }))
-            .filter(review => {
-                return selectedStatus === "all" ||
-                    review.status === selectedStatus;
-            })
-            .sort((a, b) => {
-                const aTime = a.createdAt?.toMillis?.() || 0;
-                const bTime = b.createdAt?.toMillis?.() || 0;
-                return bTime - aTime;
-            });
-
-        reviewsContainer.replaceChildren();
-
-        if (!reviews.length) {
-            const empty = document.createElement("p");
-            empty.textContent = "No reviews found for this filter.";
-            reviewsContainer.appendChild(empty);
-            setReviewsMessage("Reviews loaded successfully.");
-            return;
-        }
-
-        reviews.forEach(review => {
-            const card = document.createElement("article");
-
-            card.style.cssText = `
-                border: 1px solid #ddd;
-                border-radius: 10px;
-                padding: 16px;
-                margin: 12px 0;
-                background: #fff;
-            `;
-
-            const product = document.createElement("h4");
-            product.textContent =
-                "Product: " +
-                (productNames.get(review.productId) ||
-                 "Product not found");
-
-            const customer = document.createElement("p");
-            customer.textContent =
-                "Customer UID: " + (review.userId || "Unavailable");
-
-            const rating = document.createElement("p");
-            const numericRating = Number(review.rating);
-            rating.textContent =
-                "Rating: " +
-                (Number.isInteger(numericRating) &&
-                 numericRating >= 1 && numericRating <= 5
-                    ? "★".repeat(numericRating) +
-                      "☆".repeat(5 - numericRating) +
-                      ` (${numericRating}/5)`
-                    : "Invalid rating");
-
-            const comment = document.createElement("p");
-            comment.textContent = "Review: " + (review.comment || "");
-
-            const date = document.createElement("p");
-            date.textContent =
-                "Submitted: " + formatReviewDate(review.createdAt);
-
-            const order = document.createElement("p");
-            order.textContent =
-                "Order ID: " + (review.orderId || "Unavailable");
-
-            const status = document.createElement("p");
-            status.textContent =
-                "Status: " + (review.status || "Unspecified");
-
-            const verified = document.createElement("p");
-            verified.textContent = review.verifiedPurchase
-                ? "Verified purchase"
-                : "Purchase not verified";
-
-            const actions = document.createElement("div");
-            actions.style.cssText =
-                "display:flex; gap:8px; flex-wrap:wrap;";
-
-            async function changeReviewStatus(newStatus, button) {
-                button.disabled = true;
-
-                try {
-                    await updateDoc(
-                        doc(db, "productReviews", review.id),
-                        {
-                            status: newStatus,
-                            updatedAt: serverTimestamp()
-                        }
-                    );
-
-                    setReviewsMessage(
-                        `Review ${newStatus} successfully.`
-                    );
-
-                    await loadCustomerReviews();
-                } catch (error) {
-                    console.error("UPDATE REVIEW ERROR:", error);
-
-                    setReviewsMessage(
-                        "Could not update review. Check Firestore rules.",
-                        true
-                    );
-
-                    button.disabled = false;
-                }
-            }
-
-            if (review.status !== "approved") {
-                const approveButton = document.createElement("button");
-                approveButton.type = "button";
-                approveButton.textContent = "Approve";
-
-                approveButton.addEventListener("click", () => {
-                    changeReviewStatus("approved", approveButton);
-                });
-
-                actions.appendChild(approveButton);
-            }
-
-            if (review.status !== "rejected") {
-                const rejectButton = document.createElement("button");
-                rejectButton.type = "button";
-                rejectButton.textContent = "Reject";
-
-                rejectButton.addEventListener("click", () => {
-                    changeReviewStatus("rejected", rejectButton);
-                });
-
-                actions.appendChild(rejectButton);
-            }
-
-            const deleteButton = document.createElement("button");
-            deleteButton.type = "button";
-            deleteButton.textContent = "Delete";
-
-            deleteButton.addEventListener("click", async () => {
-                if (!window.confirm(
-                    "Permanently delete this customer review?"
-                )) {
-                    return;
-                }
-
-                deleteButton.disabled = true;
-
-                try {
-                    await deleteDoc(
-                        doc(db, "productReviews", review.id)
-                    );
-
-                    setReviewsMessage("Review deleted successfully.");
-                    await loadCustomerReviews();
-                } catch (error) {
-                    console.error("DELETE REVIEW ERROR:", error);
-
-                    setReviewsMessage(
-                        "Could not delete review. Check Firestore rules.",
-                        true
-                    );
-
-                    deleteButton.disabled = false;
-                }
-            });
-
-            actions.appendChild(deleteButton);
-
-            card.append(
-                product,
-                customer,
-                rating,
-                comment,
-                date,
-                order,
-                verified,
-                status,
-                actions
-            );
-
-            reviewsContainer.appendChild(card);
-        });
-
-        setReviewsMessage(
-            `Showing ${reviews.length} review(s).`
-        );
-    } catch (error) {
-        console.error("LOAD CUSTOMER REVIEWS ERROR:", error);
-
-        reviewsContainer.replaceChildren();
-
-        const errorText = document.createElement("p");
-        errorText.textContent =
-            "Could not load reviews. Check Firestore security rules.";
-
-        reviewsContainer.appendChild(errorText);
-
-        setReviewsMessage(
-            "Review loading failed. See the browser console for details.",
-            true
-        );
-    }
-}
-
-reviewStatusFilter.addEventListener("change", loadCustomerReviews);
-
-refreshReviewsButton.addEventListener("click", loadCustomerReviews);
-
-// ==========================================
-// VERIFY ADMIN ACCESS
-// ==========================================
-
-onAuthStateChanged(auth, async user => {
-    formSection.hidden = true;
-    listSection.hidden = true;
-
-    if (!user) {
-        window.location.href = "index.html";
-        return;
-    }
-
-    showMessage("Checking admin access...");
-
-    try {
-        const adminSnapshot = await getDoc(
-            doc(db, "admins", user.uid)
-        );
-
-        if (
-            !adminSnapshot.exists() ||
-            adminSnapshot.data().role !== "admin"
-        ) {
-            showMessage("Access denied. Admin account required.");
-
-            await signOut(auth);
-
-            window.location.href = "index.html";
-            return;
-        }
-
-        currentAdmin = user;
-
-     
-formSection.hidden = false;
-listSection.hidden = false;
-reviewsSection.hidden = false;
-
-showMessage(
-    "Admin access verified. You can manage products and customer reviews."
-);
-
-await loadCustomerReviews();
-  
-
-        if (!productsLoaded) {
-            productsLoaded = true;
-
-            await loadProducts();
-        }
-    } catch (error) {
-        console.error("ADMIN CHECK ERROR:", error);
-
-        showMessage(
-            "Could not verify admin access. Check your internet connection and Firestore security rules."
-        );
-    }
-});
-// ==========================================
-// EDIT EXISTING PRODUCT
-// ==========================================
-
-function editProduct(id, product) {
-    productIdInput.value = id;
-
-    nameInput.value = product.name || "";
-    brandInput.value = product.brand || "";
-    priceInput.value = product.price ?? "";
-    stockInput.value = product.stock ?? 0;
-    categoryInput.value = product.category || "";
-    imageInput.value = product.image || "";
-    descriptionInput.value = product.description || "";
-
-    colorsInput.value = (
-        Array.isArray(product.colors) ? product.colors : []
-    ).join(", ");
-
-    sizesInput.value = (
-        Array.isArray(product.sizes) ? product.sizes : []
-    ).join(", ");
-
-    sizePricesInput.value = formatSizePrices(product.sizePrices);
-    activeInput.checked = product.active !== false;
-
-    const url = getSecureImageUrl(product.image || "");
-
-    if (url) {
-        imagePreview.onload = () => {
-            imagePreview.hidden = false;
-        };
-
-        imagePreview.onerror = () => {
-            imagePreview.hidden = true;
-        };
-
-        imagePreview.src = url;
-    } else {
-        imagePreview.hidden = true;
-        imagePreview.removeAttribute("src");
-    }
-
-    // Restore additional images when editing.
     resetAdditionalImages();
 
-    const additionalImages = Array.isArray(product.images)
+    const existingImages = Array.isArray(product.images)
         ? product.images
         : [];
 
-    additionalImages.forEach(url => {
-        if (getSecureImageUrl(url)) {
-            addAdditionalImageField(url);
-        }
-    });
+    existingImages.forEach(url => addAdditionalImageField(url));
 
     formTitle.textContent = "Edit Product";
     saveButton.textContent = "Update Product";
@@ -1031,211 +580,249 @@ function editProduct(id, product) {
         block: "start"
     });
 }
-
 // ==========================================
 // SAVE OR UPDATE PRODUCT
 // ==========================================
 
-form.addEventListener("submit", async event => {
-    event.preventDefault();
+if (form) {
+    form.addEventListener("submit", async event => {
+        event.preventDefault();
 
-    if (!currentAdmin) {
-        showMessage("Admin access has not been verified.");
-        return;
-    }
-
-    const name = nameInput.value.trim();
-    const brand = brandInput.value.trim();
-    const category = categoryInput.value.trim();
-    const description = descriptionInput.value.trim();
-    const image = getSecureImageUrl(imageInput.value);
-
-    const priceText = priceInput.value.trim();
-    const price = Number(priceText);
-
-    const stockText = stockInput.value.trim();
-    const stock = Number(stockText);
-
-    if (
-        stockText === "" ||
-        !Number.isSafeInteger(stock) ||
-        stock < 0
-    ) {
-        showMessage("Please enter a whole stock quantity of 0 or more.");
-        return;
-    }
-
-    if (!name) {
-        showMessage("Please enter the product name.");
-        return;
-    }
-
-    if (
-        priceText === "" ||
-        !Number.isFinite(price) ||
-        price < 0
-    ) {
-        showMessage("Please enter a valid base price.");
-        return;
-    }
-
-    if (!image) {
-        showMessage("Please enter a valid HTTPS image URL.");
-        return;
-    }
-
-    const colors = splitOptions(colorsInput.value);
-    const sizes = splitOptions(sizesInput.value);
-
-    const parsedPrices = parseSizePrices(
-        sizePricesInput.value,
-        sizes
-    );
-
-    if (!parsedPrices.valid) {
-        showMessage(parsedPrices.error);
-        return;
-    }
-
-    const additionalImages = getAdditionalImageUrls();
-
-    if (!additionalImages.valid) {
-        showMessage(additionalImages.error);
-        return;
-    }
-
-    const productData = {
-        name,
-        brand,
-        price,
-        stock,
-        category,
-        image,
-        images: additionalImages.images,
-        description,
-        colors,
-        sizes,
-        sizePrices: parsedPrices.prices,
-        active: activeInput.checked,
-        updatedAt: serverTimestamp(),
-        updatedBy: currentAdmin.uid
-    };
-
-    saveButton.disabled = true;
-    saveButton.textContent = "Saving...";
-    showMessage("Saving product...");
-
-    try {
-        const existingId = productIdInput.value;
-
-        if (existingId) {
-            await updateDoc(
-                doc(db, "products", existingId),
-                productData
-            );
-
-            showMessage("Product updated successfully.");
-        } else {
-            await addDoc(
-                collection(db, "products"),
-                {
-                    ...productData,
-                    createdAt: serverTimestamp(),
-                    createdBy: currentAdmin.uid
-                }
-            );
-
-            showMessage("Product added successfully.");
+        if (!currentAdmin) {
+            showMessage("Admin access is required to save products.");
+            return;
         }
 
-        resetForm();
-        await loadProducts();
+        const name = nameInput.value.trim();
+        const brand = brandInput.value.trim();
+        const priceText = priceInput.value.trim();
+        const stockText = stockInput.value.trim();
+        const category = categoryInput.value.trim();
+        const description = descriptionInput.value.trim();
+        const mainImage = getSecureImageUrl(imageInput.value);
 
-    } catch (error) {
-        console.error("SAVE PRODUCT ERROR:", error);
+        if (!name) {
+            showMessage("Please enter the product name.");
+            nameInput.focus();
+            return;
+        }
 
-        showMessage(
-            "Could not save product. Check Firestore security rules and your connection."
+        if (
+            priceText === "" ||
+            !Number.isFinite(Number(priceText)) ||
+            Number(priceText) < 0
+        ) {
+            showMessage("Please enter a valid product price.");
+            priceInput.focus();
+            return;
+        }
+
+        if (
+            stockText === "" ||
+            !Number.isSafeInteger(Number(stockText)) ||
+            Number(stockText) < 0
+        ) {
+            showMessage("Stock must be a whole number of 0 or more.");
+            stockInput.focus();
+            return;
+        }
+
+        if (!category) {
+            showMessage("Please select or enter a product category.");
+            categoryInput.focus();
+            return;
+        }
+
+        if (!mainImage) {
+            showMessage("Please enter a valid HTTPS URL for the main image.");
+            imageInput.focus();
+            return;
+        }
+
+        const sizes = splitOptions(sizesInput.value);
+        const colors = splitOptions(colorsInput.value);
+
+        const parsedPrices = parseSizePrices(
+            sizePricesInput.value,
+            sizes
         );
 
-    } finally {
-        saveButton.disabled = false;
-        saveButton.textContent = productIdInput.value
-            ? "Update Product"
-            : "Save Product";
-    }
-});
+        if (!parsedPrices.valid) {
+            showMessage(parsedPrices.error);
+            sizePricesInput.focus();
+            return;
+        }
+
+        const additionalImages = getAdditionalImageUrls();
+
+        if (!additionalImages.valid) {
+            showMessage(additionalImages.error);
+            return;
+        }
+
+        const productData = {
+            name,
+            brand,
+            price: Number(priceText),
+            stock: Number(stockText),
+            category,
+            image: mainImage,
+            images: additionalImages.images,
+            description,
+            colors,
+            sizes,
+            sizePrices: parsedPrices.prices,
+            active: activeInput.checked,
+            updatedAt: serverTimestamp(),
+            updatedBy: currentAdmin.uid
+        };
+
+        const existingId = productIdInput.value.trim();
+
+        saveButton.disabled = true;
+        saveButton.textContent = existingId
+            ? "Updating..."
+            : "Saving...";
+
+        try {
+            if (existingId) {
+                await updateDoc(
+                    doc(db, "products", existingId),
+                    productData
+                );
+
+                showMessage("Product updated successfully.");
+            } else {
+                await addDoc(
+                    collection(db, "products"),
+                    {
+                        ...productData,
+                        createdAt: serverTimestamp(),
+                        createdBy: currentAdmin.uid
+                    }
+                );
+
+                showMessage("Product added successfully.");
+            }
+
+            resetForm();
+
+            await loadProducts();
+        } catch (error) {
+            console.error("SAVE PRODUCT ERROR:", error);
+
+            showMessage(
+                "Could not save the product. Check Firebase permissions and try again."
+            );
+        } finally {
+            saveButton.disabled = false;
+
+            saveButton.textContent = productIdInput.value
+                ? "Update Product"
+                : "Save Product";
+        }
+    });
+}
 
 // ==========================================
-// CANCEL EDITING
+// CANCEL PRODUCT EDITING
 // ==========================================
 
-cancelButton.addEventListener("click", () => {
-    resetForm();
-    showMessage("Editing cancelled.");
-});
+if (cancelButton) {
+    cancelButton.addEventListener("click", () => {
+        resetForm();
+        showMessage("Product editing cancelled.");
+    });
+}
 
 // ==========================================
-// LOG OUT
+// ADMIN LOGOUT
 // ==========================================
 
-logoutButton.addEventListener("click", async () => {
-    logoutButton.disabled = true;
+if (logoutButton) {
+    logoutButton.addEventListener("click", async () => {
+        logoutButton.disabled = true;
 
-    try {
-        await signOut(auth);
-        window.location.href = "index.html";
-    } catch (error) {
-        console.error("LOGOUT ERROR:", error);
+        try {
+            await signOut(auth);
+            window.location.href = "index.html";
+        } catch (error) {
+            console.error("ADMIN LOGOUT ERROR:", error);
 
-        showMessage("Could not log out. Please try again.");
-        logoutButton.disabled = false;
-    }
-});
+            showMessage("Could not log out. Please try again.");
+
+            logoutButton.disabled = false;
+        }
+    });
+}
 // ==========================================
-// CUSTOMER REVIEW MANAGEMENT
+// CUSTOMER REVIEW MESSAGES
 // ==========================================
 
 function setReviewsMessage(text, isError = false) {
     if (!reviewsMessage) return;
 
     reviewsMessage.textContent = text;
-    reviewsMessage.style.color = isError ? "#b00020" : "#176b36";
+    reviewsMessage.style.color = isError ? "#dc2626" : "#15803d";
 }
+
+// ==========================================
+// FORMAT REVIEW DATE
+// ==========================================
 
 function formatReviewDate(timestamp) {
-    if (!timestamp || typeof timestamp.toDate !== "function") {
-        return "Date unavailable";
-    }
-
-    return timestamp.toDate().toLocaleString();
-}
-
-async function loadCustomerReviews() {
-    if (!currentAdmin || !reviewsContainer) return;
-
-    reviewsContainer.replaceChildren();
-
-    const loading = document.createElement("p");
-    loading.textContent = "Loading customer reviews...";
-    reviewsContainer.appendChild(loading);
-
-    setReviewsMessage("");
+    if (!timestamp) return "Date unavailable";
 
     try {
-        const [reviewSnapshot, productSnapshot] = await Promise.all([
+        const date =
+            typeof timestamp.toDate === "function"
+                ? timestamp.toDate()
+                : new Date(timestamp);
+
+        if (Number.isNaN(date.getTime())) {
+            return "Date unavailable";
+        }
+
+        return date.toLocaleString();
+    } catch {
+        return "Date unavailable";
+    }
+}
+
+// ==========================================
+// LOAD CUSTOMER REVIEWS
+// ==========================================
+
+async function loadCustomerReviews() {
+    if (!currentAdmin) {
+        setReviewsMessage("Admin access is required.", true);
+        return;
+    }
+
+    if (!reviewsContainer) {
+        console.error(
+            "Customer reviews container not found. Check admin-products.html for #customer-reviews-container."
+        );
+        return;
+    }
+
+    reviewsContainer.replaceChildren();
+    setReviewsMessage("Loading customer reviews...");
+
+    try {
+        const [reviewsSnapshot, productsSnapshot] = await Promise.all([
             getDocs(collection(db, "productReviews")),
             getDocs(collection(db, "products"))
         ]);
 
         const productNames = new Map();
 
-        productSnapshot.forEach(productDoc => {
+        productsSnapshot.forEach(productDoc => {
             const product = productDoc.data();
 
             productNames.set(
                 productDoc.id,
-                product.name || "Unnamed product"
+                product.name || "Unknown product"
             );
         });
 
@@ -1243,27 +830,49 @@ async function loadCustomerReviews() {
             ? reviewStatusFilter.value
             : "all";
 
-        const reviews = reviewSnapshot.docs
-            .map(reviewDoc => ({
-                id: reviewDoc.id,
-                ...reviewDoc.data()
-            }))
-            .filter(review =>
-                selectedStatus === "all" ||
-                review.status === selectedStatus
-            )
-            .sort((a, b) => {
-                const aTime = a.createdAt?.toMillis?.() || 0;
-                const bTime = b.createdAt?.toMillis?.() || 0;
+        const reviews = [];
 
-                return bTime - aTime;
+        reviewsSnapshot.forEach(reviewDoc => {
+            const review = reviewDoc.data();
+
+            const status = review.status || "pending";
+
+            if (
+                selectedStatus !== "all" &&
+                status !== selectedStatus
+            ) {
+                return;
+            }
+
+            reviews.push({
+                id: reviewDoc.id,
+                ...review,
+                status
             });
+        });
+
+        reviews.sort((a, b) => {
+            const dateA = a.createdAt?.toMillis
+                ? a.createdAt.toMillis()
+                : 0;
+
+            const dateB = b.createdAt?.toMillis
+                ? b.createdAt.toMillis()
+                : 0;
+
+            return dateB - dateA;
+        });
 
         reviewsContainer.replaceChildren();
 
         if (reviews.length === 0) {
             const empty = document.createElement("p");
-            empty.textContent = "No reviews found for this filter.";
+
+            empty.textContent =
+                selectedStatus === "all"
+                    ? "No customer reviews found."
+                    : `No ${selectedStatus} reviews found.`;
+
             reviewsContainer.appendChild(empty);
 
             setReviewsMessage("Reviews loaded successfully.");
@@ -1272,109 +881,90 @@ async function loadCustomerReviews() {
 
         reviews.forEach(review => {
             const card = document.createElement("article");
+            card.className = "customer-review-card";
 
-            card.style.cssText = `
-                border: 1px solid #ddd;
-                border-radius: 10px;
-                padding: 16px;
-                margin: 12px 0;
-                background: #fff;
-            `;
+            const productName = document.createElement("h3");
 
-            const product = document.createElement("h4");
-            product.textContent =
-                "Product: " +
-                (productNames.get(review.productId) ||
-                    "Product not found");
+            productName.textContent =
+                productNames.get(review.productId) ||
+                review.productName ||
+                "Unknown product";
 
-            const customer = document.createElement("p");
-            customer.textContent =
-                "Customer UID: " + (review.userId || "Unavailable");
+            const statusText = document.createElement("p");
+            statusText.textContent =
+                "Status: " + review.status.toUpperCase();
 
-            const rating = document.createElement("p");
-            const numericRating = Number(review.rating);
+            const customerText = document.createElement("p");
+            customerText.textContent =
+                "Customer UID: " + (review.userId || "Not provided");
 
-            rating.textContent =
+            const ratingText = document.createElement("p");
+
+            const rating = Number(review.rating);
+
+            ratingText.textContent =
                 "Rating: " +
                 (
-                    Number.isInteger(numericRating) &&
-                    numericRating >= 1 &&
-                    numericRating <= 5
-                )
-                    ? ""
-                    : "";
+                    Number.isInteger(rating) &&
+                    rating >= 1 &&
+                    rating <= 5
+                        ? "★".repeat(rating) + "☆".repeat(5 - rating)
+                        : "Not provided"
+                );
 
-            rating.textContent = (
-                Number.isInteger(numericRating) &&
-                numericRating >= 1 &&
-                numericRating <= 5
-            )
-                ? "Rating: " +
-                    "★".repeat(numericRating) +
-                    "☆".repeat(5 - numericRating) +
-                    ` (${numericRating}/5)`
-                : "Rating: Invalid rating";
+            const commentText = document.createElement("p");
+            commentText.textContent =
+                "Review: " + (review.comment || "No comment");
 
-            const comment = document.createElement("p");
-            comment.textContent = "Review: " + (review.comment || "");
-
-            const date = document.createElement("p");
-            date.textContent =
+            const dateText = document.createElement("p");
+            dateText.textContent =
                 "Submitted: " + formatReviewDate(review.createdAt);
 
-            const order = document.createElement("p");
-            order.textContent =
-                "Order ID: " + (review.orderId || "Unavailable");
+            const orderText = document.createElement("p");
+            orderText.textContent =
+                "Order ID: " + (review.orderId || "Not provided");
 
-            const verified = document.createElement("p");
-            verified.textContent = review.verifiedPurchase
-                ? "Verified purchase"
-                : "Purchase not verified";
-
-            const status = document.createElement("p");
-            status.textContent =
-                "Status: " + (review.status || "Unspecified");
+            const verifiedText = document.createElement("p");
+            verifiedText.textContent =
+                "Verified purchase: " +
+                (review.verifiedPurchase === true ? "Yes" : "No");
 
             const actions = document.createElement("div");
-            actions.style.cssText =
-                "display:flex;gap:8px;flex-wrap:wrap;";
-
-            async function changeReviewStatus(newStatus, button) {
-                button.disabled = true;
-
-                try {
-                    await updateDoc(
-                        doc(db, "productReviews", review.id),
-                        {
-                            status: newStatus,
-                            updatedAt: serverTimestamp()
-                        }
-                    );
-
-                    setReviewsMessage(
-                        `Review ${newStatus} successfully.`
-                    );
-
-                    await loadCustomerReviews();
-                } catch (error) {
-                    console.error("UPDATE REVIEW ERROR:", error);
-
-                    setReviewsMessage(
-                        "Could not update review. Check Firestore rules.",
-                        true
-                    );
-
-                    button.disabled = false;
-                }
-            }
+            actions.className = "review-actions";
 
             if (review.status !== "approved") {
                 const approveButton = document.createElement("button");
+
                 approveButton.type = "button";
                 approveButton.textContent = "Approve";
 
-                approveButton.addEventListener("click", () => {
-                    changeReviewStatus("approved", approveButton);
+                approveButton.addEventListener("click", async () => {
+                    approveButton.disabled = true;
+                    setReviewsMessage("Approving review...");
+
+                    try {
+                        await updateDoc(
+                            doc(db, "productReviews", review.id),
+                            {
+                                status: "approved",
+                                approvedAt: serverTimestamp(),
+                                approvedBy: currentAdmin.uid
+                            }
+                        );
+
+                        setReviewsMessage("Review approved successfully.");
+
+                        await loadCustomerReviews();
+                    } catch (error) {
+                        console.error("APPROVE REVIEW ERROR:", error);
+
+                        setReviewsMessage(
+                            "Could not approve review. Check Firestore permissions.",
+                            true
+                        );
+
+                        approveButton.disabled = false;
+                    }
                 });
 
                 actions.appendChild(approveButton);
@@ -1382,28 +972,63 @@ async function loadCustomerReviews() {
 
             if (review.status !== "rejected") {
                 const rejectButton = document.createElement("button");
+
                 rejectButton.type = "button";
                 rejectButton.textContent = "Reject";
 
-                rejectButton.addEventListener("click", () => {
-                    changeReviewStatus("rejected", rejectButton);
+                rejectButton.addEventListener("click", async () => {
+                    const confirmed = window.confirm(
+                        "Are you sure you want to reject this review?"
+                    );
+
+                    if (!confirmed) return;
+
+                    rejectButton.disabled = true;
+                    setReviewsMessage("Rejecting review...");
+
+                    try {
+                        await updateDoc(
+                            doc(db, "productReviews", review.id),
+                            {
+                                status: "rejected",
+                                rejectedAt: serverTimestamp(),
+                                rejectedBy: currentAdmin.uid
+                            }
+                        );
+
+                        setReviewsMessage("Review rejected successfully.");
+
+                        await loadCustomerReviews();
+                    } catch (error) {
+                        console.error("REJECT REVIEW ERROR:", error);
+
+                        setReviewsMessage(
+                            "Could not reject review. Check Firestore permissions.",
+                            true
+                        );
+
+                        rejectButton.disabled = false;
+                    }
                 });
 
                 actions.appendChild(rejectButton);
             }
 
             const deleteButton = document.createElement("button");
+
             deleteButton.type = "button";
             deleteButton.textContent = "Delete";
+            deleteButton.className = "delete-btn";
 
             deleteButton.addEventListener("click", async () => {
-                if (!window.confirm(
+                const confirmed = window.confirm(
                     "Permanently delete this customer review?"
-                )) {
-                    return;
-                }
+                );
+
+                if (!confirmed) return;
 
                 deleteButton.disabled = true;
+                setReviewsMessage("Deleting review...");
 
                 try {
                     await deleteDoc(
@@ -1411,12 +1036,13 @@ async function loadCustomerReviews() {
                     );
 
                     setReviewsMessage("Review deleted successfully.");
+
                     await loadCustomerReviews();
                 } catch (error) {
                     console.error("DELETE REVIEW ERROR:", error);
 
                     setReviewsMessage(
-                        "Could not delete review. Check Firestore rules.",
+                        "Could not delete review. Check Firestore permissions.",
                         true
                     );
 
@@ -1427,64 +1053,63 @@ async function loadCustomerReviews() {
             actions.appendChild(deleteButton);
 
             card.append(
-                product,
-                customer,
-                rating,
-                comment,
-                date,
-                order,
-                verified,
-                status,
+                productName,
+                statusText,
+                customerText,
+                ratingText,
+                commentText,
+                dateText,
+                orderText,
+                verifiedText,
                 actions
             );
 
             reviewsContainer.appendChild(card);
         });
 
-        setReviewsMessage(`Showing ${reviews.length} review(s).`);
+        setReviewsMessage(
+            `${reviews.length} review(s) loaded successfully.`
+        );
     } catch (error) {
         console.error("LOAD CUSTOMER REVIEWS ERROR:", error);
 
         reviewsContainer.replaceChildren();
 
-        const errorText = document.createElement("p");
-        errorText.textContent =
-            "Could not load reviews. Check Firestore security rules.";
-
-        reviewsContainer.appendChild(errorText);
-
         setReviewsMessage(
-            "Review loading failed. See the browser console for details.",
+            "Could not load customer reviews. Check Firestore security rules and collection names.",
             true
         );
     }
 }
 
-if (reviewStatusFilter) {
-    reviewStatusFilter.addEventListener(
-        "change",
-        loadCustomerReviews
-    );
-}
+// ==========================================
+// REVIEW FILTER
+// ==========================================
 
-if (refreshReviewsButton) {
-    refreshReviewsButton.addEventListener(
-        "click",
-        loadCustomerReviews
-    );
+if (reviewStatusFilter) {
+    reviewStatusFilter.addEventListener("change", () => {
+        loadCustomerReviews();
+    });
 }
 
 // ==========================================
-// VERIFY ADMIN ACCESS
+// REFRESH REVIEWS
+// ==========================================
+
+if (refreshReviewsButton) {
+    refreshReviewsButton.addEventListener("click", () => {
+        loadCustomerReviews();
+    });
+}
+
+// ==========================================
+// CHECK ADMIN ACCESS
 // ==========================================
 
 onAuthStateChanged(auth, async user => {
-    formSection.hidden = true;
-    listSection.hidden = true;
-
-    if (reviewsSection) {
-        reviewsSection.hidden = true;
-    }
+    if (formSection) formSection.hidden = true;
+    if (listSection) listSection.hidden = true;
+    if (reviewsSection) reviewsSection.hidden = true;
 
     if (!user) {
         window.location.href = "index.html";
@@ -1505,29 +1130,27 @@ onAuthStateChanged(auth, async user => {
             showMessage("Access denied. Admin account required.");
 
             await signOut(auth);
+
             window.location.href = "index.html";
             return;
         }
 
         currentAdmin = user;
 
-        formSection.hidden = false;
-        listSection.hidden = false;
-
-        if (reviewsSection) {
-            reviewsSection.hidden = false;
-        }
+        if (formSection) formSection.hidden = false;
+        if (listSection) listSection.hidden = false;
+        if (reviewsSection) reviewsSection.hidden = false;
 
         showMessage(
             "Admin access verified. You can manage products and customer reviews."
         );
 
-        await Promise.all([
-            loadProducts(),
-            loadCustomerReviews()
-        ]);
+        await loadCustomerReviews();
 
-        productsLoaded = true;
+        if (!productsLoaded) {
+            productsLoaded = true;
+            await loadProducts();
+        }
     } catch (error) {
         console.error("ADMIN CHECK ERROR:", error);
 
