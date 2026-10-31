@@ -139,15 +139,29 @@
         status.textContent +=
           "Reading " + collectionName + "...\n";
 
-        const snapshot = await getDocs(
-          collection(db, collectionName)
-        );
+      if (collectionName === "admins") {
+  const adminSnapshot = await getDoc(
+    doc(db, "admins", auth.currentUser.uid)
+  );
 
-        backup.collections[collectionName] =
-          snapshot.docs.map(documentSnapshot => ({
-            id: documentSnapshot.id,
-            data: documentSnapshot.data()
-          }));
+  backup.collections.admins = adminSnapshot.exists()
+    ? [{
+        id: adminSnapshot.id,
+        data: adminSnapshot.data()
+      }]
+    : [];
+
+} else {
+  const snapshot = await getDocs(
+    collection(db, collectionName)
+  );
+
+  backup.collections[collectionName] =
+    snapshot.docs.map(documentSnapshot => ({
+      id: documentSnapshot.id,
+      data: documentSnapshot.data()
+    }));
+} 
 
         status.textContent +=
           collectionName + ": " +
