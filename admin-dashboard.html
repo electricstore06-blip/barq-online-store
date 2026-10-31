@@ -492,7 +492,12 @@ import {
   updateDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const functions = getFunctions(auth.app);
 
+const createStaffAccountCall = httpsCallable(
+  functions,
+  "createStaffAccount"
+);
 const $=id=>document.getElementById(id);
 const money=n=>"SAR "+(Number.isFinite(n)?n:0).toLocaleString("en-SA",{minimumFractionDigits:2,maximumFractionDigits:2});
 const norm=s=>String(s??"").trim().toLowerCase();
