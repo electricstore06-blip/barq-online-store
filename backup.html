@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BARQ Firebase Backup</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,6 +13,7 @@
       padding: 30px 16px;
       color: #222;
     }
+
     .container {
       max-width: 650px;
       margin: 40px auto;
@@ -20,7 +22,11 @@
       border-radius: 12px;
       box-shadow: 0 3px 15px #0001;
     }
-    h1 { margin-top: 0; }
+
+    h1 {
+      margin-top: 0;
+    }
+
     button {
       background: #111;
       color: white;
@@ -30,7 +36,12 @@
       cursor: pointer;
       font-size: 16px;
     }
-    button:disabled { opacity: .5; cursor: wait; }
+
+    button:disabled {
+      opacity: .5;
+      cursor: wait;
+    }
+
     #status {
       margin-top: 20px;
       white-space: pre-line;
@@ -38,6 +49,7 @@
     }
   </style>
 </head>
+
 <body>
 
 <div class="container">
@@ -48,7 +60,9 @@
     This page only reads data. It does not change or delete records.
   </p>
 
-  <p id="login-status">Checking administrator access...</p>
+  <p id="login-status">
+    Checking administrator access...
+  </p>
 
   <button id="backup-btn" disabled>
     Download Firebase Backup
@@ -92,13 +106,17 @@
         doc(db, "admins", user.uid)
       );
 
-      if (!adminSnapshot.exists() ||
-          adminSnapshot.data().role !== "admin") {
-        loginStatus.textContent = "Access denied. Admin account required.";
+      if (
+        !adminSnapshot.exists() ||
+        adminSnapshot.data().role !== "admin"
+      ) {
+        loginStatus.textContent =
+          "Access denied. Admin account required.";
         return;
       }
 
       authorized = true;
+
       loginStatus.textContent =
         "Administrator verified. Ready to create your backup.";
 
@@ -106,13 +124,14 @@
 
     } catch (error) {
       console.error(error);
+
       loginStatus.textContent =
         "Could not verify admin access: " + error.message;
     }
   });
 
   backupButton.addEventListener("click", async () => {
-    if (!authorized) return;
+    if (!authorized || !auth.currentUser) return;
 
     backupButton.disabled = true;
     status.textContent = "Starting backup...\n";
@@ -139,33 +158,39 @@
         status.textContent +=
           "Reading " + collectionName + "...\n";
 
-      if (collectionName === "admins") {
-  const adminSnapshot = await getDoc(
-    doc(db, "admins", auth.currentUser.uid)
-  );
+        let recordCount = 0;
 
-  backup.collections.admins = adminSnapshot.exists()
-    ? [{
-        id: adminSnapshot.id,
-        data: adminSnapshot.data()
-      }]
-    : [];
+        if (collectionName === "admins") {
+          const adminSnapshot = await getDoc(
+            doc(db, "admins", auth.currentUser.uid)
+          );
 
-} else {
-  const snapshot = await getDocs(
-    collection(db, collectionName)
-  );
+          backup.collections.admins = adminSnapshot.exists()
+            ? [{
+                id: adminSnapshot.id,
+                data: adminSnapshot.data()
+              }]
+            : [];
 
-  backup.collections[collectionName] =
-    snapshot.docs.map(documentSnapshot => ({
-      id: documentSnapshot.id,
-      data: documentSnapshot.data()
-    }));
-} 
+          recordCount = backup.collections.admins.length;
+
+        } else {
+          const snapshot = await getDocs(
+            collection(db, collectionName)
+          );
+
+          backup.collections[collectionName] =
+            snapshot.docs.map(documentSnapshot => ({
+              id: documentSnapshot.id,
+              data: documentSnapshot.data()
+            }));
+
+          recordCount = snapshot.size;
+        }
 
         status.textContent +=
           collectionName + ": " +
-          snapshot.size + " records saved.\n";
+          recordCount + " records saved.\n";
       }
 
       const json = JSON.stringify(backup, null, 2);
@@ -178,8 +203,7 @@
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
 
-      const date = new Date().toISOString()
-        .slice(0, 10);
+      const date = new Date().toISOString().slice(0, 10);
 
       link.href = url;
       link.download = "BARQ-Firebase-Backup-" + date + ".json";
@@ -188,11 +212,11 @@
       link.click();
       link.remove();
 
-      URL.revokeObjectURL(url);
-
       status.textContent +=
         "\nBACKUP DOWNLOAD STARTED!\n" +
         "Keep this file safe in your Documents folder.";
+
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
 
     } catch (error) {
       console.error("Backup error:", error);
