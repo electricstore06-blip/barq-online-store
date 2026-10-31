@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BARQ Firebase Backup</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 30px 16px;
+      color: #222;
+    }
+    .container {
+      max-width: 650px;
+      margin: 40px auto;
+      background: white;
+      padding: 28px;
+      border-radius: 12px;
+      box-shadow: 0 3px 15px #0001;
+    }
+    h1 { margin-top: 0; }
+    button {
+      background: #111;
+      color: white;
+      border: 0;
+      padding: 14px 22px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:disabled { opacity: .5; cursor: wait; }
+    #status {
+      margin-top: 20px;
+      white-space: pre-line;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>⚡ BARQ Firebase Backup</h1>
+
+  <p>
+    Create a backup of your BARQ Firestore collections.
+    This page only reads data. It does not change or delete records.
+  </p>
+
+  <p id="login-status">Checking administrator access...</p>
+
+  <button id="backup-btn" disabled>
+    Download Firebase Backup
+  </button>
+
+  <div id="status"></div>
+</div>
+
+<script type="module">
+  import { auth, db } from "./firebase-config.js";
+
+  import {
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  import {
+    collection,
+    getDocs,
+    doc,
+    getDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const loginStatus = document.getElementById("login-status");
+  const backupButton = document.getElementById("backup-btn");
+  const status = document.getElementById("status");
+
+  let authorized = false;
+
+  onAuthStateChanged(auth, async (user) => {
+    authorized = false;
+    backupButton.disabled = true;
+
+    if (!user) {
+      loginStatus.textContent =
+        "Please log in to BARQ using your administrator account first.";
+      return;
+    }
+
+    try {
+      const adminSnapshot = await getDoc(
+        doc(db, "admins", user.uid)
+      );
+
+      if (!adminSnapshot.exists() ||
+          adminSnapshot.data().role !== "admin") {
+        loginStatus.textContent = "Access denied. Admin account required.";
+        return;
+      }
+
+      authorized = true;
+      loginStatus.textContent =
+        "Administrator verified. Ready to create your backup.";
+
+      backupButton.disabled = false;
+
+    } catch (error) {
+      console.error(error);
+      loginStatus.textContent =
+        "Could not verify admin access: " + error.message;
+    }
+  });
+
+  backupButton.addEventListener("click", async () => {
+    if (!authorized) return;
+
+    backupButton.disabled = true;
+    status.textContent = "Starting backup...\n";
+
+    const collections = [
+      "products",
+      "orders",
+      "users",
+      "admins",
+      "productReviews",
+      "expenses",
+      "deliveryCosts"
+    ];
+
+    const backup = {
+      store: "BARQ Online Store",
+      projectId: "barq-online-store-a1413",
+      backupDate: new Date().toISOString(),
+      collections: {}
+    };
+
+    try {
+      for (const collectionName of collections) {
+        status.textContent +=
+          "Reading " + collectionName + "...\n";
+
+        const snapshot = await getDocs(
+          collection(db, collectionName)
+        );
+
+        backup.collections[collectionName] =
+          snapshot.docs.map(documentSnapshot => ({
+            id: documentSnapshot.id,
+            data: documentSnapshot.data()
+          }));
+
+        status.textContent +=
+          collectionName + ": " +
+          snapshot.size + " records saved.\n";
+      }
+
+      const json = JSON.stringify(backup, null, 2);
+
+      const blob = new Blob(
+        [json],
+        { type: "application/json" }
+      );
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      const date = new Date().toISOString()
+        .slice(0, 10);
+
+      link.href = url;
+      link.download = "BARQ-Firebase-Backup-" + date + ".json";
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      URL.revokeObjectURL(url);
+
+      status.textContent +=
+        "\nBACKUP DOWNLOAD STARTED!\n" +
+        "Keep this file safe in your Documents folder.";
+
+    } catch (error) {
+      console.error("Backup error:", error);
+
+      status.textContent +=
+        "\nBACKUP FAILED:\n" + error.message +
+        "\nDo not delete any Firebase records.";
+
+    } finally {
+      backupButton.disabled = !authorized;
+    }
+  });
+</script>
+
+</body>
+</html>
