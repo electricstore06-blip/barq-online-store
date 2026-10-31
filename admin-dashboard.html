@@ -891,13 +891,15 @@ th { color: var(--muted); font-weight: 600; }
     </div>
   </main>
 </div>
-
 <script type="module">
 import { auth, db, firebaseConfig } from "./firebase-config.js";
 
 import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
   onAuthStateChanged,
-  initializeApp,
   getAuth,
   createUserWithEmailAndPassword,
   deleteUser,
