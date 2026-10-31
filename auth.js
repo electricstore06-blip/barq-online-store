@@ -187,12 +187,10 @@ async function getStaffRole(user) {
 // REDIRECT ADMIN AND STAFF
 // ==========================================
 
-async function redirectStaff(user) {
-    if (await checkAdmin(user)) {
-        window.location.href = "admin-orders.html";
-        return true;
-    }
-
+if (await checkAdmin(user)) {
+    window.location.href = "admin-dashboard.html";
+    return true;
+}
     const role = await getStaffRole(user);
 
     if (role === "supervisor" || role === "Supervisor") {
