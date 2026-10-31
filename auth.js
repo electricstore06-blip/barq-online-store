@@ -182,15 +182,17 @@ async function getStaffRole(user) {
         return null;
     }
 }
-
 // ==========================================
 // REDIRECT ADMIN AND STAFF
 // ==========================================
 
-if (await checkAdmin(user)) {
-    window.location.href = "admin-dashboard.html";
-    return true;
-}
+async function redirectStaff(user) {
+
+    if (await checkAdmin(user)) {
+        window.location.href = "admin-dashboard.html";
+        return true;
+    }
+
     const role = await getStaffRole(user);
 
     if (role === "supervisor" || role === "Supervisor") {
