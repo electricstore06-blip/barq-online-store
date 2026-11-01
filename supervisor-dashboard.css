@@ -1,1 +1,592 @@
 
+/* =========================================
+   BARQ SUPERVISOR DASHBOARD
+   Professional Logistics Dashboard
+   ========================================= */
+
+:root {
+    --bg: #0b1220;
+    --panel: #151f30;
+    --panel-light: #1b293d;
+    --border: #29384d;
+    --blue: #3b82f6;
+    --blue-light: #60a5fa;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --green: #22c55e;
+    --orange: #f59e0b;
+    --red: #ef4444;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Inter, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* MAIN PAGE */
+
+.supervisor-page {
+    min-height: 100vh;
+}
+
+/* HEADER */
+
+.supervisor-header {
+    min-height: 82px;
+    padding: 15px 4%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    background: #101a2b;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.brand h1 {
+    color: white;
+    font-size: 27px;
+    letter-spacing: 1px;
+}
+
+.brand span {
+    color: var(--blue-light);
+    font-size: 10px;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.supervisor-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.supervisor-nav a {
+    color: var(--muted);
+    text-decoration: none;
+    padding: 10px 13px;
+    border-radius: 8px;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+.supervisor-nav a:hover,
+.supervisor-nav a.active {
+    color: white;
+    background: #263b59;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.supervisor-role {
+    color: var(--blue-light);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+#logout-btn {
+    background: #26364d;
+    color: white;
+    border: 1px solid #3b4c65;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+#logout-btn:hover {
+    background: #344b69;
+}
+
+/* MAIN CONTENT */
+
+.supervisor-content {
+    width: min(1500px, 94%);
+    margin: auto;
+    padding: 30px 0 60px;
+}
+
+/* WELCOME */
+
+.welcome-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 28px;
+    background: linear-gradient(120deg, #172b49, #172236);
+    border: 1px solid #304766;
+    border-radius: 16px;
+    margin-bottom: 25px;
+}
+
+.welcome-label,
+.panel-label {
+    color: var(--blue-light);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+    margin-bottom: 9px;
+}
+
+.welcome-box h2 {
+    font-size: 27px;
+    margin-bottom: 9px;
+}
+
+.welcome-box p:not(.welcome-label) {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.dashboard-date {
+    color: #bfdbfe;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: #243b5c;
+    padding: 12px 16px;
+    border-radius: 9px;
+}
+
+/* SUMMARY CARDS */
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.summary-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 23px;
+    min-height: 145px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.summary-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--blue);
+}
+
+.summary-card span {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 14px;
+}
+
+.summary-card strong {
+    display: block;
+    color: white;
+    font-size: 34px;
+    margin-bottom: 8px;
+}
+
+.summary-card small {
+    color: var(--blue-light);
+    font-size: 11px;
+}
+
+/* DASHBOARD PANELS */
+
+.operations-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.dashboard-panel,
+.dashboard-section {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 23px;
+    margin-bottom: 22px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    color: var(--text);
+    font-size: 19px;
+}
+
+.section-header button {
+    background: #263e60;
+    color: #dbeafe;
+    border: 1px solid #36577e;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.section-header button:hover {
+    background: var(--blue);
+    color: white;
+}
+
+/* DELIVERY PROGRESS */
+
+.progress-placeholder {
+    text-align: center;
+    padding: 15px 10px;
+}
+
+.progress-number {
+    font-size: 35px;
+    font-weight: 800;
+    color: var(--blue-light);
+    margin-bottom: 8px;
+}
+
+.progress-placeholder p,
+.statistics-placeholder p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.progress-track {
+    height: 9px;
+    background: #29384d;
+    border-radius: 20px;
+    margin-top: 20px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #2563eb, #60a5fa);
+    border-radius: 20px;
+}
+
+/* STATISTICS */
+
+.statistics-placeholder {
+    min-height: 115px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+}
+
+.statistics-placeholder small {
+    color: var(--blue-light);
+    font-size: 11px;
+}
+
+/* MAP */
+
+.map-section {
+    margin-bottom: 25px;
+}
+
+.map-status {
+    background: #153b32;
+    color: #4ade80;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+}
+
+.map-placeholder {
+    min-height: 320px;
+    background:
+        linear-gradient(rgba(13, 25, 42, 0.92), rgba(13, 25, 42, 0.92)),
+        repeating-linear-gradient(
+            45deg,
+            #263b55 0,
+            #263b55 1px,
+            transparent 1px,
+            transparent 35px
+        );
+    border: 1px solid #30445f;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.map-icon {
+    color: var(--blue-light);
+    font-size: 45px;
+}
+
+.map-placeholder h3 {
+    margin: 10px 0;
+    font-size: 20px;
+}
+
+.map-placeholder p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* DRIVER AND ORDER SECTIONS */
+
+.dashboard-section {
+    scroll-margin-top: 105px;
+}
+
+#drivers-container,
+#orders-container {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+/* COMMON CONTENT STYLES
+   For dynamically generated driver/order cards and tables */
+
+#drivers-container > *,
+#orders-container > * {
+    margin-bottom: 12px;
+}
+
+#drivers-container .driver-card,
+#orders-container .order-card,
+.driver-card,
+.order-card {
+    background: var(--panel-light);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 17px;
+    margin-bottom: 12px;
+}
+
+#drivers-container button,
+#orders-container button {
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 7px;
+    padding: 9px 13px;
+    margin: 4px;
+}
+
+#drivers-container button:hover,
+#orders-container button:hover {
+    background: #2563eb;
+}
+
+#drivers-container select,
+#orders-container select {
+    background: #101a2b;
+    color: white;
+    border: 1px solid #40516a;
+    border-radius: 7px;
+    padding: 9px;
+    margin: 4px;
+    max-width: 100%;
+}
+
+#drivers-container table,
+#orders-container table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+#drivers-container th,
+#orders-container th {
+    color: var(--blue-light);
+    background: #1b2a40;
+    text-align: left;
+}
+
+#drivers-container th,
+#drivers-container td,
+#orders-container th,
+#orders-container td {
+    padding: 13px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+}
+
+/* HISTORY AND REPORTS */
+
+.future-section {
+    scroll-margin-top: 105px;
+}
+
+.future-section > p {
+    color: var(--muted);
+    font-size: 13px;
+    padding: 10px 0;
+}
+
+/* SYSTEM MESSAGE */
+
+#supervisor-message {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+/* GENERAL LINKS */
+
+a {
+    transition: 0.2s;
+}
+
+/* TABLE SCROLLING */
+
+#drivers-container,
+#orders-container {
+    overflow-x: auto;
+}
+
+/* TABLET */
+
+@media (max-width: 1050px) {
+
+    .supervisor-header {
+        flex-wrap: wrap;
+    }
+
+    .supervisor-nav {
+        order: 3;
+        width: 100%;
+    }
+
+    .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+/* MOBILE */
+
+@media (max-width: 650px) {
+
+    .supervisor-content {
+        width: 92%;
+        padding-top: 18px;
+    }
+
+    .supervisor-header {
+        position: relative;
+        padding: 16px 4%;
+    }
+
+    .supervisor-nav {
+        gap: 5px;
+    }
+
+    .supervisor-nav a {
+        font-size: 11px;
+        padding: 8px;
+    }
+
+    .header-actions {
+        gap: 8px;
+    }
+
+    .supervisor-role {
+        font-size: 11px;
+    }
+
+    .welcome-box {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+    }
+
+    .welcome-box h2 {
+        font-size: 22px;
+    }
+
+    .dashboard-date {
+        font-size: 10px;
+    }
+
+    .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .summary-card {
+        padding: 15px;
+        min-height: 125px;
+    }
+
+    .summary-card strong {
+        font-size: 27px;
+    }
+
+    .summary-card span {
+        font-size: 11px;
+    }
+
+    .operations-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-panel,
+    .dashboard-section {
+        padding: 16px;
+    }
+
+    .section-header {
+        align-items: flex-start;
+    }
+
+    .section-header h2 {
+        font-size: 16px;
+    }
+
+    .section-header button {
+        padding: 8px 10px;
+        font-size: 10px;
+    }
+
+    .map-placeholder {
+        min-height: 240px;
+    }
+
+}
+
