@@ -93,7 +93,7 @@ async function verifySupervisor(user) {
     if (!user) {
         return false;
     }
-
+console.log("SUPERVISOR AUTH UID:", user.uid);
     try {
 
         const usersRef =
