@@ -998,11 +998,8 @@ onAuthStateChanged(
         }
 
 
-        console.log(
-            "Supervisor verified:",
-            user.email
-        );
-
+      console.log("Supervisor verified:", user.email);
+console.log("SUPERVISOR UID CHECK:", user.uid);  
 
         await loadDashboard();
 
