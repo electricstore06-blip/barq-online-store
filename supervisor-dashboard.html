@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>BARQ Supervisor Dashboard</title>
+    <title>BARQ | Supervisor Dashboard</title>
 
     <link rel="stylesheet" href="supervisor-dashboard.css">
 </head>
@@ -14,75 +15,199 @@
 
     <div class="supervisor-page">
 
-        <!-- HEADER -->
+        <!-- TOP NAVIGATION -->
         <header class="supervisor-header">
 
-            <div>
-                <h1>BARQ Supervisor</h1>
-                <p>Driver & Order Management</p>
+            <div class="brand">
+                <h1>⚡ BARQ</h1>
+                <span>SUPERVISOR PORTAL</span>
             </div>
 
-            <button id="logout-btn">
-                Logout
-            </button>
+            <nav class="supervisor-nav">
+                <a href="#overview" class="active">Overview</a>
+                <a href="#orders-section">Orders</a>
+                <a href="#drivers-section">Drivers</a>
+                <a href="#delivery-history">Delivery History</a>
+                <a href="#delivery-reports">Reports</a>
+            </nav>
+
+            <div class="header-actions">
+                <span class="supervisor-role">Supervisor</span>
+                <button id="logout-btn">Logout</button>
+            </div>
 
         </header>
 
 
-        <!-- MAIN CONTENT -->
         <main class="supervisor-content">
 
             <!-- WELCOME -->
-            <section class="welcome-box">
+            <section class="welcome-box" id="overview">
 
-                <h2>
-                    Welcome, <span id="supervisor-name">Supervisor</span>
-                </h2>
+                <div>
+                    <p class="welcome-label">BARQ LOGISTICS</p>
 
-                <p>
-                    Manage drivers, assigned orders and delivery operations.
-                </p>
+                    <h2>
+                        Welcome, <span id="supervisor-name">Supervisor</span>
+                    </h2>
+
+                    <p>
+                        Monitor deliveries, manage drivers and coordinate orders.
+                    </p>
+                </div>
+
+                <div class="dashboard-date">
+                    DELIVERY OPERATIONS
+                </div>
 
             </section>
 
 
-            <!-- SUMMARY -->
+            <!-- SUMMARY CARDS -->
             <section class="summary-grid">
 
                 <div class="summary-card">
-                    <h3>Total Orders</h3>
+                    <span>Total Orders</span>
                     <strong id="total-orders">0</strong>
+                    <small>All orders</small>
                 </div>
 
                 <div class="summary-card">
-                    <h3>Pending Orders</h3>
+                    <span>Pending Orders</span>
                     <strong id="pending-orders">0</strong>
+                    <small>Waiting for action</small>
                 </div>
 
                 <div class="summary-card">
-                    <h3>Active Drivers</h3>
+                    <span>Active Drivers</span>
                     <strong id="active-drivers">0</strong>
+                    <small>Active driver accounts</small>
                 </div>
 
                 <div class="summary-card">
-                    <h3>Out for Delivery</h3>
+                    <span>Out for Delivery</span>
                     <strong id="delivery-orders">0</strong>
+                    <small>Orders on the road</small>
+                </div>
+
+            </section>
+
+
+            <!-- DELIVERY OPERATIONS -->
+            <section class="operations-grid">
+
+                <!-- DELIVERY PROGRESS -->
+                <div class="dashboard-panel">
+
+                    <div class="section-header">
+                        <div>
+                            <p class="panel-label">DAILY PERFORMANCE</p>
+                            <h2>Today's Delivery Progress</h2>
+                        </div>
+                    </div>
+
+                    <div class="progress-placeholder">
+                        <div class="progress-number">--</div>
+                        <p>Delivery progress will appear here</p>
+                        <div class="progress-track">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- DRIVER DISTRIBUTION -->
+                <div class="dashboard-panel">
+
+                    <div class="section-header">
+                        <div>
+                            <p class="panel-label">TEAM OVERVIEW</p>
+                            <h2>Driver Distribution</h2>
+                        </div>
+                    </div>
+
+                    <div class="statistics-placeholder">
+                        <p>Driver statistics will appear here.</p>
+                        <p>Active, inactive and available drivers.</p>
+                    </div>
+
+                </div>
+
+
+                <!-- FUEL MANAGEMENT -->
+                <div class="dashboard-panel">
+
+                    <div class="section-header">
+                        <div>
+                            <p class="panel-label">FLEET OPERATIONS</p>
+                            <h2>Fuel Management</h2>
+                        </div>
+                    </div>
+
+                    <div class="statistics-placeholder">
+                        <p>Fuel consumption and usage records.</p>
+                        <small>Fuel costs are visible to Admin only.</small>
+                    </div>
+
+                </div>
+
+
+                <!-- VEHICLE MAINTENANCE -->
+                <div class="dashboard-panel">
+
+                    <div class="section-header">
+                        <div>
+                            <p class="panel-label">VEHICLE CONDITION</p>
+                            <h2>Vehicle Maintenance</h2>
+                        </div>
+                    </div>
+
+                    <div class="statistics-placeholder">
+                        <p>Vehicle condition and service schedules.</p>
+                        <small>Maintenance expenses are visible to Admin only.</small>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- DELIVERY TRACKING MAP -->
+            <section class="dashboard-panel map-section">
+
+                <div class="section-header">
+                    <div>
+                        <p class="panel-label">LIVE OPERATIONS</p>
+                        <h2>Delivery Tracking Map</h2>
+                    </div>
+
+                    <span class="map-status">Tracking area</span>
+                </div>
+
+                <div class="map-placeholder">
+                    <div>
+                        <span class="map-icon">⌖</span>
+                        <h3>Delivery Map</h3>
+                        <p>Driver locations and delivery tracking will appear here.</p>
+                    </div>
                 </div>
 
             </section>
 
 
             <!-- DRIVERS -->
-            <section class="dashboard-section">
+            <section class="dashboard-section" id="drivers-section">
 
                 <div class="section-header">
-
-                    <h2>Drivers</h2>
+                    <div>
+                        <p class="panel-label">DELIVERY TEAM</p>
+                        <h2>Driver Management</h2>
+                    </div>
 
                     <button id="refresh-drivers-btn">
-                        🔄 Refresh
+                        ↻ Refresh Drivers
                     </button>
-
                 </div>
 
                 <div id="drivers-container">
@@ -93,16 +218,17 @@
 
 
             <!-- ORDERS -->
-            <section class="dashboard-section">
+            <section class="dashboard-section" id="orders-section">
 
                 <div class="section-header">
-
-                    <h2>Orders</h2>
+                    <div>
+                        <p class="panel-label">ORDER OPERATIONS</p>
+                        <h2>Order Management</h2>
+                    </div>
 
                     <button id="refresh-orders-btn">
-                        🔄 Refresh
+                        ↻ Refresh Orders
                     </button>
-
                 </div>
 
                 <div id="orders-container">
@@ -112,7 +238,37 @@
             </section>
 
 
-            <!-- MESSAGE -->
+            <!-- DELIVERY HISTORY -->
+            <section class="dashboard-panel future-section" id="delivery-history">
+
+                <div class="section-header">
+                    <div>
+                        <p class="panel-label">COMPLETED OPERATIONS</p>
+                        <h2>Delivery History</h2>
+                    </div>
+                </div>
+
+                <p>Completed delivery records will appear here.</p>
+
+            </section>
+
+
+            <!-- DELIVERY REPORTS -->
+            <section class="dashboard-panel future-section" id="delivery-reports">
+
+                <div class="section-header">
+                    <div>
+                        <p class="panel-label">PERFORMANCE</p>
+                        <h2>Delivery Reports</h2>
+                    </div>
+                </div>
+
+                <p>Delivery statistics and driver performance reports will appear here.</p>
+
+            </section>
+
+
+            <!-- SYSTEM MESSAGE -->
             <div id="supervisor-message"></div>
 
         </main>
@@ -120,11 +276,7 @@
     </div>
 
 
-    <script
-        type="module"
-        src="supervisor-dashboard.js">
-    </script>
+    <script type="module" src="supervisor-dashboard.js"></script>
 
 </body>
-
 </html>
