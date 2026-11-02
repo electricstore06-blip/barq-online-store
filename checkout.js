@@ -10,9 +10,10 @@ import {
 
 import {
     collection,
-    addDoc
+    doc,
+    writeBatch,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
 // ==========================================
 // CART
 // ==========================================
