@@ -193,57 +193,91 @@
 
                     return dateB - dateA;
                 });
+ordersList.className = "";
 
-                ordersList.className = "";
+const orderCards = await Promise.all(
+    orders.map(async order => {
+        const itemNames = Array.isArray(order.items)
+            ? order.items.map(item =>
+                escapeHTML(
+                    item.name ||
+                    item.productName ||
+                    "Product"
+                )
+            ).join(", ")
+            : "See order details";
 
-                ordersList.innerHTML = orders.map(order => {
-                    const itemNames = Array.isArray(order.items)
-                        ? order.items.map(item =>
-                            escapeHTML(
-                                item.name ||
-                                item.productName ||
-                                "Product"
-                            )
-                        ).join(", ")
-                        : "See order details";
+        const total = Number(order.total);
 
-                    const total = Number(order.total);
+        const formattedTotal = Number.isFinite(total)
+            ? total.toFixed(2)
+            : "0.00";
 
-                    const formattedTotal = Number.isFinite(total)
-                        ? total.toFixed(2)
-                        : "0.00";
+        let deliveryCodeHTML = "";
 
-                    return `
-                        <article class="order-card">
-                            <div class="order-header">
-                                <div>
-                                    <div>Order Number</div>
+        if (order.status !== "Delivered") {
+            try {
+                const codeSnapshot = await getDoc(
+                    doc(db, "deliveryCodes", order.id)
+                );
 
-                                    <div class="order-number">
-                                        ${escapeHTML(
-                                            order.orderNumber || order.id
-                                        )}
-                                    </div>
-                                </div>
+                if (codeSnapshot.exists()) {
+                    const code = codeSnapshot.data().code;
 
-                                <span class="status">
-                                    ${escapeHTML(
-                                        order.status || "Pending"
-                                    )}
-                                </span>
+                    if (/^\d{6}$/.test(String(code))) {
+                        deliveryCodeHTML = `
+                            <div class="delivery-code-box">
+                                <strong>Delivery Verification Code</strong>
+                                <h2>${escapeHTML(code)}</h2>
+                                <p>Give this code to your driver when your order arrives. Keep it private until delivery.</p>
                             </div>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error(
+                    "Unable to load delivery code:",
+                    error
+                );
+            }
+        } else {
+            deliveryCodeHTML = `
+                <p><strong>Delivery verification completed.</strong></p>
+            `;
+        }
 
-                            <div>
-                                <strong>Items:</strong>
-                                ${itemNames}
-                            </div>
+        return `
+            <article class="order-card">
+                <div class="order-header">
+                    <div>
+                        <div>Order Number</div>
+                        <div class="order-number">
+                            ${escapeHTML(order.orderNumber || order.id)}
+                        </div>
+                    </div>
 
-                            <div class="order-total">
-                                Total: SAR ${formattedTotal}
-                            </div>
-                        </article>
-                    `;
-                }).join("");
+                    <span class="status">
+                        ${escapeHTML(order.status || "Pending")}
+                    </span>
+                </div>
+
+                <div>
+                    <strong>Items:</strong>
+                    ${itemNames}
+                </div>
+
+                <div class="order-total">
+                    Total: SAR ${formattedTotal}
+                </div>
+
+                ${deliveryCodeHTML}
+            </article>
+        `;
+    })
+);
+
+ordersList.innerHTML = orderCards.join("");
+              
 
             } catch (error) {
                 console.error("Unable to load orders:", error);
