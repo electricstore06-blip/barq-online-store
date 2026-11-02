@@ -1029,8 +1029,6 @@ import {
   serverTimestamp,
   runTransaction
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-/*
  
 const staffApp = initializeApp(firebaseConfig, "BARQ_STAFF_CREATION_APP");
 const staffAuth = getAuth(staffApp);
@@ -1397,26 +1395,7 @@ $("staff-form").addEventListener("submit", async event => {
     button.disabled = false;
   }
 });
-/* ---------------- DASHBOARD DATA ---------------- */
 
-function render() {
-  const totalSales = orders.reduce((sum, order) => sum + getTotal(order), 0);
-
-  const pendingCount = orders.filter(order =>
-    ["pending", "processing", "confirmed"].includes(getStatus(order))
-  ).length;
-
-  const delayedCount = orders.filter(order =>
-    ["delayed", "delivery delayed", "late"].includes(getStatus(order))
-  ).length;
-
-  $("total-sales").textContent = money(totalSales);
-  $("total-orders").textContent = orders.length;
-  $("pending-orders").textContent = pendingCount;
-  $("delayed-orders").textContent = delayedCount;
-  $("total-products").textContent = products.length;
-
-  $("finance-sales").textContent = money(totalSales);
 /* ---------------- DASHBOARD DATA ---------------- */
 
 function render() {
@@ -2088,4 +2067,3 @@ $("stock-adjustment-form").addEventListener("submit", async event => {
 
 </body>
 </html> 
-
