@@ -2,14 +2,13 @@
  // ==========================================
  // BARQ DRIVER DASHBOARD
  // ==========================================
-
-import { db, auth } from "./driver-firebase-config.js";
-
 import {
     collection,
     getDocs,
     doc,
     updateDoc,
+    writeBatch,
+    serverTimestamp,
     query,
     where,
     onSnapshot
@@ -224,29 +223,93 @@ function displayOrders(orders) {
         ".driver-status-select"
     );
 
-    statusSelects.forEach(select => {
-        select.addEventListener("change", async event => {
-            const orderId = event.target.dataset.orderId;
-            const newStatus = event.target.value;
+statusSelects.forEach(select => {
+    select.addEventListener("change", async event => {
+        const orderId = event.target.dataset.orderId;
+        const newStatus = event.target.value;
 
-            try {
-                await updateDoc(
-                    doc(db, "orders", orderId),
-                    {
-                        status: newStatus,
-                        statusUpdatedAt: new Date()
-                    }
+        try {
+            // DELIVERY VERIFICATION REQUIRED
+            if (newStatus === "Delivered") {
+
+                const enteredCode = prompt(
+                    "Enter the customer's 6-digit delivery code:"
                 );
 
-                showMessage("Delivery status updated successfully.");
-            } catch (error) {
-                console.error("Delivery status update error:", error);
-                showMessage("Unable to update delivery status.");
-            }
-        });
-    });
-}
+                if (enteredCode === null) {
+                    event.target.value = "Out for Delivery";
+                    return;
+                }
 
+                const code = enteredCode.trim();
+
+                if (!/^\d{6}$/.test(code)) {
+                    alert("Please enter a valid 6-digit code.");
+                    event.target.value = "Out for Delivery";
+                    return;
+                }
+
+                showMessage("Verifying delivery code...");
+
+                const batch = writeBatch(db);
+
+                const verificationRef = doc(
+                    db,
+                    "deliveryVerifications",
+                    orderId
+                );
+
+                const orderRef = doc(
+                    db,
+                    "orders",
+                    orderId
+                );
+
+                batch.set(verificationRef, {
+                    orderId: orderId,
+                    driverUid: currentDriver.uid,
+                    code: code,
+                    createdAt: serverTimestamp()
+                });
+
+                batch.update(orderRef, {
+                    status: "Delivered",
+                    statusUpdatedAt: serverTimestamp()
+                });
+
+                await batch.commit();
+
+                showMessage(
+                    "Code verified. Order marked as Delivered."
+                );
+
+                return;
+            }
+
+            // OTHER DELIVERY STATUS UPDATES
+            await updateDoc(
+                doc(db, "orders", orderId),
+                {
+                    status: newStatus,
+                    statusUpdatedAt: new Date()
+                }
+            );
+
+            showMessage("Delivery status updated successfully.");
+
+        } catch (error) {
+            console.error("Delivery status update error:", error);
+
+            alert(
+                "Delivery verification failed. Check the code and try again."
+            );
+
+            event.target.value = "Out for Delivery";
+
+            showMessage("Unable to complete delivery verification.");
+        }
+    });
+});   
 // ==========================================
 // REAL-TIME LOAD ASSIGNED ORDERS
 // ==========================================
