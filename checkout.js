@@ -468,12 +468,37 @@ if (placeOrderButton) {
                 status: "Pending",
                 date: new Date().toISOString()
             };
+// Create the order and its private delivery code together.
+const orderRef = doc(collection(db, "orders"));
 
-            // Save the order first. Do not clear the cart if saving fails.
-            const orderRef = await addDoc(
-                collection(db, "orders"),
-                orderData
-            );
+const deliveryCodeRef = doc(
+    db,
+    "deliveryCodes",
+    orderRef.id
+);
+
+// Generate a random 6-digit code.
+const randomValues = new Uint32Array(1);
+crypto.getRandomValues(randomValues);
+
+const deliveryCode = String(
+    randomValues[0] % 1000000
+).padStart(6, "0");
+
+// Save both documents in one batch.
+const batch = writeBatch(db);
+
+batch.set(orderRef, orderData);
+
+batch.set(deliveryCodeRef, {
+    orderId: orderRef.id,
+    customerUid: currentUser.uid,
+    code: deliveryCode,
+    createdAt: serverTimestamp()
+});
+
+await batch.commit();
+           
 
             // Keep compatibility with the existing success page.
             localStorage.setItem(
