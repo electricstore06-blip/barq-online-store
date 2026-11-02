@@ -1031,10 +1031,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /*
-  Staff creation uses a separate Firebase Auth app.
-  This prevents creating a staff account from signing out
-  the administrator who is using this dashboard.
-*/
+ 
 const staffApp = initializeApp(firebaseConfig, "BARQ_STAFF_CREATION_APP");
 const staffAuth = getAuth(staffApp);
 
