@@ -505,7 +505,7 @@ th { color: var(--muted); font-weight: 600; }
       <a href="admin-orders.html"><span class="symbol">▣</span>Orders</a>
       <a href="admin-orders.html"><span class="symbol">♧</span>Delivery & Delays</a>
       <a href="admin-orders.html"><span class="symbol">↶</span>Returns & Replacements</a>
-      <a href="admin-products.html"><span class="symbol">◇</span>Products & Inventory</a>
+      <a href="#inventory"><span class="symbol">▤</span>Inventory Management</a>
       <a href="admin-reviews.html"><span class="symbol">☆</span>Customer Reviews</a>
       <a href="admin-orders.html"><span class="symbol">♙</span>Customers / Order History</a>
       <a href="#staff"><span class="symbol">♧</span>Staff & Drivers</a>
@@ -590,10 +590,68 @@ th { color: var(--muted); font-weight: 600; }
         </div>
       </div>
 
-      <div class="grid two-col">
-        <section class="card">
-          <div class="section-head">
-            <h2>Sales Overview</h2>
+         <!-- INVENTORY MANAGEMENT -->
+      <section class="card" id="inventory">
+        <div class="section-head">
+          <div>
+            <h2>Inventory Management</h2>
+            <p class="subtitle">Monitor product quantities and stock levels.</p>
+          </div>
+        </div>
+
+        <div class="grid metrics">
+          <div class="card">
+            <div class="metric-label">Total Products</div>
+            <div class="metric-value" id="inventory-total-products">—</div>
+          </div>
+
+          <div class="card">
+            <div class="metric-label">Total Stock Units</div>
+            <div class="metric-value" id="inventory-total-units">—</div>
+          </div>
+
+          <div class="card">
+            <div class="metric-label">Low Stock (1–5)</div>
+            <div class="metric-value" id="inventory-low-stock">—</div>
+          </div>
+
+          <div class="card">
+            <div class="metric-label">Out of Stock</div>
+            <div class="metric-value" id="inventory-out-stock">—</div>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <h3>Product Stock</h3>
+          <button type="button" id="refresh-inventory" class="primary-link">
+            Refresh Inventory
+          </button>
+        </div>
+
+        <p id="inventory-message" role="status" aria-live="polite">
+          Inventory will load here.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+          <thead>
+  <tr>
+    <th>Product</th>
+    <th>Category</th>
+    <th>Stock</th>
+    <th>Status</th>
+    <th>Visibility</th>
+  </tr>
+</thead> 
+            <tbody id="inventory-list">
+              <tr>
+                <td colspan="5" class="empty">Loading inventory...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- END INVENTORY MANAGEMENT --> 
             <span class="pill">Recorded orders</span>
           </div>
           <div class="chart" id="sales-chart" aria-label="Recent sales chart"></div>
@@ -935,13 +993,14 @@ const money = value =>
   });
 
 const norm = value => String(value || "").trim().toLowerCase();
-
 let orders = [];
 let products = [];
+let allProducts = [];
 let expenses = [];
 let deliveryCosts = [];
 let staffMembers = [];
 let authorizedUid = null;
+
 
 function showMessage(id, message, isError = false) {
   const element = $(id);
@@ -1315,7 +1374,65 @@ function render() {
   $("last-updated").textContent =
     "Last updated: " + new Date().toLocaleString("en-SA");
 }
+function renderInventory() {
+  const container = $("inventory-list");
 
+  if (!container) return;
+
+  const stockOf = product => {
+    const value = Number(product.stock);
+    return Number.isSafeInteger(value) && value >= 0 ? value : 0;
+  };
+
+  const totalUnits = allProducts.reduce(
+    (sum, product) => sum + stockOf(product), 0
+  );
+
+  const lowStock = allProducts.filter(product => {
+    const stock = stockOf(product);
+    return stock >= 1 && stock <= 5;
+  }).length;
+
+  const outOfStock = allProducts.filter(
+    product => stockOf(product) === 0
+  ).length;
+
+  $("inventory-total-products").textContent = allProducts.length;
+  $("inventory-total-units").textContent = totalUnits;
+  $("inventory-low-stock").textContent = lowStock;
+  $("inventory-out-stock").textContent = outOfStock;
+
+  if (!allProducts.length) {
+    container.innerHTML =
+      '<tr><td colspan="5" class="empty">No products found.</td></tr>';
+    $("inventory-message").textContent = "No products in your catalog.";
+    return;
+  }
+
+  container.innerHTML = allProducts.map(product => {
+    const stock = stockOf(product);
+    const status = stock === 0
+      ? "Out of Stock"
+      : stock <= 5
+        ? "Low Stock"
+        : "In Stock";
+
+    const visibility = product.active === false ? "Hidden" : "Visible";
+
+    return `
+      <tr>
+        <td>${safeText(product.name || product.title || "Unnamed product")}</td>
+        <td>${safeText(product.category || "—")}</td>
+        <td>${stock}</td>
+        <td><span class="pill">${status}</span></td>
+        <td><span class="pill">${visibility}</span></td>
+      </tr>
+    `;
+  }).join("");
+
+  $("inventory-message").textContent =
+    "Showing all " + allProducts.length + " products, including hidden products.";
+}
 function renderStatus() {
   const container = $("status-list");
 
@@ -1747,13 +1864,15 @@ async function loadDashboardData() {
     id: item.id,
     ...item.data()
   }));
+allProducts = productsSnapshot.docs.map(item => ({
+  id: item.id,
+  ...item.data()
+}));
 
-  products = productsSnapshot.docs
-    .map(item => ({ id: item.id, ...item.data() }))
-    .filter(product => product.active !== false);
-
+products = allProducts.filter(product => product.active !== false);
+  
   render();
-
+renderInventory();
   await Promise.all([
     loadExpenses(),
     loadDeliveryCosts(),
@@ -1812,6 +1931,40 @@ onAuthStateChanged(auth, async user => {
       "Could not verify administrator access or load dashboard data. Please check your Firebase connection and permissions, then refresh the page.";
   }
 });
+ $("refresh-inventory").addEventListener("click", async () => {
+  const button = $("refresh-inventory");
+  const message = $("inventory-message");
+
+  if (!authorizedUid) {
+    message.textContent = "Administrator access is required.";
+    return;
+  }
+
+  button.disabled = true;
+  message.textContent = "Refreshing inventory...";
+
+  try {
+    const snapshot = await getDocs(collection(db, "products"));
+
+    allProducts = snapshot.docs.map(item => ({
+      id: item.id,
+      ...item.data()
+    }));
+
+    products = allProducts.filter(product => product.active !== false);
+
+    $("total-products").textContent = products.length;
+
+    renderInventory();
+
+    message.textContent = "Inventory refreshed successfully.";
+  } catch (error) {
+    console.error("Inventory refresh error:", error);
+    message.textContent = "Could not refresh inventory. Please try again.";
+  } finally {
+    button.disabled = false;
+  }
+}); 
 </script>
 
 </body>
