@@ -1945,6 +1945,143 @@ onAuthStateChanged(auth, async user => {
     button.disabled = false;
   }
 }); 
+// =====================================
+// MANUAL STOCK ADJUSTMENT
+// =====================================
+
+$("stock-adjustment-form").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const button = $("save-stock-adjustment");
+  const message = $("stock-adjustment-message");
+
+  if (!authorizedUid) {
+    message.textContent = "Administrator access is required.";
+    return;
+  }
+
+  const productId = $("adjust-product").value;
+  const type = $("adjust-type").value;
+  const quantity = Number($("adjust-quantity").value);
+  const reason = $("adjust-reason").value.trim();
+
+  if (!productId) {
+    message.textContent = "Please select a product.";
+    return;
+  }
+
+  if (!["add", "remove", "set"].includes(type)) {
+    message.textContent = "Please select a valid adjustment type.";
+    return;
+  }
+
+  if (!Number.isSafeInteger(quantity) || quantity < 0) {
+    message.textContent = "Enter a valid whole number of units.";
+    return;
+  }
+
+  if (type !== "set" && quantity === 0) {
+    message.textContent = "Add and Remove quantities must be greater than zero.";
+    return;
+  }
+
+  if (!reason || reason.length > 300) {
+    message.textContent = "Please enter a reason (maximum 300 characters).";
+    return;
+  }
+
+  const product = allProducts.find(item => item.id === productId);
+
+  if (!product) {
+    message.textContent = "Product not found. Refresh inventory and try again.";
+    return;
+  }
+
+  const productRef = doc(db, "products", productId);
+  const adjustmentRef = doc(collection(db, "stockAdjustments"));
+
+  button.disabled = true;
+  message.textContent = "Saving stock adjustment...";
+
+  try {
+    await runTransaction(db, async transaction => {
+      const productSnapshot = await transaction.get(productRef);
+
+      if (!productSnapshot.exists()) {
+        throw new Error("Product no longer exists.");
+      }
+
+      const productData = productSnapshot.data();
+      const previousStock = Number(productData.stock ?? 0);
+
+      if (!Number.isSafeInteger(previousStock) || previousStock < 0) {
+        throw new Error("This product has an invalid stock value.");
+      }
+
+      let newStock;
+
+      if (type === "add") {
+        newStock = previousStock + quantity;
+      } else if (type === "remove") {
+        if (quantity > previousStock) {
+          throw new Error("Cannot remove more units than the available stock.");
+        }
+
+        newStock = previousStock - quantity;
+      } else {
+        newStock = quantity;
+      }
+
+      if (!Number.isSafeInteger(newStock) || newStock < 0) {
+        throw new Error("The resulting stock quantity is invalid.");
+      }
+
+      transaction.update(productRef, {
+        stock: newStock,
+        updatedAt: serverTimestamp(),
+        updatedBy: authorizedUid
+      });
+
+      transaction.set(adjustmentRef, {
+        productId: productId,
+        productName: productData.name || productData.title || "Unnamed product",
+        type: type,
+        quantity: quantity,
+        previousStock: previousStock,
+        newStock: newStock,
+        reason: reason,
+        createdBy: authorizedUid,
+        createdAt: serverTimestamp()
+      });
+    });
+
+    $("stock-adjustment-form").reset();
+
+    const refreshedSnapshot = await getDocs(collection(db, "products"));
+
+    allProducts = refreshedSnapshot.docs.map(item => ({
+      id: item.id,
+      ...item.data()
+    }));
+
+    products = allProducts.filter(product => product.active !== false);
+
+    $("total-products").textContent = products.length;
+
+    renderInventory();
+
+    message.textContent =
+      "Stock adjustment saved successfully. New stock: " +
+      allProducts.find(item => item.id === productId).stock;
+
+  } catch (error) {
+    console.error("Stock adjustment error:", error);
+    message.textContent =
+      error.message || "Could not save stock adjustment. Please try again.";
+  } finally {
+    button.disabled = false;
+  }
+});  
 </script>
 
 </body>
