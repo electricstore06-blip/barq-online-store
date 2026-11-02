@@ -1,82 +1,75 @@
-import { auth, db } from "./firebase-config.js";
 
-import {
-    collection,
-    query,
-    where,
-    orderBy,
-    onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const customerNameElement = document.getElementById("customer-name");
+const orderNumberElement = document.getElementById("order-number");
+const orderTotalElement = document.getElementById("order-total");
+const orderStatusElement = document.getElementById("order-status");
+const deliveryCodeElement = document.getElementById("delivery-code");
 
-import {
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+function showOrderSuccess() {
+    try {
+        const savedOrder = JSON.parse(
+            localStorage.getItem("barqOrder") || "null"
+        );
 
-const ordersContainer = document.getElementById("orders-container");
+        if (!savedOrder) {
+            customerNameElement.textContent = "Thank you for shopping with BARQ!";
+            orderNumberElement.textContent = "Order information unavailable";
+            orderTotalElement.textContent = "SAR 0.00";
+            orderStatusElement.textContent = "Please check My Orders";
 
-if (!ordersContainer) {
-    console.error('Could not find the element with id="orders-container".');
-}
-
-function showMessage(message) {
-    if (ordersContainer) {
-        ordersContainer.textContent = message;
-    }
-}
-
-onAuthStateChanged(auth, (user) => {
-    if (!user) {
-        showMessage("Please log in to view your orders.");
-        return;
-    }
-
-    showMessage("Loading your orders...");
-
-    const ordersQuery = query(
-        collection(db, "orders"),
-        where("customerUid", "==", user.uid),
-        orderBy("createdAt", "desc")
-    );
-
-    onSnapshot(
-        ordersQuery,
-        (snapshot) => {
-            if (snapshot.empty) {
-                showMessage("You don't have any orders yet.");
-                return;
+            if (deliveryCodeElement) {
+                deliveryCodeElement.textContent = "------";
             }
 
-            ordersContainer.replaceChildren();
-
-            snapshot.forEach((orderDoc) => {
-                const order = orderDoc.data();
-
-                const card = document.createElement("div");
-                card.className = "order-card";
-
-                const number = document.createElement("p");
-                number.textContent = `Order Number: ${order.orderNumber || orderDoc.id}`;
-
-                const items = document.createElement("p");
-                const itemNames = Array.isArray(order.items)
-                    ? order.items.map(item => item.name || item.title || "Product").join(", ")
-                    : "Order items";
-
-                items.textContent = `Items: ${itemNames}`;
-
-                const total = document.createElement("p");
-                total.textContent = `Total: SAR ${Number(order.total || 0).toFixed(2)}`;
-
-                const status = document.createElement("p");
-                status.textContent = `Status: ${order.status || "Pending"}`;
-
-                card.append(number, items, total, status);
-                ordersContainer.appendChild(card);
-            });
-        },
-        (error) => {
-            console.error("Error loading customer orders:", error);
-            showMessage("Unable to load orders. Please try again later.");
+            return;
         }
-    );
-});
+
+        const customerName =
+            savedOrder.customerName ||
+            localStorage.getItem("barqCustomerName") ||
+            "Customer";
+
+        const orderNumber =
+            savedOrder.orderNumber ||
+            savedOrder.id ||
+            localStorage.getItem("barqOrderId") ||
+            "BARQ0000";
+
+        const total = Number(
+            savedOrder.total ??
+            localStorage.getItem("barqOrderTotal") ??
+            0
+        );
+
+        const status = savedOrder.status || "Pending";
+        const deliveryCode = savedOrder.deliveryCode || "";
+
+        customerNameElement.textContent =
+            `Thank you, ${customerName}!`;
+
+        orderNumberElement.textContent = orderNumber;
+
+        orderTotalElement.textContent =
+            `SAR ${total.toFixed(2)}`;
+
+        orderStatusElement.textContent = status;
+
+        if (deliveryCodeElement) {
+            if (/^\d{6}$/.test(String(deliveryCode))) {
+                deliveryCodeElement.textContent = deliveryCode;
+            } else {
+                deliveryCodeElement.textContent =
+                    "Code unavailable — contact BARQ support";
+            }
+        }
+
+    } catch (error) {
+        console.error("Order success page error:", error);
+
+        if (deliveryCodeElement) {
+            deliveryCodeElement.textContent = "Unable to load code";
+        }
+    }
+}
+
+showOrderSuccess();
