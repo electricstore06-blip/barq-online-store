@@ -1,4 +1,4 @@
-const CACHE_NAME = "barq-driver-v4";
+const CACHE_NAME = "barq-driver-v5";
 
 const APP_FILES = [
     "./driver-login.html",
