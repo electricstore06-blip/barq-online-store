@@ -1514,6 +1514,25 @@ function renderInventory() {
     "Showing all " + allProducts.length +
     " products, including hidden products.";
 }
+ function renderStatus() {
+  const container = $("status-list");
+  if (!container) return;
+
+  const counts = {};
+
+  orders.forEach(order => {
+    const status = getStatus(order) || "pending";
+    counts[status] = (counts[status] || 0) + 1;
+  });
+
+  container.innerHTML = Object.entries(counts)
+    .map(([status, count]) =>
+      `<div class="status-row">
+        <span>${safeText(status)}</span>
+        <span class="pill">${count}</span>
+      </div>`
+    ).join("");
+} 
 /* ---------------- EXPENSE MANAGEMENT ---------------- */
 
 function renderExpenses() {
