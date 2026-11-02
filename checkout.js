@@ -499,31 +499,33 @@ batch.set(deliveryCodeRef, {
 
 await batch.commit();
            
+// Keep compatibility with the existing success page.
+localStorage.setItem(
+    "barqOrder",
+    JSON.stringify({
+        id: orderRef.id,
+        ...orderData,
+        deliveryCode: deliveryCode
+    })
+);
 
-            // Keep compatibility with the existing success page.
-            localStorage.setItem(
-                "barqOrder",
-                JSON.stringify({
-                    id: orderRef.id,
-                    ...orderData
-                })
-            );
+localStorage.setItem(
+    "barqOrderTotal",
+    totals.total.toFixed(2)
+);
 
-            localStorage.setItem(
-                "barqOrderTotal",
-                totals.total.toFixed(2)
-            );
+localStorage.setItem("barqOrderId", orderRef.id);
 
-            localStorage.setItem("barqOrderId", orderRef.id);
-            localStorage.setItem(
-                "barqCustomerEmail",
-                customer.email
-            );
-            localStorage.setItem(
-                "barqCustomerName",
-                customer.fullName
-            );
+localStorage.setItem(
+    "barqCustomerEmail",
+    customer.email
+);
 
+localStorage.setItem(
+    "barqCustomerName",
+    customer.fullName
+);
+            
             // Clear the cart only after Firebase confirms the save.
             localStorage.removeItem("barqCart");
 
