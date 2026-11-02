@@ -14,6 +14,8 @@ import {
     writeBatch,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
 // ==========================================
 // CART
 // ==========================================
@@ -25,6 +27,7 @@ function readCart() {
         );
 
         return Array.isArray(saved) ? saved : [];
+
     } catch (error) {
         console.error("Could not read BARQ cart:", error);
         return [];
@@ -32,6 +35,7 @@ function readCart() {
 }
 
 let cart = readCart();
+
 
 // ==========================================
 // PAGE ELEMENTS
@@ -63,6 +67,7 @@ const longitudeInput =
 const accuracyInput =
     document.getElementById("location-accuracy");
 
+
 // ==========================================
 // CUSTOMER AUTHENTICATION
 // ==========================================
@@ -87,11 +92,13 @@ onAuthStateChanged(
         console.error("Authentication check failed:", error);
         authReady = true;
         currentUser = null;
+
         showMessage(
             "Unable to verify your account. Please refresh the page."
         );
     }
 );
+
 
 // ==========================================
 // MESSAGES
@@ -106,6 +113,7 @@ function showMessage(message) {
 function formatSAR(amount) {
     return `SAR ${amount.toFixed(2)}`;
 }
+
 
 // ==========================================
 // CART VALIDATION & TOTALS
@@ -162,6 +170,7 @@ function calculateTotals(items) {
     };
 }
 
+
 // ==========================================
 // DISPLAY ORDER
 // ==========================================
@@ -177,6 +186,7 @@ function displayOrder() {
 
     if (cartError) {
         orderItems.textContent = cartError;
+
         updateTotals({
             subtotal: 0,
             delivery: 0,
@@ -251,6 +261,7 @@ function updateTotals(totals) {
     }
 }
 
+
 // ==========================================
 // OPTIONAL CUSTOMER LOCATION
 // ==========================================
@@ -262,6 +273,7 @@ if (locationButton) {
                 locationStatus.textContent =
                     "Location is not supported. Enter your address instead.";
             }
+
             return;
         }
 
@@ -311,6 +323,7 @@ if (locationButton) {
         );
     });
 }
+
 
 // ==========================================
 // CUSTOMER INFORMATION VALIDATION
@@ -366,12 +379,14 @@ function getCustomerDetails() {
     };
 }
 
+
 // ==========================================
 // PLACE ORDER
 // ==========================================
 
 if (placeOrderButton) {
     placeOrderButton.addEventListener("click", async () => {
+
         // Prevent simultaneous submissions.
         if (submittingOrder) return;
 
@@ -381,6 +396,7 @@ if (placeOrderButton) {
             showMessage(
                 "Checking your account. Please try again shortly."
             );
+
             return;
         }
 
@@ -388,6 +404,7 @@ if (placeOrderButton) {
             showMessage(
                 "Please sign in to your BARQ account before placing your order."
             );
+
             return;
         }
 
@@ -406,6 +423,7 @@ if (placeOrderButton) {
 
         try {
             customer = getCustomerDetails();
+
         } catch (error) {
             showMessage(error.message);
             return;
@@ -437,6 +455,7 @@ if (placeOrderButton) {
 
                 latitude: latitude ? Number(latitude) : null,
                 longitude: longitude ? Number(longitude) : null,
+
                 locationAccuracy: locationAccuracy
                     ? Number(locationAccuracy)
                     : 0,
@@ -466,66 +485,82 @@ if (placeOrderButton) {
                 total: totals.total,
 
                 status: "Pending",
-                date: new Date().toISOString()
+                date: new Date().toISOString(),
+
+                // Timestamp used for reliable order sorting.
+                createdAt: serverTimestamp()
             };
-// Create the order and its private delivery code together.
-const orderRef = doc(collection(db, "orders"));
 
-const deliveryCodeRef = doc(
-    db,
-    "deliveryCodes",
-    orderRef.id
-);
 
-// Generate a random 6-digit code.
-const randomValues = new Uint32Array(1);
-crypto.getRandomValues(randomValues);
+            // ==========================================
+            // CREATE ORDER AND PRIVATE DELIVERY CODE
+            // ==========================================
 
-const deliveryCode = String(
-    randomValues[0] % 1000000
-).padStart(6, "0");
+            const orderRef = doc(collection(db, "orders"));
 
-// Save both documents in one batch.
-const batch = writeBatch(db);
+            const deliveryCodeRef = doc(
+                db,
+                "deliveryCodes",
+                orderRef.id
+            );
 
-batch.set(orderRef, orderData);
+            // Generate a random 6-digit code.
+            const randomValues = new Uint32Array(1);
+            crypto.getRandomValues(randomValues);
 
-batch.set(deliveryCodeRef, {
-    orderId: orderRef.id,
-    customerUid: currentUser.uid,
-    code: deliveryCode,
-    createdAt: serverTimestamp()
-});
+            const deliveryCode = String(
+                randomValues[0] % 1000000
+            ).padStart(6, "0");
 
-await batch.commit();
-           
-// Keep compatibility with the existing success page.
-localStorage.setItem(
-    "barqOrder",
-    JSON.stringify({
-        id: orderRef.id,
-        ...orderData,
-        deliveryCode: deliveryCode
-    })
-);
+            // Save both documents in one batch.
+            const batch = writeBatch(db);
 
-localStorage.setItem(
-    "barqOrderTotal",
-    totals.total.toFixed(2)
-);
+            batch.set(orderRef, orderData);
 
-localStorage.setItem("barqOrderId", orderRef.id);
+            batch.set(deliveryCodeRef, {
+                orderId: orderRef.id,
+                customerUid: currentUser.uid,
+                code: deliveryCode,
+                createdAt: serverTimestamp()
+            });
 
-localStorage.setItem(
-    "barqCustomerEmail",
-    customer.email
-);
+            await batch.commit();
 
-localStorage.setItem(
-    "barqCustomerName",
-    customer.fullName
-);
-            
+
+            // ==========================================
+            // SAVE ORDER INFORMATION FOR SUCCESS PAGE
+            // ==========================================
+
+            localStorage.setItem(
+                "barqOrder",
+                JSON.stringify({
+                    id: orderRef.id,
+                    ...orderData,
+                    deliveryCode: deliveryCode
+                })
+            );
+
+            localStorage.setItem(
+                "barqOrderTotal",
+                totals.total.toFixed(2)
+            );
+
+            localStorage.setItem(
+                "barqOrderId",
+                orderRef.id
+            );
+
+            localStorage.setItem(
+                "barqCustomerEmail",
+                customer.email
+            );
+
+            localStorage.setItem(
+                "barqCustomerName",
+                customer.fullName
+            );
+
+
             // Clear the cart only after Firebase confirms the save.
             localStorage.removeItem("barqCart");
 
@@ -545,9 +580,9 @@ localStorage.setItem(
     });
 }
 
+
 // ==========================================
 // START CHECKOUT
 // ==========================================
 
 displayOrder();
-
