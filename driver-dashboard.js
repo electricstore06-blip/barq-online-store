@@ -1,7 +1,9 @@
+// ==========================================
+// BARQ DRIVER DASHBOARD
+// ==========================================
 
- // ==========================================
- // BARQ DRIVER DASHBOARD
- // ==========================================
+import { db, auth } from "./driver-firebase-config.js";
+
 import {
     collection,
     getDocs,
@@ -19,6 +21,7 @@ import {
     signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+
 // ==========================================
 // ELEMENTS
 // ==========================================
@@ -33,12 +36,14 @@ const driverMessage = document.getElementById("driver-message");
 const logoutButton = document.getElementById("logout-btn");
 const refreshButton = document.getElementById("refresh-btn");
 
+
 // ==========================================
 // CURRENT DRIVER
 // ==========================================
 
 let currentDriver = null;
 let ordersUnsubscribe = null;
+
 
 // ==========================================
 // MESSAGE
@@ -49,6 +54,22 @@ function showMessage(text) {
         driverMessage.textContent = text;
     }
 }
+
+
+// ==========================================
+// HTML ESCAPING
+// ==========================================
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[character]);
+}
+
 
 // ==========================================
 // VERIFY DRIVER
@@ -86,6 +107,7 @@ async function verifyDriver(user) {
         };
 
         return true;
+
     } catch (error) {
         console.error("Driver verification error:", error);
         showMessage("Unable to verify driver account.");
@@ -93,11 +115,13 @@ async function verifyDriver(user) {
     }
 }
 
+
 // ==========================================
 // DISPLAY ORDERS
 // ==========================================
 
 function displayOrders(orders) {
+
     if (assignedOrders) {
         assignedOrders.textContent = orders.length;
     }
@@ -143,14 +167,23 @@ function displayOrders(orders) {
     ordersContainer.innerHTML = "";
 
     orders.forEach(order => {
+
         const card = document.createElement("div");
         card.className = "driver-order-card";
 
         const status = order.status || "Pending";
-        const customerName = order.customerName || order.name || "Customer";
-        const customerPhone = order.customerPhone || order.phone || "-";
-        const customerEmail = order.customerEmail || order.email || "-";
-        const address = order.address ||
+
+        const customerName =
+            order.customerName || order.name || "Customer";
+
+        const customerPhone =
+            order.phone || "-";
+
+        const customerEmail =
+            order.email || "-";
+
+        const address =
+            order.address ||
             order.deliveryAddress ||
             order.customerAddress ||
             "-";
@@ -158,14 +191,18 @@ function displayOrders(orders) {
         let locationHtml = `
             <p>
                 <strong>Delivery Location:</strong>
-                ${address}
+                ${escapeHTML(address)}
             </p>
         `;
 
-        if (
-            order.latitude !== undefined &&
-            order.longitude !== undefined
-        ) {
+        const hasCoordinates =
+            typeof order.latitude === "number" &&
+            Number.isFinite(order.latitude) &&
+            typeof order.longitude === "number" &&
+            Number.isFinite(order.longitude);
+
+        if (hasCoordinates) {
+
             const mapUrl =
                 `https://www.google.com/maps?q=${order.latitude},${order.longitude}`;
 
@@ -184,15 +221,30 @@ function displayOrders(orders) {
 
         card.innerHTML = `
             <div class="driver-order-header">
-                <h3>Order #${order.id}</h3>
-                <span class="order-status">${status}</span>
+                <h3>Order #${escapeHTML(order.orderNumber || order.id)}</h3>
+                <span class="order-status">
+                    ${escapeHTML(status)}
+                </span>
             </div>
 
             <div class="customer-details">
                 <h4>Customer</h4>
-                <p><strong>Name:</strong> ${customerName}</p>
-                <p><strong>Phone:</strong> ${customerPhone}</p>
-                <p><strong>Email:</strong> ${customerEmail}</p>
+
+                <p>
+                    <strong>Name:</strong>
+                    ${escapeHTML(customerName)}
+                </p>
+
+                <p>
+                    <strong>Phone:</strong>
+                    ${escapeHTML(customerPhone)}
+                </p>
+
+                <p>
+                    <strong>Email:</strong>
+                    ${escapeHTML(customerEmail)}
+                </p>
+
                 ${locationHtml}
             </div>
 
@@ -206,11 +258,14 @@ function displayOrders(orders) {
 
                 <select
                     class="driver-status-select"
-                    data-order-id="${order.id}"
+                    data-order-id="${escapeHTML(order.id)}"
                 >
                     <option value="Pending" ${status === "Pending" ? "selected" : ""}>Pending</option>
+
                     <option value="Out for Delivery" ${status === "Out for Delivery" ? "selected" : ""}>Out for Delivery</option>
+
                     <option value="Delivered" ${status === "Delivered" ? "selected" : ""}>Delivered</option>
+
                     <option value="Delivery Delayed" ${status === "Delivery Delayed" ? "selected" : ""}>Delivery Delayed</option>
                 </select>
             </div>
@@ -219,102 +274,156 @@ function displayOrders(orders) {
         ordersContainer.appendChild(card);
     });
 
+
+    // ==========================================
+    // DELIVERY STATUS & CODE VERIFICATION
+    // ==========================================
+
     const statusSelects = ordersContainer.querySelectorAll(
         ".driver-status-select"
     );
 
-statusSelects.forEach(select => {
-    select.addEventListener("change", async event => {
-        const orderId = event.target.dataset.orderId;
-        const newStatus = event.target.value;
+    statusSelects.forEach(select => {
 
-        try {
-            // DELIVERY VERIFICATION REQUIRED
-            if (newStatus === "Delivered") {
+        select.addEventListener("change", async event => {
 
-                const enteredCode = prompt(
-                    "Enter the customer's 6-digit delivery code:"
-                );
+            const orderId = event.target.dataset.orderId;
+            const newStatus = event.target.value;
 
-                if (enteredCode === null) {
-                    event.target.value = "Out for Delivery";
+            const previousStatus =
+                event.target.dataset.previousStatus ||
+                "Pending";
+
+            try {
+
+                // ==========================================
+                // CUSTOMER CODE REQUIRED BEFORE DELIVERED
+                // ==========================================
+
+                if (newStatus === "Delivered") {
+
+                    if (previousStatus !== "Out for Delivery") {
+                        alert(
+                            "Please change the order to Out for Delivery first."
+                        );
+
+                        event.target.value = previousStatus;
+                        return;
+                    }
+
+                    const enteredCode = prompt(
+                        "Enter the customer's 6-digit delivery code:"
+                    );
+
+                    if (enteredCode === null) {
+                        event.target.value = previousStatus;
+                        return;
+                    }
+
+                    const code = enteredCode.trim();
+
+                    if (!/^\d{6}$/.test(code)) {
+                        alert("Please enter a valid 6-digit code.");
+                        event.target.value = previousStatus;
+                        return;
+                    }
+
+                    showMessage("Verifying delivery code...");
+
+                    const batch = writeBatch(db);
+
+                    const verificationRef = doc(
+                        db,
+                        "deliveryVerifications",
+                        orderId
+                    );
+
+                    const orderRef = doc(
+                        db,
+                        "orders",
+                        orderId
+                    );
+
+                    batch.set(verificationRef, {
+                        orderId: orderId,
+                        driverUid: currentDriver.uid,
+                        code: code,
+                        createdAt: serverTimestamp()
+                    });
+
+                    batch.update(orderRef, {
+                        status: "Delivered",
+                        statusUpdatedAt: serverTimestamp()
+                    });
+
+                    await batch.commit();
+
+                    showMessage(
+                        "Code verified. Order marked as Delivered."
+                    );
+
                     return;
                 }
 
-                const code = enteredCode.trim();
 
-                if (!/^\d{6}$/.test(code)) {
-                    alert("Please enter a valid 6-digit code.");
-                    event.target.value = "Out for Delivery";
+                // ==========================================
+                // OTHER DELIVERY STATUS UPDATES
+                // ==========================================
+
+                if (
+                    ![
+                        "Pending",
+                        "Out for Delivery",
+                        "Delivery Delayed"
+                    ].includes(newStatus)
+                ) {
+                    event.target.value = previousStatus;
                     return;
                 }
 
-                showMessage("Verifying delivery code...");
-
-                const batch = writeBatch(db);
-
-                const verificationRef = doc(
-                    db,
-                    "deliveryVerifications",
-                    orderId
+                await updateDoc(
+                    doc(db, "orders", orderId),
+                    {
+                        status: newStatus,
+                        statusUpdatedAt: serverTimestamp()
+                    }
                 );
-
-                const orderRef = doc(
-                    db,
-                    "orders",
-                    orderId
-                );
-
-                batch.set(verificationRef, {
-                    orderId: orderId,
-                    driverUid: currentDriver.uid,
-                    code: code,
-                    createdAt: serverTimestamp()
-                });
-
-                batch.update(orderRef, {
-                    status: "Delivered",
-                    statusUpdatedAt: serverTimestamp()
-                });
-
-                await batch.commit();
 
                 showMessage(
-                    "Code verified. Order marked as Delivered."
+                    "Delivery status updated successfully."
                 );
 
-                return;
+            } catch (error) {
+
+                console.error(
+                    "Delivery status update error:",
+                    error
+                );
+
+                alert(
+                    "Delivery verification failed. Check the code and try again."
+                );
+
+                event.target.value = previousStatus;
+
+                showMessage(
+                    "Unable to complete delivery verification."
+                );
             }
+        });
 
-            // OTHER DELIVERY STATUS UPDATES
-            await updateDoc(
-                doc(db, "orders", orderId),
-                {
-                    status: newStatus,
-                    statusUpdatedAt: new Date()
-                }
-            );
-
-            showMessage("Delivery status updated successfully.");
-
-        } catch (error) {
-            console.error("Delivery status update error:", error);
-
-            alert(
-                "Delivery verification failed. Check the code and try again."
-            );
-
-            event.target.value = "Out for Delivery";
-
-            showMessage("Unable to complete delivery verification.");
-        }
+        select.dataset.previousStatus = select.value;
     });
-});   
+
+}
+
+
 // ==========================================
 // REAL-TIME LOAD ASSIGNED ORDERS
 // ==========================================
 
 function startOrdersListener() {
+
     if (!currentDriver || !currentDriver.uid) {
         showMessage("Driver account information is incomplete.");
         return;
@@ -326,7 +435,8 @@ function startOrdersListener() {
     }
 
     if (ordersContainer) {
-        ordersContainer.innerHTML = "Loading your delivery orders...";
+        ordersContainer.innerHTML =
+            "Loading your delivery orders...";
     }
 
     const ordersRef = collection(db, "orders");
@@ -338,7 +448,9 @@ function startOrdersListener() {
 
     ordersUnsubscribe = onSnapshot(
         driverQuery,
+
         snapshot => {
+
             const orders = [];
 
             snapshot.forEach(orderDoc => {
@@ -351,16 +463,26 @@ function startOrdersListener() {
             orders.sort((a, b) => {
                 const aTime = a.assignedAt?.seconds || 0;
                 const bTime = b.assignedAt?.seconds || 0;
+
                 return bTime - aTime;
             });
 
             displayOrders(orders);
+
             showMessage("Driver Dashboard ready.");
 
-            console.log("Driver orders updated:", orders.length);
+            console.log(
+                "Driver orders updated:",
+                orders.length
+            );
         },
+
         error => {
-            console.error("Real-time orders listener error:", error);
+
+            console.error(
+                "Real-time orders listener error:",
+                error
+            );
 
             if (ordersContainer) {
                 ordersContainer.innerHTML =
@@ -372,11 +494,13 @@ function startOrdersListener() {
     );
 }
 
+
 // ==========================================
 // LOAD DRIVER DASHBOARD
 // ==========================================
 
 async function loadDashboard() {
+
     showMessage("Loading Driver Dashboard...");
 
     if (driverName) {
@@ -389,24 +513,32 @@ async function loadDashboard() {
     startOrdersListener();
 }
 
+
 // ==========================================
 // MANUAL REFRESH
 // ==========================================
 
 if (refreshButton) {
+
     refreshButton.addEventListener("click", () => {
+
         showMessage("Refreshing orders...");
+
         startOrdersListener();
     });
 }
+
 
 // ==========================================
 // LOGOUT
 // ==========================================
 
 if (logoutButton) {
+
     logoutButton.addEventListener("click", async () => {
+
         try {
+
             showMessage("Logging out...");
 
             if (ordersUnsubscribe) {
@@ -417,18 +549,23 @@ if (logoutButton) {
             await signOut(auth);
 
             window.location.href = "./driver-login.html";
+
         } catch (error) {
+
             console.error("Logout error:", error);
+
             showMessage("Unable to logout. Please try again.");
         }
     });
 }
+
 
 // ==========================================
 // AUTHENTICATION
 // ==========================================
 
 onAuthStateChanged(auth, async user => {
+
     if (!user) {
         window.location.href = "./driver-login.html";
         return;
@@ -439,6 +576,7 @@ onAuthStateChanged(auth, async user => {
     const isDriver = await verifyDriver(user);
 
     if (!isDriver) {
+
         alert("Access denied. Driver account required.");
 
         await signOut(auth);
@@ -452,4 +590,7 @@ onAuthStateChanged(auth, async user => {
     await loadDashboard();
 });
 
-// No Service Worker registration in this file.
+
+// ==========================================
+// END OF BARQ DRIVER DASHBOARD
+// ==========================================
