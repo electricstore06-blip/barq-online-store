@@ -1397,11 +1397,8 @@ $("staff-form").addEventListener("submit", async event => {
 });
 
 /* ---------------- DASHBOARD DATA ---------------- */
-
 function render() {
-  const totalSales = orders.reduce(
-    (sum, order) => sum + getTotal(order), 0
-  );
+  const totalSales = orders.reduce((sum, order) => sum + getTotal(order), 0);
 
   const pendingCount = orders.filter(order =>
     ["pending", "processing", "confirmed"].includes(getStatus(order))
@@ -1416,56 +1413,8 @@ function render() {
   $("pending-orders").textContent = pendingCount;
   $("delayed-orders").textContent = delayedCount;
   $("total-products").textContent = products.length;
+
   $("finance-sales").textContent = money(totalSales);
-
-  renderStatus();
-  renderRecentOrders();
-  renderSalesChart();
-
-  $("last-updated").textContent =
-    "Last updated: " + new Date().toLocaleString("en-SA");
-}
-
-function renderSalesChart() {
-  const container = $("sales-chart");
-  if (!container) return;
-
-  const dailySales = {};
-
-  orders.forEach(order => {
-    const date = getOrderDate(order);
-    if (!date) return;
-
-    const key = date.toLocaleDateString("en-CA");
-    dailySales[key] = (dailySales[key] || 0) + getTotal(order);
-  });
-
-  const days = Object.entries(dailySales)
-    .sort((a, b) => a[0].localeCompare(b[0]))
-    .slice(-7);
-
-  if (!days.length) {
-    container.innerHTML =
-      '<div class="empty">No usable order dates found.</div>';
-    return;
-  }
-
-  const maxSales = Math.max(...days.map(item => item[1]), 1);
-
-  container.innerHTML = days.map(([date, amount]) => {
-    const height = Math.max((amount / maxSales) * 100, 2);
-
-    return `
-      <div class="chart-column">
-        <div class="bar"
-             style="height:${height}%"
-             title="${safeText(money(amount))}">
-        </div>
-        <small>${safeText(date.slice(5))}</small>
-      </div>
-    `;
-  }).join("");
-}
 
 /* ---------------- EXPENSE MANAGEMENT ---------------- */
 
