@@ -2101,6 +2101,34 @@ $("stock-adjustment-form").addEventListener("submit", async event => {
     button.disabled = false;
   }
 });  
+ function renderRecentOrders() {
+  const container = $("recent-orders");
+  if (!container) return;
+
+  if (!orders.length) {
+    container.innerHTML =
+      '<tr><td colspan="5" class="empty">No recent orders.</td></tr>';
+    return;
+  }
+
+  const recent = [...orders]
+    .sort((a, b) => {
+      const dateA = new Date(a.createdAt?.toDate?.() || a.createdAt || 0);
+      const dateB = new Date(b.createdAt?.toDate?.() || b.createdAt || 0);
+      return dateB - dateA;
+    })
+    .slice(0, 5);
+
+  container.innerHTML = recent.map(order => `
+    <tr>
+      <td>${safeText(order.orderNumber || order.id || "—")}</td>
+      <td>${safeText(order.customerName || order.name || "—")}</td>
+      <td>${money(getTotal(order))}</td>
+      <td>${safeText(getStatus(order) || "pending")}</td>
+      <td>${safeText(order.paymentMethod || "—")}</td>
+    </tr>
+  `).join("");
+} 
 </script>
 
 </body>
