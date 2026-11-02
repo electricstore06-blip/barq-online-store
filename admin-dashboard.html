@@ -628,9 +628,63 @@ th { color: var(--muted); font-weight: 600; }
           </button>
         </div>
 
+              <!-- MANUAL STOCK ADJUSTMENT -->
+        <div class="card" style="margin: 20px 0;">
+          <h3>Manual Stock Adjustment</h3>
+          <p class="subtitle">Add, remove, or set a product's stock quantity.</p>
+
+          <form id="stock-adjustment-form">
+            <div class="form-group">
+              <label for="adjust-product">Select Product</label>
+              <select id="adjust-product" required>
+                <option value="">Loading products...</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="adjust-type">Adjustment Type</label>
+              <select id="adjust-type" required>
+                <option value="add">Add Stock</option>
+                <option value="remove">Remove Stock</option>
+                <option value="set">Set Exact Stock</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="adjust-quantity">Quantity</label>
+              <input
+                type="number"
+                id="adjust-quantity"
+                min="0"
+                step="1"
+                required
+                placeholder="Enter quantity"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="adjust-reason">Reason</label>
+              <input
+                type="text"
+                id="adjust-reason"
+                maxlength="300"
+                required
+                placeholder="e.g. New delivery or damaged items"
+              >
+            </div>
+
+            <button type="submit" id="save-stock-adjustment" class="primary-link">
+              Save Stock Adjustment
+            </button>
+          </form>
+
+          <p id="stock-adjustment-message" role="status" aria-live="polite"></p>
+        </div>
+        <!-- END MANUAL STOCK ADJUSTMENT -->
+
         <p id="inventory-message" role="status" aria-live="polite">
           Inventory will load here.
-        </p>
+        </p> 
 
         <div class="table-wrap">
           <table>
@@ -963,7 +1017,6 @@ import {
   deleteUser,
   signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
 import {
   doc,
   getDoc,
@@ -973,7 +1026,8 @@ import {
   setDoc,
   deleteDoc,
   updateDoc,
-  serverTimestamp
+  serverTimestamp,
+  runTransaction
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /*
@@ -1376,6 +1430,7 @@ function render() {
 }
 function renderInventory() {
   const container = $("inventory-list");
+  const productSelect = $("adjust-product");
 
   if (!container) return;
 
@@ -1383,6 +1438,30 @@ function renderInventory() {
     const value = Number(product.stock);
     return Number.isSafeInteger(value) && value >= 0 ? value : 0;
   };
+
+  // Populate the stock adjustment product dropdown
+  if (productSelect) {
+    if (!allProducts.length) {
+      productSelect.innerHTML =
+        '<option value="">No products available</option>';
+    } else {
+      const previousSelection = productSelect.value;
+
+      productSelect.innerHTML =
+        '<option value="">Select a product</option>' +
+        allProducts.map(product => `
+          <option value="${safeText(product.id)}">
+            ${safeText(product.name || product.title || "Unnamed product")}
+            — Stock: ${stockOf(product)}
+            ${product.active === false ? "(Hidden)" : ""}
+          </option>
+        `).join("");
+
+      if (allProducts.some(product => product.id === previousSelection)) {
+        productSelect.value = previousSelection;
+      }
+    }
+  }
 
   const totalUnits = allProducts.reduce(
     (sum, product) => sum + stockOf(product), 0
@@ -1411,6 +1490,7 @@ function renderInventory() {
 
   container.innerHTML = allProducts.map(product => {
     const stock = stockOf(product);
+
     const status = stock === 0
       ? "Out of Stock"
       : stock <= 5
@@ -1431,109 +1511,9 @@ function renderInventory() {
   }).join("");
 
   $("inventory-message").textContent =
-    "Showing all " + allProducts.length + " products, including hidden products.";
+    "Showing all " + allProducts.length +
+    " products, including hidden products.";
 }
-function renderStatus() {
-  const container = $("status-list");
-
-  if (!orders.length) {
-    container.innerHTML = '<div class="empty">No orders found.</div>';
-    return;
-  }
-
-  const counts = {};
-
-  orders.forEach(order => {
-    const status = getStatus(order) || "pending";
-    counts[status] = (counts[status] || 0) + 1;
-  });
-
-  container.innerHTML = Object.entries(counts)
-    .sort((a, b) => b[1] - a[1])
-    .map(([status, count]) => `
-      <div class="status-row">
-        <span>${safeText(status.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()))}</span>
-        <span class="pill">${count}</span>
-      </div>
-    `).join("");
-}
-
-function renderRecentOrders() {
-  const container = $("recent-orders");
-
-  const recent = [...orders]
-    .sort((a, b) => {
-      const dateA = getOrderDate(a)?.getTime() || 0;
-      const dateB = getOrderDate(b)?.getTime() || 0;
-      return dateB - dateA;
-    })
-    .slice(0, 8);
-
-  if (!recent.length) {
-    container.innerHTML =
-      '<tr><td colspan="4" class="empty">No orders found.</td></tr>';
-    return;
-  }
-
-  container.innerHTML = recent.map(order => {
-    const orderId = order.orderNumber || order.id || "—";
-    const customer =
-      order.customerName ||
-      order.name ||
-      order.customer ||
-      order.email ||
-      "Customer";
-
-    const status = getStatus(order);
-
-    return `
-      <tr>
-        <td>${safeText(orderId)}</td>
-        <td>${safeText(customer)}</td>
-        <td>${money(getTotal(order))}</td>
-        <td><span class="pill">${safeText(status)}</span></td>
-      </tr>
-    `;
-  }).join("");
-}
-
-function renderSalesChart() {
-  const container = $("sales-chart");
-
-  const dailySales = {};
-
-  orders.forEach(order => {
-    const date = getOrderDate(order);
-    if (!date) return;
-
-    const key = date.toLocaleDateString("en-CA");
-    dailySales[key] = (dailySales[key] || 0) + getTotal(order);
-  });
-
-  const days = Object.entries(dailySales)
-    .sort((a, b) => a[0].localeCompare(b[0]))
-    .slice(-7);
-
-  if (!days.length) {
-    container.innerHTML =
-      '<div class="empty" style="width:100%">No dated sales records available.</div>';
-    return;
-  }
-
-  const maxValue = Math.max(...days.map(item => item[1]), 1);
-
-  container.innerHTML = days.map(([date, amount]) => {
-    const height = Math.max(3, (amount / maxValue) * 100);
-
-    return `
-      <div class="chart-column" title="${safeText(date)}: ${money(amount)}">
-        <div class="bar" style="height:${height}%"></div>
-        <small>${safeText(date.slice(5))}</small>
-      </div>
-    `;
-  }).join("");
-}
-
 /* ---------------- EXPENSE MANAGEMENT ---------------- */
 
 function renderExpenses() {
