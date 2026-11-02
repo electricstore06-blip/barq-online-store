@@ -1420,6 +1420,27 @@ function render() {
   $("total-products").textContent = products.length;
 
   $("finance-sales").textContent = money(totalSales);
+/* ---------------- DASHBOARD DATA ---------------- */
+
+function render() {
+  const totalSales = orders.reduce(
+    (sum, order) => sum + getTotal(order), 0
+  );
+
+  const pendingCount = orders.filter(order =>
+    ["pending", "processing", "confirmed"].includes(getStatus(order))
+  ).length;
+
+  const delayedCount = orders.filter(order =>
+    ["delayed", "delivery delayed", "late"].includes(getStatus(order))
+  ).length;
+
+  $("total-sales").textContent = money(totalSales);
+  $("total-orders").textContent = orders.length;
+  $("pending-orders").textContent = pendingCount;
+  $("delayed-orders").textContent = delayedCount;
+  $("total-products").textContent = products.length;
+  $("finance-sales").textContent = money(totalSales);
 
   renderStatus();
   renderRecentOrders();
@@ -1428,111 +1449,48 @@ function render() {
   $("last-updated").textContent =
     "Last updated: " + new Date().toLocaleString("en-SA");
 }
-function renderInventory() {
-  const container = $("inventory-list");
-  const productSelect = $("adjust-product");
 
+function renderSalesChart() {
+  const container = $("sales-chart");
   if (!container) return;
 
-  const stockOf = product => {
-    const value = Number(product.stock);
-    return Number.isSafeInteger(value) && value >= 0 ? value : 0;
-  };
+  const dailySales = {};
 
-  // Populate the stock adjustment product dropdown
-  if (productSelect) {
-    if (!allProducts.length) {
-      productSelect.innerHTML =
-        '<option value="">No products available</option>';
-    } else {
-      const previousSelection = productSelect.value;
+  orders.forEach(order => {
+    const date = getOrderDate(order);
+    if (!date) return;
 
-      productSelect.innerHTML =
-        '<option value="">Select a product</option>' +
-        allProducts.map(product => `
-          <option value="${safeText(product.id)}">
-            ${safeText(product.name || product.title || "Unnamed product")}
-            — Stock: ${stockOf(product)}
-            ${product.active === false ? "(Hidden)" : ""}
-          </option>
-        `).join("");
+    const key = date.toLocaleDateString("en-CA");
+    dailySales[key] = (dailySales[key] || 0) + getTotal(order);
+  });
 
-      if (allProducts.some(product => product.id === previousSelection)) {
-        productSelect.value = previousSelection;
-      }
-    }
-  }
+  const days = Object.entries(dailySales)
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .slice(-7);
 
-  const totalUnits = allProducts.reduce(
-    (sum, product) => sum + stockOf(product), 0
-  );
-
-  const lowStock = allProducts.filter(product => {
-    const stock = stockOf(product);
-    return stock >= 1 && stock <= 5;
-  }).length;
-
-  const outOfStock = allProducts.filter(
-    product => stockOf(product) === 0
-  ).length;
-
-  $("inventory-total-products").textContent = allProducts.length;
-  $("inventory-total-units").textContent = totalUnits;
-  $("inventory-low-stock").textContent = lowStock;
-  $("inventory-out-stock").textContent = outOfStock;
-
-  if (!allProducts.length) {
+  if (!days.length) {
     container.innerHTML =
-      '<tr><td colspan="5" class="empty">No products found.</td></tr>';
-    $("inventory-message").textContent = "No products in your catalog.";
+      '<div class="empty">No usable order dates found.</div>';
     return;
   }
 
-  container.innerHTML = allProducts.map(product => {
-    const stock = stockOf(product);
+  const maxSales = Math.max(...days.map(item => item[1]), 1);
 
-    const status = stock === 0
-      ? "Out of Stock"
-      : stock <= 5
-        ? "Low Stock"
-        : "In Stock";
-
-    const visibility = product.active === false ? "Hidden" : "Visible";
+  container.innerHTML = days.map(([date, amount]) => {
+    const height = Math.max((amount / maxSales) * 100, 2);
 
     return `
-      <tr>
-        <td>${safeText(product.name || product.title || "Unnamed product")}</td>
-        <td>${safeText(product.category || "—")}</td>
-        <td>${stock}</td>
-        <td><span class="pill">${status}</span></td>
-        <td><span class="pill">${visibility}</span></td>
-      </tr>
+      <div class="chart-column">
+        <div class="bar"
+             style="height:${height}%"
+             title="${safeText(money(amount))}">
+        </div>
+        <small>${safeText(date.slice(5))}</small>
+      </div>
     `;
   }).join("");
-
-  $("inventory-message").textContent =
-    "Showing all " + allProducts.length +
-    " products, including hidden products.";
 }
- function renderStatus() {
-  const container = $("status-list");
-  if (!container) return;
 
-  const counts = {};
-
-  orders.forEach(order => {
-    const status = getStatus(order) || "pending";
-    counts[status] = (counts[status] || 0) + 1;
-  });
-
-  container.innerHTML = Object.entries(counts)
-    .map(([status, count]) =>
-      `<div class="status-row">
-        <span>${safeText(status)}</span>
-        <span class="pill">${count}</span>
-      </div>`
-    ).join("");
-} 
 /* ---------------- EXPENSE MANAGEMENT ---------------- */
 
 function renderExpenses() {
