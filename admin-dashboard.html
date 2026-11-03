@@ -1423,7 +1423,70 @@ function render() {
   $("last-updated").textContent =
     "Last updated: " + new Date().toLocaleString("en-SA");
 }
+/* ---------------- SALES CHART ---------------- */
 
+function renderSalesChart() {
+  const container = $("sales-chart");
+
+  // Safely skip the chart if its HTML container is missing.
+  if (!container) return;
+
+  const days = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() - i);
+
+    days.push({
+      date,
+      label: date.toLocaleDateString("en-SA", {
+        day: "numeric",
+        month: "short"
+      }),
+      total: 0
+    });
+  }
+
+  orders.forEach(order => {
+    const rawDate = order.createdAt;
+    const orderDate = rawDate?.toDate
+      ? rawDate.toDate()
+      : new Date(rawDate);
+
+    if (isNaN(orderDate.getTime())) return;
+
+    const day = days.find(item =>
+      item.date.toDateString() === orderDate.toDateString()
+    );
+
+    if (day) {
+      day.total += getTotal(order);
+    }
+  });
+
+  const maxSales = Math.max(...days.map(day => day.total), 1);
+
+  container.innerHTML = `
+    <div style="display:flex;align-items:flex-end;gap:12px;height:180px;padding:15px 5px;">
+      ${days.map(day => `
+        <div style="flex:1;text-align:center;min-width:0;">
+          <div style="font-size:11px;margin-bottom:6px;">
+            ${money(day.total)}
+          </div>
+          <div style="
+            height:${Math.max((day.total / maxSales) * 110, 3)}px;
+            background:#2563eb;
+            border-radius:6px 6px 0 0;
+          "></div>
+          <div style="font-size:11px;margin-top:7px;">
+            ${day.label}
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
 /* ---------------- EXPENSE MANAGEMENT ---------------- */
 
 function renderExpenses() {
