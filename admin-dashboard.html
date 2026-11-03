@@ -1395,10 +1395,12 @@ $("staff-form").addEventListener("submit", async event => {
     button.disabled = false;
   }
 });
-
 /* ---------------- DASHBOARD DATA ---------------- */
+
 function render() {
-  const totalSales = orders.reduce((sum, order) => sum + getTotal(order), 0);
+  const totalSales = orders.reduce(
+    (sum, order) => sum + getTotal(order), 0
+  );
 
   const pendingCount = orders.filter(order =>
     ["pending", "processing", "confirmed"].includes(getStatus(order))
@@ -1413,8 +1415,14 @@ function render() {
   $("pending-orders").textContent = pendingCount;
   $("delayed-orders").textContent = delayedCount;
   $("total-products").textContent = products.length;
-
   $("finance-sales").textContent = money(totalSales);
+
+  renderRecentOrders();
+  renderSalesChart();
+
+  $("last-updated").textContent =
+    "Last updated: " + new Date().toLocaleString("en-SA");
+}
 
 /* ---------------- EXPENSE MANAGEMENT ---------------- */
 
