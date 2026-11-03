@@ -29,6 +29,7 @@ const statusFilter = $("status-filter");
 const dateFilter = $("date-filter");
 
 let allOrders = [];
+let activeSection = "Pending";
 let authorizedUid = null;
 let isLoading = false;
 
@@ -151,7 +152,28 @@ onAuthStateChanged(auth, async user => {
       "Unable to verify administrator access. Please refresh the page.";
   }
 });
+/* =========================================
+   ORDER SECTION BUTTONS
+========================================= */
 
+document.querySelectorAll(".section-btn").forEach(button => {
+  button.addEventListener("click", () => {
+    activeSection = button.dataset.status;
+
+    // Clear the status dropdown
+    statusFilter.value = "all";
+
+    // Highlight the selected button
+    document.querySelectorAll(".section-btn").forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    // Show matching orders
+    renderOrders();
+  });
+});
 /* =========================================
    LOAD ORDERS
 ========================================= */
@@ -207,7 +229,6 @@ function updateStatistics() {
 /* =========================================
    SEARCH AND FILTERS
 ========================================= */
-
 function getFilteredOrders() {
   const search = searchInput.value.trim().toLowerCase();
   const selectedStatus = statusFilter.value;
@@ -216,6 +237,8 @@ function getFilteredOrders() {
   const now = new Date();
 
   return allOrders.filter(order => {
+    const orderStatus = getStatus(order);
+
     const searchableText = [
       getOrderNumber(order),
       getCustomerName(order),
@@ -224,17 +247,35 @@ function getFilteredOrders() {
       order.address
     ].join(" ").toLowerCase();
 
+    // Search filter
     if (search && !searchableText.includes(search)) {
       return false;
     }
 
-    if (
-      selectedStatus !== "all" &&
-      getStatus(order) !== selectedStatus
+    // Section button filter
+    if (activeSection === "Replacement") {
+      if (
+        !["Replacement Requested", "Replacement Approved"]
+          .includes(orderStatus)
+      ) {
+        return false;
+      }
+    } else if (
+      activeSection !== "all" &&
+      orderStatus !== activeSection
     ) {
       return false;
     }
 
+    // Existing status dropdown filter
+    if (
+      selectedStatus !== "all" &&
+      orderStatus !== selectedStatus
+    ) {
+      return false;
+    }
+
+    // Existing date filter
     const date = getDate(order);
 
     if (selectedDate !== "all") {
@@ -257,33 +298,6 @@ function getFilteredOrders() {
 
     return true;
   });
-}
-
-function renderOrders() {
-  const filteredOrders = getFilteredOrders();
-
-  $("orders-count").textContent =
-    filteredOrders.length + " of " + allOrders.length + " orders";
-
-  if (!allOrders.length) {
-    adminMessage.textContent = "No orders found.";
-    ordersContainer.innerHTML = "";
-    return;
-  }
-
-  if (!filteredOrders.length) {
-    adminMessage.textContent =
-      "No orders match your search or selected filters.";
-    ordersContainer.innerHTML = "";
-    return;
-  }
-
-  adminMessage.textContent =
-    allOrders.length + " order(s) found.";
-
-  ordersContainer.innerHTML = filteredOrders
-    .map(createOrderCard)
-    .join("");
 }
 
 /* =========================================
