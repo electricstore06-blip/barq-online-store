@@ -706,52 +706,32 @@ th { color: var(--muted); font-weight: 600; }
         </div>
       </section>
       <!-- END INVENTORY MANAGEMENT --> 
-            <span class="pill">Recorded orders</span>
-          </div>
-          <div class="chart" id="sales-chart" aria-label="Recent sales chart"></div>
-          <div class="legend">
-            <span><i class="dot"></i>Sales by order date</span>
-          </div>
-          <p class="footer-note">Chart groups order totals by date when a usable order date is available.</p>
-        </section>
+         <div class="grid two-col">
+  <section class="card">
+    <div class="section-head">
+      <h2>Sales Overview</h2>
+      <span class="pill">Recorded orders</span>
+    </div>
 
-        <section class="card">
-          <h2>Order Status</h2>
-          <div class="status-list" id="status-list">
-            <div class="empty">Loading orders...</div>
-          </div>
-        </section>
-      </div>
+    <div class="chart" id="sales-chart"
+         aria-label="Recent sales chart"></div>
 
-      <div class="grid two-col">
-        <section class="card">
-          <div class="section-head">
-            <h2>Recent Orders</h2>
-            <a class="primary-link" href="admin-orders.html">Manage Orders ↗</a>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Order</th>
-                  <th>Customer</th>
-                  <th>Total</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="recent-orders">
-                <tr><td colspan="4" class="empty">Loading orders...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+    <div class="legend">
+      <span><i class="dot"></i>Sales by order date</span>
+    </div>
 
-        <section class="card" id="expenses">
-          <h2>Sales & Expenses</h2>
-          <div class="notice">
-            Record business expenses here. Only authorized administrators can manage these records.
-          </div>
+    <p class="footer-note">
+      Chart groups order totals by date when a usable order date is available.
+    </p>
+  </section>
 
+  <section class="card">
+    <h2>Order Status</h2>
+    <div class="status-list" id="status-list">
+      <div class="empty">Loading orders...</div>
+    </div>
+  </section>
+</div>  
           <form id="expense-form" style="display:grid;gap:12px;margin:16px 0;">
             <label>
               Expense amount (SAR)
@@ -1395,6 +1375,89 @@ $("staff-form").addEventListener("submit", async event => {
     button.disabled = false;
   }
 });
+ /* ---------------- INVENTORY MANAGEMENT ---------------- */
+
+function renderInventory() {
+  const container = $("inventory-list");
+  const selector = $("adjust-product");
+
+  if (!container) return;
+
+  const activeProducts = allProducts.filter(
+    product => product.active !== false
+  );
+
+  const getStock = product => {
+    const value = Number(product.stock ?? 0);
+    return Number.isSafeInteger(value) && value >= 0 ? value : 0;
+  };
+
+  const totalUnits = activeProducts.reduce(
+    (sum, product) => sum + getStock(product), 0
+  );
+
+  const lowStock = activeProducts.filter(product => {
+    const stock = getStock(product);
+    return stock >= 1 && stock <= 5;
+  }).length;
+
+  const outOfStock = activeProducts.filter(
+    product => getStock(product) === 0
+  ).length;
+
+  $("inventory-total-products").textContent = activeProducts.length;
+  $("inventory-total-units").textContent = totalUnits;
+  $("inventory-low-stock").textContent = lowStock;
+  $("inventory-out-stock").textContent = outOfStock;
+
+  if (selector) {
+    const previousSelection = selector.value;
+
+    selector.innerHTML =
+      '<option value="">Select a product</option>' +
+      activeProducts.map(product => `
+        <option value="${safeText(product.id)}">
+          ${safeText(product.name || product.title || "Unnamed product")}
+        </option>
+      `).join("");
+
+    if (activeProducts.some(product => product.id === previousSelection)) {
+      selector.value = previousSelection;
+    }
+  }
+
+  if (!activeProducts.length) {
+    container.innerHTML =
+      '<tr><td colspan="5" class="empty">No active products found.</td></tr>';
+    return;
+  }
+
+  container.innerHTML = activeProducts.map(product => {
+    const stock = getStock(product);
+
+    const status = stock === 0
+      ? "Out of Stock"
+      : stock <= 5
+        ? "Low Stock"
+        : "In Stock";
+
+    const statusClass = stock === 0
+      ? "red"
+      : stock <= 5
+        ? ""
+        : "green";
+
+    return `
+      <tr>
+        <td>${safeText(product.name || product.title || "Unnamed product")}</td>
+        <td>${safeText(product.category || "—")}</td>
+        <td>${stock}</td>
+        <td><span class="pill ${statusClass}">${status}</span></td>
+        <td>${product.active === false ? "Hidden" : "Visible"}</td>
+      </tr>
+    `;
+  }).join("");
+} 
 /* ---------------- DASHBOARD DATA ---------------- */
 
 function render() {
@@ -2055,20 +2118,20 @@ $("stock-adjustment-form").addEventListener("submit", async event => {
     button.disabled = false;
   }
 });  
- function renderRecentOrders() {
+function renderRecentOrders() {
   const container = $("recent-orders");
   if (!container) return;
 
   if (!orders.length) {
     container.innerHTML =
-      '<tr><td colspan="5" class="empty">No recent orders.</td></tr>';
+      '<tr><td colspan="4" class="empty">No recent orders.</td></tr>';
     return;
   }
 
   const recent = [...orders]
     .sort((a, b) => {
-      const dateA = new Date(a.createdAt?.toDate?.() || a.createdAt || 0);
-      const dateB = new Date(b.createdAt?.toDate?.() || b.createdAt || 0);
+      const dateA = getOrderDate(a)?.getTime() || 0;
+      const dateB = getOrderDate(b)?.getTime() || 0;
       return dateB - dateA;
     })
     .slice(0, 5);
@@ -2079,10 +2142,9 @@ $("stock-adjustment-form").addEventListener("submit", async event => {
       <td>${safeText(order.customerName || order.name || "—")}</td>
       <td>${money(getTotal(order))}</td>
       <td>${safeText(getStatus(order) || "pending")}</td>
-      <td>${safeText(order.paymentMethod || "—")}</td>
     </tr>
   `).join("");
-} 
+}
 </script>
 
 </body>
