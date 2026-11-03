@@ -8,7 +8,7 @@
   --dark: #1b1b1b;
   --gold: #c6a15b;
   --gold-light: #f8f1e5;
-  --background: #f6f6f4;
+--background: #fbfaf7;
   --white: #ffffff;
   --text: #252525;
   --muted: #777777;
@@ -81,17 +81,15 @@ select {
 
 .brand p {
   margin: 5px 0 0;
-  color: #bcbcbc;
+  color: #777777;
   font-size: 12px;
 }
-
 .header-actions {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
 }
-
 .header-actions a,
 .header-actions button {
   padding: 11px 16px;
@@ -99,9 +97,9 @@ select {
   font-weight: 700;
   font-size: 13px;
   text-decoration: none;
-  border: 1px solid #444;
-  background: #222;
-  color: white;
+  border: 1px solid #e5dfd2;
+  background: #f8f6f1;
+  color: #252525;
 }
 
 .header-actions a:hover,
@@ -743,13 +741,14 @@ button:disabled {
   align-items: center;
   gap: 12px;
   padding: 18px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid #eee7da;
   border-radius: 14px;
-  background: #fff;
-  color: #222;
+  background: #ffffff;
+  color: #292929;
   cursor: pointer;
   text-align: left;
   font-size: 14px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.035);
   transition: 0.2s ease;
 }
 
@@ -763,12 +762,11 @@ button:disabled {
 }
 
 .section-btn.active {
-  background: #171717;
-  color: #fff;
-  border-color: #c49a45;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  background: #fff4dc;
+  color: #292929;
+  border: 2px solid #c49a45;
+  box-shadow: 0 4px 14px rgba(198, 161, 91, 0.15);
 }
-
 @media (max-width: 650px) {
   .order-sections {
     grid-template-columns: repeat(2, minmax(0, 1fr));
