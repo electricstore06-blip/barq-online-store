@@ -299,7 +299,36 @@ function getFilteredOrders() {
     return true;
   });
 }
+/* =========================================
+   DISPLAY FILTERED ORDERS
+========================================= */
 
+function renderOrders() {
+  const filteredOrders = getFilteredOrders();
+
+  $("orders-count").textContent =
+    filteredOrders.length + " of " + allOrders.length + " orders";
+
+  if (!allOrders.length) {
+    adminMessage.textContent = "No orders found.";
+    ordersContainer.innerHTML = "";
+    return;
+  }
+
+  if (!filteredOrders.length) {
+    adminMessage.textContent =
+      "No orders match your search or selected filters.";
+    ordersContainer.innerHTML = "";
+    return;
+  }
+
+  adminMessage.textContent =
+    filteredOrders.length + " order(s) found.";
+
+  ordersContainer.innerHTML = filteredOrders
+    .map(createOrderCard)
+    .join("");
+}
 /* =========================================
    CREATE ORDER CARD
 ========================================= */
