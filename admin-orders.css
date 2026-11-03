@@ -774,3 +774,20 @@ button:disabled {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+/* ORDER SECTION COUNTERS */
+.section-btn .section-count {
+  margin-left: auto;
+  min-width: 28px;
+  padding: 5px 8px;
+  border-radius: 20px;
+  background: #f2e6cc;
+  color: #171717;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.section-btn.active .section-count {
+  background: #c49a45;
+  color: #111;
+}
