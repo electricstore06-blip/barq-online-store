@@ -437,6 +437,7 @@
   </div>
 </main>
 
+
 <script type="module">
   import { auth, db, firebaseConfig } from "./firebase-config.js";
 
@@ -460,18 +461,21 @@
     setDoc,
     updateDoc,
     serverTimestamp,
-    arrayUnion,
-    increment
+    runTransaction
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  // A secondary Firebase app creates staff accounts without signing out the admin.
+  // Secondary Firebase app: staff creation does not sign out the admin.
   const staffApp = initializeApp(firebaseConfig, "BARQ_STAFF_CREATION_APP");
   const staffAuth = getAuth(staffApp);
 
   const $ = id => document.getElementById(id);
+
   let authorizedUid = null;
   let staffMembers = [];
   let salaryRecords = [];
+
+  // Prevent two rapid clicks from recording two payments for one salary.
+  const processingSalaryIds = new Set();
 
   const money = value =>
     "SAR " + Number(value || 0).toLocaleString("en-SA", {
@@ -493,14 +497,19 @@
 
   function setMessage(id, message, type = "") {
     const element = $(id);
+    if (!element) return;
+
     element.textContent = message;
     element.className = "message" + (type ? " " + type : "");
   }
 
   function setAccessMessage(message, isError = false) {
-    $("access-message").textContent = message;
-    $("access-message").style.background = isError ? "#fff0ef" : "";
-    $("access-message").style.color = isError ? "#b42318" : "";
+    const element = $("access-message");
+    if (!element) return;
+
+    element.textContent = message;
+    element.style.background = isError ? "#fff0ef" : "";
+    element.style.color = isError ? "#b42318" : "";
   }
 
   function getEmployeeRole(member) {
@@ -522,6 +531,7 @@
   function salaryStatus(record) {
     const salary = Number(record.basicSalary || 0);
     const paid = Number(record.paidAmount || 0);
+
     if (paid <= 0) return "unpaid";
     if (paid >= salary) return "paid";
     return "partial";
@@ -533,47 +543,70 @@
       : status === "active" ? "Active"
       : status === "inactive" ? "Inactive"
       : "Unpaid";
+
     return `<span class="pill ${escapeHTML(status)}">${label}</span>`;
   }
 
-  // Admin verification
+  // ---------------- ADMIN VERIFICATION ----------------
+
   onAuthStateChanged(auth, async user => {
     if (!user) {
-      setAccessMessage("Please sign in with your BARQ administrator account.", true);
+      authorizedUid = null;
+      setAccessMessage(
+        "Please sign in with your BARQ administrator account.",
+        true
+      );
       return;
     }
 
     try {
       const adminSnap = await getDoc(doc(db, "admins", user.uid));
+
       if (!adminSnap.exists() || adminSnap.data().role !== "admin") {
         authorizedUid = null;
-        setAccessMessage("Access denied. This page is only available to authorized BARQ administrators.", true);
+        setAccessMessage(
+          "Access denied. This page is only available to authorized BARQ administrators.",
+          true
+        );
         return;
       }
 
       authorizedUid = user.uid;
+
       $("access-message").classList.add("hidden");
       $("staff-app").classList.remove("hidden");
 
       await loadStaff();
       await loadSalaries();
+
     } catch (error) {
       console.error("Admin verification failed:", error);
-      setAccessMessage("Could not verify administrator access: " + error.message, true);
+      setAccessMessage(
+        "Could not verify administrator access: " + error.message,
+        true
+      );
     }
   });
 
-  // Tabs
+  // ---------------- TABS ----------------
+
   document.querySelectorAll(".tab").forEach(button => {
     button.addEventListener("click", () => {
-      document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
-      document.querySelectorAll(".panel").forEach(panel => panel.classList.remove("active"));
+      document.querySelectorAll(".tab").forEach(tab =>
+        tab.classList.remove("active")
+      );
+
+      document.querySelectorAll(".panel").forEach(panel =>
+        panel.classList.remove("active")
+      );
+
       button.classList.add("active");
       $(button.dataset.tab).classList.add("active");
     });
   });
 
-  // Create employee account using the secondary Firebase Auth instance.
+  // ---------------- CREATE STAFF ACCOUNT ----------------
+
   $("staff-form").addEventListener("submit", async event => {
     event.preventDefault();
     if (!authorizedUid) return;
@@ -587,7 +620,16 @@
     const button = $("create-staff-btn");
 
     if (!name || !email || password.length < 6) {
-      setMessage("staff-message", "Enter a name, valid email and password of at least 6 characters.", "error");
+      setMessage(
+        "staff-message",
+        "Enter a name, valid email and password of at least 6 characters.",
+        "error"
+      );
+      return;
+    }
+
+    if (!["staff", "supervisor", "driver"].includes(role)) {
+      setMessage("staff-message", "Invalid staff role.", "error");
       return;
     }
 
@@ -598,7 +640,12 @@
     let createdUser = null;
 
     try {
-      const credential = await createUserWithEmailAndPassword(staffAuth, email, password);
+      const credential = await createUserWithEmailAndPassword(
+        staffAuth,
+        email,
+        password
+      );
+
       createdUser = credential.user;
 
       await setDoc(doc(db, "users", createdUser.uid), {
@@ -614,21 +661,37 @@
       });
 
       await signOut(staffAuth);
+
       $("staff-form").reset();
-      setMessage("staff-message", "Account created successfully.", "success");
+
+      setMessage(
+        "staff-message",
+        "Account created successfully.",
+        "success"
+      );
+
       await loadStaff();
+
     } catch (error) {
       console.error("Create employee failed:", error);
 
       if (createdUser) {
-        try { await deleteUser(createdUser); } catch (cleanupError) {
-          console.error("Could not clean up newly created Auth user:", cleanupError);
+        try {
+          await deleteUser(createdUser);
+        } catch (cleanupError) {
+          console.error(
+            "Could not clean up newly created Auth user:",
+            cleanupError
+          );
         }
       }
 
-      try { await signOut(staffAuth); } catch (_) {}
+      try {
+        await signOut(staffAuth);
+      } catch (_) {}
 
       let message = error.message || "Could not create account.";
+
       if (error.code === "auth/email-already-in-use") {
         message = "This email address is already registered in Firebase Authentication.";
       } else if (error.code === "auth/weak-password") {
@@ -638,21 +701,27 @@
       }
 
       setMessage("staff-message", message, "error");
+
     } finally {
       button.disabled = false;
       button.textContent = "+ Create Staff Account";
     }
   });
 
-  // Load only employee roles. Admin records are intentionally excluded.
+  // ---------------- LOAD STAFF AND DRIVERS ----------------
+
   async function loadStaff() {
     if (!authorizedUid) return;
 
-    $("staff-list").innerHTML = '<tr><td colspan="7" class="empty">Loading staff...</td></tr>';
-    $("driver-list").innerHTML = '<tr><td colspan="6" class="empty">Loading drivers...</td></tr>';
+    $("staff-list").innerHTML =
+      '<tr><td colspan="7" class="empty">Loading staff...</td></tr>';
+
+    $("driver-list").innerHTML =
+      '<tr><td colspan="6" class="empty">Loading drivers...</td></tr>';
 
     try {
       const snapshot = await getDocs(collection(db, "users"));
+
       staffMembers = snapshot.docs
         .map(item => ({ id: item.id, ...item.data() }))
         .filter(isEmployee);
@@ -660,22 +729,31 @@
       renderStaff();
       renderDrivers();
       renderEmployeeOptions();
+
     } catch (error) {
       console.error("Load staff failed:", error);
-      $("staff-list").innerHTML = `<tr><td colspan="7" class="empty">${escapeHTML(error.message)}</td></tr>`;
-      $("driver-list").innerHTML = `<tr><td colspan="6" class="empty">${escapeHTML(error.message)}</td></tr>`;
+
+      $("staff-list").innerHTML =
+        `<tr><td colspan="7" class="empty">${escapeHTML(error.message)}</td></tr>`;
+
+      $("driver-list").innerHTML =
+        `<tr><td colspan="6" class="empty">${escapeHTML(error.message)}</td></tr>`;
     }
   }
 
   function renderStaff() {
     const search = normal($("staff-search").value);
+
     const members = staffMembers.filter(member =>
       ["staff", "supervisor"].includes(getEmployeeRole(member)) &&
-      `${employeeName(member)} ${member.email || ""}`.toLowerCase().includes(search)
+      `${employeeName(member)} ${member.email || ""}`
+        .toLowerCase()
+        .includes(search)
     );
 
     if (!members.length) {
-      $("staff-list").innerHTML = '<tr><td colspan="7" class="empty">No staff accounts found.</td></tr>';
+      $("staff-list").innerHTML =
+        '<tr><td colspan="7" class="empty">No staff accounts found.</td></tr>';
       return;
     }
 
@@ -688,9 +766,15 @@
         <td>${escapeHTML(member.city || "—")}</td>
         <td>${statusPill(isActive(member) ? "active" : "inactive")}</td>
         <td>
-          <button class="small-btn secondary" data-action="role" data-id="${escapeHTML(member.id)}">Change role</button>
+          <button class="small-btn secondary"
+            data-action="role"
+            data-id="${escapeHTML(member.id)}">
+            Change role
+          </button>
+
           <button class="small-btn ${isActive(member) ? "danger" : "secondary"}"
-            data-action="toggle" data-id="${escapeHTML(member.id)}"
+            data-action="toggle"
+            data-id="${escapeHTML(member.id)}"
             data-active="${isActive(member) ? "true" : "false"}">
             ${isActive(member) ? "Deactivate" : "Activate"}
           </button>
@@ -701,13 +785,17 @@
 
   function renderDrivers() {
     const search = normal($("driver-search").value);
+
     const members = staffMembers.filter(member =>
       getEmployeeRole(member) === "driver" &&
-      `${employeeName(member)} ${member.email || ""}`.toLowerCase().includes(search)
+      `${employeeName(member)} ${member.email || ""}`
+        .toLowerCase()
+        .includes(search)
     );
 
     if (!members.length) {
-      $("driver-list").innerHTML = '<tr><td colspan="6" class="empty">No driver accounts found.</td></tr>';
+      $("driver-list").innerHTML =
+        '<tr><td colspan="6" class="empty">No driver accounts found.</td></tr>';
       return;
     }
 
@@ -720,7 +808,8 @@
         <td>${statusPill(isActive(member) ? "active" : "inactive")}</td>
         <td>
           <button class="small-btn ${isActive(member) ? "danger" : "secondary"}"
-            data-action="toggle" data-id="${escapeHTML(member.id)}"
+            data-action="toggle"
+            data-id="${escapeHTML(member.id)}"
             data-active="${isActive(member) ? "true" : "false"}">
             ${isActive(member) ? "Deactivate" : "Activate"}
           </button>
@@ -729,7 +818,8 @@
     `).join("");
   }
 
-  // Staff role changes are restricted to staff and supervisor.
+  // ---------------- STAFF AND DRIVER ACTIONS ----------------
+
   async function handleEmployeeAction(event) {
     const button = event.target.closest("button[data-action]");
     if (!button || !authorizedUid) return;
@@ -741,30 +831,43 @@
 
     try {
       if (action === "role") {
-        if (!["staff", "supervisor"].includes(getEmployeeRole(member))) return;
+        if (!["staff", "supervisor"].includes(getEmployeeRole(member))) {
+          return;
+        }
 
-        const newRole = prompt("Enter new role: staff or supervisor", getEmployeeRole(member));
+        const newRole = prompt(
+          "Enter new role: staff or supervisor",
+          getEmployeeRole(member)
+        );
+
         if (newRole === null) return;
 
         const role = normal(newRole);
+
         if (!["staff", "supervisor"].includes(role)) {
           alert("Role must be staff or supervisor.");
           return;
         }
+
         await updateDoc(doc(db, "users", member.id), { role });
       }
 
       if (action === "toggle") {
         const currentlyActive = button.dataset.active === "true";
+
         const confirmed = confirm(
           `Are you sure you want to ${currentlyActive ? "deactivate" : "activate"} ${employeeName(member)}?`
         );
+
         if (!confirmed) return;
 
-        await updateDoc(doc(db, "users", member.id), { active: !currentlyActive });
+        await updateDoc(doc(db, "users", member.id), {
+          active: !currentlyActive
+        });
       }
 
       await loadStaff();
+
     } catch (error) {
       console.error("Employee update failed:", error);
       alert("Could not update employee: " + error.message);
@@ -780,13 +883,19 @@
   $("refresh-staff").addEventListener("click", loadStaff);
   $("refresh-drivers").addEventListener("click", loadStaff);
 
+  // ---------------- SALARY EMPLOYEE DROPDOWN ----------------
+
   function renderEmployeeOptions() {
     const select = $("salary-employee");
+
     const eligible = staffMembers
       .filter(member => isActive(member))
-      .sort((a, b) => employeeName(a).localeCompare(employeeName(b)));
+      .sort((a, b) =>
+        employeeName(a).localeCompare(employeeName(b))
+      );
 
-    select.innerHTML = '<option value="">Choose an employee</option>' +
+    select.innerHTML =
+      '<option value="">Choose an employee</option>' +
       eligible.map(member => `
         <option value="${escapeHTML(member.id)}">
           ${escapeHTML(employeeName(member))} — ${escapeHTML(getEmployeeRole(member))}
@@ -794,7 +903,8 @@
       `).join("");
   }
 
-  // Create one monthly salary record per employee.
+  // ---------------- CREATE MONTHLY SALARY ----------------
+
   $("salary-form").addEventListener("submit", async event => {
     event.preventDefault();
     if (!authorizedUid) return;
@@ -806,11 +916,25 @@
     const button = $("save-salary-btn");
 
     if (!member || !isActive(member)) {
-      setMessage("salary-message", "Choose an active employee or driver.", "error");
+      setMessage(
+        "salary-message",
+        "Choose an active employee or driver.",
+        "error"
+      );
       return;
     }
-    if (!/^\d{4}-\d{2}$/.test(month) || !Number.isFinite(basicSalary) || basicSalary <= 0) {
-      setMessage("salary-message", "Enter a valid month and salary amount greater than zero.", "error");
+
+    if (
+      !/^\d{4}-(0[1-9]|1[0-2])$/.test(month) ||
+      !Number.isFinite(basicSalary) ||
+      basicSalary <= 0 ||
+      basicSalary > 100000000
+    ) {
+      setMessage(
+        "salary-message",
+        "Enter a valid month and salary amount greater than zero.",
+        "error"
+      );
       return;
     }
 
@@ -822,8 +946,13 @@
 
     try {
       const existing = await getDoc(salaryRef);
+
       if (existing.exists()) {
-        setMessage("salary-message", "A salary record already exists for this employee and month. Use Edit Salary in the records table to change it.", "error");
+        setMessage(
+          "salary-message",
+          "A salary record already exists for this employee and month. Use Edit Salary in the records table to change it.",
+          "error"
+        );
         return;
       }
 
@@ -843,34 +972,61 @@
       });
 
       $("salary-form").reset();
-      setMessage("salary-message", "Monthly salary record saved successfully.", "success");
+
+      setMessage(
+        "salary-message",
+        "Monthly salary record saved successfully.",
+        "success"
+      );
+
       await loadSalaries();
+
     } catch (error) {
       console.error("Save salary failed:", error);
-      setMessage("salary-message", "Could not save salary: " + error.message, "error");
+
+      setMessage(
+        "salary-message",
+        "Could not save salary: " + error.message,
+        "error"
+      );
+
     } finally {
       button.disabled = false;
       button.textContent = "Save Monthly Salary";
     }
   });
 
+  // ---------------- LOAD SALARIES ----------------
+
   async function loadSalaries() {
     if (!authorizedUid) return;
 
-    $("salary-list").innerHTML = '<tr><td colspan="8" class="empty">Loading salary records...</td></tr>';
+    $("salary-list").innerHTML =
+      '<tr><td colspan="8" class="empty">Loading salary records...</td></tr>';
 
     try {
       const snapshot = await getDocs(collection(db, "staffSalaries"));
-      salaryRecords = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+
+      salaryRecords = snapshot.docs.map(item => ({
+        id: item.id,
+        ...item.data()
+      }));
+
       renderSalaries();
+
     } catch (error) {
       console.error("Load salaries failed:", error);
-      $("salary-list").innerHTML = `<tr><td colspan="8" class="empty">${escapeHTML(error.message)}</td></tr>`;
+
+      $("salary-list").innerHTML =
+        `<tr><td colspan="8" class="empty">${escapeHTML(error.message)}</td></tr>`;
+
       $("salary-total").textContent = money(0);
       $("salary-paid").textContent = money(0);
       $("salary-balance").textContent = money(0);
     }
   }
+
+  // ---------------- DISPLAY SALARIES ----------------
 
   function renderSalaries() {
     const search = normal($("salary-search").value);
@@ -878,24 +1034,49 @@
     const statusFilter = $("salary-filter-status").value;
 
     const filtered = salaryRecords.filter(record => {
-      const matchesSearch = `${record.employeeName || ""} ${record.employeeEmail || ""}`
-        .toLowerCase().includes(search);
-      const matchesMonth = !monthFilter || record.month === monthFilter;
-      const matchesStatus = !statusFilter || salaryStatus(record) === statusFilter;
-      return matchesSearch && matchesMonth && matchesStatus;
-    }).sort((a, b) => String(b.month || "").localeCompare(String(a.month || "")));
+      const matchesSearch =
+        `${record.employeeName || ""} ${record.employeeEmail || ""}`
+          .toLowerCase()
+          .includes(search);
 
-    const total = filtered.reduce((sum, item) => sum + Number(item.basicSalary || 0), 0);
-    const paid = filtered.reduce((sum, item) => sum + Number(item.paidAmount || 0), 0);
-    const balance = filtered.reduce((sum, item) =>
-      sum + Math.max(0, Number(item.basicSalary || 0) - Number(item.paidAmount || 0)), 0);
+      const matchesMonth =
+        !monthFilter || record.month === monthFilter;
+
+      const matchesStatus =
+        !statusFilter || salaryStatus(record) === statusFilter;
+
+      return matchesSearch && matchesMonth && matchesStatus;
+
+    }).sort((a, b) =>
+      String(b.month || "").localeCompare(String(a.month || ""))
+    );
+
+    const total = filtered.reduce(
+      (sum, item) => sum + Number(item.basicSalary || 0),
+      0
+    );
+
+    const paid = filtered.reduce(
+      (sum, item) => sum + Number(item.paidAmount || 0),
+      0
+    );
+
+    const balance = filtered.reduce(
+      (sum, item) =>
+        sum + Math.max(
+          0,
+          Number(item.basicSalary || 0) - Number(item.paidAmount || 0)
+        ),
+      0
+    );
 
     $("salary-total").textContent = money(total);
     $("salary-paid").textContent = money(paid);
     $("salary-balance").textContent = money(balance);
 
     if (!filtered.length) {
-      $("salary-list").innerHTML = '<tr><td colspan="8" class="empty">No salary records found for these filters.</td></tr>';
+      $("salary-list").innerHTML =
+        '<tr><td colspan="8" class="empty">No salary records found for these filters.</td></tr>';
       return;
     }
 
@@ -904,10 +1085,12 @@
       const paidAmount = Number(record.paidAmount || 0);
       const remaining = Math.max(0, salary - paidAmount);
       const status = salaryStatus(record);
+      const isProcessing = processingSalaryIds.has(record.id);
 
       return `
         <tr>
-          <td>${escapeHTML(record.employeeName || "Employee")}<br>
+          <td>
+            ${escapeHTML(record.employeeName || "Employee")}<br>
             <span class="help-text">${escapeHTML(record.employeeEmail || "")}</span>
           </td>
           <td>${escapeHTML(record.employeeRole || "—")}</td>
@@ -917,43 +1100,76 @@
           <td>${money(remaining)}</td>
           <td>${statusPill(status)}</td>
           <td>
-            <button class="small-btn secondary" data-salary-action="edit"
-              data-id="${escapeHTML(record.id)}">Edit salary</button>
+            <button class="small-btn secondary"
+              data-salary-action="edit"
+              data-id="${escapeHTML(record.id)}">
+              Edit salary
+            </button>
+
             ${remaining > 0 ? `
-              <button class="small-btn primary" data-salary-action="pay"
-                data-id="${escapeHTML(record.id)}">Record payment</button>
+              <button class="small-btn primary"
+                data-salary-action="pay"
+                data-id="${escapeHTML(record.id)}"
+                ${isProcessing ? "disabled" : ""}>
+                ${isProcessing ? "Processing..." : "Record payment"}
+              </button>
             ` : ""}
-            <button class="small-btn secondary" data-salary-action="history"
-              data-id="${escapeHTML(record.id)}">History</button>
+
+            <button class="small-btn secondary"
+              data-salary-action="history"
+              data-id="${escapeHTML(record.id)}">
+              History
+            </button>
           </td>
         </tr>
       `;
     }).join("");
   }
 
+  // ---------------- SALARY ACTIONS ----------------
+
   $("salary-list").addEventListener("click", async event => {
     const button = event.target.closest("button[data-salary-action]");
     if (!button || !authorizedUid) return;
 
-    const record = salaryRecords.find(item => item.id === button.dataset.id);
+    const record = salaryRecords.find(
+      item => item.id === button.dataset.id
+    );
+
     if (!record) return;
 
     const action = button.dataset.salaryAction;
     const salaryRef = doc(db, "staffSalaries", record.id);
 
+    // Lock this salary against rapid repeated payment clicks.
+    if (action === "pay") {
+      if (processingSalaryIds.has(record.id)) return;
+
+      processingSalaryIds.add(record.id);
+      renderSalaries();
+    }
+
     try {
+      // EDIT MONTHLY SALARY
       if (action === "edit") {
         const newAmountText = prompt(
           `Enter the new monthly salary in SAR for ${record.employeeName} (${record.month}):`,
           String(record.basicSalary)
         );
+
         if (newAmountText === null) return;
 
         const newAmount = Number(newAmountText);
-        if (!Number.isFinite(newAmount) || newAmount <= 0) {
+
+        if (
+          !Number.isFinite(newAmount) ||
+          newAmount <= 0 ||
+          newAmount > 100000000
+        ) {
           alert("Enter a valid salary amount greater than zero.");
           return;
         }
+
         if (newAmount < Number(record.paidAmount || 0)) {
           alert("The new salary cannot be less than the amount already paid.");
           return;
@@ -966,55 +1182,175 @@
         });
       }
 
+      // RECORD PAYMENT AND AUTOMATICALLY CREATE EXPENSE
       if (action === "pay") {
         const remaining = Math.max(
           0,
-          Number(record.basicSalary || 0) - Number(record.paidAmount || 0)
+          Number(record.basicSalary || 0) -
+          Number(record.paidAmount || 0)
         );
-        const paymentText = prompt(
-          `Remaining balance: ${money(remaining)}\nEnter payment amount in SAR:`
-        );
-        if (paymentText === null) return;
 
-        const paymentAmount = Number(paymentText);
-        if (!Number.isFinite(paymentAmount) || paymentAmount <= 0 || paymentAmount > remaining) {
-          alert(`Enter an amount greater than zero and no more than ${money(remaining)}.`);
+        if (remaining <= 0) {
+          alert("This salary has already been fully paid.");
           return;
         }
 
+        const paymentText = prompt(
+          `Remaining balance: ${money(remaining)}\nEnter payment amount in SAR:`
+        );
+
+        if (paymentText === null) return;
+
+        const paymentAmount = Number(paymentText);
+
+        if (
+          !Number.isFinite(paymentAmount) ||
+          paymentAmount <= 0 ||
+          paymentAmount > remaining ||
+          paymentAmount > 100000000
+        ) {
+          alert(
+            `Enter an amount greater than zero and no more than ${money(remaining)}.`
+          );
+          return;
+        }
+
+        // Create the expense reference once, outside the transaction.
+        // Firestore transaction retries will reuse this same expense ID.
+        const expenseRef = doc(collection(db, "expenses"));
+        const paymentId = expenseRef.id;
+
+        const paymentDate = new Date();
+
+        const expenseDate =
+          `${paymentDate.getFullYear()}-` +
+          `${String(paymentDate.getMonth() + 1).padStart(2, "0")}-` +
+          `${String(paymentDate.getDate()).padStart(2, "0")}`;
+
         const payment = {
+          paymentId,
           amount: paymentAmount,
-          paidAt: new Date().toISOString(),
+          paidAt: paymentDate.toISOString(),
           recordedBy: authorizedUid
         };
 
-        await updateDoc(salaryRef, {
-          paidAmount: increment(paymentAmount),
-          payments: arrayUnion(payment),
-          updatedBy: authorizedUid,
-          updatedAt: serverTimestamp()
+        await runTransaction(db, async transaction => {
+          // Always read the latest salary record.
+          const salarySnapshot = await transaction.get(salaryRef);
+
+          if (!salarySnapshot.exists()) {
+            throw new Error("Salary record not found.");
+          }
+
+          const salaryData = salarySnapshot.data();
+
+          const currentBasicSalary =
+            Number(salaryData.basicSalary || 0);
+
+          const currentPaidAmount =
+            Number(salaryData.paidAmount || 0);
+
+          const currentRemaining =
+            currentBasicSalary - currentPaidAmount;
+
+          if (
+            !Number.isFinite(currentRemaining) ||
+            currentRemaining <= 0 ||
+            paymentAmount > currentRemaining
+          ) {
+            throw new Error(
+              "The salary balance has changed. Refresh the salary list and try again."
+            );
+          }
+
+          // Check that this expense ID has not already been created.
+          const existingExpense = await transaction.get(expenseRef);
+
+          if (existingExpense.exists()) {
+            throw new Error(
+              "This salary payment expense already exists."
+            );
+          }
+
+          const existingPayments =
+            Array.isArray(salaryData.payments)
+              ? salaryData.payments
+              : [];
+
+          // Create one expense for this exact salary payment.
+          transaction.set(expenseRef, {
+            amount: paymentAmount,
+            category: "Salaries",
+            description:
+              `Salary payment - ${salaryData.employeeName} - ${salaryData.month}`,
+            expenseDate,
+            createdBy: authorizedUid,
+            createdAt: serverTimestamp(),
+
+            // Extra tracking fields for this salary payment.
+            salaryId: salaryRef.id,
+            paymentId,
+            employeeUid: salaryData.employeeUid,
+            employeeName: salaryData.employeeName,
+            salaryMonth: salaryData.month
+          });
+
+          // Update the salary in the same transaction.
+          transaction.update(salaryRef, {
+            paidAmount: currentPaidAmount + paymentAmount,
+            payments: [...existingPayments, payment],
+            updatedBy: authorizedUid,
+            updatedAt: serverTimestamp()
+          });
         });
+
+        alert(
+          `Payment recorded successfully!\n\n` +
+          `Employee: ${record.employeeName}\n` +
+          `Payment: ${money(paymentAmount)}\n` +
+          `Expense automatically recorded: ${money(paymentAmount)}`
+        );
       }
 
+      // PAYMENT HISTORY
       if (action === "history") {
-        const payments = Array.isArray(record.payments) ? record.payments : [];
+        const payments = Array.isArray(record.payments)
+          ? record.payments
+          : [];
+
         if (!payments.length) {
           alert("No payments have been recorded for this salary.");
         } else {
           const lines = payments.map((payment, index) =>
             `${index + 1}. ${money(payment.amount)} — ${payment.paidAt || "Date not available"}`
           );
-          alert(`Payment history for ${record.employeeName} (${record.month})\n\n${lines.join("\n")}`);
+
+          alert(
+            `Payment history for ${record.employeeName} (${record.month})\n\n${lines.join("\n")}`
+          );
         }
+
         return;
       }
 
       await loadSalaries();
+
     } catch (error) {
       console.error("Salary action failed:", error);
-      alert("Could not update salary record: " + error.message);
+
+      alert(
+        "Could not update salary record: " + error.message
+      );
+
+    } finally {
+      if (action === "pay") {
+        processingSalaryIds.delete(record.id);
+        renderSalaries();
+      }
     }
   });
+
+  // ---------------- SALARY FILTERS AND REFRESH ----------------
 
   $("salary-search").addEventListener("input", renderSalaries);
   $("salary-filter-month").addEventListener("change", renderSalaries);
@@ -1023,9 +1359,11 @@
 
   // Default salary month to the current local month.
   const now = new Date();
+
   $("salary-month").value =
     `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
 </script>
+
 
 </body>
 </html>
