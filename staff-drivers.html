@@ -1,0 +1,1031 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BARQ Admin | Staff & Drivers</title>
+  <style>
+    :root {
+      --ink: #171717;
+      --muted: #77736d;
+      --cream: #f7f5f0;
+      --white: #fff;
+      --line: #e9e5dc;
+      --gold: #b58b45;
+      --green: #18794e;
+      --red: #b42318;
+      --blue: #2457a7;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: Inter, Arial, sans-serif;
+    }
+    header {
+      background: #171717;
+      color: white;
+      padding: 22px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    header h1 { margin: 0; font-size: 23px; }
+    header p { margin: 6px 0 0; color: #c8c3b9; font-size: 13px; }
+    .header-link {
+      color: white;
+      text-decoration: none;
+      border: 1px solid #68645d;
+      padding: 10px 15px;
+      border-radius: 9px;
+      font-size: 13px;
+    }
+    main { width: min(1200px, 94%); margin: 28px auto 60px; }
+    .notice {
+      background: #fff9e9;
+      border: 1px solid #ead9ad;
+      color: #6c5424;
+      border-radius: 12px;
+      padding: 13px 15px;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 20px;
+    }
+    .tab {
+      border: 1px solid var(--line);
+      background: white;
+      color: #514d46;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .tab.active {
+      background: #171717;
+      color: white;
+      border-color: #171717;
+    }
+    .panel {
+      display: none;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 5px 22px #1b160d08;
+    }
+    .panel.active { display: block; }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    h2 { font-size: 19px; margin: 0; }
+    .subtitle { color: var(--muted); font-size: 13px; margin: 6px 0 0; }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+      margin: 18px 0;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #45413b;
+    }
+    input, select {
+      display: block;
+      width: 100%;
+      margin-top: 7px;
+      border: 1px solid #dedad1;
+      border-radius: 9px;
+      padding: 12px;
+      background: white;
+      color: #171717;
+      font: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+    input:focus, select:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px #b58b4518;
+    }
+    button {
+      font: inherit;
+    }
+    .primary, .secondary, .danger, .small-btn {
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .primary { background: #171717; color: white; }
+    .primary:hover { background: #34312c; }
+    .secondary { background: #f1eee8; color: #292621; }
+    .danger { background: #fff0ef; color: var(--red); }
+    .small-btn { padding: 7px 10px; font-size: 12px; margin: 2px; }
+    button:disabled { opacity: .55; cursor: not-allowed; }
+    .divider { border-top: 1px solid var(--line); margin: 24px 0; }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 16px 0;
+    }
+    .toolbar input, .toolbar select {
+      max-width: 280px;
+      margin: 0;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+    }
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 13px 12px;
+      text-align: left;
+      border-bottom: 1px solid #efede8;
+      vertical-align: middle;
+    }
+    th {
+      background: #f8f6f2;
+      color: #5b554c;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .pill {
+      display: inline-block;
+      border-radius: 30px;
+      padding: 5px 9px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #f1eee8;
+      color: #5a554c;
+      white-space: nowrap;
+    }
+    .pill.active, .pill.paid { background: #e8f6ee; color: var(--green); }
+    .pill.inactive, .pill.unpaid { background: #fff0ef; color: var(--red); }
+    .pill.partial { background: #fff5df; color: #93650c; }
+    .message {
+      min-height: 20px;
+      margin: 12px 0 0;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .message.error { color: var(--red); }
+    .message.success { color: var(--green); }
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 25px;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .summary-card {
+      background: #faf9f6;
+      border: 1px solid var(--line);
+      padding: 15px;
+      border-radius: 12px;
+    }
+    .summary-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+    .summary-card strong { font-size: 20px; }
+    .help-text { color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .hidden { display: none !important; }
+
+    @media (max-width: 650px) {
+      header { padding: 18px 4%; }
+      main { width: 94%; margin-top: 18px; }
+      .panel { padding: 15px; }
+      .form-grid, .summary-grid { grid-template-columns: 1fr; }
+      .toolbar input, .toolbar select { max-width: none; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>⚡ BARQ Admin</h1>
+    <p>Staff, drivers and salary management</p>
+  </div>
+  <a class="header-link" href="admin-dashboard.html">← Back to Dashboard</a>
+</header>
+
+<main>
+  <div id="access-message" class="notice">Checking administrator access...</div>
+
+  <div id="staff-app" class="hidden">
+    <div class="notice">
+      Manage your BARQ staff and drivers here. Salary records are stored separately
+      from employee accounts and from your Expenses &amp; Profit records.
+    </div>
+
+    <nav class="tabs" aria-label="Staff management sections">
+      <button class="tab active" type="button" data-tab="staff-panel">Staff</button>
+      <button class="tab" type="button" data-tab="drivers-panel">Drivers</button>
+      <button class="tab" type="button" data-tab="salary-panel">Staff Salary</button>
+    </nav>
+
+    <!-- STAFF -->
+    <section class="panel active" id="staff-panel">
+      <div class="section-head">
+        <div>
+          <h2>Staff Accounts</h2>
+          <p class="subtitle">Create and manage staff and supervisor accounts.</p>
+        </div>
+        <button type="button" class="secondary" id="refresh-staff">Refresh</button>
+      </div>
+
+      <form id="staff-form">
+        <div class="form-grid">
+          <label>Full name
+            <input id="staff-name" type="text" maxlength="100" required placeholder="Full name">
+          </label>
+          <label>Email address
+            <input id="staff-email" type="email" maxlength="254" required placeholder="staff@example.com">
+          </label>
+          <label>Phone number
+            <input id="staff-phone" type="tel" maxlength="30" placeholder="Phone number">
+          </label>
+          <label>City
+            <input id="staff-city" type="text" maxlength="100" placeholder="City">
+          </label>
+          <label>Temporary password
+            <input id="staff-password" type="password" minlength="6" autocomplete="new-password" required placeholder="At least 6 characters">
+          </label>
+          <label>Account role
+         <select id="staff-role" required>
+  <option value="staff">Staff</option>
+  <option value="supervisor">Supervisor</option>
+  <option value="driver">Driver</option>
+</select> 
+          </label>
+        </div>
+        <button type="submit" class="primary" id="create-staff-btn">+ Create Staff Account</button>
+        <p id="staff-message" class="message" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="divider"></div>
+      <div class="toolbar">
+        <input id="staff-search" type="search" placeholder="Search staff by name or email">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>City</th><th>Status</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="staff-list">
+            <tr><td colspan="7" class="empty">Loading staff...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- DRIVERS -->
+    <section class="panel" id="drivers-panel">
+      <div class="section-head">
+        <div>
+          <h2>Drivers</h2>
+          <p class="subtitle">View and manage driver accounts.</p>
+        </div>
+        <button type="button" class="secondary" id="refresh-drivers">Refresh</button>
+      </div>
+
+      <p class="help-text">
+        To create a driver account, use the Staff form and choose the Driver role
+        if you add that option later, or create it using your existing driver setup.
+        Existing driver accounts are displayed below.
+      </p>
+
+      <div class="toolbar">
+        <input id="driver-search" type="search" placeholder="Search drivers by name or email">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th><th>Email</th><th>Phone</th><th>City</th><th>Status</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="driver-list">
+            <tr><td colspan="6" class="empty">Loading drivers...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SALARY -->
+    <section class="panel" id="salary-panel">
+      <div class="section-head">
+        <div>
+          <h2>Staff Salary</h2>
+          <p class="subtitle">Set monthly salaries and record salary payments.</p>
+        </div>
+        <button type="button" class="secondary" id="refresh-salaries">Refresh</button>
+      </div>
+
+      <div class="notice">
+        Each salary record belongs to one employee and one calendar month.
+        Payments are added to the record, so you can track partial and full payments.
+        This section does not automatically create an expense in Expenses &amp; Profit.
+      </div>
+
+      <form id="salary-form">
+        <div class="form-grid">
+          <label>Staff member or driver
+            <select id="salary-employee" required>
+              <option value="">Loading employees...</option>
+            </select>
+          </label>
+          <label>Salary month
+            <input id="salary-month" type="month" required>
+          </label>
+          <label>Monthly salary (SAR)
+            <input id="salary-amount" type="number" min="0.01" max="100000000" step="0.01" required placeholder="Example: 2500">
+          </label>
+        </div>
+        <button type="submit" class="primary" id="save-salary-btn">Save Monthly Salary</button>
+        <p id="salary-message" class="message" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="divider"></div>
+
+      <div class="section-head">
+        <div>
+          <h2>Salary Records</h2>
+          <p class="subtitle">Monthly salary balances and payment history.</p>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <input id="salary-search" type="search" placeholder="Search employee">
+        <input id="salary-filter-month" type="month" aria-label="Filter salary month">
+        <select id="salary-filter-status" aria-label="Filter salary status">
+          <option value="">All payment statuses</option>
+          <option value="unpaid">Unpaid</option>
+          <option value="partial">Partially paid</option>
+          <option value="paid">Paid</option>
+        </select>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <span>Total salaries</span>
+          <strong id="salary-total">SAR 0.00</strong>
+        </div>
+        <div class="summary-card">
+          <span>Total paid</span>
+          <strong id="salary-paid">SAR 0.00</strong>
+        </div>
+        <div class="summary-card">
+          <span>Remaining balance</span>
+          <strong id="salary-balance">SAR 0.00</strong>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Employee</th><th>Role</th><th>Month</th><th>Salary</th>
+              <th>Paid</th><th>Balance</th><th>Status</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="salary-list">
+            <tr><td colspan="8" class="empty">No salary records loaded.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="help-text">
+        Payment history is saved with each monthly salary record. Keep your own
+        payroll documentation as well; this page is an administrative tracking tool.
+      </p>
+    </section>
+  </div>
+</main>
+
+<script type="module">
+  import { auth, db, firebaseConfig } from "./firebase-config.js";
+
+  import {
+    initializeApp
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+  import {
+    onAuthStateChanged,
+    getAuth,
+    createUserWithEmailAndPassword,
+    deleteUser,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  import {
+    doc,
+    getDoc,
+    collection,
+    getDocs,
+    setDoc,
+    updateDoc,
+    serverTimestamp,
+    arrayUnion,
+    increment
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  // A secondary Firebase app creates staff accounts without signing out the admin.
+  const staffApp = initializeApp(firebaseConfig, "BARQ_STAFF_CREATION_APP");
+  const staffAuth = getAuth(staffApp);
+
+  const $ = id => document.getElementById(id);
+  let authorizedUid = null;
+  let staffMembers = [];
+  let salaryRecords = [];
+
+  const money = value =>
+    "SAR " + Number(value || 0).toLocaleString("en-SA", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+
+  const normal = value => String(value || "").trim().toLowerCase();
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[char]);
+  }
+
+  function setMessage(id, message, type = "") {
+    const element = $(id);
+    element.textContent = message;
+    element.className = "message" + (type ? " " + type : "");
+  }
+
+  function setAccessMessage(message, isError = false) {
+    $("access-message").textContent = message;
+    $("access-message").style.background = isError ? "#fff0ef" : "";
+    $("access-message").style.color = isError ? "#b42318" : "";
+  }
+
+  function getEmployeeRole(member) {
+    return normal(member.role);
+  }
+
+  function isEmployee(member) {
+    return ["staff", "supervisor", "driver"].includes(getEmployeeRole(member));
+  }
+
+  function isActive(member) {
+    return member.active === true;
+  }
+
+  function employeeName(member) {
+    return member.name || member.fullName || member.email || "Unnamed employee";
+  }
+
+  function salaryStatus(record) {
+    const salary = Number(record.basicSalary || 0);
+    const paid = Number(record.paidAmount || 0);
+    if (paid <= 0) return "unpaid";
+    if (paid >= salary) return "paid";
+    return "partial";
+  }
+
+  function statusPill(status) {
+    const label = status === "paid" ? "Paid"
+      : status === "partial" ? "Partially paid"
+      : status === "active" ? "Active"
+      : status === "inactive" ? "Inactive"
+      : "Unpaid";
+    return `<span class="pill ${escapeHTML(status)}">${label}</span>`;
+  }
+
+  // Admin verification
+  onAuthStateChanged(auth, async user => {
+    if (!user) {
+      setAccessMessage("Please sign in with your BARQ administrator account.", true);
+      return;
+    }
+
+    try {
+      const adminSnap = await getDoc(doc(db, "admins", user.uid));
+      if (!adminSnap.exists() || adminSnap.data().role !== "admin") {
+        authorizedUid = null;
+        setAccessMessage("Access denied. This page is only available to authorized BARQ administrators.", true);
+        return;
+      }
+
+      authorizedUid = user.uid;
+      $("access-message").classList.add("hidden");
+      $("staff-app").classList.remove("hidden");
+
+      await loadStaff();
+      await loadSalaries();
+    } catch (error) {
+      console.error("Admin verification failed:", error);
+      setAccessMessage("Could not verify administrator access: " + error.message, true);
+    }
+  });
+
+  // Tabs
+  document.querySelectorAll(".tab").forEach(button => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+      document.querySelectorAll(".panel").forEach(panel => panel.classList.remove("active"));
+      button.classList.add("active");
+      $(button.dataset.tab).classList.add("active");
+    });
+  });
+
+  // Create employee account using the secondary Firebase Auth instance.
+  $("staff-form").addEventListener("submit", async event => {
+    event.preventDefault();
+    if (!authorizedUid) return;
+
+    const name = $("staff-name").value.trim();
+    const email = $("staff-email").value.trim().toLowerCase();
+    const phone = $("staff-phone").value.trim();
+    const city = $("staff-city").value.trim();
+    const password = $("staff-password").value;
+    const role = $("staff-role").value;
+    const button = $("create-staff-btn");
+
+    if (!name || !email || password.length < 6) {
+      setMessage("staff-message", "Enter a name, valid email and password of at least 6 characters.", "error");
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Creating account...";
+    setMessage("staff-message", "Creating employee account...");
+
+    let createdUser = null;
+
+    try {
+      const credential = await createUserWithEmailAndPassword(staffAuth, email, password);
+      createdUser = credential.user;
+
+      await setDoc(doc(db, "users", createdUser.uid), {
+        uid: createdUser.uid,
+        name,
+        email,
+        phone,
+        city,
+        role,
+        active: true,
+        createdBy: authorizedUid,
+        createdAt: serverTimestamp()
+      });
+
+      await signOut(staffAuth);
+      $("staff-form").reset();
+      setMessage("staff-message", "Account created successfully.", "success");
+      await loadStaff();
+    } catch (error) {
+      console.error("Create employee failed:", error);
+
+      if (createdUser) {
+        try { await deleteUser(createdUser); } catch (cleanupError) {
+          console.error("Could not clean up newly created Auth user:", cleanupError);
+        }
+      }
+
+      try { await signOut(staffAuth); } catch (_) {}
+
+      let message = error.message || "Could not create account.";
+      if (error.code === "auth/email-already-in-use") {
+        message = "This email address is already registered in Firebase Authentication.";
+      } else if (error.code === "auth/weak-password") {
+        message = "The password is too weak. Use at least 6 characters.";
+      } else if (error.code === "permission-denied") {
+        message = "Firestore permission denied. Check your Firebase security rules.";
+      }
+
+      setMessage("staff-message", message, "error");
+    } finally {
+      button.disabled = false;
+      button.textContent = "+ Create Staff Account";
+    }
+  });
+
+  // Load only employee roles. Admin records are intentionally excluded.
+  async function loadStaff() {
+    if (!authorizedUid) return;
+
+    $("staff-list").innerHTML = '<tr><td colspan="7" class="empty">Loading staff...</td></tr>';
+    $("driver-list").innerHTML = '<tr><td colspan="6" class="empty">Loading drivers...</td></tr>';
+
+    try {
+      const snapshot = await getDocs(collection(db, "users"));
+      staffMembers = snapshot.docs
+        .map(item => ({ id: item.id, ...item.data() }))
+        .filter(isEmployee);
+
+      renderStaff();
+      renderDrivers();
+      renderEmployeeOptions();
+    } catch (error) {
+      console.error("Load staff failed:", error);
+      $("staff-list").innerHTML = `<tr><td colspan="7" class="empty">${escapeHTML(error.message)}</td></tr>`;
+      $("driver-list").innerHTML = `<tr><td colspan="6" class="empty">${escapeHTML(error.message)}</td></tr>`;
+    }
+  }
+
+  function renderStaff() {
+    const search = normal($("staff-search").value);
+    const members = staffMembers.filter(member =>
+      ["staff", "supervisor"].includes(getEmployeeRole(member)) &&
+      `${employeeName(member)} ${member.email || ""}`.toLowerCase().includes(search)
+    );
+
+    if (!members.length) {
+      $("staff-list").innerHTML = '<tr><td colspan="7" class="empty">No staff accounts found.</td></tr>';
+      return;
+    }
+
+    $("staff-list").innerHTML = members.map(member => `
+      <tr>
+        <td>${escapeHTML(employeeName(member))}</td>
+        <td>${escapeHTML(member.email || "—")}</td>
+        <td>${escapeHTML(member.phone || "—")}</td>
+        <td>${escapeHTML(getEmployeeRole(member))}</td>
+        <td>${escapeHTML(member.city || "—")}</td>
+        <td>${statusPill(isActive(member) ? "active" : "inactive")}</td>
+        <td>
+          <button class="small-btn secondary" data-action="role" data-id="${escapeHTML(member.id)}">Change role</button>
+          <button class="small-btn ${isActive(member) ? "danger" : "secondary"}"
+            data-action="toggle" data-id="${escapeHTML(member.id)}"
+            data-active="${isActive(member) ? "true" : "false"}">
+            ${isActive(member) ? "Deactivate" : "Activate"}
+          </button>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  function renderDrivers() {
+    const search = normal($("driver-search").value);
+    const members = staffMembers.filter(member =>
+      getEmployeeRole(member) === "driver" &&
+      `${employeeName(member)} ${member.email || ""}`.toLowerCase().includes(search)
+    );
+
+    if (!members.length) {
+      $("driver-list").innerHTML = '<tr><td colspan="6" class="empty">No driver accounts found.</td></tr>';
+      return;
+    }
+
+    $("driver-list").innerHTML = members.map(member => `
+      <tr>
+        <td>${escapeHTML(employeeName(member))}</td>
+        <td>${escapeHTML(member.email || "—")}</td>
+        <td>${escapeHTML(member.phone || "—")}</td>
+        <td>${escapeHTML(member.city || "—")}</td>
+        <td>${statusPill(isActive(member) ? "active" : "inactive")}</td>
+        <td>
+          <button class="small-btn ${isActive(member) ? "danger" : "secondary"}"
+            data-action="toggle" data-id="${escapeHTML(member.id)}"
+            data-active="${isActive(member) ? "true" : "false"}">
+            ${isActive(member) ? "Deactivate" : "Activate"}
+          </button>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  // Staff role changes are restricted to staff and supervisor.
+  async function handleEmployeeAction(event) {
+    const button = event.target.closest("button[data-action]");
+    if (!button || !authorizedUid) return;
+
+    const member = staffMembers.find(item => item.id === button.dataset.id);
+    if (!member || !isEmployee(member)) return;
+
+    const action = button.dataset.action;
+
+    try {
+      if (action === "role") {
+        if (!["staff", "supervisor"].includes(getEmployeeRole(member))) return;
+
+        const newRole = prompt("Enter new role: staff or supervisor", getEmployeeRole(member));
+        if (newRole === null) return;
+
+        const role = normal(newRole);
+        if (!["staff", "supervisor"].includes(role)) {
+          alert("Role must be staff or supervisor.");
+          return;
+        }
+        await updateDoc(doc(db, "users", member.id), { role });
+      }
+
+      if (action === "toggle") {
+        const currentlyActive = button.dataset.active === "true";
+        const confirmed = confirm(
+          `Are you sure you want to ${currentlyActive ? "deactivate" : "activate"} ${employeeName(member)}?`
+        );
+        if (!confirmed) return;
+
+        await updateDoc(doc(db, "users", member.id), { active: !currentlyActive });
+      }
+
+      await loadStaff();
+    } catch (error) {
+      console.error("Employee update failed:", error);
+      alert("Could not update employee: " + error.message);
+    }
+  }
+
+  $("staff-list").addEventListener("click", handleEmployeeAction);
+  $("driver-list").addEventListener("click", handleEmployeeAction);
+
+  $("staff-search").addEventListener("input", renderStaff);
+  $("driver-search").addEventListener("input", renderDrivers);
+
+  $("refresh-staff").addEventListener("click", loadStaff);
+  $("refresh-drivers").addEventListener("click", loadStaff);
+
+  function renderEmployeeOptions() {
+    const select = $("salary-employee");
+    const eligible = staffMembers
+      .filter(member => isActive(member))
+      .sort((a, b) => employeeName(a).localeCompare(employeeName(b)));
+
+    select.innerHTML = '<option value="">Choose an employee</option>' +
+      eligible.map(member => `
+        <option value="${escapeHTML(member.id)}">
+          ${escapeHTML(employeeName(member))} — ${escapeHTML(getEmployeeRole(member))}
+        </option>
+      `).join("");
+  }
+
+  // Create one monthly salary record per employee.
+  $("salary-form").addEventListener("submit", async event => {
+    event.preventDefault();
+    if (!authorizedUid) return;
+
+    const uid = $("salary-employee").value;
+    const month = $("salary-month").value;
+    const basicSalary = Number($("salary-amount").value);
+    const member = staffMembers.find(item => item.id === uid);
+    const button = $("save-salary-btn");
+
+    if (!member || !isActive(member)) {
+      setMessage("salary-message", "Choose an active employee or driver.", "error");
+      return;
+    }
+    if (!/^\d{4}-\d{2}$/.test(month) || !Number.isFinite(basicSalary) || basicSalary <= 0) {
+      setMessage("salary-message", "Enter a valid month and salary amount greater than zero.", "error");
+      return;
+    }
+
+    const salaryId = `${uid}_${month}`;
+    const salaryRef = doc(db, "staffSalaries", salaryId);
+
+    button.disabled = true;
+    button.textContent = "Saving...";
+
+    try {
+      const existing = await getDoc(salaryRef);
+      if (existing.exists()) {
+        setMessage("salary-message", "A salary record already exists for this employee and month. Use Edit Salary in the records table to change it.", "error");
+        return;
+      }
+
+      await setDoc(salaryRef, {
+        employeeUid: uid,
+        employeeName: employeeName(member),
+        employeeEmail: member.email || "",
+        employeeRole: getEmployeeRole(member),
+        month,
+        basicSalary,
+        paidAmount: 0,
+        payments: [],
+        status: "unpaid",
+        createdBy: authorizedUid,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+
+      $("salary-form").reset();
+      setMessage("salary-message", "Monthly salary record saved successfully.", "success");
+      await loadSalaries();
+    } catch (error) {
+      console.error("Save salary failed:", error);
+      setMessage("salary-message", "Could not save salary: " + error.message, "error");
+    } finally {
+      button.disabled = false;
+      button.textContent = "Save Monthly Salary";
+    }
+  });
+
+  async function loadSalaries() {
+    if (!authorizedUid) return;
+
+    $("salary-list").innerHTML = '<tr><td colspan="8" class="empty">Loading salary records...</td></tr>';
+
+    try {
+      const snapshot = await getDocs(collection(db, "staffSalaries"));
+      salaryRecords = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+      renderSalaries();
+    } catch (error) {
+      console.error("Load salaries failed:", error);
+      $("salary-list").innerHTML = `<tr><td colspan="8" class="empty">${escapeHTML(error.message)}</td></tr>`;
+      $("salary-total").textContent = money(0);
+      $("salary-paid").textContent = money(0);
+      $("salary-balance").textContent = money(0);
+    }
+  }
+
+  function renderSalaries() {
+    const search = normal($("salary-search").value);
+    const monthFilter = $("salary-filter-month").value;
+    const statusFilter = $("salary-filter-status").value;
+
+    const filtered = salaryRecords.filter(record => {
+      const matchesSearch = `${record.employeeName || ""} ${record.employeeEmail || ""}`
+        .toLowerCase().includes(search);
+      const matchesMonth = !monthFilter || record.month === monthFilter;
+      const matchesStatus = !statusFilter || salaryStatus(record) === statusFilter;
+      return matchesSearch && matchesMonth && matchesStatus;
+    }).sort((a, b) => String(b.month || "").localeCompare(String(a.month || "")));
+
+    const total = filtered.reduce((sum, item) => sum + Number(item.basicSalary || 0), 0);
+    const paid = filtered.reduce((sum, item) => sum + Number(item.paidAmount || 0), 0);
+    const balance = filtered.reduce((sum, item) =>
+      sum + Math.max(0, Number(item.basicSalary || 0) - Number(item.paidAmount || 0)), 0);
+
+    $("salary-total").textContent = money(total);
+    $("salary-paid").textContent = money(paid);
+    $("salary-balance").textContent = money(balance);
+
+    if (!filtered.length) {
+      $("salary-list").innerHTML = '<tr><td colspan="8" class="empty">No salary records found for these filters.</td></tr>';
+      return;
+    }
+
+    $("salary-list").innerHTML = filtered.map(record => {
+      const salary = Number(record.basicSalary || 0);
+      const paidAmount = Number(record.paidAmount || 0);
+      const remaining = Math.max(0, salary - paidAmount);
+      const status = salaryStatus(record);
+
+      return `
+        <tr>
+          <td>${escapeHTML(record.employeeName || "Employee")}<br>
+            <span class="help-text">${escapeHTML(record.employeeEmail || "")}</span>
+          </td>
+          <td>${escapeHTML(record.employeeRole || "—")}</td>
+          <td>${escapeHTML(record.month || "—")}</td>
+          <td>${money(salary)}</td>
+          <td>${money(paidAmount)}</td>
+          <td>${money(remaining)}</td>
+          <td>${statusPill(status)}</td>
+          <td>
+            <button class="small-btn secondary" data-salary-action="edit"
+              data-id="${escapeHTML(record.id)}">Edit salary</button>
+            ${remaining > 0 ? `
+              <button class="small-btn primary" data-salary-action="pay"
+                data-id="${escapeHTML(record.id)}">Record payment</button>
+            ` : ""}
+            <button class="small-btn secondary" data-salary-action="history"
+              data-id="${escapeHTML(record.id)}">History</button>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  $("salary-list").addEventListener("click", async event => {
+    const button = event.target.closest("button[data-salary-action]");
+    if (!button || !authorizedUid) return;
+
+    const record = salaryRecords.find(item => item.id === button.dataset.id);
+    if (!record) return;
+
+    const action = button.dataset.salaryAction;
+    const salaryRef = doc(db, "staffSalaries", record.id);
+
+    try {
+      if (action === "edit") {
+        const newAmountText = prompt(
+          `Enter the new monthly salary in SAR for ${record.employeeName} (${record.month}):`,
+          String(record.basicSalary)
+        );
+        if (newAmountText === null) return;
+
+        const newAmount = Number(newAmountText);
+        if (!Number.isFinite(newAmount) || newAmount <= 0) {
+          alert("Enter a valid salary amount greater than zero.");
+          return;
+        }
+        if (newAmount < Number(record.paidAmount || 0)) {
+          alert("The new salary cannot be less than the amount already paid.");
+          return;
+        }
+
+        await updateDoc(salaryRef, {
+          basicSalary: newAmount,
+          updatedBy: authorizedUid,
+          updatedAt: serverTimestamp()
+        });
+      }
+
+      if (action === "pay") {
+        const remaining = Math.max(
+          0,
+          Number(record.basicSalary || 0) - Number(record.paidAmount || 0)
+        );
+        const paymentText = prompt(
+          `Remaining balance: ${money(remaining)}\nEnter payment amount in SAR:`
+        );
+        if (paymentText === null) return;
+
+        const paymentAmount = Number(paymentText);
+        if (!Number.isFinite(paymentAmount) || paymentAmount <= 0 || paymentAmount > remaining) {
+          alert(`Enter an amount greater than zero and no more than ${money(remaining)}.`);
+          return;
+        }
+
+        const payment = {
+          amount: paymentAmount,
+          paidAt: new Date().toISOString(),
+          recordedBy: authorizedUid
+        };
+
+        await updateDoc(salaryRef, {
+          paidAmount: increment(paymentAmount),
+          payments: arrayUnion(payment),
+          updatedBy: authorizedUid,
+          updatedAt: serverTimestamp()
+        });
+      }
+
+      if (action === "history") {
+        const payments = Array.isArray(record.payments) ? record.payments : [];
+        if (!payments.length) {
+          alert("No payments have been recorded for this salary.");
+        } else {
+          const lines = payments.map((payment, index) =>
+            `${index + 1}. ${money(payment.amount)} — ${payment.paidAt || "Date not available"}`
+          );
+          alert(`Payment history for ${record.employeeName} (${record.month})\n\n${lines.join("\n")}`);
+        }
+        return;
+      }
+
+      await loadSalaries();
+    } catch (error) {
+      console.error("Salary action failed:", error);
+      alert("Could not update salary record: " + error.message);
+    }
+  });
+
+  $("salary-search").addEventListener("input", renderSalaries);
+  $("salary-filter-month").addEventListener("change", renderSalaries);
+  $("salary-filter-status").addEventListener("change", renderSalaries);
+  $("refresh-salaries").addEventListener("click", loadSalaries);
+
+  // Default salary month to the current local month.
+  const now = new Date();
+  $("salary-month").value =
+    `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+</script>
+
+</body>
+</html>
