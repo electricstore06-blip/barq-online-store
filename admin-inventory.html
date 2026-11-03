@@ -1,0 +1,958 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BARQ | Inventory Management</title>
+  <meta name="theme-color" content="#111111">
+
+  <style>
+    :root {
+      --ink: #201d19;
+      --gold: #c5a267;
+      --cream: #f7f3ec;
+      --panel: #fffdfa;
+      --muted: #777166;
+      --line: #e9e1d5;
+      --green: #238454;
+      --red: #c94747;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    [hidden] { display: none !important; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .layout {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 235px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      background: #171613;
+      color: #fff;
+      padding: 24px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .brand {
+      padding: 0 12px 22px;
+      border-bottom: 1px solid #37332b;
+    }
+
+    .brand strong {
+      font-family: Georgia, serif;
+      font-size: 28px;
+      letter-spacing: 4px;
+    }
+
+    .brand small {
+      display: block;
+      color: #c9b184;
+      font-size: 10px;
+      letter-spacing: 3px;
+      margin-left: 39px;
+    }
+
+    .nav { display: grid; gap: 5px; }
+
+    .nav a {
+      padding: 13px 12px;
+      border-radius: 9px;
+      font-size: 13px;
+      display: flex;
+      gap: 11px;
+      align-items: center;
+      color: white;
+      text-decoration: none;
+    }
+
+    .nav a:hover, .nav a.active {
+      background: #423727;
+      color: #f1d6a1;
+    }
+
+    .nav .symbol {
+      width: 20px;
+      text-align: center;
+      font-size: 17px;
+    }
+
+    .sidebar-note {
+      margin-top: auto;
+      padding: 17px;
+      border: 1px solid #675237;
+      border-radius: 12px;
+      color: #e9d6b2;
+      font-family: Georgia, serif;
+      line-height: 1.6;
+    }
+
+    .sidebar-note small {
+      display: block;
+      color: #d4cbbd;
+      font: 12px Arial;
+      margin-top: 8px;
+    }
+
+    main { min-width: 0; }
+
+    .topbar {
+      min-height: 75px;
+      background: #fffdfa;
+      border-bottom: 1px solid var(--line);
+      padding: 15px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .admin-user {
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .content {
+      padding: 25px;
+      max-width: 1800px;
+      margin: auto;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      font: bold 28px Georgia, serif;
+      margin-bottom: 7px;
+    }
+
+    h2 {
+      font: bold 19px Georgia, serif;
+      margin-bottom: 18px;
+    }
+
+    h3 { font-size: 14px; }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .welcome {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .metrics {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 19px;
+      min-width: 0;
+      box-shadow: 0 3px 12px #32240a05;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .metric-value {
+      font: bold 26px Georgia, serif;
+      margin: 12px 0 7px;
+      overflow-wrap: anywhere;
+    }
+
+    .green { color: var(--green); }
+    .red { color: var(--red); }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .section-head h3 { margin-bottom: 0; }
+
+    .primary-link {
+      display: inline-block;
+      background: #211e19;
+      color: white;
+      border: 0;
+      border-radius: 8px;
+      padding: 11px 15px;
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    .primary-link:hover { background: #493a25; }
+
+    button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .form-group {
+      margin: 15px 0;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+
+    .form-group input,
+    .form-group select {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+      color: var(--ink);
+    }
+
+    #adjust-product-results button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 11px 12px;
+      border: 0;
+      border-bottom: 1px solid #eee;
+      background: white;
+      cursor: pointer;
+    }
+
+    #adjust-product-results button:hover {
+      background: #faf4e9;
+    }
+
+    .selected-product {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--green);
+    }
+
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 12px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 13px 10px;
+      border-bottom: 1px solid var(--line);
+      white-space: nowrap;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .pill {
+      font-size: 10px;
+      padding: 5px 8px;
+      border-radius: 20px;
+      background: #f0e8db;
+      white-space: nowrap;
+    }
+
+    .pill.green { background: #e0f2e6; }
+    .pill.red { background: #fae6e3; }
+
+    .empty {
+      text-align: center;
+      padding: 25px;
+      color: var(--muted);
+    }
+
+    .message {
+      font-size: 13px;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+
+    #access-check {
+      max-width: 500px;
+      margin: 100px auto;
+      text-align: center;
+      padding: 25px;
+    }
+
+    #access-message {
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .footer-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 18px;
+      line-height: 1.6;
+    }
+
+    @media(max-width: 1150px) {
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media(max-width: 720px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { padding: 12px; gap: 10px; }
+      .brand { padding: 5px 8px 12px; }
+      .brand strong { font-size: 23px; }
+      .brand small { margin-left: 32px; }
+      .nav { display: flex; overflow-x: auto; }
+      .nav a { white-space: nowrap; padding: 10px; }
+      .nav .symbol { width: auto; }
+      .sidebar-note { display: none; }
+      .topbar { padding: 12px; }
+      .content { padding: 13px; }
+      .welcome { align-items: flex-start; flex-direction: column; }
+      .metrics { gap: 9px; }
+      .card { padding: 14px; }
+      .metric-value { font-size: 22px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<section id="access-check" class="card" role="status">
+  <h1>⚡ BARQ Admin</h1>
+  <p id="access-message">Checking your administrator permissions...</p>
+  <a class="primary-link" href="index.html">Return to Store</a>
+</section>
+
+<div id="admin-content" class="layout" hidden>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <strong>⚡ BARQ</strong>
+      <small>ONLINE STORE</small>
+    </div>
+
+    <nav class="nav" aria-label="Admin navigation">
+      <a href="admin-dashboard.html" target="_blank" rel="noopener">
+        <span class="symbol">⌂</span>Dashboard
+      </a>
+      <a href="admin-orders.html" target="_blank" rel="noopener">
+        <span class="symbol">▣</span>Orders
+      </a>
+      <a class="active" href="admin-inventory.html">
+        <span class="symbol">▤</span>Inventory Management
+      </a>
+      <a href="admin-reviews.html" target="_blank" rel="noopener">
+        <span class="symbol">☆</span>Customer Reviews
+      </a>
+      <a href="admin-products.html" target="_blank" rel="noopener">
+        <span class="symbol">◇</span>Manage Products
+      </a>
+    </nav>
+
+    <div class="sidebar-note">
+      BARQ<br>
+      Beauty in Every Order
+      <small>Premium cosmetics, skincare and more.</small>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <strong>Inventory Management</strong>
+      <div class="admin-user">
+        ⚡ BARQ <span style="color:#777">· Administrator</span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <div class="welcome">
+        <div>
+          <h1>Inventory Management</h1>
+          <p class="subtitle">Monitor product quantities and stock levels.</p>
+        </div>
+
+        <button type="button" id="refresh-inventory" class="primary-link">
+          Refresh Inventory
+        </button>
+      </div>
+
+      <div class="grid metrics">
+        <div class="card">
+          <div class="metric-label">Total Products</div>
+          <div class="metric-value" id="inventory-total-products">—</div>
+        </div>
+
+        <div class="card">
+          <div class="metric-label">Total Stock Units</div>
+          <div class="metric-value" id="inventory-total-units">—</div>
+        </div>
+
+        <div class="card">
+          <div class="metric-label">Low Stock (1–5)</div>
+          <div class="metric-value" id="inventory-low-stock">—</div>
+        </div>
+
+        <div class="card">
+          <div class="metric-label">Out of Stock</div>
+          <div class="metric-value" id="inventory-out-stock">—</div>
+        </div>
+      </div>
+
+      <section class="card">
+        <h2>Manual Stock Adjustment</h2>
+        <p class="subtitle">Add, remove, or set a product's stock quantity.</p>
+
+        <form id="stock-adjustment-form">
+
+          <div class="form-group">
+            <label for="adjust-product-search">Search Product</label>
+
+            <input
+              type="text"
+              id="adjust-product-search"
+              placeholder="Type a product name..."
+              autocomplete="off"
+              required
+            >
+
+            <div
+              id="adjust-product-results"
+              style="display:none;border:1px solid #ddd;border-radius:8px;margin-top:6px;max-height:220px;overflow-y:auto;background:#fff;"
+            ></div>
+
+            <p id="adjust-product-selected" class="selected-product"></p>
+
+            <select id="adjust-product" required hidden>
+              <option value="">Select a product</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="adjust-type">Adjustment Type</label>
+            <select id="adjust-type" required>
+              <option value="add">Add Stock</option>
+              <option value="remove">Remove Stock</option>
+              <option value="set">Set Exact Stock</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="adjust-quantity">Quantity</label>
+            <input
+              type="number"
+              id="adjust-quantity"
+              min="0"
+              step="1"
+              required
+              placeholder="Enter quantity"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="adjust-reason">Reason</label>
+            <input
+              type="text"
+              id="adjust-reason"
+              maxlength="300"
+              required
+              placeholder="e.g. New delivery or damaged items"
+            >
+          </div>
+
+          <button type="submit" id="save-stock-adjustment" class="primary-link">
+            Save Stock Adjustment
+          </button>
+        </form>
+
+        <p id="stock-adjustment-message" class="message" role="status" aria-live="polite"></p>
+      </section>
+
+      <div style="height:18px"></div>
+
+      <section class="card">
+        <div class="section-head">
+          <div>
+            <h2>Product Stock</h2>
+            <p class="subtitle">Current stock levels for active products.</p>
+          </div>
+        </div>
+
+        <p id="inventory-message" class="message" role="status" aria-live="polite">
+          Loading inventory...
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Visibility</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-list">
+              <tr>
+                <td colspan="5" class="empty">Loading inventory...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <p class="footer-note">
+        Stock adjustments are recorded in Firebase. Each successful adjustment
+        stores the previous quantity, new quantity, reason, and administrator ID.
+      </p>
+
+    </div>
+  </main>
+</div>
+
+<script type="module">
+  import { auth, db } from "./firebase-config.js";
+
+  import {
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  import {
+    doc,
+    getDoc,
+    collection,
+    getDocs,
+    serverTimestamp,
+    runTransaction
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const $ = id => document.getElementById(id);
+
+  let allProducts = [];
+  let products = [];
+  let authorizedUid = null;
+
+  function safeText(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[character]);
+  }
+
+  function getProductName(product) {
+    return product.name || product.title || "Unnamed product";
+  }
+
+  function getStock(product) {
+    const value = Number(product.stock ?? 0);
+    return Number.isSafeInteger(value) && value >= 0 ? value : 0;
+  }
+
+  function renderInventory() {
+    const container = $("inventory-list");
+    const selector = $("adjust-product");
+
+    const activeProducts = allProducts.filter(
+      product => product.active !== false
+    );
+
+    const totalUnits = activeProducts.reduce(
+      (sum, product) => sum + getStock(product), 0
+    );
+
+    const lowStock = activeProducts.filter(product => {
+      const stock = getStock(product);
+      return stock >= 1 && stock <= 5;
+    }).length;
+
+    const outOfStock = activeProducts.filter(
+      product => getStock(product) === 0
+    ).length;
+
+    $("inventory-total-products").textContent = activeProducts.length;
+    $("inventory-total-units").textContent = totalUnits;
+    $("inventory-low-stock").textContent = lowStock;
+    $("inventory-out-stock").textContent = outOfStock;
+
+    const previousSelection = selector.value;
+
+    selector.innerHTML =
+      '<option value="">Select a product</option>' +
+      activeProducts.map(product => `
+        <option value="${safeText(product.id)}">
+          ${safeText(getProductName(product))}
+        </option>
+      `).join("");
+
+    if (activeProducts.some(product => product.id === previousSelection)) {
+      selector.value = previousSelection;
+    }
+
+    if (!activeProducts.length) {
+      container.innerHTML =
+        '<tr><td colspan="5" class="empty">No active products found.</td></tr>';
+      return;
+    }
+
+    container.innerHTML = activeProducts.map(product => {
+      const stock = getStock(product);
+
+      const status = stock === 0
+        ? "Out of Stock"
+        : stock <= 5
+          ? "Low Stock"
+          : "In Stock";
+
+      const statusClass = stock === 0
+        ? "red"
+        : stock <= 5
+          ? ""
+          : "green";
+
+      return `
+        <tr>
+          <td>${safeText(getProductName(product))}</td>
+          <td>${safeText(product.category || "—")}</td>
+          <td>${stock}</td>
+          <td><span class="pill ${statusClass}">${status}</span></td>
+          <td>Visible</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function setupStockProductSearch() {
+    const searchInput = $("adjust-product-search");
+    const results = $("adjust-product-results");
+    const selector = $("adjust-product");
+    const selectedMessage = $("adjust-product-selected");
+
+    function showResults() {
+      const search = searchInput.value.trim().toLowerCase();
+
+      const matchingProducts = allProducts.filter(product =>
+        product.active !== false &&
+        getProductName(product).toLowerCase().includes(search)
+      );
+
+      if (!matchingProducts.length) {
+        results.innerHTML =
+          '<div style="padding:12px;">No matching products found.</div>';
+        results.style.display = "block";
+        return;
+      }
+
+      results.innerHTML = matchingProducts.map(product => `
+        <button
+          type="button"
+          data-product-id="${safeText(product.id)}"
+        >
+          ${safeText(getProductName(product))}
+        </button>
+      `).join("");
+
+      results.style.display = "block";
+    }
+
+    searchInput.addEventListener("input", () => {
+      selector.value = "";
+      selectedMessage.textContent = "";
+      showResults();
+    });
+
+    results.addEventListener("click", event => {
+      const button = event.target.closest("[data-product-id]");
+      if (!button) return;
+
+      const productId = button.dataset.productId;
+      const product = allProducts.find(item => item.id === productId);
+
+      if (!product) return;
+
+      selector.value = productId;
+      searchInput.value = getProductName(product);
+      results.style.display = "none";
+
+      selectedMessage.textContent =
+        "Selected: " + getProductName(product);
+    });
+
+    searchInput.addEventListener("focus", showResults);
+
+    document.addEventListener("click", event => {
+      if (
+        !searchInput.contains(event.target) &&
+        !results.contains(event.target)
+      ) {
+        results.style.display = "none";
+      }
+    });
+  }
+
+  async function loadInventory() {
+    $("inventory-message").textContent = "Loading inventory...";
+
+    const snapshot = await getDocs(collection(db, "products"));
+
+    allProducts = snapshot.docs.map(item => ({
+      id: item.id,
+      ...item.data()
+    }));
+
+    products = allProducts.filter(product => product.active !== false);
+
+    renderInventory();
+
+    $("inventory-message").textContent =
+      "Inventory loaded successfully. " + products.length + " active products found.";
+  }
+
+  onAuthStateChanged(auth, async user => {
+    const access = $("access-check");
+    const content = $("admin-content");
+    const message = $("access-message");
+
+    if (!user) {
+      authorizedUid = null;
+      content.hidden = true;
+      access.hidden = false;
+      message.textContent =
+        "Please log in with your administrator account to access inventory.";
+      return;
+    }
+
+    try {
+      message.textContent = "Checking administrator permissions...";
+
+      const adminSnapshot = await getDoc(doc(db, "admins", user.uid));
+
+      if (
+        !adminSnapshot.exists() ||
+        adminSnapshot.data().role !== "admin"
+      ) {
+        authorizedUid = null;
+        content.hidden = true;
+        access.hidden = false;
+        message.textContent =
+          "Access denied. This account is not an authorized administrator.";
+        return;
+      }
+
+      authorizedUid = user.uid;
+      access.hidden = true;
+      content.hidden = false;
+
+      await loadInventory();
+      setupStockProductSearch();
+
+    } catch (error) {
+      console.error("Inventory page loading error:", error);
+      authorizedUid = null;
+      content.hidden = true;
+      access.hidden = false;
+      message.textContent =
+        "Could not verify administrator access or load inventory. Check your Firebase connection and permissions, then refresh the page.";
+    }
+  });
+
+  $("refresh-inventory").addEventListener("click", async () => {
+    const button = $("refresh-inventory");
+    const message = $("inventory-message");
+
+    if (!authorizedUid) {
+      message.textContent = "Administrator access is required.";
+      return;
+    }
+
+    button.disabled = true;
+    message.textContent = "Refreshing inventory...";
+
+    try {
+      await loadInventory();
+      message.textContent = "Inventory refreshed successfully.";
+    } catch (error) {
+      console.error("Inventory refresh error:", error);
+      message.textContent = error.message || "Could not refresh inventory.";
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  $("stock-adjustment-form").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const button = $("save-stock-adjustment");
+    const message = $("stock-adjustment-message");
+
+    if (!authorizedUid) {
+      message.textContent = "Administrator access is required.";
+      return;
+    }
+
+    const productId = $("adjust-product").value;
+    const type = $("adjust-type").value;
+    const quantity = Number($("adjust-quantity").value);
+    const reason = $("adjust-reason").value.trim();
+
+    if (!productId) {
+      message.textContent = "Please select a product from the search results.";
+      return;
+    }
+
+    if (!["add", "remove", "set"].includes(type)) {
+      message.textContent = "Please select a valid adjustment type.";
+      return;
+    }
+
+    if (!Number.isSafeInteger(quantity) || quantity < 0) {
+      message.textContent = "Enter a valid whole number of units.";
+      return;
+    }
+
+    if (type !== "set" && quantity === 0) {
+      message.textContent =
+        "Add and Remove quantities must be greater than zero.";
+      return;
+    }
+
+    if (!reason || reason.length > 300) {
+      message.textContent =
+        "Please enter a reason (maximum 300 characters).";
+      return;
+    }
+
+    const product = allProducts.find(item => item.id === productId);
+
+    if (!product) {
+      message.textContent =
+        "Product not found. Refresh inventory and try again.";
+      return;
+    }
+
+    button.disabled = true;
+    message.textContent = "Saving stock adjustment...";
+
+    try {
+      const productRef = doc(db, "products", productId);
+      const adjustmentRef = doc(collection(db, "stockAdjustments"));
+
+      let savedNewStock = null;
+
+      await runTransaction(db, async transaction => {
+        const productSnapshot = await transaction.get(productRef);
+
+        if (!productSnapshot.exists()) {
+          throw new Error("Product no longer exists.");
+        }
+
+        const productData = productSnapshot.data();
+        const previousStock = Number(productData.stock ?? 0);
+
+        if (
+          !Number.isSafeInteger(previousStock) ||
+          previousStock < 0
+        ) {
+          throw new Error("This product has an invalid stock value.");
+        }
+
+        let newStock;
+
+        if (type === "add") {
+          newStock = previousStock + quantity;
+        } else if (type === "remove") {
+          if (quantity > previousStock) {
+            throw new Error(
+              "Cannot remove more units than the available stock."
+            );
+          }
+
+          newStock = previousStock - quantity;
+        } else {
+          newStock = quantity;
+        }
+
+        if (!Number.isSafeInteger(newStock) || newStock < 0) {
+          throw new Error("The resulting stock quantity is invalid.");
+        }
+
+        transaction.update(productRef, {
+          stock: newStock,
+          updatedAt: serverTimestamp(),
+          updatedBy: authorizedUid
+        });
+
+        transaction.set(adjustmentRef, {
+          productId: productId,
+          productName: productData.name || productData.title || "Unnamed product",
+          type: type,
+          quantity: quantity,
+          previousStock: previousStock,
+          newStock: newStock,
+          reason: reason,
+          createdBy: authorizedUid,
+          createdAt: serverTimestamp()
+        });
+
+        savedNewStock = newStock;
+      });
+
+      $("stock-adjustment-form").reset();
+      $("adjust-product-selected").textContent = "";
+      $("adjust-product-results").style.display = "none";
+
+      await loadInventory();
+
+      message.textContent =
+        "Stock adjustment saved successfully. New stock: " + savedNewStock;
+      message.style.color = "#238454";
+
+    } catch (error) {
+      console.error("Stock adjustment error:", error);
+      message.textContent =
+        error.message || "Could not save stock adjustment. Please try again.";
+      message.style.color = "#c94747";
+    } finally {
+      button.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>
