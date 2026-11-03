@@ -1490,7 +1490,7 @@ function render() {
 
   renderRecentOrders();
   renderSalesChart();
-
+renderOrderStatus();
   $("last-updated").textContent =
     "Last updated: " + new Date().toLocaleString("en-SA");
 }
@@ -2126,6 +2126,61 @@ $("stock-adjustment-form").addEventListener("submit", async event => {
     button.disabled = false;
   }
 });  
+ /* ---------------- ORDER STATUS SUMMARY ---------------- */
+
+function renderOrderStatus() {
+  const container = $("status-list");
+  if (!container) return;
+
+  if (!orders.length) {
+    container.innerHTML =
+      '<div class="empty">No orders found.</div>';
+    return;
+  }
+
+  const counts = {};
+
+  orders.forEach(order => {
+    const status = String(getStatus(order) || "pending")
+      .trim()
+      .toLowerCase();
+
+    counts[status] = (counts[status] || 0) + 1;
+  });
+
+  const statusLabels = {
+    pending: "Pending",
+    processing: "Processing",
+    confirmed: "Confirmed",
+    shipped: "Shipped",
+    "out for delivery": "Out for Delivery",
+    delivered: "Delivered",
+    cancelled: "Cancelled",
+    returned: "Returned"
+  };
+
+  const sortedStatuses = Object.entries(counts)
+    .sort((a, b) => b[1] - a[1]);
+
+  container.innerHTML = sortedStatuses.map(([status, count]) => {
+    const label = statusLabels[status] ||
+      status.replace(/\b\w/g, letter => letter.toUpperCase());
+
+    const percentage = Math.round((count / orders.length) * 100);
+
+    return `
+      <div class="status-item" style="margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;gap:12px;">
+          <span>${safeText(label)}</span>
+          <strong>${count}</strong>
+        </div>
+        <div style="height:8px;background:#eeeeee;border-radius:20px;margin-top:6px;overflow:hidden;">
+          <div style="height:100%;width:${percentage}%;background:#b68a3a;border-radius:20px;"></div>
+        </div>
+      </div>
+    `;
+  }).join("");
+} 
 function renderRecentOrders() {
   const container = $("recent-orders");
   if (!container) return;
