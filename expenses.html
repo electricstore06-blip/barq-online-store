@@ -172,11 +172,10 @@ $("finance-sales").textContent=money(sales);
 $("total-expenses").textContent=money(costs);
 $("net-profit").textContent=money(sales-costs);
 }
-
 function renderExpenses(){
 const body=$("expense-list");
-body.innerHTML=expenses.length?[...expenses].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))).map(x=>`
-<tr><td>${safe(x.date)}</td><td>${safe(x.category)}</td><td>${safe(x.description)}</td><td>${money(x.amount)}</td><td><button class="delete" data-id="${safe(x.id)}">Delete</button></td></tr>`).join(""):'<tr><td colspan="5" class="empty">No expense records yet.</td></tr>';
+body.innerHTML=expenses.length?[...expenses].sort((a,b)=>String(b.expenseDate||b.date||"").localeCompare(String(a.expenseDate||a.date||""))).map(x=>`
+<tr><td>${safe(x.expenseDate||x.date)}</td><td>${safe(x.category)}</td><td>${safe(x.description)}</td><td>${money(x.amount)}</td><td><button class="delete" data-id="${safe(x.id)}">Delete</button></td></tr>`).join(""):'<tr><td colspan="5" class="empty">No expense records yet.</td></tr>';
 
 body.querySelectorAll("button").forEach(b=>b.addEventListener("click",async()=>{
 const item=expenses.find(x=>x.id===b.dataset.id);
@@ -189,11 +188,6 @@ renderAll();msg("expense-message","Expense deleted.");
 }catch(e){console.error(e);msg("expense-message","Could not delete expense. Check Firebase permissions.",true);b.disabled=false;}
 }));
 }
-
-function renderDelivery(){
-const body=$("delivery-cost-list");
-body.innerHTML=deliveryCosts.length?[...deliveryCosts].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))).map(x=>`
-<tr><td>${safe(x.date)}</td><td>${safe(x.courier)}</td><td>${safe(x.orderNumber||"—")}</td><td>${money(x.amount)}</td><td><button class="delete" data-id="${safe(x.id)}">Delete</button></td></tr>`).join(""):'<tr><td colspan="5" class="empty">No courier costs recorded yet.</td></tr>';
 
 body.querySelectorAll("button").forEach(b=>b.addEventListener("click",async()=>{
 const item=deliveryCosts.find(x=>x.id===b.dataset.id);
@@ -231,7 +225,14 @@ const category=$("expense-category").value;
 const date=$("expense-date").value;
 const description=$("expense-description").value.trim();
 if(!Number.isFinite(amount)||amount<=0||!category||!date||!description)throw new Error("Please complete all fields correctly.");
-await addDoc(collection(db,"expenses"),{amount,category,date,description,createdBy:authorizedUid,createdAt:serverTimestamp()});
+await addDoc(collection(db,"expenses"),{
+  amount,
+  category,
+  expenseDate: date,
+  description,
+  createdBy: authorizedUid,
+  createdAt: serverTimestamp()
+});
 $("expense-form").reset();
 msg("expense-message","Expense saved successfully.");
 await loadData();
