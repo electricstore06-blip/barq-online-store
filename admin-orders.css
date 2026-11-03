@@ -727,3 +727,50 @@ button:disabled {
     font-size: 18px;
   }
 }
+/* =========================================
+   BARQ ORDER SECTION BUTTONS
+========================================= */
+
+.order-sections {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 24px 0;
+}
+
+.section-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid #e5e5e5;
+  border-radius: 14px;
+  background: #fff;
+  color: #222;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.section-btn span {
+  font-size: 23px;
+}
+
+.section-btn:hover {
+  border-color: #c49a45;
+  transform: translateY(-2px);
+}
+
+.section-btn.active {
+  background: #171717;
+  color: #fff;
+  border-color: #c49a45;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 650px) {
+  .order-sections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
