@@ -220,10 +220,26 @@ function updateStatistics() {
   const count = status =>
     allOrders.filter(order => getStatus(order) === status).length;
 
+  const replacementCount = allOrders.filter(order =>
+    ["Replacement Requested", "Replacement Approved"].includes(getStatus(order))
+  ).length;
+
+  // Overview cards
   $("stat-total").textContent = allOrders.length;
   $("stat-pending").textContent = count("Pending");
   $("stat-processing").textContent = count("Processing");
   $("stat-delivered").textContent = count("Delivered");
+
+  // Section button counters
+  $("count-pending").textContent = count("Pending");
+  $("count-processing").textContent = count("Processing");
+  $("count-shipped").textContent = count("Shipped");
+  $("count-out-for-delivery").textContent = count("Out for Delivery");
+  $("count-delivered").textContent = count("Delivered");
+  $("count-delayed").textContent = count("Delivery Delayed");
+  $("count-replacement").textContent = replacementCount;
+  $("count-cancelled").textContent = count("Cancelled");
+  $("count-all").textContent = allOrders.length;
 }
 
 /* =========================================
