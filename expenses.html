@@ -18,7 +18,7 @@ h1{font-size:28px}
 .card{background:#fffdfa;border:1px solid #e8e0d4;border-radius:12px;padding:20px;margin-bottom:18px}
 .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
 .metric-label{font-size:12px;color:#777}
-.metric-value{font: bold 26px Georgia,serif;margin-top:12px}
+.metric-value{font:bold 26px Georgia,serif;margin-top:12px}
 .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:15px 0}
 label{font-size:12px}
 input,select{display:block;width:100%;padding:11px;margin-top:6px;border:1px solid #e8e0d4;border-radius:8px;background:white}
@@ -32,7 +32,13 @@ th{color:#777}
 .empty{text-align:center;padding:20px;color:#777}
 .message{font-size:12px;min-height:18px}
 #access-check{max-width:500px;margin:100px auto;text-align:center;padding:25px;background:white;border-radius:12px}
-@media(max-width:700px){main{padding:13px}header{padding:14px}.metrics{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.metric-value{font-size:23px}}
+@media(max-width:700px){
+main{padding:13px}
+header{padding:14px}
+.metrics{grid-template-columns:1fr}
+.form-grid{grid-template-columns:1fr}
+.metric-value{font-size:23px}
+}
 </style>
 </head>
 <body>
@@ -44,6 +50,7 @@ th{color:#777}
 </section>
 
 <div id="admin-content" hidden>
+
 <header>
 <strong>⚡ BARQ · Expenses &amp; Profit</strong>
 <a class="back" href="admin-dashboard.html">Back to Admin Dashboard</a>
@@ -58,10 +65,12 @@ th{color:#777}
 <div class="metric-label">Recorded Sales</div>
 <div class="metric-value" id="finance-sales">Loading...</div>
 </div>
+
 <div class="card">
 <div class="metric-label">Total Expenses</div>
 <div class="metric-value" id="total-expenses">Loading...</div>
 </div>
+
 <div class="card">
 <div class="metric-label">Net Operating Balance</div>
 <div class="metric-value" id="net-profit">Loading...</div>
@@ -70,11 +79,14 @@ th{color:#777}
 
 <section class="card">
 <h2>Add Expense</h2>
+
 <form id="expense-form">
 <div class="form-grid">
+
 <label>Expense amount (SAR)
-<input id="expense-amount" type="number" min="0.01" step="0.01" required>
+<input id="expense-amount" type="number" min="0.01" max="100000000" step="0.01" required>
 </label>
+
 <label>Category
 <select id="expense-category" required>
 <option value="">Choose category</option>
@@ -87,52 +99,90 @@ th{color:#777}
 <option value="Other">Other</option>
 </select>
 </label>
+
 <label>Expense date
 <input id="expense-date" type="date" required>
 </label>
+
 <label>Description
 <input id="expense-description" type="text" maxlength="500" required>
 </label>
+
 </div>
+
 <button id="save-expense" type="submit">+ Save Expense</button>
 <p id="expense-message" class="message"></p>
 </form>
 
 <h3>Recorded Expenses</h3>
+
 <div class="table-wrap">
 <table>
-<thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Action</th></tr></thead>
-<tbody id="expense-list"><tr><td colspan="5" class="empty">Loading...</td></tr></tbody>
+<thead>
+<tr>
+<th>Date</th>
+<th>Category</th>
+<th>Description</th>
+<th>Amount</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="expense-list">
+<tr><td colspan="5" class="empty">Loading...</td></tr>
+</tbody>
 </table>
 </div>
 </section>
 
 <section class="card">
 <h2>Courier Delivery Costs</h2>
+
 <form id="delivery-cost-form">
 <div class="form-grid">
-<label>Courier
+
+<label>Courier / Company
 <input id="delivery-courier" type="text" maxlength="100" required>
 </label>
+
 <label>Delivery cost (SAR)
-<input id="delivery-amount" type="number" min="0.01" step="0.01" required>
+<input id="delivery-amount" type="number" min="0.01" max="100000000" step="0.01" required>
 </label>
+
 <label>Delivery date
 <input id="delivery-date" type="date" required>
 </label>
-<label>Order number (optional)
-<input id="delivery-order" type="text" maxlength="100">
+
+<label>Number of deliveries
+<input id="delivery-count" type="number" min="1" max="100000" step="1" value="1" required>
 </label>
+
+<label>Notes (optional)
+<input id="delivery-order" type="text" maxlength="500" placeholder="Order number or other details">
+</label>
+
 </div>
+
 <button id="save-delivery-cost" type="submit">+ Save Courier Cost</button>
 <p id="delivery-cost-message" class="message"></p>
 </form>
 
 <h3>Courier Cost Records</h3>
+
 <div class="table-wrap">
 <table>
-<thead><tr><th>Date</th><th>Courier</th><th>Order</th><th>Cost</th><th>Action</th></tr></thead>
-<tbody id="delivery-cost-list"><tr><td colspan="5" class="empty">Loading...</td></tr></tbody>
+<thead>
+<tr>
+<th>Date</th>
+<th>Courier</th>
+<th>Deliveries</th>
+<th>Notes</th>
+<th>Cost</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="delivery-cost-list">
+<tr><td colspan="6" class="empty">Loading...</td></tr>
+</tbody>
 </table>
 </div>
 </section>
@@ -143,15 +193,40 @@ th{color:#777}
 
 <script type="module">
 import {auth,db} from "./firebase-config.js";
-import {onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 import {
-collection,getDocs,addDoc,deleteDoc,doc,getDoc,serverTimestamp
+onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+collection,
+getDocs,
+addDoc,
+deleteDoc,
+doc,
+getDoc,
+serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const $=id=>document.getElementById(id);
-const money=n=>"SAR "+(Number(n)||0).toLocaleString("en-SA",{minimumFractionDigits:2,maximumFractionDigits:2});
-const safe=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let authorizedUid=null,orders=[],expenses=[],deliveryCosts=[];
+
+const money=n=>"SAR "+(Number(n)||0).toLocaleString("en-SA",{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+});
+
+const safe=v=>String(v??"").replace(/[&<>"']/g,c=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+}[c]));
+
+let authorizedUid=null;
+let orders=[];
+let expenses=[];
+let deliveryCosts=[];
 
 function msg(id,text,error=false){
 $(id).textContent=text;
@@ -159,133 +234,347 @@ $(id).style.color=error?"#c33":"#238454";
 }
 
 function orderTotal(o){
-for(const value of [o.total,o.totalAmount,o.grandTotal,o.amount,o.finalTotal]){
-if(value!==undefined&&value!==null&&value!==""&&Number.isFinite(Number(value)))return Number(value);
+for(const value of [
+o.total,
+o.totalAmount,
+o.grandTotal,
+o.amount,
+o.finalTotal
+]){
+if(value!==undefined&&value!==null&&value!==""&&Number.isFinite(Number(value))){
+return Number(value);
+}
 }
 return 0;
 }
 
 function renderSummary(){
+
 const sales=orders.reduce((s,o)=>s+orderTotal(o),0);
-const costs=expenses.reduce((s,x)=>s+(Number(x.amount)||0),0)+deliveryCosts.reduce((s,x)=>s+(Number(x.amount)||0),0);
+
+const costs=
+expenses.reduce((s,x)=>s+(Number(x.amount)||0),0)+
+deliveryCosts.reduce((s,x)=>s+(Number(x.amount)||0),0);
+
 $("finance-sales").textContent=money(sales);
 $("total-expenses").textContent=money(costs);
 $("net-profit").textContent=money(sales-costs);
+
 }
+
 function renderExpenses(){
+
 const body=$("expense-list");
-body.innerHTML=expenses.length?[...expenses].sort((a,b)=>String(b.expenseDate||b.date||"").localeCompare(String(a.expenseDate||a.date||""))).map(x=>`
-<tr><td>${safe(x.expenseDate||x.date)}</td><td>${safe(x.category)}</td><td>${safe(x.description)}</td><td>${money(x.amount)}</td><td><button class="delete" data-id="${safe(x.id)}">Delete</button></td></tr>`).join(""):'<tr><td colspan="5" class="empty">No expense records yet.</td></tr>';
 
-body.querySelectorAll("button").forEach(b=>b.addEventListener("click",async()=>{
+body.innerHTML=expenses.length
+?[...expenses]
+.sort((a,b)=>String(b.expenseDate||b.date||"").localeCompare(String(a.expenseDate||a.date||"")))
+.map(x=>`
+<tr>
+<td>${safe(x.expenseDate||x.date)}</td>
+<td>${safe(x.category)}</td>
+<td>${safe(x.description)}</td>
+<td>${money(x.amount)}</td>
+<td><button class="delete" data-id="${safe(x.id)}">Delete</button></td>
+</tr>
+`).join("")
+:'<tr><td colspan="5" class="empty">No expense records yet.</td></tr>';
+
+body.querySelectorAll("button").forEach(b=>{
+b.addEventListener("click",async()=>{
+
 const item=expenses.find(x=>x.id===b.dataset.id);
+
 if(!item||!confirm("Delete this expense?"))return;
+
 b.disabled=true;
+
 try{
+
 await deleteDoc(doc(db,"expenses",item.id));
+
 expenses=expenses.filter(x=>x.id!==item.id);
-renderAll();msg("expense-message","Expense deleted.");
-}catch(e){console.error(e);msg("expense-message","Could not delete expense. Check Firebase permissions.",true);b.disabled=false;}
-}));
+
+renderAll();
+
+msg("expense-message","Expense deleted.");
+
+}catch(e){
+
+console.error(e);
+
+msg("expense-message","Could not delete expense. Check Firebase permissions.",true);
+
+b.disabled=false;
+
 }
 
-body.querySelectorAll("button").forEach(b=>b.addEventListener("click",async()=>{
+});
+});
+
+}
+
+function renderDelivery(){
+
+const body=$("delivery-cost-list");
+
+body.innerHTML=deliveryCosts.length
+?[...deliveryCosts]
+.sort((a,b)=>String(b.deliveryDate||b.date||"").localeCompare(String(a.deliveryDate||a.date||"")))
+.map(x=>`
+<tr>
+<td>${safe(x.deliveryDate||x.date)}</td>
+<td>${safe(x.company||x.courier)}</td>
+<td>${safe(x.deliveryCount??"—")}</td>
+<td>${safe(x.notes||x.orderNumber||"—")}</td>
+<td>${money(x.amount)}</td>
+<td><button class="delete" data-id="${safe(x.id)}">Delete</button></td>
+</tr>
+`).join("")
+:'<tr><td colspan="6" class="empty">No courier costs recorded yet.</td></tr>';
+
+body.querySelectorAll("button").forEach(b=>{
+b.addEventListener("click",async()=>{
+
 const item=deliveryCosts.find(x=>x.id===b.dataset.id);
+
 if(!item||!confirm("Delete this courier cost?"))return;
+
 b.disabled=true;
+
 try{
+
 await deleteDoc(doc(db,"deliveryCosts",item.id));
+
 deliveryCosts=deliveryCosts.filter(x=>x.id!==item.id);
-renderAll();msg("delivery-cost-message","Courier cost deleted.");
-}catch(e){console.error(e);msg("delivery-cost-message","Could not delete courier cost. Check Firebase permissions.",true);b.disabled=false;}
-}));
+
+renderAll();
+
+msg("delivery-cost-message","Courier cost deleted.");
+
+}catch(e){
+
+console.error(e);
+
+msg("delivery-cost-message","Could not delete courier cost. Check Firebase permissions.",true);
+
+b.disabled=false;
+
 }
 
-function renderAll(){renderExpenses();renderDelivery();renderSummary();}
+});
+});
+
+}
+
+function renderAll(){
+renderExpenses();
+renderDelivery();
+renderSummary();
+}
 
 async function loadData(){
+
 const [o,e,d]=await Promise.all([
 getDocs(collection(db,"orders")),
 getDocs(collection(db,"expenses")),
 getDocs(collection(db,"deliveryCosts"))
 ]);
+
 orders=o.docs.map(x=>({id:x.id,...x.data()}));
 expenses=e.docs.map(x=>({id:x.id,...x.data()}));
 deliveryCosts=d.docs.map(x=>({id:x.id,...x.data()}));
+
 renderAll();
+
 }
 
+// SAVE EXPENSE
+
 $("expense-form").addEventListener("submit",async event=>{
+
 event.preventDefault();
-if(!authorizedUid)return msg("expense-message","Admin access required.",true);
-const button=$("save-expense");button.disabled=true;
+
+if(!authorizedUid){
+return msg("expense-message","Admin access required.",true);
+}
+
+const button=$("save-expense");
+button.disabled=true;
+
 try{
+
 const amount=Number($("expense-amount").value);
 const category=$("expense-category").value;
 const date=$("expense-date").value;
 const description=$("expense-description").value.trim();
-if(!Number.isFinite(amount)||amount<=0||!category||!date||!description)throw new Error("Please complete all fields correctly.");
+
+if(
+!Number.isFinite(amount)||
+amount<=0||
+amount>100000000||
+!category||
+category.length>60||
+!date||
+!description||
+description.length>500
+){
+throw new Error("Please complete all expense fields correctly.");
+}
+
 await addDoc(collection(db,"expenses"),{
-  amount,
-  category,
-  expenseDate: date,
-  description,
-  createdBy: authorizedUid,
-  createdAt: serverTimestamp()
+amount,
+category,
+expenseDate:date,
+description,
+createdBy:authorizedUid,
+createdAt:serverTimestamp()
 });
+
 $("expense-form").reset();
+
 msg("expense-message","Expense saved successfully.");
+
 await loadData();
-}catch(e){console.error(e);msg("expense-message",e.message||"Could not save expense. Check Firebase permissions.",true);}
-finally{button.disabled=false;}
+
+}catch(e){
+
+console.error(e);
+
+msg("expense-message",e.message||"Could not save expense. Check Firebase permissions.",true);
+
+}finally{
+
+button.disabled=false;
+
+}
+
 });
+
+// SAVE COURIER COST
 
 $("delivery-cost-form").addEventListener("submit",async event=>{
+
 event.preventDefault();
-if(!authorizedUid)return msg("delivery-cost-message","Admin access required.",true);
-const button=$("save-delivery-cost");button.disabled=true;
+
+if(!authorizedUid){
+return msg("delivery-cost-message","Admin access required.",true);
+}
+
+const button=$("save-delivery-cost");
+button.disabled=true;
+
 try{
-const courier=$("delivery-courier").value.trim();
+
+const company=$("delivery-courier").value.trim();
 const amount=Number($("delivery-amount").value);
-const date=$("delivery-date").value;
-const orderNumber=$("delivery-order").value.trim();
-if(!courier||!Number.isFinite(amount)||amount<=0||!date)throw new Error("Please complete the courier fields correctly.");
-await addDoc(collection(db,"deliveryCosts"),{courier,amount,date,orderNumber,createdBy:authorizedUid,createdAt:serverTimestamp()});
-$("delivery-cost-form").reset();
-msg("delivery-cost-message","Courier cost saved successfully.");
-await loadData();
-}catch(e){console.error(e);msg("delivery-cost-message",e.message||"Could not save courier cost. Check Firebase permissions.",true);}
-finally{button.disabled=false;}
+const deliveryDate=$("delivery-date").value;
+const deliveryCount=Number($("delivery-count").value);
+const notes=$("delivery-order").value.trim();
+
+if(
+!company||
+company.length>100||
+!Number.isFinite(amount)||
+amount<=0||
+amount>100000000||
+!deliveryDate||
+!Number.isInteger(deliveryCount)||
+deliveryCount<1||
+deliveryCount>100000||
+notes.length>500
+){
+throw new Error("Please complete the courier fields correctly.");
+}
+
+await addDoc(collection(db,"deliveryCosts"),{
+company,
+amount,
+deliveryDate,
+deliveryCount,
+notes,
+createdBy:authorizedUid,
+createdAt:serverTimestamp()
 });
 
+$("delivery-cost-form").reset();
+
+$("delivery-count").value="1";
+
+msg("delivery-cost-message","Courier cost saved successfully.");
+
+await loadData();
+
+}catch(e){
+
+console.error(e);
+
+msg("delivery-cost-message",e.message||"Could not save courier cost. Check Firebase permissions.",true);
+
+}finally{
+
+button.disabled=false;
+
+}
+
+});
+
+// CHECK ADMIN ACCESS
+
 onAuthStateChanged(auth,async user=>{
+
 if(!user){
+
 authorizedUid=null;
+
 $("admin-content").hidden=true;
 $("access-check").hidden=false;
+
 $("access-message").textContent="Please log in with your administrator account.";
+
 return;
+
 }
+
 try{
+
 const admin=await getDoc(doc(db,"admins",user.uid));
+
 if(!admin.exists()||admin.data().role!=="admin"){
+
 authorizedUid=null;
+
 $("admin-content").hidden=true;
 $("access-check").hidden=false;
+
 $("access-message").textContent="Access denied. This account is not an authorized administrator.";
+
 return;
+
 }
+
 authorizedUid=user.uid;
+
 $("access-check").hidden=true;
 $("admin-content").hidden=false;
+
 await loadData();
+
 }catch(e){
+
 console.error(e);
+
+authorizedUid=null;
+
 $("admin-content").hidden=true;
 $("access-check").hidden=false;
+
 $("access-message").textContent="Could not verify administrator access or load records. Check Firebase permissions and refresh.";
+
 }
+
 });
+
 </script>
 </body>
 </html>
