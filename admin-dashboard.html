@@ -1376,6 +1376,7 @@ $("staff-form").addEventListener("submit", async event => {
   }
 });
  /* ---------------- INVENTORY MANAGEMENT ---------------- */
+/* ---------------- INVENTORY MANAGEMENT ---------------- */
 
 function renderInventory() {
   const container = $("inventory-list");
@@ -1405,10 +1406,15 @@ function renderInventory() {
     product => getStock(product) === 0
   ).length;
 
-  $("inventory-total-products").textContent = activeProducts.length;
-  $("inventory-total-units").textContent = totalUnits;
-  $("inventory-low-stock").textContent = lowStock;
-  $("inventory-out-stock").textContent = outOfStock;
+  const totalProducts = $("inventory-total-products");
+  const unitsElement = $("inventory-total-units");
+  const lowElement = $("inventory-low-stock");
+  const outElement = $("inventory-out-stock");
+
+  if (totalProducts) totalProducts.textContent = activeProducts.length;
+  if (unitsElement) unitsElement.textContent = totalUnits;
+  if (lowElement) lowElement.textContent = lowStock;
+  if (outElement) outElement.textContent = outOfStock;
 
   if (selector) {
     const previousSelection = selector.value;
@@ -1453,11 +1459,13 @@ function renderInventory() {
         <td>${safeText(product.category || "—")}</td>
         <td>${stock}</td>
         <td><span class="pill ${statusClass}">${status}</span></td>
-        <td>${product.active === false ? "Hidden" : "Visible"}</td>
+        <td>Visible</td>
       </tr>
     `;
   }).join("");
-} 
+}
+
+
 /* ---------------- DASHBOARD DATA ---------------- */
 
 function render() {
