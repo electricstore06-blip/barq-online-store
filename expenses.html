@@ -1,0 +1,977 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BARQ | Expenses & Profit</title>
+<meta name="theme-color" content="#111111">
+
+<style>
+:root {
+  --ink:#201d19;
+  --gold:#c5a267;
+  --cream:#f7f3ec;
+  --panel:#fffdfa;
+  --muted:#777166;
+  --line:#e9e1d5;
+  --green:#238454;
+  --red:#c94747;
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:Inter,Arial,sans-serif;
+}
+
+[hidden] { display:none!important; }
+
+button,input,select { font:inherit; }
+button { cursor:pointer; }
+a { color:inherit;text-decoration:none; }
+
+.layout {
+  min-height:100vh;
+  display:block;
+}
+
+main {
+  min-width:0;
+  max-width:1500px;
+  margin:0 auto;
+}
+
+.topbar {
+  min-height:75px;
+  background:#fffdfa;
+  border-bottom:1px solid var(--line);
+  padding:15px 25px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+
+.content {
+  padding:25px;
+  max-width:1400px;
+  margin:auto;
+}
+
+h1,h2,h3,p { margin-top:0; }
+
+h1 {
+  font:bold 28px Georgia,serif;
+  margin-bottom:7px;
+}
+
+h2 {
+  font:bold 19px Georgia,serif;
+  margin-bottom:18px;
+}
+
+h3 { font-size:14px; }
+
+.subtitle {
+  font-size:13px;
+  color:var(--muted);
+}
+
+.grid { display:grid;gap:14px; }
+
+.metrics {
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  margin-bottom:16px;
+}
+
+.card {
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:19px;
+  min-width:0;
+  box-shadow:0 3px 12px #32240a05;
+}
+
+.metric-label {
+  color:var(--muted);
+  font-size:12px;
+}
+
+.metric-value {
+  font:bold 26px Georgia,serif;
+  margin:12px 0 7px;
+  overflow-wrap:anywhere;
+}
+
+.metric-note {
+  font-size:11px;
+  color:var(--muted);
+}
+
+.form-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  margin:15px 0;
+}
+
+label {
+  display:block;
+  font-size:12px;
+}
+
+input,select {
+  display:block;
+  width:100%;
+  padding:11px;
+  margin-top:6px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#fff;
+  color:var(--ink);
+}
+
+.primary {
+  display:inline-block;
+  background:#211e19;
+  color:#fff;
+  border:0;
+  border-radius:8px;
+  padding:11px 15px;
+  font-size:12px;
+}
+
+.primary:hover { background:#493a25; }
+
+.table-wrap { overflow-x:auto; }
+
+table {
+  border-collapse:collapse;
+  width:100%;
+  font-size:12px;
+}
+
+th,td {
+  text-align:left;
+  padding:13px 10px;
+  border-bottom:1px solid var(--line);
+  white-space:nowrap;
+}
+
+th {
+  color:var(--muted);
+  font-weight:600;
+}
+
+.empty {
+  text-align:center;
+  padding:25px;
+  color:var(--muted);
+}
+
+.notice {
+  border:1px solid #ead9b8;
+  background:#fbf4e7;
+  padding:12px;
+  border-radius:9px;
+  color:#69502d;
+  font-size:12px;
+  line-height:1.5;
+}
+
+.message {
+  font-size:12px;
+  min-height:18px;
+  margin:10px 0 0;
+}
+
+.delete {
+  padding:6px 9px;
+  border:1px solid #e8caca;
+  border-radius:6px;
+  background:#fff5f5;
+  color:#b33;
+}
+
+.section { margin-bottom:16px; }
+
+#access-check {
+  max-width:500px;
+  margin:100px auto;
+  text-align:center;
+  padding:25px;
+  background:#fffdfa;
+  border:1px solid var(--line);
+  border-radius:12px;
+}
+
+#access-message {
+  line-height:1.6;
+  color:var(--muted);
+}
+
+@media(max-width:850px) {
+  .content { padding:13px; }
+  .topbar { padding:12px; }
+  .metrics { grid-template-columns:1fr; }
+  .form-grid { grid-template-columns:1fr; }
+  .metric-value { font-size:22px; }
+}
+</style>
+</head>
+
+<body>
+
+<section id="access-check" role="status">
+  <h1>⚡ BARQ Admin</h1>
+  <p id="access-message">
+    Checking your administrator permissions...
+  </p>
+  <a class="primary" href="admin-dashboard.html">
+    Return to Admin Dashboard
+  </a>
+</section>
+
+<div id="admin-content" class="layout" hidden>
+
+  <main>
+
+    <div class="topbar">
+      <strong>
+        ⚡ BARQ
+        <span style="color:#777;font-weight:normal">
+          · Expenses &amp; Profit
+        </span>
+      </strong>
+
+      <a class="primary" href="admin-dashboard.html">
+        Back to Admin Dashboard
+      </a>
+    </div>
+
+    <div class="content">
+
+      <div class="section">
+        <h1>Expenses &amp; Profit</h1>
+        <p class="subtitle">
+          Record store expenses and courier delivery costs,
+          and review your operating balance.
+        </p>
+      </div>
+
+      <div class="grid metrics">
+
+        <div class="card">
+          <div class="metric-label">Recorded Sales</div>
+          <div class="metric-value" id="finance-sales">Loading...</div>
+          <div class="metric-note">
+            Based on all order records in Firestore
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="metric-label">Total Expenses</div>
+          <div class="metric-value" id="total-expenses">Loading...</div>
+          <div class="metric-note" id="expenses-note">
+            Including courier costs
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="metric-label">Net Operating Balance</div>
+          <div class="metric-value" id="net-profit">Loading...</div>
+          <div class="metric-note">
+            Sales minus recorded expenses; not full accounting profit
+          </div>
+        </div>
+
+      </div>
+
+      <!-- EXPENSE FORM -->
+
+      <section class="card section">
+
+        <h2>Add Expense</h2>
+
+        <form id="expense-form">
+
+          <div class="form-grid">
+
+            <label>
+              Expense amount (SAR)
+              <input
+                id="expense-amount"
+                type="number"
+                min="0.01"
+                max="100000000"
+                step="0.01"
+                required
+                placeholder="e.g. 250.00">
+            </label>
+
+            <label>
+              Category
+              <select id="expense-category" required>
+                <option value="">Choose a category</option>
+                <option value="Shipping">Shipping &amp; Delivery</option>
+                <option value="Packaging">Packaging</option>
+                <option value="Marketing">Marketing &amp; Advertising</option>
+                <option value="Inventory">Inventory &amp; Supplies</option>
+                <option value="Rent">Rent &amp; Utilities</option>
+                <option value="Salaries">Salaries &amp; Staff</option>
+                <option value="Other">Other</option>
+              </select>
+            </label>
+
+            <label>
+              Expense date
+              <input id="expense-date" type="date" required>
+            </label>
+
+            <label>
+              Description
+              <input
+                id="expense-description"
+                type="text"
+                maxlength="500"
+                placeholder="e.g. Delivery payment"
+                required>
+            </label>
+
+          </div>
+
+          <button id="save-expense" type="submit" class="primary">
+            + Save Expense
+          </button>
+
+          <p id="expense-message" class="message"
+             role="status" aria-live="polite"></p>
+
+        </form>
+
+        <h3>Recorded Expenses</h3>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody id="expense-list">
+              <tr>
+                <td colspan="5" class="empty">Loading expenses...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+      <!-- COURIER COST FORM -->
+
+      <section class="card section">
+
+        <h2>Courier Delivery Costs</h2>
+
+        <form id="delivery-cost-form">
+
+          <div class="form-grid">
+
+            <label>
+              Courier
+              <input
+                id="delivery-courier"
+                type="text"
+                maxlength="100"
+                placeholder="Courier company"
+                required>
+            </label>
+
+            <label>
+              Delivery cost (SAR)
+              <input
+                id="delivery-amount"
+                type="number"
+                min="0.01"
+                max="100000000"
+                step="0.01"
+                placeholder="e.g. 25.00"
+                required>
+            </label>
+
+            <label>
+              Delivery date
+              <input id="delivery-date" type="date" required>
+            </label>
+
+            <label>
+              Order number (optional)
+              <input
+                id="delivery-order"
+                type="text"
+                maxlength="100"
+                placeholder="Order number">
+            </label>
+
+          </div>
+
+          <button id="save-delivery-cost" type="submit" class="primary">
+            + Save Courier Cost
+          </button>
+
+          <p id="delivery-cost-message" class="message"
+             role="status" aria-live="polite"></p>
+
+        </form>
+
+        <h3>Courier Cost Records</h3>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Courier</th>
+                <th>Order</th>
+                <th>Cost</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody id="delivery-cost-list">
+              <tr>
+                <td colspan="5" class="empty">
+                  Loading courier costs...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+      <div class="notice">
+        Dashboard calculations use the orders, expenses and
+        deliveryCosts collections in Firestore. Net operating
+        balance is a simple sales-minus-recorded-expenses figure.
+        It does not include unrecorded costs, refunds or other
+        accounting adjustments.
+      </div>
+
+      <p id="page-message" class="message"
+         role="status" aria-live="polite"></p>
+
+    </div>
+  </main>
+</div>
+
+<script type="module">
+
+import { auth, db } from "./firebase-config.js";
+
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  doc,
+  getDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+const $ = id => document.getElementById(id);
+
+const money = value =>
+  "SAR " + (Number(value) || 0).toLocaleString("en-SA", {
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+  });
+
+const safeText = value =>
+  String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[character]);
+
+let authorizedUid = null;
+let orders = [];
+let expenses = [];
+let deliveryCosts = [];
+
+
+function message(id, text, error = false) {
+  const el = $(id);
+  if (!el) return;
+
+  el.textContent = text;
+  el.style.color = error ? "#c94747" : "#238454";
+}
+
+
+function orderTotal(order) {
+  for (const value of [
+    order.total,
+    order.totalAmount,
+    order.grandTotal,
+    order.amount,
+    order.finalTotal
+  ]) {
+    const n = Number(value);
+
+    if (Number.isFinite(n)) return n;
+  }
+
+  return 0;
+}
+
+
+function renderSummary() {
+
+  const sales = orders.reduce(
+    (sum, order) => sum + orderTotal(order), 0
+  );
+
+  const expenseTotal = expenses.reduce(
+    (sum, item) => sum + (Number(item.amount) || 0), 0
+  );
+
+  const courierTotal = deliveryCosts.reduce(
+    (sum, item) => sum + (Number(item.amount) || 0), 0
+  );
+
+  const totalCosts = expenseTotal + courierTotal;
+
+  $("finance-sales").textContent = money(sales);
+  $("total-expenses").textContent = money(totalCosts);
+  $("net-profit").textContent = money(sales - totalCosts);
+
+  $("expenses-note").textContent =
+    `${expenses.length} expense records + ${deliveryCosts.length} courier records`;
+}
+
+
+function renderExpenses() {
+
+  const body = $("expense-list");
+
+  if (!expenses.length) {
+
+    body.innerHTML =
+      '<tr><td colspan="5" class="empty">No expense records yet.</td></tr>';
+
+  } else {
+
+    const sorted = [...expenses].sort((a,b) =>
+      String(b.date || "").localeCompare(String(a.date || ""))
+    );
+
+    body.innerHTML = sorted.map(item => `
+      <tr>
+        <td>${safeText(item.date || "—")}</td>
+        <td>${safeText(item.category || "—")}</td>
+        <td>${safeText(item.description || "—")}</td>
+        <td>${money(item.amount)}</td>
+        <td>
+          <button type="button"
+            class="delete delete-expense"
+            data-id="${safeText(item.id)}">
+            Delete
+          </button>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  body.querySelectorAll(".delete-expense").forEach(button => {
+
+    button.addEventListener("click", async () => {
+
+      const item = expenses.find(x => x.id === button.dataset.id);
+
+      if (!item || !confirm("Delete this expense record?")) return;
+
+      button.disabled = true;
+
+      try {
+
+        await deleteDoc(doc(db, "expenses", item.id));
+
+        expenses = expenses.filter(x => x.id !== item.id);
+
+        renderAll();
+
+        message("expense-message", "Expense deleted successfully.");
+
+      } catch (error) {
+
+        console.error("Delete expense error:", error);
+
+        message(
+          "expense-message",
+          "Could not delete expense. Check Firebase permissions.",
+          true
+        );
+
+        button.disabled = false;
+      }
+    });
+  });
+}
+
+
+function renderDeliveryCosts() {
+
+  const body = $("delivery-cost-list");
+
+  if (!deliveryCosts.length) {
+
+    body.innerHTML =
+      '<tr><td colspan="5" class="empty">No courier costs recorded yet.</td></tr>';
+
+  } else {
+
+    const sorted = [...deliveryCosts].sort((a,b) =>
+      String(b.date || "").localeCompare(String(a.date || ""))
+    );
+
+    body.innerHTML = sorted.map(item => `
+      <tr>
+        <td>${safeText(item.date || "—")}</td>
+        <td>${safeText(item.courier || "—")}</td>
+        <td>${safeText(item.orderNumber || "—")}</td>
+        <td>${money(item.amount)}</td>
+        <td>
+          <button type="button"
+            class="delete delete-delivery-cost"
+            data-id="${safeText(item.id)}">
+            Delete
+          </button>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  body.querySelectorAll(".delete-delivery-cost").forEach(button => {
+
+    button.addEventListener("click", async () => {
+
+      const item = deliveryCosts.find(x => x.id === button.dataset.id);
+
+      if (!item || !confirm("Delete this courier cost record?")) return;
+
+      button.disabled = true;
+
+      try {
+
+        await deleteDoc(doc(db, "deliveryCosts", item.id));
+
+        deliveryCosts = deliveryCosts.filter(x => x.id !== item.id);
+
+        renderAll();
+
+        message(
+          "delivery-cost-message",
+          "Courier cost deleted successfully."
+        );
+
+      } catch (error) {
+
+        console.error("Delete courier cost error:", error);
+
+        message(
+          "delivery-cost-message",
+          "Could not delete courier cost. Check Firebase permissions.",
+          true
+        );
+
+        button.disabled = false;
+      }
+    });
+  });
+}
+
+
+function renderAll() {
+  renderExpenses();
+  renderDeliveryCosts();
+  renderSummary();
+}
+
+
+async function loadData() {
+
+  const [ordersSnap, expensesSnap, deliverySnap] = await Promise.all([
+
+    getDocs(collection(db, "orders")),
+
+    getDocs(collection(db, "expenses")),
+
+    getDocs(collection(db, "deliveryCosts"))
+
+  ]);
+
+  orders = ordersSnap.docs.map(item => ({
+    id:item.id,
+    ...item.data()
+  }));
+
+  expenses = expensesSnap.docs.map(item => ({
+    id:item.id,
+    ...item.data()
+  }));
+
+  deliveryCosts = deliverySnap.docs.map(item => ({
+    id:item.id,
+    ...item.data()
+  }));
+
+  renderAll();
+}
+
+
+// SAVE EXPENSE
+
+$("expense-form").addEventListener("submit", async event => {
+
+  event.preventDefault();
+
+  if (!authorizedUid) {
+    return message(
+      "expense-message",
+      "Administrator access is required.",
+      true
+    );
+  }
+
+  const button = $("save-expense");
+  button.disabled = true;
+
+  const amount = Number($("expense-amount").value);
+  const category = $("expense-category").value;
+  const date = $("expense-date").value;
+  const description = $("expense-description").value.trim();
+
+  if (
+    !Number.isFinite(amount) ||
+    amount <= 0 ||
+    !category ||
+    !date ||
+    !description
+  ) {
+
+    message(
+      "expense-message",
+      "Please complete all expense fields correctly.",
+      true
+    );
+
+    button.disabled = false;
+    return;
+  }
+
+  try {
+
+    await addDoc(collection(db, "expenses"), {
+
+      amount,
+      category,
+      date,
+      description,
+
+      createdBy: authorizedUid,
+      createdAt: serverTimestamp()
+
+    });
+
+    $("expense-form").reset();
+
+    message("expense-message", "Expense saved successfully.");
+
+    await loadData();
+
+  } catch (error) {
+
+    console.error("Save expense error:", error);
+
+    message(
+      "expense-message",
+      "Could not save expense. Check Firebase permissions.",
+      true
+    );
+
+  } finally {
+
+    button.disabled = false;
+  }
+});
+
+
+// SAVE COURIER COST
+
+$("delivery-cost-form").addEventListener("submit", async event => {
+
+  event.preventDefault();
+
+  if (!authorizedUid) {
+    return message(
+      "delivery-cost-message",
+      "Administrator access is required.",
+      true
+    );
+  }
+
+  const button = $("save-delivery-cost");
+  button.disabled = true;
+
+  const courier = $("delivery-courier").value.trim();
+  const amount = Number($("delivery-amount").value);
+  const date = $("delivery-date").value;
+  const orderNumber = $("delivery-order").value.trim();
+
+  if (
+    !courier ||
+    !date ||
+    !Number.isFinite(amount) ||
+    amount <= 0
+  ) {
+
+    message(
+      "delivery-cost-message",
+      "Please complete the courier cost fields correctly.",
+      true
+    );
+
+    button.disabled = false;
+    return;
+  }
+
+  try {
+
+    await addDoc(collection(db, "deliveryCosts"), {
+
+      courier,
+      amount,
+      date,
+      orderNumber,
+
+      createdBy: authorizedUid,
+      createdAt: serverTimestamp()
+
+    });
+
+    $("delivery-cost-form").reset();
+
+    message(
+      "delivery-cost-message",
+      "Courier cost saved successfully."
+    );
+
+    await loadData();
+
+  } catch (error) {
+
+    console.error("Save courier cost error:", error);
+
+    message(
+      "delivery-cost-message",
+      "Could not save courier cost. Check Firebase permissions.",
+      true
+    );
+
+  } finally {
+
+    button.disabled = false;
+  }
+});
+
+
+// ADMIN AUTHENTICATION
+
+onAuthStateChanged(auth, async user => {
+
+  const access = $("access-check");
+  const content = $("admin-content");
+  const accessMessage = $("access-message");
+
+  if (!user) {
+
+    authorizedUid = null;
+
+    content.hidden = true;
+    access.hidden = false;
+
+    accessMessage.textContent =
+      "Please log in with your administrator account to access this page.";
+
+    return;
+  }
+
+  try {
+
+    accessMessage.textContent =
+      "Checking administrator permissions...";
+
+    const adminSnapshot = await getDoc(
+      doc(db, "admins", user.uid)
+    );
+
+    if (
+      !adminSnapshot.exists() ||
+      adminSnapshot.data().role !== "admin"
+    ) {
+
+      authorizedUid = null;
+
+      content.hidden = true;
+      access.hidden = false;
+
+      accessMessage.textContent =
+        "Access denied. This account is not an authorized administrator.";
+
+      return;
+    }
+
+    authorizedUid = user.uid;
+
+    access.hidden = true;
+    content.hidden = false;
+
+    await loadData();
+
+  } catch (error) {
+
+    console.error("Expenses page loading error:", error);
+
+    authorizedUid = null;
+
+    content.hidden = true;
+    access.hidden = false;
+
+    accessMessage.textContent =
+      "Could not verify administrator access or load financial data. Check Firebase connection and permissions, then refresh.";
+  }
+});
+
+</script>
+
+</body>
+</html>
