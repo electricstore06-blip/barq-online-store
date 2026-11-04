@@ -482,7 +482,245 @@ th { color: var(--muted); font-weight: 600; }
   .three-col, .form-grid { grid-template-columns: 1fr; }
   .chart { gap: 5px; }
   .metric-icon { width: 32px; height: 32px; }
+} 
+
+/* =========================================
+   BARQ ADMIN — PROFESSIONAL DESIGN UPGRADE
+   Visual improvements only — preserves functionality
+========================================= */
+
+:root {
+  --barq-ink: #191919;
+  --barq-muted: #77736d;
+  --barq-gold: #b18a45;
+  --barq-cream: #f7f5f0;
+  --barq-white: #ffffff;
+  --barq-border: #eae6de;
+  --barq-shadow: 0 8px 28px rgba(35, 29, 20, 0.06);
 }
+
+body {
+  background: var(--barq-cream);
+  color: var(--barq-ink);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+.layout {
+  background: var(--barq-cream);
+}
+
+.sidebar {
+  background: #171717;
+  border-right: 1px solid #292929;
+  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.08);
+}
+
+.brand {
+  padding: 28px 22px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.brand strong {
+  color: #fff;
+  letter-spacing: 2px;
+  font-size: 25px;
+}
+
+.brand small {
+  color: #c6a66b;
+  letter-spacing: 3px;
+}
+
+.nav {
+  padding: 20px 12px;
+  gap: 7px;
+}
+
+.nav a {
+  border-radius: 10px;
+  color: #c9c7c2;
+  padding: 12px 14px;
+  transition: background .2s ease, color .2s ease;
+}
+
+.nav a:hover {
+  background: #292929;
+  color: #fff;
+}
+
+.nav a.active {
+  background: #b18a45;
+  color: #fff;
+  box-shadow: 0 5px 15px rgba(177, 138, 69, 0.2);
+}
+
+.nav .symbol {
+  opacity: .9;
+}
+
+.sidebar-note {
+  color: #c9c7c2;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-note small {
+  color: #aaa49a;
+}
+
+#dashboard {
+  min-width: 0;
+}
+
+.topbar {
+  background: rgba(255,255,255,.96);
+  border-bottom: 1px solid var(--barq-border);
+  box-shadow: 0 3px 15px rgba(0,0,0,.025);
+  backdrop-filter: blur(12px);
+}
+
+.search-wrap input {
+  background: #f7f6f3;
+  border: 1px solid #eeeae2;
+  border-radius: 10px;
+  padding: 12px 15px;
+}
+
+.search-wrap input:focus {
+  outline: none;
+  border-color: var(--barq-gold);
+  box-shadow: 0 0 0 3px rgba(177,138,69,.12);
+}
+
+.admin-user {
+  font-weight: 700;
+  color: var(--barq-ink);
+}
+
+.content {
+  padding: 30px;
+}
+
+.welcome {
+  margin-bottom: 26px;
+}
+
+.welcome h1 {
+  color: var(--barq-ink);
+  font-size: clamp(24px, 3vw, 32px);
+  letter-spacing: -0.7px;
+}
+
+.subtitle {
+  color: var(--barq-muted);
+}
+
+.card {
+  background: var(--barq-white);
+  border: 1px solid var(--barq-border);
+  border-radius: 16px;
+  box-shadow: var(--barq-shadow);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.metrics .card:hover,
+.three-col .card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(35,29,20,.09);
+}
+
+.metric-label {
+  color: var(--barq-muted);
+  font-weight: 600;
+}
+
+.metric-value {
+  color: var(--barq-ink);
+  font-size: clamp(23px, 2.5vw, 30px);
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+
+.metric-icon {
+  background: #f5efe4;
+  color: var(--barq-gold);
+  border-radius: 11px;
+}
+
+.metric-note {
+  color: #918b80;
+  font-size: 12px;
+}
+
+button,
+.primary-link {
+  border-radius: 9px;
+  transition: background .2s ease, transform .2s ease;
+}
+
+button:hover,
+.primary-link:hover {
+  transform: translateY(-1px);
+}
+
+input,
+select,
+textarea {
+  border-radius: 9px;
+  border-color: var(--barq-border);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--barq-gold);
+  box-shadow: 0 0 0 3px rgba(177,138,69,.1);
+}
+
+.table-wrap {
+  border: 1px solid var(--barq-border);
+  border-radius: 12px;
+  overflow-x: auto;
+  background: #fff;
+}
+
+table th {
+  background: #f6f3ed;
+  color: #5e574b;
+  font-weight: 700;
+}
+
+.notice {
+  border-radius: 10px;
+}
+
+@media (max-width: 900px) {
+  .content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 15px;
+  }
+
+  .welcome {
+    gap: 12px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .topbar {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .search-wrap {
+    width: 100%;
+  }
+}
+  
 </style>
 </head>
 
