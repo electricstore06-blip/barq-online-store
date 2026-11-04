@@ -1,4 +1,3 @@
-
 import { db, auth } from "./firebase-config.js";
 
 import {
@@ -44,6 +43,94 @@ const STATUSES = [
   "Replacement Approved",
   "Cancelled"
 ];
+
+/* =========================================
+   EXPORT BUTTONS AND STYLES
+========================================= */
+
+function addExportStyles() {
+  if ($("barq-export-styles")) return;
+
+  const style = document.createElement("style");
+  style.id = "barq-export-styles";
+
+  style.textContent = `
+    .barq-export-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    .barq-action-btn {
+      border: 1px solid #c6a15b;
+      background: #111;
+      color: #fff;
+      padding: 11px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .barq-action-btn:hover {
+      background: #c6a15b;
+      color: #111;
+    }
+
+    .barq-order-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin: 16px 0;
+    }
+
+    .barq-order-actions .barq-action-btn {
+      padding: 9px 13px;
+    }
+
+    @media print {
+      .barq-export-toolbar,
+      .barq-order-actions,
+      .status-section,
+      .order-sections,
+      header,
+      button {
+        display: none !important;
+      }
+    }
+  `;
+
+  document.head.appendChild(style);
+}
+
+function addExportToolbar() {
+  if ($("barq-export-toolbar")) return;
+
+  addExportStyles();
+
+  const toolbar = document.createElement("div");
+  toolbar.id = "barq-export-toolbar";
+  toolbar.className = "barq-export-toolbar";
+
+  toolbar.innerHTML = `
+    <button type="button" class="barq-action-btn" data-export="pdf">
+      Export Orders PDF
+    </button>
+
+    <button type="button" class="barq-action-btn" data-export="csv">
+      Export Excel / CSV
+    </button>
+
+    <button type="button" class="barq-action-btn" data-export="whatsapp">
+      Share Order List on WhatsApp
+    </button>
+  `;
+
+  ordersContainer.parentNode.insertBefore(toolbar, ordersContainer);
+}
+
+addExportToolbar();
 
 /* =========================================
    SAFE DISPLAY HELPERS
@@ -119,6 +206,453 @@ function getCoordinates(order) {
 }
 
 /* =========================================
+   PRINT WINDOW HELPER
+========================================= */
+
+function openPrintWindow(title, content) {
+  const printWindow = window.open("", "_blank");
+
+  if (!printWindow) {
+    alert("Please allow pop-ups for this website, then try again.");
+    return;
+  }
+
+  printWindow.document.open();
+
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>${safeText(title)}</title>
+
+      <style>
+        * {
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: Arial, sans-serif;
+          color: #222;
+          margin: 30px;
+          background: #fff;
+        }
+
+        .invoice-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          border-bottom: 3px solid #c6a15b;
+          padding-bottom: 18px;
+          margin-bottom: 25px;
+        }
+
+        .brand {
+          font-size: 30px;
+          font-weight: 800;
+          color: #111;
+          letter-spacing: 2px;
+        }
+
+        .brand-subtitle {
+          color: #9b7a3f;
+          font-size: 11px;
+          letter-spacing: 3px;
+          margin-top: 5px;
+        }
+
+        h2 {
+          color: #111;
+          margin-top: 25px;
+          font-size: 16px;
+        }
+
+        .info-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+          margin-bottom: 20px;
+        }
+
+        .info-box {
+          background: #fbfaf7;
+          border: 1px solid #eee6d7;
+          border-radius: 8px;
+          padding: 14px;
+          line-height: 1.7;
+          overflow-wrap: anywhere;
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 12px;
+        }
+
+        th {
+          background: #111;
+          color: #fff;
+          padding: 11px;
+          text-align: left;
+        }
+
+        td {
+          padding: 11px;
+          border-bottom: 1px solid #eee;
+        }
+
+        .totals {
+          width: 320px;
+          max-width: 100%;
+          margin-left: auto;
+          margin-top: 22px;
+        }
+
+        .total-row {
+          display: flex;
+          justify-content: space-between;
+          padding: 8px 0;
+        }
+
+        .grand-total {
+          border-top: 2px solid #c6a15b;
+          font-size: 19px;
+          font-weight: 800;
+          padding-top: 12px;
+        }
+
+        .footer {
+          text-align: center;
+          border-top: 1px solid #ddd;
+          margin-top: 40px;
+          padding-top: 15px;
+          color: #777;
+          font-size: 12px;
+        }
+
+        @media print {
+          body {
+            margin: 12mm;
+          }
+        }
+
+        @media (max-width: 600px) {
+          .info-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      </style>
+    </head>
+
+    <body>
+      ${content}
+    </body>
+    </html>
+  `);
+
+  printWindow.document.close();
+
+  printWindow.onload = () => {
+    printWindow.focus();
+    printWindow.print();
+  };
+}
+
+/* =========================================
+   INDIVIDUAL INVOICE
+========================================= */
+
+function printInvoice(order) {
+  const items = getItems(order);
+
+  const productsHTML = items.map(item => {
+    const quantity = Number(item.quantity) || 0;
+    const price = Number(item.price) || 0;
+
+    return `
+      <tr>
+        <td>${safeText(item.name || "Product")}</td>
+        <td>${quantity}</td>
+        <td>${money(price)}</td>
+        <td>${money(price * quantity)}</td>
+      </tr>
+    `;
+  }).join("");
+
+  const calculatedSubtotal = items.reduce((sum, item) => {
+    return sum +
+      (Number(item.price) || 0) *
+      (Number(item.quantity) || 0);
+  }, 0);
+
+  const subtotal = order.subtotal ?? calculatedSubtotal;
+  const delivery = Number(order.delivery) || 0;
+  const total = order.total ?? (Number(subtotal) + delivery);
+
+  const content = `
+    <div class="invoice-header">
+      <div>
+        <div class="brand">BARQ</div>
+        <div class="brand-subtitle">ONLINE STORE</div>
+      </div>
+
+      <div style="text-align:right">
+        <h1 style="margin:0">INVOICE</h1>
+        <p><strong>Order:</strong> ${safeText(getOrderNumber(order))}</p>
+        <p><strong>Date:</strong> ${safeText(formatDate(order))}</p>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div>
+        <h2>Customer Details</h2>
+        <div class="info-box">
+          <strong>${safeText(getCustomerName(order))}</strong><br>
+          Phone: ${safeText(order.phone || "Not provided")}<br>
+          Email: ${safeText(order.email || "Not provided")}<br>
+          Address: ${safeText(order.address || "Not provided")}
+        </div>
+      </div>
+
+      <div>
+        <h2>Order Details</h2>
+        <div class="info-box">
+          Order Number: ${safeText(getOrderNumber(order))}<br>
+          Status: ${safeText(getStatus(order))}<br>
+          Payment Method: ${safeText(order.paymentMethod || "Not selected")}
+        </div>
+      </div>
+    </div>
+
+    <h2>Order Items</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        ${productsHTML || `
+          <tr><td colspan="4">No products found</td></tr>
+        `}
+      </tbody>
+    </table>
+
+    <div class="totals">
+      <div class="total-row">
+        <span>Subtotal</span>
+        <strong>${money(subtotal)}</strong>
+      </div>
+
+      <div class="total-row">
+        <span>Delivery</span>
+        <strong>${money(delivery)}</strong>
+      </div>
+
+      <div class="total-row grand-total">
+        <span>Total</span>
+        <strong>${money(total)}</strong>
+      </div>
+    </div>
+
+    <div class="footer">
+      Thank you for shopping with BARQ Online Store.
+    </div>
+  `;
+
+  openPrintWindow("BARQ Invoice - " + getOrderNumber(order), content);
+}
+
+/* =========================================
+   INDIVIDUAL WHATSAPP SHARE
+========================================= */
+
+function shareOrderWhatsApp(order) {
+  const message = [
+    "BARQ ONLINE STORE",
+    "Order: " + getOrderNumber(order),
+    "Customer: " + getCustomerName(order),
+    "Date: " + formatDate(order),
+    "Status: " + getStatus(order),
+    "Payment: " + (order.paymentMethod || "Not selected"),
+    "Total: " + money(order.total)
+  ].join("\n");
+
+  window.open(
+    "https://wa.me/?text=" + encodeURIComponent(message),
+    "_blank",
+    "noopener,noreferrer"
+  );
+}
+
+/* =========================================
+   BULK EXPORT: CSV FOR EXCEL
+========================================= */
+
+function csvCell(value) {
+  let text = String(value ?? "");
+
+  // Protect spreadsheet users from formula injection.
+  if (/^[=+\-@\t\r]/.test(text)) {
+    text = "'" + text;
+  }
+
+  return '"' + text.replace(/"/g, '""') + '"';
+}
+
+function exportOrdersCSV(orders) {
+  const headers = [
+    "Order Number",
+    "Date",
+    "Customer",
+    "Phone",
+    "Email",
+    "Address",
+    "Products",
+    "Payment Method",
+    "Subtotal",
+    "Delivery",
+    "Total",
+    "Status"
+  ];
+
+  const rows = orders.map(order => {
+    const products = getItems(order).map(item =>
+      `${item.name || "Product"} x ${Number(item.quantity) || 0}`
+    ).join("; ");
+
+    return [
+      getOrderNumber(order),
+      formatDate(order),
+      getCustomerName(order),
+      order.phone || "",
+      order.email || "",
+      order.address || "",
+      products,
+      order.paymentMethod || "",
+      order.subtotal ?? "",
+      order.delivery ?? "",
+      order.total ?? "",
+      getStatus(order)
+    ];
+  });
+
+  const csv = [
+    headers,
+    ...rows
+  ].map(row => row.map(csvCell).join(",")).join("\r\n");
+
+  const blob = new Blob(["\uFEFF" + csv], {
+    type: "text/csv;charset=utf-8;"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "BARQ-orders-" + new Date().toISOString().slice(0, 10) + ".csv";
+
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  URL.revokeObjectURL(url);
+}
+
+/* =========================================
+   BULK EXPORT: PDF / PRINT
+========================================= */
+
+function exportOrdersPDF(orders) {
+  const rows = orders.map(order => `
+    <tr>
+      <td>${safeText(getOrderNumber(order))}</td>
+      <td>${safeText(getCustomerName(order))}</td>
+      <td>${safeText(formatDate(order))}</td>
+      <td>${safeText(getStatus(order))}</td>
+      <td>${money(order.total)}</td>
+    </tr>
+  `).join("");
+
+  const content = `
+    <div class="invoice-header">
+      <div>
+        <div class="brand">BARQ</div>
+        <div class="brand-subtitle">ONLINE STORE</div>
+      </div>
+
+      <div style="text-align:right">
+        <h1>ORDERS REPORT</h1>
+        <p>Generated: ${safeText(new Date().toLocaleString())}</p>
+        <p>Total orders: ${orders.length}</p>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Order Number</th>
+          <th>Customer</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        ${rows || `<tr><td colspan="5">No orders found</td></tr>`}
+      </tbody>
+    </table>
+
+    <div class="footer">
+      BARQ Online Store — Orders Report
+    </div>
+  `;
+
+  openPrintWindow("BARQ Orders Report", content);
+}
+
+/* =========================================
+   BULK WHATSAPP SHARE
+========================================= */
+
+function shareOrdersWhatsApp(orders) {
+  if (!orders.length) {
+    alert("There are no orders to share.");
+    return;
+  }
+
+  const lines = [
+    "BARQ ONLINE STORE - ORDER LIST",
+    "Orders: " + orders.length,
+    ""
+  ];
+
+  orders.forEach((order, index) => {
+    lines.push(
+      `${index + 1}. ${getOrderNumber(order)} | ` +
+      `${getCustomerName(order)} | ` +
+      `${getStatus(order)} | ` +
+      `${money(order.total)}`
+    );
+  });
+
+  const message = lines.join("\n");
+
+  window.open(
+    "https://wa.me/?text=" + encodeURIComponent(message),
+    "_blank",
+    "noopener,noreferrer"
+  );
+}
+
+/* =========================================
    ADMIN LOGIN CHECK
 ========================================= */
 
@@ -134,8 +668,10 @@ onAuthStateChanged(auth, async user => {
 
     const adminSnapshot = await getDoc(doc(db, "admins", user.uid));
 
-    if (!adminSnapshot.exists() ||
-        adminSnapshot.data().role !== "admin") {
+    if (
+      !adminSnapshot.exists() ||
+      adminSnapshot.data().role !== "admin"
+    ) {
       authorizedUid = null;
       alert("Access denied. You are not an administrator.");
       await signOut(auth);
@@ -152,6 +688,7 @@ onAuthStateChanged(auth, async user => {
       "Unable to verify administrator access. Please refresh the page.";
   }
 });
+
 /* =========================================
    ORDER SECTION BUTTONS
 ========================================= */
@@ -159,21 +696,17 @@ onAuthStateChanged(auth, async user => {
 document.querySelectorAll(".section-btn").forEach(button => {
   button.addEventListener("click", () => {
     activeSection = button.dataset.status;
-
-    // Clear the status dropdown
     statusFilter.value = "all";
 
-    // Highlight the selected button
     document.querySelectorAll(".section-btn").forEach(btn => {
       btn.classList.remove("active");
     });
 
     button.classList.add("active");
-
-    // Show matching orders
     renderOrders();
   });
 });
+
 /* =========================================
    LOAD ORDERS
 ========================================= */
@@ -224,13 +757,11 @@ function updateStatistics() {
     ["Replacement Requested", "Replacement Approved"].includes(getStatus(order))
   ).length;
 
-  // Overview cards
   $("stat-total").textContent = allOrders.length;
   $("stat-pending").textContent = count("Pending");
   $("stat-processing").textContent = count("Processing");
   $("stat-delivered").textContent = count("Delivered");
 
-  // Section button counters
   $("count-pending").textContent = count("Pending");
   $("count-processing").textContent = count("Processing");
   $("count-shipped").textContent = count("Shipped");
@@ -245,6 +776,7 @@ function updateStatistics() {
 /* =========================================
    SEARCH AND FILTERS
 ========================================= */
+
 function getFilteredOrders() {
   const search = searchInput.value.trim().toLowerCase();
   const selectedStatus = statusFilter.value;
@@ -263,12 +795,10 @@ function getFilteredOrders() {
       order.address
     ].join(" ").toLowerCase();
 
-    // Search filter
     if (search && !searchableText.includes(search)) {
       return false;
     }
 
-    // Section button filter
     if (activeSection === "Replacement") {
       if (
         !["Replacement Requested", "Replacement Approved"]
@@ -283,7 +813,6 @@ function getFilteredOrders() {
       return false;
     }
 
-    // Existing status dropdown filter
     if (
       selectedStatus !== "all" &&
       orderStatus !== selectedStatus
@@ -291,7 +820,6 @@ function getFilteredOrders() {
       return false;
     }
 
-    // Existing date filter
     const date = getDate(order);
 
     if (selectedDate !== "all") {
@@ -315,6 +843,7 @@ function getFilteredOrders() {
     return true;
   });
 }
+
 /* =========================================
    DISPLAY FILTERED ORDERS
 ========================================= */
@@ -345,6 +874,7 @@ function renderOrders() {
     .map(createOrderCard)
     .join("");
 }
+
 /* =========================================
    CREATE ORDER CARD
 ========================================= */
@@ -431,6 +961,22 @@ function createOrderCard(order) {
 
       </div>
 
+      <div class="barq-order-actions">
+        <button type="button"
+          class="barq-action-btn"
+          data-order-action="invoice"
+          data-order-id="${safeText(order.id)}">
+          Print Invoice / Save PDF
+        </button>
+
+        <button type="button"
+          class="barq-action-btn"
+          data-order-action="whatsapp"
+          data-order-id="${safeText(order.id)}">
+          Share on WhatsApp
+        </button>
+      </div>
+
       <div class="status-section">
         <label for="status-${safeText(order.id)}">Update Order Status</label>
         <select
@@ -446,6 +992,69 @@ function createOrderCard(order) {
     </article>
   `;
 }
+
+/* =========================================
+   EXPORT BUTTON EVENTS
+========================================= */
+
+document.addEventListener("click", event => {
+  const exportButton = event.target.closest("[data-export]");
+
+  if (exportButton) {
+    if (!authorizedUid) {
+      alert("Administrator access is required.");
+      return;
+    }
+
+    const orders = getFilteredOrders();
+    const action = exportButton.dataset.export;
+
+    if (!orders.length) {
+      alert("There are no orders to export.");
+      return;
+    }
+
+    if (action === "pdf") {
+      exportOrdersPDF(orders);
+    }
+
+    if (action === "csv") {
+      exportOrdersCSV(orders);
+    }
+
+    if (action === "whatsapp") {
+      shareOrdersWhatsApp(orders);
+    }
+
+    return;
+  }
+
+  const orderButton = event.target.closest("[data-order-action]");
+
+  if (!orderButton) return;
+
+  if (!authorizedUid) {
+    alert("Administrator access is required.");
+    return;
+  }
+
+  const order = allOrders.find(item =>
+    item.id === orderButton.dataset.orderId
+  );
+
+  if (!order) {
+    alert("Order not found. Please refresh the page.");
+    return;
+  }
+
+  if (orderButton.dataset.orderAction === "invoice") {
+    printInvoice(order);
+  }
+
+  if (orderButton.dataset.orderAction === "whatsapp") {
+    shareOrderWhatsApp(order);
+  }
+});
 
 /* =========================================
    UPDATE ORDER STATUS
