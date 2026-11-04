@@ -28,7 +28,7 @@ const statusFilter = $("status-filter");
 const dateFilter = $("date-filter");
 
 let allOrders = [];
-let activeSection = "Pending";
+let activeSection = "all";
 let authorizedUid = null;
 let isLoading = false;
 
