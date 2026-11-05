@@ -195,18 +195,17 @@ function createProductCard(product) {
 // DISPLAY PRODUCTS
 // This function is separate from createProductCard.
 // ==========================================
-
 function displayProducts(products) {
     const container = document.querySelector(
         "#products .product-container"
     );
 
+    // Product details and other pages do not have this container.
+    // Skip product rendering on those pages.
     if (!container) {
-        console.error(
-            'BARQ: Could not find "#products .product-container".'
-        );
         return;
     }
+
 
     container.replaceChildren();
 
