@@ -17,12 +17,18 @@
   </div>
 
   
-  <!-- HEADER -->
-  <div class="logo">
-  <span class="barq-bolt">ϟ</span>
-  <span class="barq-name">BARQ</span>
-  <span class="barq-subtitle">ONLINE STORE</span>
-</div>
+
+<!-- HEADER -->
+<header class="site-header">
+
+  <div class="header-main">
+
+    <a class="logo" href="index.html">
+      <span class="barq-bolt">ϟ</span>
+      <span class="barq-name">BARQ</span>
+      <span class="barq-subtitle">ONLINE STORE</span>
+    </a>
+
     <div class="header-search">
       <input
         id="searchInput"
@@ -39,31 +45,36 @@
       id="menuButton"
       type="button"
       aria-label="Toggle navigation"
+      aria-expanded="false"
     >☰</button>
 
-    <nav id="mainNav">
-      <a href="index.html" data-i18n="home">Home</a>
-      <a href="#products" data-i18n="shop">Shop</a>
-      <a href="#beauty-categories" data-i18n="categories">Categories</a>
-      <a href="#offers" data-i18n="offers">Offers</a>
-      <a href="orders.html" data-i18n="myOrders">My Orders</a>
+  </div>
 
-      <a href="#" onclick="openCart(); return false;">
-        🛒 <span data-i18n="cart">Cart</span>
-        <span id="cartCount">0</span>
-      </a>
+  <nav id="mainNav" class="main-nav">
+    <a href="index.html" data-i18n="home">Home</a>
+    <a href="#products" data-i18n="shop">Shop</a>
+    <a href="#beauty-categories" data-i18n="categories">Categories</a>
+    <a href="#offers" data-i18n="offers">Offers</a>
+    <a href="orders.html" data-i18n="myOrders">My Orders</a>
 
-      <a id="accountLink" href="#" onclick="openLogin(); return false;">
-        🔐 <span data-i18n="login">Account</span>
-      </a>
+    <a href="#" onclick="openCart(); return false;">
+      🛒 <span data-i18n="cart">Cart</span>
+      <span id="cartCount">0</span>
+    </a>
 
-      <a id="logoutLink" href="#" onclick="logout(); return false;" hidden>
-        <span data-i18n="logout">Logout</span>
-      </a>
+    <a id="accountLink" href="#" onclick="openLogin(); return false;">
+      🔐 <span data-i18n="login">Account</span>
+    </a>
 
-      <div id="languageSelector"></div>
-    </nav>
-  </header>
+    <a id="logoutLink" href="#" onclick="logout(); return false;" hidden>
+      <span data-i18n="logout">Logout</span>
+    </a>
+
+    <div id="languageSelector"></div>
+  </nav>
+
+</header>
+
 
 
   <!-- HERO BANNER -->
