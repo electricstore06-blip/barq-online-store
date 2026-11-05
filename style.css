@@ -1545,3 +1545,46 @@ html[dir="rtl"] .brand-list {
         order: 3;
     }
 }
+
+/* BARQ HEADER LAYOUT FIX */
+header.site-header,
+body > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 15px 20px;
+    box-sizing: border-box;
+}
+
+header .logo {
+    flex: 0 0 auto;
+}
+
+header .header-search {
+    flex: 1 1 240px;
+    min-width: 180px;
+    max-width: 350px;
+    margin: 0;
+}
+
+header #mainNav {
+    flex: 1 1 100%;
+}
+
+@media (max-width: 768px) {
+    body > header {
+        gap: 10px;
+    }
+
+    header .header-search {
+        flex: 1 1 100%;
+        max-width: none;
+        order: 3;
+    }
+
+    header #mainNav {
+        flex: 1 1 100%;
+    }
+}
