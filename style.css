@@ -306,3 +306,46 @@ header.site-header .header-search input#searchInput:-webkit-autofill:focus{
   html{scroll-behavior:auto}
   *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
 }
+/* BARQ — Navigation spacing fix */
+.site-header nav,
+header.site-header nav,
+#mainNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px 28px;
+}
+
+.site-header nav a,
+header.site-header nav a,
+#mainNav a {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  padding: 10px 4px;
+  text-decoration: none;
+  line-height: 1.5;
+}
+
+/* Keep cart and login separated */
+.site-header .cart-link,
+.site-header .login-link {
+  margin-left: 10px;
+}
+
+/* Mobile navigation */
+@media (max-width: 768px) {
+  .site-header nav,
+  header.site-header nav,
+  #mainNav {
+    gap: 8px 16px;
+  }
+
+  .site-header nav a,
+  header.site-header nav a,
+  #mainNav a {
+    padding: 8px 4px;
+    font-size: 14px;
+  }
+}
