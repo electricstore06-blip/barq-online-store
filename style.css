@@ -1609,3 +1609,87 @@ header .header-search input {
         flex: 1 1 100%;
     }
 }
+/* ==========================================
+   BARQ — REFINED LUXURY SEARCH BAR
+   Desktop and mobile
+   ========================================== */
+
+header.site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px 24px;
+    padding: 16px 24px;
+}
+
+/* Search container */
+header.site-header .header-search {
+    position: relative;
+    flex: 0 1 340px;
+    width: 340px;
+    max-width: 340px;
+    min-width: 200px;
+    margin: 0;
+}
+
+/* Search input */
+header.site-header .header-search input#searchInput {
+    display: block;
+    width: 100%;
+    height: 50px;
+    min-height: 50px;
+    padding: 0 48px 0 20px;
+    border: 1px solid #e5d8ce;
+    border-radius: 28px;
+    background: #faf7f2;
+    color: #302925;
+    font-size: 14px;
+    box-shadow: 0 3px 12px rgba(48, 41, 37, 0.04);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+header.site-header .header-search input#searchInput:focus {
+    border-color: #96745e;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(150, 116, 94, 0.12);
+    outline: none;
+}
+
+header.site-header .header-search input#searchInput::placeholder {
+    color: #9a8b81;
+}
+
+/* Search icon */
+header.site-header .header-search .search-icon {
+    position: absolute;
+    top: 50%;
+    right: 18px;
+    transform: translateY(-50%);
+    color: #96745e;
+    font-size: 23px;
+    pointer-events: none;
+}
+
+/* Mobile layout */
+@media (max-width: 768px) {
+    header.site-header {
+        gap: 12px;
+        padding: 14px 18px;
+    }
+
+    header.site-header .header-search {
+        order: 4;
+        flex: 0 1 420px;
+        width: min(420px, calc(100vw - 36px));
+        max-width: 420px;
+        min-width: 0;
+        margin: 0 auto;
+    }
+
+    header.site-header .header-search input#searchInput {
+        height: 48px;
+        min-height: 48px;
+        font-size: 14px;
+    }
+}
