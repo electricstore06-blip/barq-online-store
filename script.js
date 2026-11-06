@@ -31,16 +31,17 @@ try {
 let currentCategory = null;
 let searchRequest = 0;
 let searchTimer = null;
-
 const searchInput = document.getElementById("searchInput");
 const searchResultsSection =
     document.getElementById("searchResultsSection");
 const searchResultsContainer =
     document.getElementById("searchResultsContainer");
+
 // Prevent saved email autofill from triggering product search
 if (searchInput) {
     searchInput.value = "";
 }
+
 // ==========================================
 // TRANSLATION HELPER
 // ==========================================
