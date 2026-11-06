@@ -1,8 +1,8 @@
 
- // ==========================================
- // BARQ STORE MAIN SCRIPT
- // Product display + Firebase + cart + language support
- // ==========================================
+// ==========================================
+// BARQ STORE MAIN SCRIPT
+// Product display + Firebase + cart + language support
+// ==========================================
 
 import { db } from "./firebase-config.js";
 
@@ -31,16 +31,35 @@ try {
 let currentCategory = null;
 let searchRequest = 0;
 let searchTimer = null;
+
 const searchInput = document.getElementById("searchInput");
+
 const searchResultsSection =
     document.getElementById("searchResultsSection");
+
 const searchResultsContainer =
     document.getElementById("searchResultsContainer");
 
-// Prevent saved email autofill from triggering product search
-if (searchInput) {
-    searchInput.value = "";
+// ==========================================
+// SEARCH FIELD PROTECTION
+// ==========================================
+
+function isEmailLikeSearch(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        String(value || "").trim()
+    );
 }
+
+function clearSearchField() {
+    if (!searchInput) return;
+
+    searchInput.value = "";
+    searchInput.setAttribute("autocomplete", "off");
+    searchInput.setAttribute("autocapitalize", "off");
+    searchInput.setAttribute("spellcheck", "false");
+}
+
+clearSearchField();
 
 // ==========================================
 // TRANSLATION HELPER
@@ -49,7 +68,10 @@ if (searchInput) {
 function tr(key, fallback) {
     if (typeof window.barqTranslate === "function") {
         const result = window.barqTranslate(key);
-        if (result && result !== key) return result;
+
+        if (result && result !== key) {
+            return result;
+        }
     }
 
     return fallback;
@@ -197,19 +219,17 @@ function createProductCard(product) {
 
 // ==========================================
 // DISPLAY PRODUCTS
-// This function is separate from createProductCard.
 // ==========================================
+
 function displayProducts(products) {
     const container = document.querySelector(
         "#products .product-container"
     );
 
-    // Product details and other pages do not have this container.
-    // Skip product rendering on those pages.
+    // Other pages do not have the main product container.
     if (!container) {
         return;
     }
-
 
     container.replaceChildren();
 
@@ -281,11 +301,17 @@ async function loadProducts() {
         );
 
         currentCategory = null;
-        displayProducts(productsData);
+
+        if (searchInput && isEmailLikeSearch(searchInput.value)) {
+            clearSearchField();
+        }
 
         if (searchInput && searchInput.value.trim()) {
             renderSearchResults(searchInput.value);
+        } else {
+            displayProducts(productsData);
         }
+
     } catch (error) {
         console.error("Firebase Products Error:", error);
 
@@ -320,6 +346,13 @@ function renderSearchResults(searchTerm) {
     const value = String(searchTerm || "")
         .trim()
         .toLowerCase();
+
+    // Never use an email address as a product search.
+    if (isEmailLikeSearch(value)) {
+        clearSearchField();
+        renderSearchResults("");
+        return;
+    }
 
     if (!value) {
         if (searchResultsSection) {
@@ -356,6 +389,7 @@ function renderSearchResults(searchTerm) {
         const name = String(product.name || "").toLowerCase();
         const brand = String(product.brand || "").toLowerCase();
         const category = getProductCategory(product);
+
         const description = String(
             product.description || ""
         ).toLowerCase();
@@ -394,23 +428,45 @@ function renderSearchResults(searchTerm) {
 
     displayProducts(results);
 }
-if (searchInput) {
-    // Clear unwanted autofilled content after the page loads
-    window.addEventListener("load", () => {
-        searchInput.value = "";
-        renderSearchResults("");
-    });
 
+// ==========================================
+// SEARCH INPUT EVENTS
+// ==========================================
+
+if (searchInput) {
     searchInput.addEventListener("input", () => {
         const requestNumber = ++searchRequest;
 
         window.clearTimeout(searchTimer);
+
+        if (isEmailLikeSearch(searchInput.value)) {
+            clearSearchField();
+            renderSearchResults("");
+            return;
+        }
 
         searchTimer = window.setTimeout(() => {
             if (requestNumber !== searchRequest) return;
 
             renderSearchResults(searchInput.value);
         }, 100);
+    });
+
+    // Clear browser-restored email values after page loading.
+    window.addEventListener("load", () => {
+        if (isEmailLikeSearch(searchInput.value)) {
+            clearSearchField();
+        }
+
+        renderSearchResults(searchInput.value);
+    });
+
+    // Also handle pages restored from browser history.
+    window.addEventListener("pageshow", () => {
+        if (isEmailLikeSearch(searchInput.value)) {
+            clearSearchField();
+            renderSearchResults("");
+        }
     });
 }
 
@@ -431,7 +487,7 @@ document.querySelectorAll(".beauty-category-card").forEach(card => {
         currentCategory = category;
 
         if (searchInput) {
-            searchInput.value = "";
+            clearSearchField();
             window.clearTimeout(searchTimer);
             searchRequest++;
         }
@@ -757,6 +813,10 @@ document.addEventListener("DOMContentLoaded", () => {
 // ==========================================
 
 document.addEventListener("barq:languageChanged", () => {
+    if (searchInput && isEmailLikeSearch(searchInput.value)) {
+        clearSearchField();
+    }
+
     if (searchInput && searchInput.value.trim()) {
         renderSearchResults(searchInput.value);
     } else if (currentCategory) {
