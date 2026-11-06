@@ -426,4 +426,39 @@ header.site-header .header-search input#searchInput:-webkit-autofill:focus{
 }
 
 
+/* BARQ — FULL WIDTH SPACED NAVIGATION */
+
+.site-header #mainNav {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 14px 3%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  border-top: 1px solid #eee;
+}
+
+.site-header #mainNav a {
+  margin: 0;
+  padding: 10px 8px;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.site-header #mainNav #languageSelector {
+  margin: 0;
+  padding: 5px;
+}
+
+@media (max-width: 768px) {
+  .site-header #mainNav {
+    justify-content: flex-start;
+  }
+}
+
 
