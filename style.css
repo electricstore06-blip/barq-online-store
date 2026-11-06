@@ -349,3 +349,89 @@ header.site-header nav a,
     font-size: 14px;
   }
 }
+
+/* BARQ HEADER LAYOUT */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  background: #fff;
+}
+
+.header-main {
+  width: 94%;
+  max-width: 1200px;
+  min-height: 85px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+.site-header .logo {
+  flex-shrink: 0;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.site-header .header-search {
+  flex: 1;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.site-header .main-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  padding: 12px 20px;
+  border-top: 1px solid #eee;
+}
+
+.site-header .main-nav a {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  text-decoration: none;
+  padding: 8px 5px;
+}
+
+.site-header .menu-toggle {
+  display: none;
+}
+
+/* MOBILE HEADER */
+@media (max-width: 768px) {
+  .header-main {
+    min-height: 70px;
+    gap: 12px;
+  }
+
+  .site-header .header-search {
+    max-width: none;
+  }
+
+  .site-header .menu-toggle {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .site-header .main-nav {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  .site-header .main-nav.active {
+    display: flex;
+  }
+
+  .site-header .main-nav a {
+    padding: 12px;
+  }
+}
