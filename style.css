@@ -306,51 +306,11 @@ header.site-header .header-search input#searchInput:-webkit-autofill:focus{
   html{scroll-behavior:auto}
   *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
 }
-/* BARQ — Navigation spacing fix */
-.site-header nav,
-header.site-header nav,
-#mainNav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 14px 28px;
-}
 
-.site-header nav a,
-header.site-header nav a,
-#mainNav a {
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-  padding: 10px 4px;
-  text-decoration: none;
-  line-height: 1.5;
-}
+/* =================================
+   BARQ HEADER — CLEAN FINAL LAYOUT
+================================= */
 
-/* Keep cart and login separated */
-.site-header .cart-link,
-.site-header .login-link {
-  margin-left: 10px;
-}
-
-/* Mobile navigation */
-@media (max-width: 768px) {
-  .site-header nav,
-  header.site-header nav,
-  #mainNav {
-    gap: 8px 16px;
-  }
-
-  .site-header nav a,
-  header.site-header nav a,
-  #mainNav a {
-    padding: 8px 4px;
-    font-size: 14px;
-  }
-}
-
-/* BARQ HEADER LAYOUT */
 .site-header {
   position: sticky;
   top: 0;
@@ -359,60 +319,87 @@ header.site-header nav a,
   background: #fff;
 }
 
-.header-main {
+/* First row: logo, search and menu */
+.site-header .header-main {
   width: 94%;
   max-width: 1200px;
-  min-height: 85px;
-  margin: auto;
+  min-height: 90px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 25px;
+  gap: 30px;
 }
 
+/* Logo */
 .site-header .logo {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   flex-shrink: 0;
   white-space: nowrap;
   text-decoration: none;
 }
 
+.site-header .barq-bolt,
+.site-header .barq-name,
+.site-header .barq-subtitle {
+  display: inline-block;
+}
+
+/* Search */
 .site-header .header-search {
+  position: relative;
   flex: 1;
   max-width: 420px;
   margin: 0 auto;
 }
 
-.site-header .main-nav {
+/* Second row: navigation */
+.site-header #mainNav {
+  width: 100%;
+  min-height: 60px;
+  padding: 12px 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 12px 28px;
-  padding: 12px 20px;
+  column-gap: 32px;
+  row-gap: 12px;
   border-top: 1px solid #eee;
 }
 
-.site-header .main-nav a {
+.site-header #mainNav a {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 6px;
   white-space: nowrap;
   text-decoration: none;
-  padding: 8px 5px;
+  line-height: 1.5;
 }
 
+.site-header #mainNav #languageSelector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Hide menu button on desktop */
 .site-header .menu-toggle {
   display: none;
 }
 
-/* MOBILE HEADER */
+/* Mobile */
 @media (max-width: 768px) {
-  .header-main {
-    min-height: 70px;
+  .site-header .header-main {
+    min-height: 75px;
     gap: 12px;
   }
 
   .site-header .header-search {
-    max-width: none;
+    min-width: 0;
   }
 
   .site-header .menu-toggle {
@@ -420,18 +407,23 @@ header.site-header nav a,
     flex-shrink: 0;
   }
 
-  .site-header .main-nav {
+  .site-header #mainNav {
     display: none;
     flex-direction: column;
     align-items: stretch;
-    gap: 4px;
+    gap: 5px;
+    padding: 12px 5%;
   }
 
-  .site-header .main-nav.active {
+  .site-header #mainNav.active {
     display: flex;
   }
 
-  .site-header .main-nav a {
+  .site-header #mainNav a {
+    justify-content: flex-start;
     padding: 12px;
   }
 }
+
+
+
