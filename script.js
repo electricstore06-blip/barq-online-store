@@ -37,7 +37,10 @@ const searchResultsSection =
     document.getElementById("searchResultsSection");
 const searchResultsContainer =
     document.getElementById("searchResultsContainer");
-
+// Prevent saved email autofill from triggering product search
+if (searchInput) {
+    searchInput.value = "";
+}
 // ==========================================
 // TRANSLATION HELPER
 // ==========================================
