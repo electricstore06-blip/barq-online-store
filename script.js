@@ -394,8 +394,13 @@ function renderSearchResults(searchTerm) {
 
     displayProducts(results);
 }
-
 if (searchInput) {
+    // Clear unwanted autofilled content after the page loads
+    window.addEventListener("load", () => {
+        searchInput.value = "";
+        renderSearchResults("");
+    });
+
     searchInput.addEventListener("input", () => {
         const requestNumber = ++searchRequest;
 
