@@ -55,6 +55,8 @@ function addExportStyles() {
   style.id = "barq-export-styles";
 
   style.textContent = `
+    /* EXPORT TOOLBAR */
+
     .barq-export-toolbar {
       display: flex;
       flex-wrap: wrap;
@@ -62,7 +64,7 @@ function addExportStyles() {
       margin: 18px 0;
     }
 
-    .barq-action-btn {
+    .barq-export-toolbar .barq-action-btn {
       border: 1px solid #c6a15b;
       background: #111;
       color: #fff;
@@ -71,43 +73,99 @@ function addExportStyles() {
       font-weight: 600;
       cursor: pointer;
       font-size: 13px;
+      transition: all 0.2s ease;
     }
 
-    .barq-action-btn:hover {
+    .barq-export-toolbar .barq-action-btn:hover {
       background: #c6a15b;
       color: #111;
     }
 
+    /* ORDER ACTION BUTTONS */
+
     .barq-order-actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 9px;
-      margin: 16px 0;
+      gap: 12px;
+      margin: 20px 0;
     }
 
-  .barq-order-actions .barq-action-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 11px 18px;
-  min-height: 44px;
-  border: 1px solid #c6a15b;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #171717, #303030);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  transition: all 0.2s ease;
-}
+    .barq-order-actions .barq-action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 11px 18px;
+      border: 1px solid #c6a15b;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #171717, #303030);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
 
-.barq-order-actions .barq-action-btn:hover {
-  background: #c6a15b;
-  color: #111;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 14px rgba(198, 161, 91, 0.2);
-}  
+    /* PDF BUTTON */
+
+    .barq-order-actions .invoice-btn:hover {
+      background: #c6a15b;
+      border-color: #c6a15b;
+      color: #111;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 14px rgba(198, 161, 91, 0.2);
+    }
+
+    /* WHATSAPP BUTTON */
+
+    .barq-order-actions .whatsapp-btn {
+      background: #14251c;
+      border-color: #25a366;
+    }
+
+    .barq-order-actions .whatsapp-btn:hover {
+      background: #25a366;
+      border-color: #25a366;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 14px rgba(37, 163, 102, 0.2);
+    }
+
+    /* BUTTON ICONS */
+
+    .barq-order-actions .action-icon {
+      font-size: 17px;
+      line-height: 1;
+    }
+
+    .barq-order-actions .action-arrow {
+      opacity: 0.65;
+      font-size: 14px;
+    }
+
+    /* MOBILE RESPONSIVE */
+
+    @media (max-width: 480px) {
+      .barq-order-actions {
+        flex-direction: column;
+      }
+
+      .barq-order-actions .barq-action-btn {
+        width: 100%;
+      }
+
+      .barq-export-toolbar {
+        flex-direction: column;
+      }
+
+      .barq-export-toolbar .barq-action-btn {
+        width: 100%;
+      }
+    }
+
+    /* PRINT SETTINGS */
 
     @media print {
       .barq-export-toolbar,
@@ -123,6 +181,10 @@ function addExportStyles() {
 
   document.head.appendChild(style);
 }
+
+/* =========================================
+   EXPORT TOOLBAR
+========================================= */
 
 function addExportToolbar() {
   if ($("barq-export-toolbar")) return;
@@ -151,7 +213,6 @@ function addExportToolbar() {
 }
 
 addExportToolbar();
-
 /* =========================================
    SAFE DISPLAY HELPERS
 ========================================= */
