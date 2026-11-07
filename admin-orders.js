@@ -55,32 +55,57 @@ function addExportStyles() {
   style.id = "barq-export-styles";
 
   style.textContent = `
-    /* EXPORT TOOLBAR */
+   /* MODERN BARQ EXPORT TOOLBAR */
 
-    .barq-export-toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 18px 0;
-    }
+.barq-export-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 14px;
+  margin: 24px 0;
+}
 
-    .barq-export-toolbar .barq-action-btn {
-      border: 1px solid #c6a15b;
-      background: #111;
-      color: #fff;
-      padding: 11px 16px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 13px;
-      transition: all 0.2s ease;
-    }
+.barq-export-toolbar .barq-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 50px;
+  padding: 13px 22px;
+  border: 1px solid #c6a15b;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #171717, #303030);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+  transition: all 0.25s ease;
+}
 
-    .barq-export-toolbar .barq-action-btn:hover {
-      background: #c6a15b;
-      color: #111;
-    }
+.barq-export-toolbar .barq-action-btn:hover {
+  background: #c6a15b;
+  color: #111;
+  transform: translateY(-2px);
+  box-shadow: 0 7px 18px rgba(198, 161, 91, 0.22);
+}
 
+.barq-export-toolbar .barq-action-btn:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 600px) {
+  .barq-export-toolbar {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .barq-export-toolbar .barq-action-btn {
+    width: 100%;
+  }
+}
     /* ORDER ACTION BUTTONS */
 
     .barq-order-actions {
