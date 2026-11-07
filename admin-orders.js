@@ -85,9 +85,29 @@ function addExportStyles() {
       margin: 16px 0;
     }
 
-    .barq-order-actions .barq-action-btn {
-      padding: 9px 13px;
-    }
+  .barq-order-actions .barq-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 18px;
+  min-height: 44px;
+  border: 1px solid #c6a15b;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #171717, #303030);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  transition: all 0.2s ease;
+}
+
+.barq-order-actions .barq-action-btn:hover {
+  background: #c6a15b;
+  color: #111;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(198, 161, 91, 0.2);
+}  
 
     @media print {
       .barq-export-toolbar,
@@ -874,7 +894,6 @@ function renderOrders() {
     .map(createOrderCard)
     .join("");
 }
-
 /* =========================================
    CREATE ORDER CARD
 ========================================= */
@@ -962,19 +981,25 @@ function createOrderCard(order) {
       </div>
 
       <div class="barq-order-actions">
+
         <button type="button"
-          class="barq-action-btn"
+          class="barq-action-btn invoice-btn"
           data-order-action="invoice"
           data-order-id="${safeText(order.id)}">
-          Print Invoice / Save PDF
+          <span class="action-icon">📄</span>
+          <span>Save / Print PDF</span>
+          <span class="action-arrow">↗</span>
         </button>
 
         <button type="button"
-          class="barq-action-btn"
+          class="barq-action-btn whatsapp-btn"
           data-order-action="whatsapp"
           data-order-id="${safeText(order.id)}">
-          Share on WhatsApp
+          <span class="action-icon">◉</span>
+          <span>Share on WhatsApp</span>
+          <span class="action-arrow">↗</span>
         </button>
+
       </div>
 
       <div class="status-section">
