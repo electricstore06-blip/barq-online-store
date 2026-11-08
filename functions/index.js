@@ -866,3 +866,14 @@ exports.createOrder = onCall(async request => {
     deliveryCode
   };
 });
+  return {
+    success: true,
+    orderId: orderRef.id,
+    order: {
+      ...finalOrderData,
+      createdAt: new Date().toISOString()
+    },
+    totals: finalTotals,
+    deliveryCode
+  };
+});
