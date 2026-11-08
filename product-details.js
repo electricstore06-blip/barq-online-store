@@ -1,8 +1,9 @@
+
 import { db } from "./firebase-config.js";
 
 import {
     doc,
-    getDoc
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const params = new URLSearchParams(window.location.search);
@@ -12,6 +13,7 @@ const container = document.getElementById("productDetails");
 let product = null;
 let selectedColor = "";
 let selectedSize = "";
+let stockUnsubscribe = null;
 
 function escapeHTML(value) {
     return String(value ?? "").replace(/[&<>"']/g, character => ({
@@ -23,25 +25,35 @@ function escapeHTML(value) {
     })[character]);
 }
 
-// Find the correct price for the selected size.
+function getAvailableStock() {
+    const stock = Number(product?.stock);
+
+    if (
+        product?.stock === undefined ||
+        product?.stock === null ||
+        product?.stock === ""
+    ) {
+        return null;
+    }
+
+    return Number.isFinite(stock) ? Math.max(0, stock) : 0;
+}
+
 function getPrice(size = "") {
     if (!product) return 0;
 
     const sizePrices = product.sizePrices || {};
 
-    // Check prices saved in the sizePrices object.
     if (size && sizePrices[size] !== undefined) {
         const price = Number(sizePrices[size]);
         if (Number.isFinite(price)) return price;
     }
 
-    // Check prices saved as separate Firebase fields.
     if (size && product[size] !== undefined) {
         const price = Number(product[size]);
         if (Number.isFinite(price)) return price;
     }
 
-    // Support numeric keys such as "30", "50", and "100".
     const match = String(size).match(/\d+/);
 
     if (match) {
@@ -61,7 +73,6 @@ function getPrice(size = "") {
     return Number(product.price) || 0;
 }
 
-// Display the selected price.
 function updateDisplayedPrice() {
     const priceElement = document.getElementById("selectedPrice");
 
@@ -69,6 +80,87 @@ function updateDisplayedPrice() {
         priceElement.textContent =
             `${getPrice(selectedSize).toFixed(2)} SAR`;
     }
+}
+
+function updateStockDisplay() {
+    const stockElement = document.getElementById("productStockStatus");
+    const addButton = document.getElementById("addProductToCart");
+
+    if (!stockElement || !addButton || !product) return;
+
+    const stock = getAvailableStock();
+
+    // Products without a stock field retain their previous behavior.
+    if (stock === null) {
+        stockElement.textContent = "";
+        addButton.disabled = false;
+        addButton.textContent = "Add To Cart";
+        return;
+    }
+
+    if (stock <= 0) {
+        stockElement.textContent = "Out of Stock";
+        stockElement.style.color = "#dc2626";
+        addButton.disabled = true;
+        addButton.textContent = "Out of Stock";
+    } else {
+        stockElement.textContent = `In Stock (${stock} available)`;
+        stockElement.style.color = "#15803d";
+        addButton.disabled = false;
+        addButton.textContent = "Add To Cart";
+    }
+}
+
+function startStockListener() {
+    if (!productId) return;
+
+    const productRef = doc(db, "products", productId);
+
+    stockUnsubscribe = onSnapshot(
+        productRef,
+        snapshot => {
+            if (!snapshot.exists()) {
+                container.innerHTML = "<h2>Product not found.</h2>";
+                product = null;
+                return;
+            }
+
+            product = {
+                id: snapshot.id,
+                ...snapshot.data()
+            };
+
+            if (product.active === false) {
+                container.innerHTML =
+                    "<h2>This product is currently unavailable.</h2>";
+                product = null;
+                return;
+            }
+
+            updateStockDisplay();
+
+            console.log(
+                "Live product stock updated:",
+                product.name,
+                product.stock
+            );
+        },
+        error => {
+            console.error("Stock listener error:", error);
+            const stockElement =
+                document.getElementById("productStockStatus");
+
+            if (stockElement) {
+                stockElement.textContent =
+                    "Unable to verify current stock.";
+            }
+
+            const addButton =
+                document.getElementById("addProductToCart");
+
+            if (addButton) addButton.disabled = true;
+        }
+    );
 }
 
 async function loadProduct() {
@@ -84,6 +176,12 @@ async function loadProduct() {
 
     try {
         const productRef = doc(db, "products", productId);
+
+        // Initial load. The live listener below keeps stock updated.
+        const { getDoc } = await import(
+            "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"
+        );
+
         const snapshot = await getDoc(productRef);
 
         if (!snapshot.exists()) {
@@ -95,6 +193,12 @@ async function loadProduct() {
             id: snapshot.id,
             ...snapshot.data()
         };
+
+        if (product.active === false) {
+            container.innerHTML =
+                "<h2>This product is currently unavailable.</h2>";
+            return;
+        }
 
         console.log("Loaded product:", product);
 
@@ -128,6 +232,8 @@ async function loadProduct() {
                     <div class="price-box" id="selectedPrice">
                         ${getPrice().toFixed(2)} SAR
                     </div>
+
+                    <p id="productStockStatus"></p>
 
                     <p>${escapeHTML(product.description || "")}</p>
 
@@ -181,7 +287,8 @@ async function loadProduct() {
             </div>
         `;
 
-        // Select a color.
+        updateStockDisplay();
+
         container.querySelectorAll("[data-color]").forEach(button => {
             button.addEventListener("click", () => {
                 selectedColor = button.dataset.color;
@@ -196,7 +303,6 @@ async function loadProduct() {
             });
         });
 
-        // Select a size and update the price.
         container.querySelectorAll("[data-size]").forEach(button => {
             button.addEventListener("click", () => {
                 selectedSize = button.dataset.size;
@@ -210,15 +316,9 @@ async function loadProduct() {
                 });
 
                 updateDisplayedPrice();
-
-                console.log(
-                    "Selected size:", selectedSize,
-                    "Selected price:", getPrice(selectedSize)
-                );
             });
         });
 
-        // Add the selected product to the cart.
         document.getElementById("addProductToCart")
             .addEventListener("click", () => {
 
@@ -237,12 +337,17 @@ async function loadProduct() {
                     return;
                 }
 
-                const selectedPrice = getPrice(selectedSize);
+                const stock = getAvailableStock();
+
+                if (stock !== null && stock <= 0) {
+                    alert("Sorry, this product is out of stock.");
+                    return;
+                }
 
                 window.addToCart(
                     product.id,
                     product.name,
-                    selectedPrice,
+                    getPrice(selectedSize),
                     product.image || "",
                     product.brand || "BARQ",
                     selectedColor,
@@ -250,11 +355,17 @@ async function loadProduct() {
                 );
             });
 
+        startStockListener();
+
     } catch (error) {
         console.error("Product details error:", error);
         container.innerHTML =
             "<h2>Unable to load product. Please refresh.</h2>";
     }
 }
+
+window.addEventListener("pagehide", () => {
+    if (stockUnsubscribe) stockUnsubscribe();
+});
 
 loadProduct();
