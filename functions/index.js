@@ -504,3 +504,365 @@ exports.createStaffAccount = onCall(async request => {
     );
   }
 });
+
+// ==========================================
+// BARQ SECURE ORDER CREATION
+// Checks stock, verifies prices, creates order,
+// creates delivery code and deducts inventory.
+// ==========================================
+
+exports.createOrder = onCall(async request => {
+  const uid = await requireUser(request);
+
+  const data = request.data || {};
+  const items = data.items;
+  const customer = data.customer;
+
+  if (!Array.isArray(items) || items.length === 0 || items.length > 50) {
+    throw new HttpsError(
+      "invalid-argument",
+      "Your cart is empty or contains too many items."
+    );
+  }
+
+  if (!customer || typeof customer !== "object") {
+    throw new HttpsError(
+      "invalid-argument",
+      "Customer information is missing."
+    );
+  }
+
+  const fullName = String(customer.fullName || "").trim();
+  const phone = String(customer.phone || "").trim();
+  const email = String(customer.email || "").trim();
+  const address = String(customer.address || "").trim();
+  const paymentMethod = String(customer.paymentMethod || "").trim();
+
+  if (fullName.length < 2 || fullName.length > 100) {
+    throw new HttpsError("invalid-argument", "Please enter your full name.");
+  }
+
+  if (!/^05\d{8}$/.test(phone)) {
+    throw new HttpsError("invalid-argument", "Invalid Saudi phone number.");
+  }
+
+  if (
+    email.length > 254 ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  ) {
+    throw new HttpsError("invalid-argument", "Invalid email address.");
+  }
+
+  if (address.length < 5 || address.length > 1000) {
+    throw new HttpsError("invalid-argument", "Please enter your delivery address.");
+  }
+
+  if (!paymentMethod || paymentMethod.length > 60) {
+    throw new HttpsError("invalid-argument", "Please select a payment method.");
+  }
+
+  function getTrustedPrice(product, size) {
+    const sizePrices = product.sizePrices || {};
+
+    if (
+      size &&
+      Object.prototype.hasOwnProperty.call(sizePrices, size)
+    ) {
+      return Number(sizePrices[size]);
+    }
+
+    if (
+      size &&
+      Object.prototype.hasOwnProperty.call(product, size)
+    ) {
+      return Number(product[size]);
+    }
+
+    const match = String(size || "").match(/\d+/);
+
+    if (match) {
+      const key = match[0];
+
+      if (Object.prototype.hasOwnProperty.call(sizePrices, key)) {
+        return Number(sizePrices[key]);
+      }
+
+      if (Object.prototype.hasOwnProperty.call(product, key)) {
+        return Number(product[key]);
+      }
+    }
+
+    return Number(product.price);
+  }
+
+  // Validate cart and collect quantities by product.
+  const quantities = new Map();
+
+  for (const item of items) {
+    if (!item || typeof item !== "object") {
+      throw new HttpsError("invalid-argument", "Invalid cart item.");
+    }
+
+    const productId = item.productId;
+    const quantity = item.quantity;
+    const size = String(item.size || "");
+    const color = String(item.color || "");
+
+    if (
+      typeof productId !== "string" ||
+      !productId ||
+      productId.length > 150
+    ) {
+      throw new HttpsError("invalid-argument", "Invalid product.");
+    }
+
+    if (!Number.isSafeInteger(quantity) || quantity < 1 || quantity > 999) {
+      throw new HttpsError("invalid-argument", "Invalid product quantity.");
+    }
+
+    if (size.length > 100 || color.length > 100) {
+      throw new HttpsError("invalid-argument", "Invalid product option.");
+    }
+
+    quantities.set(
+      productId,
+      (quantities.get(productId) || 0) + quantity
+    );
+  }
+
+  for (const quantity of quantities.values()) {
+    if (!Number.isSafeInteger(quantity)) {
+      throw new HttpsError("invalid-argument", "Invalid total quantity.");
+    }
+  }
+
+  const productRefs = new Map();
+
+  for (const productId of quantities.keys()) {
+    productRefs.set(
+      productId,
+      db.collection("products").doc(productId)
+    );
+  }
+
+  const orderRef = db.collection("orders").doc();
+  const deliveryCodeRef = db.collection("deliveryCodes").doc(orderRef.id);
+
+  // Generate a private six-digit delivery code.
+  const deliveryCode = String(
+    require("crypto").randomInt(0, 1000000)
+  ).padStart(6, "0");
+
+  let finalOrderData;
+  let finalTotals;
+
+  await db.runTransaction(async transaction => {
+    const products = new Map();
+
+    // Read every product before making any writes.
+    for (const [productId, productRef] of productRefs) {
+      const snapshot = await transaction.get(productRef);
+
+      if (!snapshot.exists) {
+        throw new HttpsError(
+          "not-found",
+          "A product in your cart is no longer available."
+        );
+      }
+
+      const product = snapshot.data();
+
+      if (product.active === false) {
+        throw new HttpsError(
+          "failed-precondition",
+          `${product.name || "A product"} is no longer available.`
+        );
+      }
+
+      products.set(productId, {
+        ref: productRef,
+        data: product
+      });
+    }
+
+    let subtotalHalalas = 0;
+    const trustedItems = [];
+
+    // Verify prices, options and stock using Firestore data.
+    for (const item of items) {
+      const product = products.get(item.productId).data;
+
+      const size = String(item.size || "");
+      const color = String(item.color || "");
+
+      if (
+        Array.isArray(product.sizes) &&
+        product.sizes.length > 0 &&
+        !product.sizes.includes(size)
+      ) {
+        throw new HttpsError(
+          "failed-precondition",
+          `${product.name || "A product"} has an invalid size selection.`
+        );
+      }
+
+      if (
+        Array.isArray(product.colors) &&
+        product.colors.length > 0 &&
+        !product.colors.includes(color)
+      ) {
+        throw new HttpsError(
+          "failed-precondition",
+          `${product.name || "A product"} has an invalid color selection.`
+        );
+      }
+
+      const price = getTrustedPrice(product, size);
+
+      if (!Number.isFinite(price) || price < 0) {
+        throw new HttpsError(
+          "failed-precondition",
+          `${product.name || "A product"} has an invalid price.`
+        );
+      }
+
+      const priceHalalas = Math.round(price * 100);
+
+      if (!Number.isSafeInteger(priceHalalas)) {
+        throw new HttpsError(
+          "failed-precondition",
+          "A product price is invalid."
+        );
+      }
+
+      subtotalHalalas += priceHalalas * item.quantity;
+
+      if (!Number.isSafeInteger(subtotalHalalas)) {
+        throw new HttpsError(
+          "invalid-argument",
+          "Order total is too large."
+        );
+      }
+
+      trustedItems.push({
+        productId: item.productId,
+        name: String(product.name || "Product"),
+        brand: String(product.brand || "BARQ"),
+        price: priceHalalas / 100,
+        quantity: item.quantity,
+        color,
+        size
+      });
+    }
+
+    // Check stock for every tracked product.
+    for (const [productId, quantity] of quantities) {
+      const product = products.get(productId).data;
+
+      // Products without a stock field remain untracked.
+      if (
+        product.stock === undefined ||
+        product.stock === null ||
+        product.stock === ""
+      ) {
+        continue;
+      }
+
+      const stock = Number(product.stock);
+
+      if (!Number.isSafeInteger(stock) || stock < 0) {
+        throw new HttpsError(
+          "failed-precondition",
+          `${product.name || "A product"} has invalid inventory data.`
+        );
+      }
+
+      if (stock < quantity) {
+        throw new HttpsError(
+          "failed-precondition",
+          `Only ${stock} unit(s) of ${product.name || "this product"} are available. Please update your cart.`
+        );
+      }
+    }
+
+    const deliveryHalalas = subtotalHalalas > 0 ? 1500 : 0;
+
+    finalTotals = {
+      subtotal: subtotalHalalas / 100,
+      delivery: deliveryHalalas / 100,
+      total: (subtotalHalalas + deliveryHalalas) / 100
+    };
+
+    finalOrderData = {
+      customerUid: uid,
+
+      orderNumber:
+        "BARQ" + Date.now().toString().slice(-8),
+
+      customerName: fullName,
+      phone,
+      email,
+      address,
+
+      latitude:
+        data.latitude == null ? null : Number(data.latitude),
+
+      longitude:
+        data.longitude == null ? null : Number(data.longitude),
+
+      locationAccuracy:
+        data.locationAccuracy == null
+          ? 0
+          : Number(data.locationAccuracy),
+
+      paymentMethod,
+
+      productIds: [...quantities.keys()],
+
+      items: trustedItems,
+
+      subtotal: finalTotals.subtotal,
+      delivery: finalTotals.delivery,
+      total: finalTotals.total,
+
+      status: "Pending",
+      date: new Date().toISOString(),
+      createdAt: FieldValue.serverTimestamp()
+    };
+
+    // Deduct stock inside the same transaction as order creation.
+    for (const [productId, quantity] of quantities) {
+      const product = products.get(productId).data;
+
+      if (
+        product.stock === undefined ||
+        product.stock === null ||
+        product.stock === ""
+      ) {
+        continue;
+      }
+
+      transaction.update(productRefs.get(productId), {
+        stock: Number(product.stock) - quantity
+      });
+    }
+
+    // Save order and delivery code atomically.
+    transaction.set(orderRef, finalOrderData);
+
+    transaction.set(deliveryCodeRef, {
+      orderId: orderRef.id,
+      customerUid: uid,
+      code: deliveryCode,
+      createdAt: FieldValue.serverTimestamp()
+    });
+  });
+
+  return {
+    success: true,
+    orderId: orderRef.id,
+    order: finalOrderData,
+    totals: finalTotals,
+    deliveryCode
+  };
+});
