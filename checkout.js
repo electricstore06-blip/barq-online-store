@@ -1,19 +1,31 @@
-// ==========================================
-// BARQ CHECKOUT — IMPROVED & VALIDATED
-// ==========================================
 
-import { auth, db } from "./firebase-config.js";
+ // ==========================================
+ // BARQ CHECKOUT — SECURE ORDER CREATION
+ // Uses Firebase Cloud Function createOrder
+ // ==========================================
+
+import { auth } from "./firebase-config.js";
 
 import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-    collection,
-    doc,
-    writeBatch,
-    serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    getApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+    getFunctions,
+    httpsCallable
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+
+
+// ==========================================
+// FIREBASE CLOUD FUNCTION
+// ==========================================
+
+const functions = getFunctions(getApp());
+const createOrderFunction = httpsCallable(functions, "createOrder");
 
 
 // ==========================================
@@ -90,6 +102,7 @@ onAuthStateChanged(
     },
     error => {
         console.error("Authentication check failed:", error);
+
         authReady = true;
         currentUser = null;
 
@@ -111,7 +124,7 @@ function showMessage(message) {
 }
 
 function formatSAR(amount) {
-    return `SAR ${amount.toFixed(2)}`;
+    return `SAR ${Number(amount).toFixed(2)}`;
 }
 
 
@@ -126,7 +139,14 @@ function validateCart(items) {
 
     for (const item of items) {
         if (!item || typeof item !== "object") {
-            return "Your cart contains an invalid item. Please update your cart.";
+            return "Your cart contains an invalid item.";
+        }
+
+        if (
+            typeof item.productId !== "string" ||
+            !item.productId.trim()
+        ) {
+            return "A product is missing its product ID. Please update your cart.";
         }
 
         const price = Number(item.price);
@@ -280,20 +300,25 @@ if (locationButton) {
         locationButton.disabled = true;
 
         if (locationStatus) {
-            locationStatus.textContent =
-                "Getting your location...";
+            locationStatus.textContent = "Getting your location...";
         }
 
         navigator.geolocation.getCurrentPosition(
             position => {
-                latitudeInput.value =
-                    String(position.coords.latitude);
+                if (latitudeInput) {
+                    latitudeInput.value =
+                        String(position.coords.latitude);
+                }
 
-                longitudeInput.value =
-                    String(position.coords.longitude);
+                if (longitudeInput) {
+                    longitudeInput.value =
+                        String(position.coords.longitude);
+                }
 
-                accuracyInput.value =
-                    String(position.coords.accuracy);
+                if (accuracyInput) {
+                    accuracyInput.value =
+                        String(position.coords.accuracy);
+                }
 
                 if (locationStatus) {
                     locationStatus.textContent =
@@ -381,13 +406,12 @@ function getCustomerDetails() {
 
 
 // ==========================================
-// PLACE ORDER
+// PLACE ORDER — SECURE CLOUD FUNCTION
 // ==========================================
 
 if (placeOrderButton) {
     placeOrderButton.addEventListener("click", async () => {
 
-        // Prevent simultaneous submissions.
         if (submittingOrder) return;
 
         showMessage("");
@@ -396,7 +420,6 @@ if (placeOrderButton) {
             showMessage(
                 "Checking your account. Please try again shortly."
             );
-
             return;
         }
 
@@ -404,11 +427,9 @@ if (placeOrderButton) {
             showMessage(
                 "Please sign in to your BARQ account before placing your order."
             );
-
             return;
         }
 
-        // Reload the latest browser cart before checking it.
         cart = readCart();
 
         const cartError = validateCart(cart);
@@ -423,7 +444,6 @@ if (placeOrderButton) {
 
         try {
             customer = getCustomerDetails();
-
         } catch (error) {
             showMessage(error.message);
             return;
@@ -434,98 +454,63 @@ if (placeOrderButton) {
         placeOrderButton.textContent = "Processing Order...";
 
         try {
-            const totals = calculateTotals(cart);
+            const latitude =
+                latitudeInput?.value
+                    ? Number(latitudeInput.value)
+                    : null;
 
-            const latitude = latitudeInput?.value || "";
-            const longitude = longitudeInput?.value || "";
-            const locationAccuracy = accuracyInput?.value || "";
+            const longitude =
+                longitudeInput?.value
+                    ? Number(longitudeInput.value)
+                    : null;
 
-            // Preserve the existing order document fields.
-            const orderData = {
-                customerUid: currentUser.uid,
+            const locationAccuracy =
+                accuracyInput?.value
+                    ? Number(accuracyInput.value)
+                    : 0;
 
-                orderNumber:
-                    "BARQ" +
-                    Date.now().toString().slice(-8),
+            // Send only customer information and selected products.
+            // The server retrieves trusted product prices and stock.
+            const requestData = {
+                customer: {
+                    fullName: customer.fullName,
+                    phone: customer.phone,
+                    email: customer.email,
+                    address: customer.address,
+                    paymentMethod: customer.paymentMethod
+                },
 
-                customerName: customer.fullName,
-                phone: customer.phone,
-                email: customer.email,
-                address: customer.address,
-
-                latitude: latitude ? Number(latitude) : null,
-                longitude: longitude ? Number(longitude) : null,
-
-                locationAccuracy: locationAccuracy
-                    ? Number(locationAccuracy)
-                    : 0,
-
-                paymentMethod: customer.paymentMethod,
-
-                productIds: [
-                    ...new Set(
-                        cart
-                            .map(item => String(item.productId || ""))
-                            .filter(Boolean)
-                    )
-                ],
+                latitude,
+                longitude,
+                locationAccuracy,
 
                 items: cart.map(item => ({
-                    productId: String(item.productId || ""),
-                    name: String(item.name || "Product"),
-                    brand: String(item.brand || ""),
-                    price: Number(item.price),
+                    productId: String(item.productId),
                     quantity: Number(item.quantity),
                     color: String(item.color || ""),
                     size: String(item.size || "")
-                })),
-
-                subtotal: totals.subtotal,
-                delivery: totals.delivery,
-                total: totals.total,
-
-                status: "Pending",
-                date: new Date().toISOString(),
-
-                // Timestamp used for reliable order sorting.
-                createdAt: serverTimestamp()
+                }))
             };
 
+            // Call the secure Firebase function.
+            const response = await createOrderFunction(requestData);
 
-            // ==========================================
-            // CREATE ORDER AND PRIVATE DELIVERY CODE
-            // ==========================================
+            const result = response.data;
 
-            const orderRef = doc(collection(db, "orders"));
+            if (
+                !result ||
+                result.success !== true ||
+                !result.orderId ||
+                !result.order
+            ) {
+                throw new Error(
+                    "The server did not confirm your order."
+                );
+            }
 
-            const deliveryCodeRef = doc(
-                db,
-                "deliveryCodes",
-                orderRef.id
-            );
-
-            // Generate a random 6-digit code.
-            const randomValues = new Uint32Array(1);
-            crypto.getRandomValues(randomValues);
-
-            const deliveryCode = String(
-                randomValues[0] % 1000000
-            ).padStart(6, "0");
-
-            // Save both documents in one batch.
-            const batch = writeBatch(db);
-
-            batch.set(orderRef, orderData);
-
-            batch.set(deliveryCodeRef, {
-                orderId: orderRef.id,
-                customerUid: currentUser.uid,
-                code: deliveryCode,
-                createdAt: serverTimestamp()
-            });
-
-            await batch.commit();
-
+            // Use the server-confirmed order and totals.
+            const orderData = result.order;
+            const totals = result.totals;
 
             // ==========================================
             // SAVE ORDER INFORMATION FOR SUCCESS PAGE
@@ -534,20 +519,20 @@ if (placeOrderButton) {
             localStorage.setItem(
                 "barqOrder",
                 JSON.stringify({
-                    id: orderRef.id,
+                    id: result.orderId,
                     ...orderData,
-                    deliveryCode: deliveryCode
+                    deliveryCode: result.deliveryCode
                 })
             );
 
             localStorage.setItem(
                 "barqOrderTotal",
-                totals.total.toFixed(2)
+                Number(totals.total).toFixed(2)
             );
 
             localStorage.setItem(
                 "barqOrderId",
-                orderRef.id
+                result.orderId
             );
 
             localStorage.setItem(
@@ -560,8 +545,7 @@ if (placeOrderButton) {
                 customer.fullName
             );
 
-
-            // Clear the cart only after Firebase confirms the save.
+            // Clear cart only after server confirmation.
             localStorage.removeItem("barqCart");
 
             window.location.href = "order-success.html";
@@ -570,6 +554,7 @@ if (placeOrderButton) {
             console.error("BARQ order submission error:", error);
 
             showMessage(
+                error.message ||
                 "Unable to confirm your order. Please check your order history before trying again."
             );
 
