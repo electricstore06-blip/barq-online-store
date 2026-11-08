@@ -2,6 +2,7 @@
 // ==========================================
 // BARQ STORE MAIN SCRIPT
 // Product display + Firebase + cart + language support
+// Real-time product and stock updates
 // ==========================================
 
 import { db } from "./firebase-config.js";
@@ -10,6 +11,7 @@ import {
     collection,
     onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 // ==========================================
 // VARIABLES
 // ==========================================
@@ -21,7 +23,9 @@ try {
     const savedCart = JSON.parse(
         localStorage.getItem("barqCart") || "[]"
     );
+
     cart = Array.isArray(savedCart) ? savedCart : [];
+
 } catch (error) {
     console.error("BARQ: Could not read saved cart:", error);
     cart = [];
@@ -30,6 +34,7 @@ try {
 let currentCategory = null;
 let searchRequest = 0;
 let searchTimer = null;
+let unsubscribeProducts = null;
 
 const searchInput = document.getElementById("searchInput");
 
@@ -128,6 +133,28 @@ function getCategoryAliases(category) {
 }
 
 // ==========================================
+// PRODUCT STOCK STATUS
+// ==========================================
+
+function getStockStatus(product) {
+    if (
+        product.stock === undefined ||
+        product.stock === null ||
+        product.stock === ""
+    ) {
+        return null;
+    }
+
+    const stock = Number(product.stock);
+
+    if (!Number.isFinite(stock) || stock <= 0) {
+        return "out";
+    }
+
+    return "in";
+}
+
+// ==========================================
 // CREATE ONE PRODUCT CARD
 // ==========================================
 
@@ -180,11 +207,30 @@ function createProductCard(product) {
 
         price.textContent =
             `${tr("from", "From")} ${lowestPrice.toFixed(2)} SAR`;
+
     } else {
         price.textContent = `${basePrice.toFixed(2)} SAR`;
     }
 
     productArea.append(image, name, brand, price);
+
+    // Show live stock status when stock is available in Firestore.
+    const stockStatus = getStockStatus(product);
+
+    if (stockStatus !== null) {
+        const stockLabel = document.createElement("p");
+        stockLabel.className = "stock-status";
+
+        if (stockStatus === "out") {
+            stockLabel.textContent = "Out of Stock";
+            stockLabel.style.color = "#c62828";
+        } else {
+            stockLabel.textContent = "In Stock";
+            stockLabel.style.color = "#238636";
+        }
+
+        productArea.appendChild(stockLabel);
+    }
 
     function openProductDetails() {
         window.location.href =
@@ -262,11 +308,11 @@ function displayProducts(products) {
 }
 
 // ==========================================
-// LOAD PRODUCTS FROM FIREBASE
+// REAL-TIME PRODUCTS FROM FIREBASE
 // ==========================================
 
-async function loadProducts() {
-    console.log("BARQ: Loading products...");
+function startProductsListener() {
+    console.log("BARQ: Starting real-time product listener...");
 
     const container = document.querySelector(
         "#products .product-container"
@@ -276,65 +322,90 @@ async function loadProducts() {
         container.textContent = tr("loading", "Loading...");
     }
 
-    try {
-        const snapshot = await getDocs(
-            collection(db, "products")
-        );
-
-        productsData = [];
-
-        snapshot.forEach(documentSnapshot => {
-            const product = {
-                ...documentSnapshot.data(),
-                id: documentSnapshot.id
-            };
-
-            if (product.active === false) return;
-
-            productsData.push(product);
-        });
-
-        console.log(
-            "BARQ: Products loaded:",
-            productsData.length
-        );
-
-        currentCategory = null;
-
-        if (searchInput && isEmailLikeSearch(searchInput.value)) {
-            clearSearchField();
-        }
-
-        if (searchInput && searchInput.value.trim()) {
-            renderSearchResults(searchInput.value);
-        } else {
-            displayProducts(productsData);
-        }
-
-    } catch (error) {
-        console.error("Firebase Products Error:", error);
-
-        if (container) {
-            const message = document.createElement("p");
-            message.className = "no-products";
-            message.textContent =
-                "Unable to load products. Please refresh the page.";
-
-            container.replaceChildren(message);
-        }
-
-        if (
-            searchResultsContainer &&
-            searchInput?.value.trim()
-        ) {
-            const message = document.createElement("p");
-            message.className = "no-search-results";
-            message.textContent =
-                "Products could not be loaded. Please try again.";
-
-            searchResultsContainer.replaceChildren(message);
-        }
+    // Prevent duplicate Firebase listeners.
+    if (unsubscribeProducts) {
+        unsubscribeProducts();
+        unsubscribeProducts = null;
     }
+
+    unsubscribeProducts = onSnapshot(
+        collection(db, "products"),
+
+        snapshot => {
+            productsData = [];
+
+            snapshot.forEach(documentSnapshot => {
+                const product = {
+                    ...documentSnapshot.data(),
+                    id: documentSnapshot.id
+                };
+
+                // Do not display products hidden by the administrator.
+                if (product.active === false) return;
+
+                productsData.push(product);
+            });
+
+            console.log(
+                "BARQ: Real-time products updated:",
+                productsData.length
+            );
+
+            if (
+                searchInput &&
+                isEmailLikeSearch(searchInput.value)
+            ) {
+                clearSearchField();
+            }
+
+            // Keep the customer's current search.
+            if (searchInput && searchInput.value.trim()) {
+                renderSearchResults(searchInput.value);
+
+            // Keep the customer's selected category.
+            } else if (currentCategory) {
+                const aliases = getCategoryAliases(currentCategory);
+
+                displayProducts(
+                    productsData.filter(product =>
+                        aliases.includes(getProductCategory(product))
+                    )
+                );
+
+            // Otherwise display all active products.
+            } else {
+                displayProducts(productsData);
+            }
+        },
+
+        error => {
+            console.error(
+                "BARQ: Real-time products listener error:",
+                error
+            );
+
+            if (container) {
+                const message = document.createElement("p");
+                message.className = "no-products";
+                message.textContent =
+                    "Unable to update products. Please refresh the page.";
+
+                container.replaceChildren(message);
+            }
+
+            if (
+                searchResultsContainer &&
+                searchInput?.value.trim()
+            ) {
+                const message = document.createElement("p");
+                message.className = "no-search-results";
+                message.textContent =
+                    "Products could not be updated. Please try again.";
+
+                searchResultsContainer.replaceChildren(message);
+            }
+        }
+    );
 }
 
 // ==========================================
@@ -412,6 +483,7 @@ function renderSearchResults(searchTerm) {
                 "No products found. Try another product name or brand.";
 
             searchResultsContainer.appendChild(message);
+
         } else {
             const fragment = document.createDocumentFragment();
 
@@ -543,6 +615,7 @@ function saveCart() {
             "barqCart",
             JSON.stringify(cart)
         );
+
     } catch (error) {
         console.error("BARQ: Could not save cart:", error);
 
@@ -585,6 +658,7 @@ function addToCart(
     if (existing) {
         existing.quantity =
             Math.max(1, Number(existing.quantity) || 1) + 1;
+
     } else {
         cart.push({
             productId: id,
@@ -818,6 +892,7 @@ document.addEventListener("barq:languageChanged", () => {
 
     if (searchInput && searchInput.value.trim()) {
         renderSearchResults(searchInput.value);
+
     } else if (currentCategory) {
         const aliases = getCategoryAliases(currentCategory);
 
@@ -826,6 +901,7 @@ document.addEventListener("barq:languageChanged", () => {
                 aliases.includes(getProductCategory(product))
             )
         );
+
     } else {
         displayProducts(productsData);
     }
@@ -852,4 +928,4 @@ window.toggleMenu = toggleMenu;
 // ==========================================
 
 updateCart();
-loadProducts();
+startProductsListener();
