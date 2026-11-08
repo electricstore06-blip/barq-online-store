@@ -1,4 +1,4 @@
-A
+
 // ==========================================
 // BARQ STORE MAIN SCRIPT
 // Product display + Firebase + cart + language support
