@@ -13,270 +13,616 @@
 
 <body>
 
-    <div class="supervisor-page">
+<div class="supervisor-page">
 
-        <!-- TOP NAVIGATION -->
-        <header class="supervisor-header">
+    <!-- TOP NAVIGATION -->
+    <header class="supervisor-header">
 
-            <div class="brand">
-                <h1>⚡ BARQ</h1>
-                <span>SUPERVISOR PORTAL</span>
+        <div class="brand">
+            <h1>⚡ BARQ</h1>
+            <span>SUPERVISOR PORTAL</span>
+        </div>
+
+        <nav class="supervisor-nav">
+            <a href="#overview" class="active">Overview</a>
+            <a href="#fleet-section">Fleet</a>
+            <a href="#fuel-section">Fuel</a>
+            <a href="#maintenance-section">Maintenance</a>
+            <a href="#orders-section">Orders</a>
+            <a href="#drivers-section">Drivers</a>
+            <a href="#delivery-history">History</a>
+            <a href="#delivery-reports">Reports</a>
+        </nav>
+
+        <div class="header-actions">
+            <span class="supervisor-role">Supervisor</span>
+            <button id="logout-btn">Logout</button>
+        </div>
+
+    </header>
+
+
+    <main class="supervisor-content">
+
+        <!-- WELCOME -->
+        <section class="welcome-box" id="overview">
+
+            <div>
+                <p class="welcome-label">BARQ LOGISTICS</p>
+
+                <h2>
+                    Welcome, <span id="supervisor-name">Supervisor</span>
+                </h2>
+
+                <p>
+                    Monitor deliveries, manage drivers and coordinate fleet operations.
+                </p>
             </div>
 
-            <nav class="supervisor-nav">
-                <a href="#overview" class="active">Overview</a>
-                <a href="#orders-section">Orders</a>
-                <a href="#drivers-section">Drivers</a>
-                <a href="#delivery-history">Delivery History</a>
-                <a href="#delivery-reports">Reports</a>
-            </nav>
-
-            <div class="header-actions">
-                <span class="supervisor-role">Supervisor</span>
-                <button id="logout-btn">Logout</button>
+            <div class="dashboard-date">
+                DELIVERY OPERATIONS
             </div>
 
-        </header>
+        </section>
 
 
-        <main class="supervisor-content">
+        <!-- SUMMARY CARDS -->
+        <section class="summary-grid">
 
-            <!-- WELCOME -->
-            <section class="welcome-box" id="overview">
+            <div class="summary-card">
+                <span>Total Orders</span>
+                <strong id="total-orders">0</strong>
+                <small>All orders</small>
+            </div>
 
+            <div class="summary-card">
+                <span>Pending Orders</span>
+                <strong id="pending-orders">0</strong>
+                <small>Waiting for action</small>
+            </div>
+
+            <div class="summary-card">
+                <span>Active Drivers</span>
+                <strong id="active-drivers">0</strong>
+                <small>Active driver accounts</small>
+            </div>
+
+            <div class="summary-card">
+                <span>Out for Delivery</span>
+                <strong id="delivery-orders">0</strong>
+                <small>Orders on the road</small>
+            </div>
+
+        </section>
+
+
+        <!-- OPERATIONS OVERVIEW -->
+        <section class="operations-grid">
+
+            <div class="dashboard-panel">
+
+                <div class="section-header">
+                    <div>
+                        <p class="panel-label">DAILY PERFORMANCE</p>
+                        <h2>Today's Delivery Progress</h2>
+                    </div>
+                </div>
+
+                <div class="progress-placeholder">
+                    <div class="progress-number">--</div>
+                    <p>Delivery progress will appear here</p>
+
+                    <div class="progress-track">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-panel">
+
+                <div class="section-header">
+                    <div>
+                        <p class="panel-label">TEAM OVERVIEW</p>
+                        <h2>Driver Distribution</h2>
+                    </div>
+                </div>
+
+                <div class="statistics-placeholder">
+                    <p>Driver statistics will appear here.</p>
+                    <p>Active, inactive and available drivers.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FLEET MANAGEMENT -->
+        <section class="dashboard-section" id="fleet-section">
+
+            <div class="section-header">
                 <div>
-                    <p class="welcome-label">BARQ LOGISTICS</p>
-
-                    <h2>
-                        Welcome, <span id="supervisor-name">Supervisor</span>
-                    </h2>
-
-                    <p>
-                        Monitor deliveries, manage drivers and coordinate orders.
-                    </p>
+                    <p class="panel-label">FLEET OPERATIONS</p>
+                    <h2>Vehicle Registration</h2>
                 </div>
 
-                <div class="dashboard-date">
-                    DELIVERY OPERATIONS
-                </div>
+                <button type="button" id="refresh-vehicles-btn">
+                    ↻ Refresh Vehicles
+                </button>
+            </div>
 
-            </section>
+            <p class="fleet-description">
+                Register delivery vehicles, assign drivers and manage vehicle information.
+            </p>
 
+            <!-- VEHICLE REGISTRATION FORM -->
+            <form id="vehicle-form" class="fleet-form">
 
-            <!-- SUMMARY CARDS -->
-            <section class="summary-grid">
+                <input type="hidden" id="vehicle-edit-id">
 
-                <div class="summary-card">
-                    <span>Total Orders</span>
-                    <strong id="total-orders">0</strong>
-                    <small>All orders</small>
-                </div>
+                <div class="fleet-form-grid">
 
-                <div class="summary-card">
-                    <span>Pending Orders</span>
-                    <strong id="pending-orders">0</strong>
-                    <small>Waiting for action</small>
-                </div>
+                    <label>
+                        Vehicle Registration / Plate Number *
+                        <input
+                            type="text"
+                            id="vehicle-plate"
+                            maxlength="30"
+                            required
+                            placeholder="Example: ABC 1234">
+                    </label>
 
-                <div class="summary-card">
-                    <span>Active Drivers</span>
-                    <strong id="active-drivers">0</strong>
-                    <small>Active driver accounts</small>
-                </div>
+                    <label>
+                        Vehicle Name *
+                        <input
+                            type="text"
+                            id="vehicle-name"
+                            maxlength="80"
+                            required
+                            placeholder="Example: Toyota Hilux">
+                    </label>
 
-                <div class="summary-card">
-                    <span>Out for Delivery</span>
-                    <strong id="delivery-orders">0</strong>
-                    <small>Orders on the road</small>
-                </div>
+                    <label>
+                        Vehicle Model
+                        <input
+                            type="text"
+                            id="vehicle-model"
+                            maxlength="80"
+                            placeholder="Example: 2025">
+                    </label>
 
-            </section>
+                    <label>
+                        Vehicle Type *
+                        <select id="vehicle-type" required>
+                            <option value="">Select vehicle type</option>
+                            <option value="Car">Car</option>
+                            <option value="Van">Van</option>
+                            <option value="Pickup">Pickup</option>
+                            <option value="Motorcycle">Motorcycle</option>
+                            <option value="Truck">Truck</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </label>
 
+                    <label>
+                        Assigned Driver
+                        <select id="vehicle-driver">
+                            <option value="">No driver assigned</option>
+                        </select>
+                    </label>
 
-            <!-- DELIVERY OPERATIONS -->
-            <section class="operations-grid">
+                    <label>
+                        Current Mileage (KM) *
+                        <input
+                            type="number"
+                            id="vehicle-mileage"
+                            min="0"
+                            max="10000000"
+                            step="1"
+                            required
+                            placeholder="Example: 45000">
+                    </label>
 
-                <!-- DELIVERY PROGRESS -->
-                <div class="dashboard-panel">
+                    <label>
+                        Registration Expiry Date
+                        <input type="date" id="vehicle-registration-expiry">
+                    </label>
 
-                    <div class="section-header">
-                        <div>
-                            <p class="panel-label">DAILY PERFORMANCE</p>
-                            <h2>Today's Delivery Progress</h2>
-                        </div>
-                    </div>
+                    <label>
+                        Insurance Expiry Date
+                        <input type="date" id="vehicle-insurance-expiry">
+                    </label>
 
-                    <div class="progress-placeholder">
-                        <div class="progress-number">--</div>
-                        <p>Delivery progress will appear here</p>
-                        <div class="progress-track">
-                            <div class="progress-fill"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-
-                <!-- DRIVER DISTRIBUTION -->
-                <div class="dashboard-panel">
-
-                    <div class="section-header">
-                        <div>
-                            <p class="panel-label">TEAM OVERVIEW</p>
-                            <h2>Driver Distribution</h2>
-                        </div>
-                    </div>
-
-                    <div class="statistics-placeholder">
-                        <p>Driver statistics will appear here.</p>
-                        <p>Active, inactive and available drivers.</p>
-                    </div>
-
-                </div>
-
-
-                <!-- FUEL MANAGEMENT -->
-                <div class="dashboard-panel">
-
-                    <div class="section-header">
-                        <div>
-                            <p class="panel-label">FLEET OPERATIONS</p>
-                            <h2>Fuel Management</h2>
-                        </div>
-                    </div>
-
-                    <div class="statistics-placeholder">
-                        <p>Fuel consumption and usage records.</p>
-                        <small>Fuel costs are visible to Admin only.</small>
-                    </div>
+                    <label>
+                        Vehicle Status
+                        <select id="vehicle-status">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </label>
 
                 </div>
 
+                <div class="fleet-form-actions">
+                    <button type="submit" id="save-vehicle-btn">
+                        Save Vehicle
+                    </button>
 
-                <!-- VEHICLE MAINTENANCE -->
-                <div class="dashboard-panel">
-
-                    <div class="section-header">
-                        <div>
-                            <p class="panel-label">VEHICLE CONDITION</p>
-                            <h2>Vehicle Maintenance</h2>
-                        </div>
-                    </div>
-
-                    <div class="statistics-placeholder">
-                        <p>Vehicle condition and service schedules.</p>
-                        <small>Maintenance expenses are visible to Admin only.</small>
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- DELIVERY TRACKING MAP -->
-            <section class="dashboard-panel map-section">
-
-                <div class="section-header">
-                    <div>
-                        <p class="panel-label">LIVE OPERATIONS</p>
-                        <h2>Delivery Tracking Map</h2>
-                    </div>
-
-                    <span class="map-status">Tracking area</span>
-                </div>
-
-                <div class="map-placeholder">
-                    <div>
-                        <span class="map-icon">⌖</span>
-                        <h3>Delivery Map</h3>
-                        <p>Driver locations and delivery tracking will appear here.</p>
-                    </div>
-                </div>
-
-            </section>
-
-
-            <!-- DRIVERS -->
-            <section class="dashboard-section" id="drivers-section">
-
-                <div class="section-header">
-                    <div>
-                        <p class="panel-label">DELIVERY TEAM</p>
-                        <h2>Driver Management</h2>
-                    </div>
-
-                    <button id="refresh-drivers-btn">
-                        ↻ Refresh Drivers
+                    <button type="button" id="cancel-vehicle-edit-btn">
+                        Clear Form
                     </button>
                 </div>
 
-                <div id="drivers-container">
-                    Loading drivers...
+            </form>
+
+
+            <!-- VEHICLE LIST -->
+            <div class="fleet-list-heading">
+                <h3>Registered Vehicles</h3>
+            </div>
+
+            <div id="vehicles-container">
+                Loading vehicles...
+            </div>
+
+        </section>
+
+
+        <!-- FUEL MANAGEMENT -->
+        <section class="dashboard-section" id="fuel-section">
+
+            <div class="section-header">
+                <div>
+                    <p class="panel-label">FLEET OPERATIONS</p>
+                    <h2>Fuel Management</h2>
                 </div>
 
-            </section>
+                <button type="button" id="refresh-fuel-btn">
+                    ↻ Refresh Fuel Records
+                </button>
+            </div>
 
+            <p class="fleet-description">
+                Record vehicle fuel consumption, fuel type and mileage.
+                Fuel expenses are accessible to Admin only.
+            </p>
 
-            <!-- ORDERS -->
-            <section class="dashboard-section" id="orders-section">
+            <form id="fuel-form" class="fleet-form">
 
-                <div class="section-header">
-                    <div>
-                        <p class="panel-label">ORDER OPERATIONS</p>
-                        <h2>Order Management</h2>
-                    </div>
+                <div class="fleet-form-grid">
 
-                    <button id="refresh-orders-btn">
-                        ↻ Refresh Orders
+                    <label>
+                        Vehicle *
+                        <select id="fuel-vehicle" required>
+                            <option value="">Select vehicle</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Fuel Type *
+                        <select id="fuel-type" required>
+                            <option value="">Select fuel type</option>
+                            <option value="Petrol">Petrol</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Electric">Electric / Charging</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Fuel Quantity (Litres) *
+                        <input
+                            type="number"
+                            id="fuel-litres"
+                            min="0.01"
+                            max="10000"
+                            step="0.01"
+                            required
+                            placeholder="Example: 45">
+                    </label>
+
+                    <label>
+                        Vehicle Mileage (KM) *
+                        <input
+                            type="number"
+                            id="fuel-mileage"
+                            min="0"
+                            max="10000000"
+                            step="1"
+                            required
+                            placeholder="Current odometer reading">
+                    </label>
+
+                    <label>
+                        Fuel Date *
+                        <input type="date" id="fuel-date" required>
+                    </label>
+
+                    <label>
+                        Notes
+                        <input
+                            type="text"
+                            id="fuel-notes"
+                            maxlength="300"
+                            placeholder="Optional notes">
+                    </label>
+
+                </div>
+
+                <div class="fleet-form-actions">
+                    <button type="submit" id="save-fuel-btn">
+                        Save Fuel Record
                     </button>
                 </div>
 
-                <div id="orders-container">
-                    Loading orders...
+            </form>
+
+            <div class="fleet-list-heading">
+                <h3>Fuel Usage History</h3>
+                <small>Financial costs are not displayed here.</small>
+            </div>
+
+            <div id="fuel-container">
+                Loading fuel records...
+            </div>
+
+        </section>
+
+
+        <!-- VEHICLE MAINTENANCE -->
+        <section class="dashboard-section" id="maintenance-section">
+
+            <div class="section-header">
+                <div>
+                    <p class="panel-label">VEHICLE CONDITION</p>
+                    <h2>Vehicle Maintenance</h2>
                 </div>
 
-            </section>
+                <button type="button" id="refresh-maintenance-btn">
+                    ↻ Refresh Maintenance
+                </button>
+            </div>
 
+            <p class="fleet-description">
+                Record oil changes, servicing, inspections, repairs and vehicle maintenance.
+                Maintenance expenses are accessible to Admin only.
+            </p>
 
-            <!-- DELIVERY HISTORY -->
-            <section class="dashboard-panel future-section" id="delivery-history">
+            <form id="maintenance-form" class="fleet-form">
 
-                <div class="section-header">
-                    <div>
-                        <p class="panel-label">COMPLETED OPERATIONS</p>
-                        <h2>Delivery History</h2>
-                    </div>
+                <div class="fleet-form-grid">
+
+                    <label>
+                        Vehicle *
+                        <select id="maintenance-vehicle" required>
+                            <option value="">Select vehicle</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Maintenance Type *
+                        <select id="maintenance-type" required>
+
+                            <option value="">Select maintenance type</option>
+
+                            <option value="Engine Oil">Engine Oil Change</option>
+                            <option value="Gearbox Oil">Gearbox / Transmission Oil</option>
+                            <option value="Brake Fluid">Brake Fluid</option>
+                            <option value="Oil Filter">Oil Filter</option>
+                            <option value="Air Filter">Air Filter</option>
+                            <option value="Fuel Filter">Fuel Filter</option>
+                            <option value="Tyres">Tyres</option>
+                            <option value="Brakes">Brakes</option>
+                            <option value="Battery">Battery / Electrical</option>
+                            <option value="General Service">General Service</option>
+                            <option value="Repair">General Repair</option>
+                            <option value="Inspection">Vehicle Inspection</option>
+                            <option value="Other">Other</option>
+
+                        </select>
+                    </label>
+
+                    <label>
+                        Service Date *
+                        <input type="date" id="maintenance-date" required>
+                    </label>
+
+                    <label>
+                        Mileage at Service (KM) *
+                        <input
+                            type="number"
+                            id="maintenance-mileage"
+                            min="0"
+                            max="10000000"
+                            step="1"
+                            required
+                            placeholder="Current vehicle mileage">
+                    </label>
+
+                    <label>
+                        Oil / Fluid Brand or Type
+                        <input
+                            type="text"
+                            id="maintenance-fluid-type"
+                            maxlength="100"
+                            placeholder="Example: 5W-30">
+                    </label>
+
+                    <label>
+                        Quantity (Litres)
+                        <input
+                            type="number"
+                            id="maintenance-quantity"
+                            min="0"
+                            max="10000"
+                            step="0.01"
+                            placeholder="Example: 5">
+                    </label>
+
+                    <label>
+                        Next Service Date
+                        <input type="date" id="maintenance-next-date">
+                    </label>
+
+                    <label>
+                        Next Service Mileage (KM)
+                        <input
+                            type="number"
+                            id="maintenance-next-mileage"
+                            min="0"
+                            max="10000000"
+                            step="1"
+                            placeholder="Next service odometer">
+                    </label>
+
                 </div>
 
-                <p>Completed delivery records will appear here.</p>
+                <label class="fleet-full-label">
+                    Maintenance Description / Work Performed
+                    <textarea
+                        id="maintenance-description"
+                        rows="3"
+                        maxlength="1000"
+                        placeholder="Describe the maintenance or repair work..."></textarea>
+                </label>
 
-            </section>
-
-
-            <!-- DELIVERY REPORTS -->
-            <section class="dashboard-panel future-section" id="delivery-reports">
-
-                <div class="section-header">
-                    <div>
-                        <p class="panel-label">PERFORMANCE</p>
-                        <h2>Delivery Reports</h2>
-                    </div>
+                <div class="fleet-form-actions">
+                    <button type="submit" id="save-maintenance-btn">
+                        Save Maintenance Record
+                    </button>
                 </div>
 
-                <p>Delivery statistics and driver performance reports will appear here.</p>
-
-            </section>
+            </form>
 
 
-            <!-- SYSTEM MESSAGE -->
-            <div id="supervisor-message"></div>
+            <!-- SERVICE REMINDERS -->
+            <div class="fleet-list-heading">
+                <h3>Service Reminders</h3>
+            </div>
 
-        </main>
+            <div id="service-reminders-container">
+                Service reminders will appear here.
+            </div>
 
-    </div>
+
+            <!-- MAINTENANCE HISTORY -->
+            <div class="fleet-list-heading">
+                <h3>Maintenance History</h3>
+                <small>Financial expenses are not displayed here.</small>
+            </div>
+
+            <div id="maintenance-container">
+                Loading maintenance records...
+            </div>
+
+        </section>
 
 
-    <script type="module" src="supervisor-dashboard.js"></script>
+        <!-- DELIVERY TRACKING MAP -->
+        <section class="dashboard-panel map-section">
+
+            <div class="section-header">
+                <div>
+                    <p class="panel-label">LIVE OPERATIONS</p>
+                    <h2>Delivery Tracking Map</h2>
+                </div>
+
+                <span class="map-status">Tracking area</span>
+            </div>
+
+            <div class="map-placeholder">
+                <div>
+                    <span class="map-icon">⌖</span>
+                    <h3>Delivery Map</h3>
+                    <p>Driver locations and delivery tracking will appear here.</p>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- DRIVERS -->
+        <section class="dashboard-section" id="drivers-section">
+
+            <div class="section-header">
+                <div>
+                    <p class="panel-label">DELIVERY TEAM</p>
+                    <h2>Driver Management</h2>
+                </div>
+
+                <button type="button" id="refresh-drivers-btn">
+                    ↻ Refresh Drivers
+                </button>
+            </div>
+
+            <div id="drivers-container">
+                Loading drivers...
+            </div>
+
+        </section>
+
+
+        <!-- ORDERS -->
+        <section class="dashboard-section" id="orders-section">
+
+            <div class="section-header">
+                <div>
+                    <p class="panel-label">ORDER OPERATIONS</p>
+                    <h2>Order Management</h2>
+                </div>
+
+                <button type="button" id="refresh-orders-btn">
+                    ↻ Refresh Orders
+                </button>
+            </div>
+
+            <div id="orders-container">
+                Loading orders...
+            </div>
+
+        </section>
+
+
+        <!-- DELIVERY HISTORY -->
+        <section class="dashboard-panel future-section" id="delivery-history">
+
+            <div class="section-header">
+                <div>
+                    <p class="panel-label">COMPLETED OPERATIONS</p>
+                    <h2>Delivery History</h2>
+                </div>
+            </div>
+
+            <p>Completed delivery records will appear here.</p>
+
+        </section>
+
+
+        <!-- DELIVERY REPORTS -->
+        <section class="dashboard-panel future-section" id="delivery-reports">
+
+            <div class="section-header">
+                <div>
+                    <p class="panel-label">PERFORMANCE</p>
+                    <h2>Delivery Reports</h2>
+                </div>
+            </div>
+
+            <p>Delivery statistics and driver performance reports will appear here.</p>
+
+        </section>
+
+
+        <!-- SYSTEM MESSAGE -->
+        <div id="supervisor-message" role="status" aria-live="polite"></div>
+
+    </main>
+
+</div>
+
+<script type="module" src="supervisor-dashboard.js"></script>
 
 </body>
 </html>
