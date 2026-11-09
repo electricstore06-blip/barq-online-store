@@ -1074,7 +1074,7 @@ if (maintenanceForm) {
                 collection(db, "maintenanceLogs"),
                 maintenanceData
             );
-
+console.log("STEP 1: Maintenance record saved successfully.");
             if (mileage > Number(vehicle.mileage || 0)) {
                 await updateDoc(
                     doc(db, "vehicles", vehicle.id),
