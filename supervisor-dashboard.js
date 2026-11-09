@@ -226,6 +226,8 @@ async function verifySupervisor(user) {
         }
 
         const staffDocument = snapshot.docs[0];
+        console.log("SUPERVISOR DOCUMENT ID:", staffDocument.id);
+console.log("SUPERVISOR DATA UID:", staffDocument.data().uid);
         const staffData = staffDocument.data();
 
         // Match the supervisor security rule:
