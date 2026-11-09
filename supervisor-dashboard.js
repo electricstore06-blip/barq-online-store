@@ -1070,11 +1070,14 @@ if (maintenanceForm) {
         submitButton.disabled = true;
 
         try {
+           console.log("UPDATING VEHICLE MILEAGE NOW"); 
             await addDoc(
                 collection(db, "maintenanceLogs"),
                 maintenanceData
             );
 console.log("STEP 1: Maintenance record saved successfully.");
+            console.log("MAINTENANCE INPUT MILEAGE:", mileage);
+console.log("CURRENT VEHICLE MILEAGE:", vehicle.mileage);
             if (mileage > Number(vehicle.mileage || 0)) {
                 await updateDoc(
                     doc(db, "vehicles", vehicle.id),
