@@ -211,48 +211,51 @@ async function verifySupervisor(user) {
     if (!user) return false;
 
     console.log("SUPERVISOR AUTH UID:", user.uid);
+try {
+    await addDoc(
+        collection(db, "maintenanceLogs"),
+        maintenanceData
+    );
 
-    try {
-        const usersQuery = query(
-            collection(db, "users"),
-            where("uid", "==", user.uid)
+    console.log("STEP 1: Maintenance record saved successfully.");
+    console.log("MAINTENANCE INPUT MILEAGE:", mileage);
+    console.log("CURRENT VEHICLE MILEAGE:", vehicle.mileage);
+    console.log("VEHICLE DOCUMENT ID:", vehicle.id);
+
+    if (mileage > Number(vehicle.mileage || 0)) {
+
+        console.log("STEP 2: Updating vehicle mileage now.");
+
+        await updateDoc(
+            doc(db, "vehicles", vehicle.id),
+            {
+                mileage: mileage,
+                updatedAt: new Date(),
+                updatedByUid: currentSupervisor.uid
+            }
         );
 
-        const snapshot = await getDocs(usersQuery);
+        console.log("STEP 3: Vehicle mileage updated successfully.");
 
-        if (snapshot.empty) {
-            console.error("Supervisor user document not found.");
-            return false;
-        }
-
-        const staffDocument = snapshot.docs[0];
-        console.log("SUPERVISOR DOCUMENT ID:", staffDocument.id);
-console.log("SUPERVISOR DATA UID:", staffDocument.data().uid);
-        const staffData = staffDocument.data();
-
-        // Match the supervisor security rule:
-        // role must be lowercase "supervisor"
-        // and active must be true.
-        if (
-            staffData.role !== "supervisor" ||
-            staffData.active !== true
-        ) {
-            console.error("Supervisor role or active status is invalid.");
-            return false;
-        }
-
-        currentSupervisor = {
-            id: staffDocument.id,
-            ...staffData
-        };
-
-        return true;
-
-    } catch (error) {
-        console.error("Supervisor verification error:", error);
-        return false;
+    } else {
+        console.log("Mileage update skipped: new mileage is not higher.");
     }
+
+    maintenanceForm.reset();
+
+    showMessage("Maintenance record saved successfully.");
+
+    await loadVehicles();
+    await loadMaintenanceRecords();
+
+} catch (error) {
+    console.error("Save maintenance error:", error);
+    showMessage("Unable to save maintenance record. Check Firestore rules.", "error");
+
+} finally {
+    submitButton.disabled = false;
 }
+   
 
 
 // ==========================================
