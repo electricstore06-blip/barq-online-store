@@ -635,7 +635,7 @@ function populateVehicleOptions() {
         `;
 
         availableVehicles
-            .filter(vehicle => vehicle.status === "active")
+            .filter(vehicle => String(vehicle.status || "").trim().toLowerCase() === "active")
             .forEach(vehicle => {
                 const option = document.createElement("option");
                 option.value = vehicle.id;
