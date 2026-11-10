@@ -1566,8 +1566,7 @@ if (refreshMaintenanceButton) {
 
 async function loadDashboard() {
     try {
-        showMessage("Loading supervisor dashboard...");
-
+showMessage("Loading supervisor dashboard...");
         await loadDrivers();
         await loadOrders();
         await loadVehicles();
