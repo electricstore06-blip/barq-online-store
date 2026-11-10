@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BARQ | Supervisor Fuel Management</title>
+    <link rel="stylesheet" href="supervisor-dashboard.css">
+</head>
+
+<body>
+
+    <header class="dashboard-header">
+        <div>
+            <h1>BARQ Supervisor Portal</h1>
+            <p>Fleet Operations Management</p>
+        </div>
+
+        <div>
+            <span id="supervisor-name">Supervisor</span>
+            <button type="button" id="logout-btn">Logout</button>
+        </div>
+    </header>
+
+    <nav class="dashboard-nav">
+        <a href="supervisor-dashboard.html">Overview</a>
+        <a href="supervisor-fleet.html">Fleet</a>
+        <a href="supervisor-fuel.html" class="active">Fuel</a>
+        <a href="supervisor-maintenance.html">Maintenance</a>
+        <a href="supervisor-orders.html">Orders</a>
+        <a href="supervisor-drivers.html">Drivers</a>
+        <a href="supervisor-history.html">History</a>
+        <a href="supervisor-reports.html">Reports</a>
+    </nav>
+
+    <main class="dashboard-main">
+
+        <!-- FUEL MANAGEMENT -->
+        <section class="dashboard-section" id="fuel-section">
+
+            <div class="section-header">
+                <div>
+                    <p class="panel-label">FLEET OPERATIONS</p>
+                    <h2>Fuel Management</h2>
+                </div>
+
+                <button type="button" id="refresh-fuel-btn">
+                    ↻ Refresh Fuel Records
+                </button>
+            </div>
+
+            <p class="fleet-description">
+                Record vehicle fuel consumption, fuel type and mileage.
+                Fuel expenses are accessible to Admin only.
+            </p>
+
+            <form id="fuel-form" class="fleet-form">
+
+                <div class="fleet-form-grid">
+
+                    <label>
+                        Vehicle *
+                        <select id="fuel-vehicle" required>
+                            <option value="">Select vehicle</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Fuel Type *
+                        <select id="fuel-type" required>
+                            <option value="">Select fuel type</option>
+                            <option value="Petrol">Petrol</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Electric">Electric / Charging</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Fuel Quantity (Litres) *
+                        <input
+                            type="number"
+                            id="fuel-litres"
+                            min="0.01"
+                            max="10000"
+                            step="0.01"
+                            required
+                            placeholder="Example: 45">
+                    </label>
+
+                    <label>
+                        Vehicle Mileage (KM) *
+                        <input
+                            type="number"
+                            id="fuel-mileage"
+                            min="0"
+                            max="10000000"
+                            step="1"
+                            required
+                            placeholder="Current odometer reading">
+                    </label>
+
+                    <label>
+                        Fuel Date *
+                        <input type="date" id="fuel-date" required>
+                    </label>
+
+                    <label>
+                        Fuel Cost (SAR) *
+                        <input
+                            type="number"
+                            id="fuel-cost"
+                            min="0"
+                            max="1000000"
+                            step="0.01"
+                            required
+                            placeholder="Example: 120.50">
+                    </label>
+
+                    <label>
+                        Notes
+                        <input
+                            type="text"
+                            id="fuel-notes"
+                            maxlength="300"
+                            placeholder="Optional notes">
+                    </label>
+
+                </div>
+
+                <div class="fleet-form-actions">
+                    <button type="submit" id="save-fuel-btn">
+                        Save Fuel Record
+                    </button>
+                </div>
+
+            </form>
+
+            <div class="fleet-list-heading">
+                <h3>Fuel Usage History</h3>
+                <small>Financial costs are not displayed here.</small>
+            </div>
+
+            <div id="fuel-container">
+                Loading fuel records...
+            </div>
+
+        </section>
+
+        <div id="supervisor-message"></div>
+
+        <!-- Hidden compatibility containers.
+             These allow the existing JavaScript to load
+             drivers and vehicles for the fuel dropdown. -->
+        <div hidden>
+            <div id="drivers-container"></div>
+            <div id="orders-container"></div>
+            <div id="vehicles-container"></div>
+            <div id="maintenance-container"></div>
+            <div id="service-reminders-container"></div>
+        </div>
+
+    </main>
+
+    <script type="module" src="supervisor-dashboard.js"></script>
+
+</body>
+</html>
