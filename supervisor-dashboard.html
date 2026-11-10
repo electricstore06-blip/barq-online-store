@@ -335,10 +335,22 @@
                             placeholder="Current odometer reading">
                     </label>
 
-                    <label>
-                        Fuel Date *
-                        <input type="date" id="fuel-date" required>
-                    </label>
+                   <label>
+    Fuel Date *
+    <input type="date" id="fuel-date" required>
+</label>
+
+<label>
+    Fuel Cost (SAR) *
+    <input
+        type="number"
+        id="fuel-cost"
+        min="0"
+        max="1000000"
+        step="0.01"
+        required
+        placeholder="Example: 120.50">
+</label> 
 
                     <label>
                         Notes
