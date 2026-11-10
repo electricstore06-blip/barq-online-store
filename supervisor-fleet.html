@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BARQ | Supervisor Fleet</title>
+    <link rel="stylesheet" href="supervisor-dashboard.css">
+</head>
+<body>
+
+<div class="supervisor-page">
+
+    <header class="supervisor-header">
+
+        <div class="brand">
+            <h1>⚡ BARQ</h1>
+            <span>SUPERVISOR PORTAL</span>
+        </div>
+
+        <nav class="supervisor-nav">
+            <a href="supervisor-dashboard.html">Overview</a>
+            <a href="supervisor-fleet.html" class="active">Fleet</a>
+            <a href="supervisor-fuel.html">Fuel</a>
+            <a href="supervisor-maintenance.html">Maintenance</a>
+            <a href="supervisor-orders.html">Orders</a>
+            <a href="supervisor-drivers.html">Drivers</a>
+            <a href="supervisor-history.html">History</a>
+            <a href="supervisor-reports.html">Reports</a>
+        </nav>
+
+        <div class="header-actions">
+            <span class="supervisor-role">Supervisor</span>
+            <button type="button" id="logout-btn">Logout</button>
+        </div>
+
+    </header>
+
+
+    <main class="supervisor-content">
+
+        <section class="welcome-box">
+            <div>
+                <p class="welcome-label">FLEET MANAGEMENT</p>
+                <h2>Vehicle Management</h2>
+                <p>Register vehicles, assign drivers and manage your delivery fleet.</p>
+            </div>
+
+            <div class="dashboard-date">BARQ OPERATIONS</div>
+        </section>
+
+
+        <section class="dashboard-section" id="fleet-section">
+
+            <div class="section-header">
+                <div>
+                    <p class="panel-label">FLEET OPERATIONS</p>
+                    <h2>Vehicle Registration</h2>
+                </div>
+
+                <button type="button" id="refresh-vehicles-btn">
+                    ↻ Refresh Vehicles
+                </button>
+            </div>
+
+            <p class="fleet-description">
+                Register delivery vehicles, assign drivers and manage vehicle information.
+            </p>
+
+
+            <form id="vehicle-form" class="fleet-form">
+
+                <input type="hidden" id="vehicle-edit-id">
+
+                <div class="fleet-form-grid">
+
+                    <label>
+                        Vehicle Registration / Plate Number *
+                        <input
+                            type="text"
+                            id="vehicle-plate"
+                            maxlength="30"
+                            required
+                            placeholder="Example: ABC 1234">
+                    </label>
+
+                    <label>
+                        Vehicle Name *
+                        <input
+                            type="text"
+                            id="vehicle-name"
+                            maxlength="80"
+                            required
+                            placeholder="Example: Toyota Hilux">
+                    </label>
+
+                    <label>
+                        Vehicle Model
+                        <input
+                            type="text"
+                            id="vehicle-model"
+                            maxlength="80"
+                            placeholder="Example: 2025">
+                    </label>
+
+                    <label>
+                        Vehicle Type *
+                        <select id="vehicle-type" required>
+                            <option value="">Select vehicle type</option>
+                            <option value="Car">Car</option>
+                            <option value="Van">Van</option>
+                            <option value="Pickup">Pickup</option>
+                            <option value="Motorcycle">Motorcycle</option>
+                            <option value="Truck">Truck</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Assigned Driver
+                        <select id="vehicle-driver">
+                            <option value="">No driver assigned</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Current Mileage (KM) *
+                        <input
+                            type="number"
+                            id="vehicle-mileage"
+                            min="0"
+                            max="10000000"
+                            step="1"
+                            required
+                            placeholder="Example: 45000">
+                    </label>
+
+                    <label>
+                        Registration Expiry Date
+                        <input type="date" id="vehicle-registration-expiry">
+                    </label>
+
+                    <label>
+                        Insurance Expiry Date
+                        <input type="date" id="vehicle-insurance-expiry">
+                    </label>
+
+                    <label>
+                        Vehicle Status
+                        <select id="vehicle-status">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </label>
+
+                </div>
+
+                <div class="fleet-form-actions">
+
+                    <button type="submit" id="save-vehicle-btn">
+                        Save Vehicle
+                    </button>
+
+                    <button type="button" id="cancel-vehicle-edit-btn">
+                        Clear Form
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <div class="fleet-list-heading">
+                <h3>Registered Vehicles</h3>
+                <small>Manage your registered delivery vehicles</small>
+            </div>
+
+            <div id="vehicles-container">
+                Loading vehicles...
+            </div>
+
+        </section>
+
+        <!-- Used by the existing script to load driver options.
+             Kept hidden because the Fleet page only displays vehicles. -->
+        <div id="drivers-container" hidden></div>
+
+    </main>
+
+    <div id="supervisor-message"></div>
+
+</div>
+
+<script type="module" src="supervisor-dashboard.js"></script>
+
+</body>
+</html>
