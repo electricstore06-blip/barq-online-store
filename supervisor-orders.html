@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BARQ | Supervisor Orders</title>
+    <link rel="stylesheet" href="supervisor-dashboard.css">
+</head>
+
+<body>
+
+    <header class="dashboard-header">
+        <div>
+            <h1>BARQ Supervisor Portal</h1>
+            <p>Fleet Operations Management</p>
+        </div>
+
+        <div>
+            <span id="supervisor-name">Supervisor</span>
+            <button type="button" id="logout-btn">Logout</button>
+        </div>
+    </header>
+
+    <nav class="dashboard-nav">
+        <a href="supervisor-dashboard.html">Overview</a>
+        <a href="supervisor-fleet.html">Fleet</a>
+        <a href="supervisor-fuel.html">Fuel</a>
+        <a href="supervisor-maintenance.html">Maintenance</a>
+        <a href="supervisor-orders.html" class="active">Orders</a>
+        <a href="supervisor-drivers.html">Drivers</a>
+        <a href="supervisor-history.html">History</a>
+        <a href="supervisor-reports.html">Reports</a>
+    </nav>
+
+    <main class="dashboard-main">
+
+        <!-- ORDERS -->
+        <section class="dashboard-section" id="orders-section">
+
+            <div class="section-header">
+                <div>
+                    <p class="panel-label">ORDER OPERATIONS</p>
+                    <h2>Order Management</h2>
+                </div>
+
+                <button type="button" id="refresh-orders-btn">
+                    ↻ Refresh Orders
+                </button>
+            </div>
+
+            <div id="orders-container">
+                Loading orders...
+            </div>
+
+        </section>
+
+        <div id="supervisor-message" role="status" aria-live="polite"></div>
+
+        <!-- Hidden compatibility containers for existing JavaScript -->
+        <div hidden>
+            <div id="drivers-container"></div>
+            <div id="vehicles-container"></div>
+            <div id="fuel-container"></div>
+            <div id="maintenance-container"></div>
+            <div id="service-reminders-container"></div>
+        </div>
+
+    </main>
+
+    <script type="module" src="supervisor-dashboard.js"></script>
+
+</body>
+</html>
