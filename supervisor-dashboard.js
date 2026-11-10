@@ -33,6 +33,7 @@ const deliveryOrders = document.getElementById("delivery-orders");
 
 const driversContainer = document.getElementById("drivers-container");
 const ordersContainer = document.getElementById("orders-container");
+const historyContainer = document.getElementById("history-container");
 const message = document.getElementById("supervisor-message");
 
 const logoutButton = document.getElementById("logout-btn");
@@ -528,6 +529,101 @@ async function loadOrders() {
     }
 }
 
+
+// ==========================================
+// LOAD DELIVERY HISTORY
+// ==========================================
+
+async function loadDeliveryHistory() {
+    if (!historyContainer) return;
+
+    showLoading(historyContainer, "Loading delivery history...");
+
+    try {
+        const snapshot = await getDocs(
+            collection(db, "orders")
+        );
+
+        const completedOrders = snapshot.docs
+            .map(orderDoc => ({
+                id: orderDoc.id,
+                ...orderDoc.data()
+            }))
+            .filter(order =>
+                String(order.status || "").trim().toLowerCase() === "delivered"
+            )
+            .sort((a, b) => {
+                const dateA = a.statusUpdatedAt?.toDate
+                    ? a.statusUpdatedAt.toDate()
+                    : new Date(a.statusUpdatedAt || 0);
+
+                const dateB = b.statusUpdatedAt?.toDate
+                    ? b.statusUpdatedAt.toDate()
+                    : new Date(b.statusUpdatedAt || 0);
+
+                return dateB - dateA;
+            });
+
+        if (completedOrders.length === 0) {
+            showEmpty(
+                historyContainer,
+                "No completed deliveries found yet."
+            );
+            return;
+        }
+
+        historyContainer.innerHTML = "";
+
+        completedOrders.forEach(order => {
+            const card = document.createElement("div");
+            card.className = "order-card";
+
+            card.innerHTML = `
+                <h3>Order #${escapeHTML(order.id)}</h3>
+
+                <p>
+                    <strong>Customer:</strong>
+                    ${escapeHTML(order.customerName || order.name || "Customer")}
+                </p>
+
+                <p>
+                    <strong>Phone:</strong>
+                    ${escapeHTML(order.phone || order.customerPhone || "-")}
+                </p>
+
+                <p>
+                    <strong>Driver:</strong>
+                    ${escapeHTML(order.assignedDriverName || "Unassigned")}
+                </p>
+
+                <p>
+                    <strong>Total:</strong>
+                    ${Number(order.total || 0).toFixed(2)} SAR
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    <span class="status-badge status-active">Delivered</span>
+                </p>
+
+                <p>
+                    <strong>Last status update:</strong>
+                    ${escapeHTML(formatDate(order.statusUpdatedAt))}
+                </p>
+            `;
+
+            historyContainer.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error("Delivery history error:", error);
+
+        showEmpty(
+            historyContainer,
+            "Unable to load delivery history. Check Firestore permissions."
+        );
+    }
+}
 
 // ==========================================
 // ORDER STATUS AND DRIVER ASSIGNMENT
