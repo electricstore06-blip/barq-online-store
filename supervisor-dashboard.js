@@ -669,3 +669,1015 @@ function populateVehicleOptions() {
         }
     });
 }
+// ==========================================
+// LOAD VEHICLES
+// ==========================================
+
+async function loadVehicles() {
+    if (!vehiclesContainer) return;
+
+    showLoading(vehiclesContainer, "Loading vehicles...");
+
+    try {
+        const snapshot = await getDocs(
+            collection(db, "vehicles")
+        );
+
+        availableVehicles = snapshot.docs.map(vehicleDoc => ({
+            id: vehicleDoc.id,
+            ...vehicleDoc.data()
+        }));
+
+        renderVehicles();
+        populateVehicleOptions();
+        populateDriverOptions();
+
+    } catch (error) {
+        console.error("Load vehicles error:", error);
+
+        showEmpty(
+            vehiclesContainer,
+            "Unable to load vehicles. Check Firestore permissions."
+        );
+    }
+}
+
+
+// ==========================================
+// RENDER VEHICLES
+// ==========================================
+
+function renderVehicles() {
+    if (!vehiclesContainer) return;
+
+    if (availableVehicles.length === 0) {
+        showEmpty(vehiclesContainer, "No vehicles registered yet.");
+        return;
+    }
+
+    vehiclesContainer.innerHTML = "";
+
+    availableVehicles.forEach(vehicle => {
+        const card = document.createElement("div");
+        card.className = "vehicle-card";
+
+        const driver = getDriverById(vehicle.assignedDriverId);
+
+        card.innerHTML = `
+            <h3>${escapeHTML(vehicle.name || "Vehicle")}</h3>
+
+            <p><strong>Plate:</strong> ${escapeHTML(vehicle.plate || "-")}</p>
+            <p><strong>Model:</strong> ${escapeHTML(vehicle.model || "-")}</p>
+            <p><strong>Type:</strong> ${escapeHTML(vehicle.type || "-")}</p>
+
+            <p><strong>Driver:</strong>
+                ${escapeHTML(driver?.name || vehicle.assignedDriverName || "Unassigned")}
+            </p>
+
+            <p><strong>Mileage:</strong>
+                ${Number(vehicle.mileage || 0).toLocaleString()} km
+            </p>
+
+            <p><strong>Registration expiry:</strong>
+                ${formatDate(vehicle.registrationExpiry)}
+            </p>
+
+            <p><strong>Insurance expiry:</strong>
+                ${formatDate(vehicle.insuranceExpiry)}
+            </p>
+
+            <p><strong>Status:</strong>
+                ${escapeHTML(vehicle.status || "Active")}
+            </p>
+
+            <div class="vehicle-actions">
+                <button type="button" class="edit-vehicle-btn"
+                    data-id="${escapeHTML(vehicle.id)}">
+                    Edit
+                </button>
+            </div>
+        `;
+
+        vehiclesContainer.appendChild(card);
+    });
+
+    vehiclesContainer.querySelectorAll(".edit-vehicle-btn")
+        .forEach(button => {
+            button.addEventListener("click", () => {
+                editVehicle(button.dataset.id);
+            });
+        });
+}
+
+
+// ==========================================
+// SAVE VEHICLE
+// ==========================================
+
+if (vehicleForm) {
+    vehicleForm.addEventListener("submit", async event => {
+        event.preventDefault();
+
+        if (!currentSupervisor) {
+            showMessage("Supervisor authorization required.", "error");
+            return;
+        }
+
+        const plate = vehiclePlate?.value.trim() || "";
+        const name = vehicleName?.value.trim() || "";
+        const model = vehicleModel?.value.trim() || "";
+        const type = vehicleType?.value || "";
+        const assignedDriverId = vehicleDriver?.value || "";
+        const mileage = Number(vehicleMileage?.value || 0);
+        const registrationExpiry = vehicleRegistrationExpiry?.value || "";
+        const insuranceExpiry = vehicleInsuranceExpiry?.value || "";
+        const status = vehicleStatus?.value || "active";
+
+        if (!plate || !name) {
+            showMessage("Please enter the vehicle name and plate.", "error");
+            return;
+        }
+
+        if (!Number.isFinite(mileage) || mileage < 0) {
+            showMessage("Please enter a valid mileage.", "error");
+            return;
+        }
+
+        const driver = assignedDriverId
+            ? getDriverById(assignedDriverId)
+            : null;
+
+        const vehicleData = {
+            plate,
+            name,
+            model,
+            type,
+            assignedDriverId: driver ? getDriverId(driver) : null,
+            assignedDriverName: driver?.name || null,
+            mileage,
+            registrationExpiry,
+            insuranceExpiry,
+            status,
+            updatedAt: new Date(),
+            updatedByUid: currentSupervisor.uid
+        };
+
+        if (saveVehicleButton) {
+            saveVehicleButton.disabled = true;
+            saveVehicleButton.textContent = "Saving...";
+        }
+
+        try {
+            const editingId = vehicleEditId?.value || "";
+
+            if (editingId) {
+                await updateDoc(
+                    doc(db, "vehicles", editingId),
+                    vehicleData
+                );
+
+                showMessage("Vehicle updated successfully.");
+
+            } else {
+                await addDoc(
+                    collection(db, "vehicles"),
+                    {
+                        ...vehicleData,
+                        createdAt: new Date(),
+                        createdByUid: currentSupervisor.uid
+                    }
+                );
+
+                showMessage("Vehicle added successfully.");
+            }
+
+            resetVehicleForm();
+            await loadVehicles();
+
+        } catch (error) {
+            console.error("Save vehicle error:", error);
+            showMessage("Unable to save vehicle. Check permissions.", "error");
+
+        } finally {
+            if (saveVehicleButton) {
+                saveVehicleButton.disabled = false;
+                saveVehicleButton.textContent = "Save Vehicle";
+            }
+        }
+    });
+}
+
+
+// ==========================================
+// EDIT VEHICLE
+// ==========================================
+
+function editVehicle(vehicleId) {
+    const vehicle = getVehicleById(vehicleId);
+
+    if (!vehicle) {
+        showMessage("Vehicle not found.", "error");
+        return;
+    }
+
+    if (vehicleEditId) vehicleEditId.value = vehicle.id;
+    if (vehiclePlate) vehiclePlate.value = vehicle.plate || "";
+    if (vehicleName) vehicleName.value = vehicle.name || "";
+    if (vehicleModel) vehicleModel.value = vehicle.model || "";
+    if (vehicleType) vehicleType.value = vehicle.type || "";
+    if (vehicleDriver) vehicleDriver.value = vehicle.assignedDriverId || "";
+    if (vehicleMileage) vehicleMileage.value = vehicle.mileage || 0;
+
+    if (vehicleRegistrationExpiry) {
+        vehicleRegistrationExpiry.value =
+            dateInputValue(vehicle.registrationExpiry);
+    }
+
+    if (vehicleInsuranceExpiry) {
+        vehicleInsuranceExpiry.value =
+            dateInputValue(vehicle.insuranceExpiry);
+    }
+
+    if (vehicleStatus) {
+        vehicleStatus.value = vehicle.status || "active";
+    }
+
+    if (saveVehicleButton) {
+        saveVehicleButton.textContent = "Update Vehicle";
+    }
+
+    if (cancelVehicleEditButton) {
+        cancelVehicleEditButton.style.display = "inline-block";
+    }
+
+    vehicleForm?.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+}
+
+
+// ==========================================
+// RESET VEHICLE FORM
+// ==========================================
+
+function resetVehicleForm() {
+    if (vehicleForm) vehicleForm.reset();
+
+    if (vehicleEditId) vehicleEditId.value = "";
+
+    if (saveVehicleButton) {
+        saveVehicleButton.textContent = "Save Vehicle";
+    }
+
+    if (cancelVehicleEditButton) {
+        cancelVehicleEditButton.style.display = "none";
+    }
+}
+
+
+if (cancelVehicleEditButton) {
+    cancelVehicleEditButton.addEventListener("click", resetVehicleForm);
+}
+
+
+// ==========================================
+// REFRESH VEHICLES
+// ==========================================
+
+if (refreshVehiclesButton) {
+    refreshVehiclesButton.addEventListener("click", loadVehicles);
+}
+// ==========================================
+// FUEL MANAGEMENT
+// ==========================================
+
+if (fuelForm) {
+    fuelForm.addEventListener("submit", async event => {
+        event.preventDefault();
+
+        if (!currentSupervisor) {
+            showMessage("Supervisor session not ready.", "error");
+            return;
+        }
+
+        const vehicle = getVehicleById(fuelVehicle.value);
+        const litres = Number(fuelLitres.value);
+        const cost = Number(fuelCost.value);
+        const mileage = Number(fuelMileage.value);
+
+        if (!vehicle) {
+            showMessage("Please select a registered vehicle.", "error");
+            return;
+        }
+
+        if (
+            !Number.isFinite(litres) ||
+            litres <= 0 ||
+            fuelCost.value.trim() === "" ||
+            !Number.isFinite(cost) ||
+            cost < 0 ||
+            fuelMileage.value.trim() === "" ||
+            !Number.isFinite(mileage) ||
+            mileage < 0 ||
+            !fuelDate.value ||
+            !fuelType.value
+        ) {
+            showMessage(
+                "Please enter valid fuel information, cost and mileage.",
+                "error"
+            );
+            return;
+        }
+
+        const fuelData = {
+            vehicleId: vehicle.id,
+            vehiclePlate: vehicle.plate || "",
+            vehicleName: vehicle.name || "",
+            fuelType: fuelType.value,
+            litres,
+            cost,
+            mileage,
+            fuelDate: fuelDate.value,
+            notes: fuelNotes.value.trim(),
+            createdAt: new Date(),
+            createdByUid: currentSupervisor.uid
+        };
+
+        const submitButton = fuelForm.querySelector('[type="submit"]');
+
+        if (submitButton) submitButton.disabled = true;
+
+        try {
+            await addDoc(collection(db, "fuelLogs"), fuelData);
+
+            console.log("Fuel record saved successfully.");
+
+            // Update vehicle mileage only when the new reading is higher.
+            if (mileage > Number(vehicle.mileage || 0)) {
+                await updateDoc(
+                    doc(db, "vehicles", vehicle.id),
+                    {
+                        mileage,
+                        updatedAt: new Date(),
+                        updatedByUid: currentSupervisor.uid
+                    }
+                );
+
+                console.log("Vehicle mileage updated after fuel entry.");
+            }
+
+            fuelForm.reset();
+
+            showMessage("Fuel record saved successfully.");
+
+            await loadVehicles();
+            await loadFuelRecords();
+
+        } catch (error) {
+            console.error("Save fuel record error:", error);
+
+            showMessage(
+                "Unable to save fuel record. Check Firestore rules.",
+                "error"
+            );
+
+        } finally {
+            if (submitButton) submitButton.disabled = false;
+        }
+    });
+}
+
+
+// ==========================================
+// LOAD FUEL RECORDS
+// ==========================================
+
+async function loadFuelRecords() {
+    if (!fuelContainer) return;
+
+    showLoading(fuelContainer, "Loading fuel records...");
+
+    try {
+        const snapshot = await getDocs(collection(db, "fuelLogs"));
+
+        const records = snapshot.docs.map(recordDoc => ({
+            id: recordDoc.id,
+            ...recordDoc.data()
+        }));
+
+        records.sort((a, b) =>
+            String(b.fuelDate || "").localeCompare(String(a.fuelDate || ""))
+        );
+
+        if (records.length === 0) {
+            showEmpty(fuelContainer, "No fuel records found.");
+            return;
+        }
+
+        fuelContainer.innerHTML = "";
+
+        records.forEach(record => {
+            const card = document.createElement("div");
+            card.className = "fuel-card";
+
+            // Fuel cost is deliberately not displayed to supervisors.
+            card.innerHTML = `
+                <h3>
+                    ${escapeHTML(record.vehicleName || "Vehicle")}
+                    — ${escapeHTML(record.vehiclePlate || "-")}
+                </h3>
+
+                <p>
+                    <strong>Fuel type:</strong>
+                    ${escapeHTML(record.fuelType || "-")}
+                </p>
+
+                <p>
+                    <strong>Quantity:</strong>
+                    ${Number(record.litres || 0).toFixed(2)} litres
+                </p>
+
+                <p>
+                    <strong>Mileage:</strong>
+                    ${Number(record.mileage || 0).toLocaleString()} KM
+                </p>
+
+                <p>
+                    <strong>Date:</strong>
+                    ${formatDate(record.fuelDate)}
+                </p>
+
+                <p>
+                    <strong>Notes:</strong>
+                    ${escapeHTML(record.notes || "-")}
+                </p>
+            `;
+
+            fuelContainer.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error("Load fuel records error:", error);
+
+        showEmpty(
+            fuelContainer,
+            "Unable to load fuel records. Check Firestore rules."
+        );
+    }
+}
+
+
+// ==========================================
+// MAINTENANCE MANAGEMENT
+// ==========================================
+
+if (maintenanceForm) {
+    maintenanceForm.addEventListener("submit", async event => {
+        event.preventDefault();
+
+        if (!currentSupervisor) {
+            showMessage("Supervisor session not ready.", "error");
+            return;
+        }
+
+        const vehicle = getVehicleById(maintenanceVehicle.value);
+        const mileage = Number(maintenanceMileage.value);
+        const quantityValue = maintenanceQuantity.value;
+        const nextMileageValue = maintenanceNextMileage.value;
+
+        if (!vehicle) {
+            showMessage("Please select a registered vehicle.", "error");
+            return;
+        }
+
+        if (
+            !maintenanceType.value ||
+            !maintenanceDate.value ||
+            maintenanceMileage.value.trim() === "" ||
+            !Number.isFinite(mileage) ||
+            mileage < 0
+        ) {
+            showMessage(
+                "Please complete the required maintenance fields.",
+                "error"
+            );
+            return;
+        }
+
+        const maintenanceData = {
+            vehicleId: vehicle.id,
+            vehiclePlate: vehicle.plate || "",
+            vehicleName: vehicle.name || "",
+            maintenanceType: maintenanceType.value,
+            serviceDate: maintenanceDate.value,
+            mileage,
+            fluidType: maintenanceFluidType.value.trim(),
+            quantity: quantityValue === "" ? null : Number(quantityValue),
+            nextServiceDate: maintenanceNextDate.value || null,
+            nextServiceMileage:
+                nextMileageValue === "" ? null : Number(nextMileageValue),
+            description: maintenanceDescription.value.trim(),
+            createdAt: new Date(),
+            createdByUid: currentSupervisor.uid
+        };
+
+        if (
+            maintenanceData.quantity !== null &&
+            (
+                !Number.isFinite(maintenanceData.quantity) ||
+                maintenanceData.quantity < 0
+            )
+        ) {
+            showMessage(
+                "Please enter a valid maintenance quantity.",
+                "error"
+            );
+            return;
+        }
+
+        if (
+            maintenanceData.nextServiceMileage !== null &&
+            (
+                !Number.isFinite(maintenanceData.nextServiceMileage) ||
+                maintenanceData.nextServiceMileage < 0
+            )
+        ) {
+            showMessage(
+                "Please enter a valid next service mileage.",
+                "error"
+            );
+            return;
+        }
+
+        const submitButton =
+            maintenanceForm.querySelector('[type="submit"]');
+
+        if (submitButton) submitButton.disabled = true;
+
+        try {
+            console.log("Saving maintenance record...");
+            console.log("VEHICLE DOCUMENT ID:", vehicle.id);
+            console.log("MAINTENANCE INPUT MILEAGE:", mileage);
+            console.log("CURRENT VEHICLE MILEAGE:", vehicle.mileage);
+
+            // Save maintenance record.
+            await addDoc(
+                collection(db, "maintenanceLogs"),
+                maintenanceData
+            );
+
+            console.log("Maintenance record saved successfully.");
+
+            // Update vehicle mileage only if the new reading is higher.
+            if (mileage > Number(vehicle.mileage || 0)) {
+                await updateDoc(
+                    doc(db, "vehicles", vehicle.id),
+                    {
+                        mileage,
+                        updatedAt: new Date(),
+                        updatedByUid: currentSupervisor.uid
+                    }
+                );
+
+                console.log("Vehicle mileage updated successfully.");
+
+            } else {
+                console.log(
+                    "Vehicle mileage update skipped: new reading is not higher."
+                );
+            }
+
+            maintenanceForm.reset();
+
+            showMessage("Maintenance record saved successfully.");
+
+            await loadVehicles();
+            await loadMaintenanceRecords();
+
+        } catch (error) {
+            console.error("Save maintenance error:", error);
+
+            showMessage(
+                "Unable to save maintenance record. Check Firestore rules.",
+                "error"
+            );
+
+        } finally {
+            if (submitButton) submitButton.disabled = false;
+        }
+    });
+}
+
+
+// ==========================================
+// LOAD MAINTENANCE HISTORY
+// ==========================================
+
+async function loadMaintenanceRecords() {
+    if (!maintenanceContainer) return;
+
+    showLoading(maintenanceContainer, "Loading maintenance records...");
+
+    try {
+        const snapshot = await getDocs(
+            collection(db, "maintenanceLogs")
+        );
+
+        maintenanceRecords = snapshot.docs.map(recordDoc => ({
+            id: recordDoc.id,
+            ...recordDoc.data()
+        }));
+
+        maintenanceRecords.sort((a, b) =>
+            String(b.serviceDate || "").localeCompare(String(a.serviceDate || ""))
+        );
+
+        renderMaintenanceRecords();
+        renderServiceReminders();
+
+    } catch (error) {
+        console.error("Load maintenance records error:", error);
+
+        showEmpty(
+            maintenanceContainer,
+            "Unable to load maintenance records. Check Firestore rules."
+        );
+
+        if (serviceRemindersContainer) {
+            showEmpty(
+                serviceRemindersContainer,
+                "Unable to load service reminders."
+            );
+        }
+    }
+}
+
+
+// ==========================================
+// RENDER MAINTENANCE HISTORY
+// ==========================================
+
+function renderMaintenanceRecords() {
+    if (!maintenanceContainer) return;
+
+    if (maintenanceRecords.length === 0) {
+        showEmpty(maintenanceContainer, "No maintenance records found.");
+        return;
+    }
+
+    maintenanceContainer.innerHTML = "";
+
+    maintenanceRecords.forEach(record => {
+        const card = document.createElement("div");
+        card.className = "maintenance-card";
+
+        card.innerHTML = `
+            <h3>
+                ${escapeHTML(record.maintenanceType || "Maintenance")}
+            </h3>
+
+            <p>
+                <strong>Vehicle:</strong>
+                ${escapeHTML(record.vehicleName || "Vehicle")}
+                — ${escapeHTML(record.vehiclePlate || "-")}
+            </p>
+
+            <p>
+                <strong>Service date:</strong>
+                ${formatDate(record.serviceDate)}
+            </p>
+
+            <p>
+                <strong>Mileage:</strong>
+                ${Number(record.mileage || 0).toLocaleString()} KM
+            </p>
+
+            <p>
+                <strong>Oil / fluid type:</strong>
+                ${escapeHTML(record.fluidType || "-")}
+            </p>
+
+            <p>
+                <strong>Quantity:</strong>
+                ${record.quantity == null
+                    ? "-"
+                    : Number(record.quantity).toFixed(2) + " litres"}
+            </p>
+
+            <p>
+                <strong>Next service date:</strong>
+                ${formatDate(record.nextServiceDate)}
+            </p>
+
+            <p>
+                <strong>Next service mileage:</strong>
+                ${record.nextServiceMileage == null
+                    ? "-"
+                    : Number(record.nextServiceMileage).toLocaleString() + " KM"}
+            </p>
+
+            <p>
+                <strong>Description:</strong>
+                ${escapeHTML(record.description || "-")}
+            </p>
+        `;
+
+        maintenanceContainer.appendChild(card);
+    });
+}
+// ==========================================
+// SERVICE REMINDERS
+// ==========================================
+
+function renderServiceReminders() {
+    if (!serviceRemindersContainer) return;
+
+    const reminders = [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Maintenance service reminders
+    maintenanceRecords.forEach(record => {
+        const vehicle = getVehicleById(record.vehicleId);
+
+        const vehicleLabel = vehicle
+            ? getVehicleName(vehicle)
+            : record.vehicleName || "Vehicle";
+
+        if (record.nextServiceDate) {
+            const serviceDate = new Date(record.nextServiceDate);
+
+            if (!Number.isNaN(serviceDate.getTime())) {
+                serviceDate.setHours(0, 0, 0, 0);
+
+                const daysRemaining = Math.ceil(
+                    (serviceDate - today) / (1000 * 60 * 60 * 24)
+                );
+
+                if (daysRemaining <= 30) {
+                    reminders.push({
+                        title: "Scheduled maintenance",
+                        vehicle: vehicleLabel,
+                        detail: daysRemaining < 0
+                            ? `Overdue by ${Math.abs(daysRemaining)} days`
+                            : daysRemaining === 0
+                                ? "Due today"
+                                : `Due in ${daysRemaining} days`,
+                        urgent: daysRemaining <= 0
+                    });
+                }
+            }
+        }
+
+        if (record.nextServiceMileage != null && vehicle) {
+            const remainingMileage =
+                Number(record.nextServiceMileage) -
+                Number(vehicle.mileage || 0);
+
+            if (remainingMileage <= 1000) {
+                reminders.push({
+                    title: "Mileage-based service",
+                    vehicle: vehicleLabel,
+                    detail: remainingMileage < 0
+                        ? `Overdue by ${Math.abs(remainingMileage)} KM`
+                        : remainingMileage === 0
+                            ? "Service mileage reached"
+                            : `${remainingMileage} KM remaining`,
+                    urgent: remainingMileage <= 0
+                });
+            }
+        }
+    });
+
+
+    // Vehicle registration and insurance expiry reminders
+    availableVehicles.forEach(vehicle => {
+        const expiryFields = [
+            {
+                field: "registrationExpiry",
+                title: "Registration expiry"
+            },
+            {
+                field: "insuranceExpiry",
+                title: "Insurance expiry"
+            }
+        ];
+
+        expiryFields.forEach(item => {
+            const value = vehicle[item.field];
+
+            if (!value) return;
+
+            const expiryDate = new Date(value);
+
+            if (Number.isNaN(expiryDate.getTime())) return;
+
+            expiryDate.setHours(0, 0, 0, 0);
+
+            const daysRemaining = Math.ceil(
+                (expiryDate - today) / (1000 * 60 * 60 * 24)
+            );
+
+            if (daysRemaining <= 30) {
+                reminders.push({
+                    title: item.title,
+                    vehicle: getVehicleName(vehicle),
+                    detail: daysRemaining < 0
+                        ? `Expired ${Math.abs(daysRemaining)} days ago`
+                        : daysRemaining === 0
+                            ? "Expires today"
+                            : `Expires in ${daysRemaining} days`,
+                    urgent: daysRemaining <= 0
+                });
+            }
+        });
+    });
+
+
+    if (reminders.length === 0) {
+        showEmpty(
+            serviceRemindersContainer,
+            "No upcoming service or expiry reminders."
+        );
+        return;
+    }
+
+    serviceRemindersContainer.innerHTML = "";
+
+    reminders.forEach(reminder => {
+        const card = document.createElement("div");
+
+        card.className = reminder.urgent
+            ? "service-reminder urgent"
+            : "service-reminder";
+
+        card.innerHTML = `
+            <h3>${escapeHTML(reminder.title)}</h3>
+
+            <p>
+                <strong>Vehicle:</strong>
+                ${escapeHTML(reminder.vehicle)}
+            </p>
+
+            <p>
+                <strong>Reminder:</strong>
+                ${escapeHTML(reminder.detail)}
+            </p>
+
+            <span class="status-badge ${
+                reminder.urgent ? "status-inactive" : "status-active"
+            }">
+                ${reminder.urgent ? "Action Required" : "Upcoming"}
+            </span>
+        `;
+
+        serviceRemindersContainer.appendChild(card);
+    });
+}
+
+
+// ==========================================
+// REFRESH FUEL RECORDS
+// ==========================================
+
+if (refreshFuelButton) {
+    refreshFuelButton.addEventListener("click", loadFuelRecords);
+}
+
+
+// ==========================================
+// REFRESH MAINTENANCE RECORDS
+// ==========================================
+
+if (refreshMaintenanceButton) {
+    refreshMaintenanceButton.addEventListener(
+        "click",
+        loadMaintenanceRecords
+    );
+}
+
+
+// ==========================================
+// REFRESH DRIVERS
+// ==========================================
+
+if (refreshDriversButton) {
+    refreshDriversButton.addEventListener("click", loadDrivers);
+}
+
+
+// ==========================================
+// REFRESH ORDERS
+// ==========================================
+
+if (refreshOrdersButton) {
+    refreshOrdersButton.addEventListener("click", loadOrders);
+}
+
+
+// ==========================================
+// DASHBOARD LOADING
+// ==========================================
+
+async function loadDashboard() {
+    try {
+        showMessage("Loading supervisor dashboard...", "success");
+
+        console.log("Loading supervisor dashboard...");
+
+        await loadDrivers();
+        await loadOrders();
+        await loadVehicles();
+        await loadFuelRecords();
+        await loadMaintenanceRecords();
+
+        console.log("Supervisor dashboard loading completed.");
+
+        showMessage("Supervisor dashboard loaded successfully.");
+
+    } catch (error) {
+        console.error("Dashboard loading error:", error);
+
+        showMessage(
+            "Unable to load the supervisor dashboard. Check the console.",
+            "error"
+        );
+    }
+}
+
+
+// ==========================================
+// SUPERVISOR LOGOUT
+// ==========================================
+
+async function logoutSupervisor() {
+    try {
+        await signOut(auth);
+
+        window.location.href = "login.html";
+
+    } catch (error) {
+        console.error("Supervisor logout error:", error);
+
+        showMessage("Unable to log out. Please try again.", "error");
+    }
+}
+
+
+if (logoutButton) {
+    logoutButton.addEventListener("click", logoutSupervisor);
+}
+
+
+// ==========================================
+// SUPERVISOR AUTHENTICATION
+// ==========================================
+
+onAuthStateChanged(auth, async user => {
+    if (!user) {
+        currentSupervisor = null;
+
+        window.location.href = "login.html";
+        return;
+    }
+
+    try {
+        const verified = await verifySupervisor(user);
+
+        if (!verified) {
+            console.error("Supervisor verification failed.");
+
+            await signOut(auth);
+
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (supervisorName) {
+            supervisorName.textContent =
+                currentSupervisor.name ||
+                currentSupervisor.displayName ||
+                user.displayName ||
+                "Supervisor";
+        }
+
+        console.log("Supervisor verified successfully.");
+        console.log("Supervisor UID:", user.uid);
+
+        await loadDashboard();
+
+    } catch (error) {
+        console.error("Supervisor authentication error:", error);
+
+        showMessage(
+            "Supervisor verification failed. Please log in again.",
+            "error"
+        );
+    }
+});
+
+
+// ==========================================
+// END OF BARQ SUPERVISOR DASHBOARD
+// ==========================================
