@@ -64,6 +64,7 @@ const fuelForm = document.getElementById("fuel-form");
 const fuelVehicle = document.getElementById("fuel-vehicle");
 const fuelType = document.getElementById("fuel-type");
 const fuelLitres = document.getElementById("fuel-litres");
+const fuelCost = document.getElementById("fuel-cost");
 const fuelMileage = document.getElementById("fuel-mileage");
 const fuelDate = document.getElementById("fuel-date");
 const fuelNotes = document.getElementById("fuel-notes");
@@ -753,19 +754,19 @@ if (vehicleForm) {
         const mileage = Number(vehicleMileage.value);
         const status = vehicleStatus.value;
 
-        if (!plate || !name || !type || !Number.isFinite(mileage) || mileage < 0) {
-            showMessage("Please complete the required vehicle fields.", "error");
-            return;
-        }
-
-        const driver = driverId ? getDriverById(driverId) : null;
-
-        if (driverId && !driver) {
-            showMessage("Selected driver could not be found. Refresh drivers.", "error");
-            return;
-        }
-
-        const vehicleData = {
+   if (
+    !Number.isFinite(litres) ||
+    litres <= 0 ||
+    !Number.isFinite(cost) ||
+    cost < 0 ||
+    !Number.isFinite(mileage) ||
+    mileage < 0 ||
+    !fuelDate.value ||
+    !fuelType.value
+) {
+    showMessage("Please enter valid fuel information and cost.", "error");
+    return;
+}
             plate,
             name,
             model,
@@ -902,19 +903,20 @@ if (fuelForm) {
             showMessage("Please enter valid fuel information.", "error");
             return;
         }
-
-        const fuelData = {
-            vehicleId: vehicle.id,
-            vehiclePlate: vehicle.plate || "",
-            vehicleName: vehicle.name || "",
-            fuelType: fuelType.value,
-            litres,
-            mileage,
-            fuelDate: fuelDate.value,
-            notes: fuelNotes.value.trim(),
-            createdAt: new Date(),
-            createdByUid: currentSupervisor.uid
-        };
+const fuelData = {
+    vehicleId: vehicle.id,
+    vehiclePlate: vehicle.plate || "",
+    vehicleName: vehicle.name || "",
+    fuelType: fuelType.value,
+    litres,
+    cost: cost,
+    mileage,
+    fuelDate: fuelDate.value,
+    notes: fuelNotes.value.trim(),
+    createdAt: new Date(),
+    createdByUid: currentSupervisor.uid
+};
+      
 
         const submitButton = fuelForm.querySelector('[type="submit"]');
         submitButton.disabled = true;
