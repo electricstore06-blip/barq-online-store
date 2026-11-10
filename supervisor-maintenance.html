@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BARQ | Supervisor Maintenance</title>
+    <link rel="stylesheet" href="supervisor-dashboard.css">
+</head>
+
+<body>
+
+    <header class="dashboard-header">
+        <div>
+            <h1>BARQ Supervisor Portal</h1>
+            <p>Fleet Operations Management</p>
+        </div>
+
+        <div>
+            <span id="supervisor-name">Supervisor</span>
+            <button type="button" id="logout-btn">Logout</button>
+        </div>
+    </header>
+
+    <nav class="dashboard-nav">
+        <a href="supervisor-dashboard.html">Overview</a>
+        <a href="supervisor-fleet.html">Fleet</a>
+        <a href="supervisor-fuel.html">Fuel</a>
+        <a href="supervisor-maintenance.html" class="active">Maintenance</a>
+        <a href="supervisor-orders.html">Orders</a>
+        <a href="supervisor-drivers.html">Drivers</a>
+        <a href="supervisor-history.html">History</a>
+        <a href="supervisor-reports.html">Reports</a>
+    </nav>
+
+    <main class="dashboard-main">
+
+        <!-- VEHICLE MAINTENANCE -->
+        <section class="dashboard-section" id="maintenance-section">
+
+            <div class="section-header">
+                <div>
+                    <p class="panel-label">VEHICLE CONDITION</p>
+                    <h2>Vehicle Maintenance</h2>
+                </div>
+
+                <button type="button" id="refresh-maintenance-btn">
+                    ↻ Refresh Maintenance
+                </button>
+            </div>
+
+            <p class="fleet-description">
+                Record oil changes, servicing, inspections, repairs and vehicle maintenance.
+                Maintenance expenses are accessible to Admin only.
+            </p>
+
+            <form id="maintenance-form" class="fleet-form">
+
+                <div class="fleet-form-grid">
+
+                    <label>
+                        Vehicle *
+                        <select id="maintenance-vehicle" required>
+                            <option value="">Select vehicle</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Maintenance Type *
+                        <select id="maintenance-type" required>
+                            <option value="">Select maintenance type</option>
+                            <option value="Engine Oil">Engine Oil Change</option>
+                            <option value="Gearbox Oil">Gearbox / Transmission Oil</option>
+                            <option value="Brake Fluid">Brake Fluid</option>
+                            <option value="Oil Filter">Oil Filter</option>
+                            <option value="Air Filter">Air Filter</option>
+                            <option value="Fuel Filter">Fuel Filter</option>
+                            <option value="Tyres">Tyres</option>
+                            <option value="Brakes">Brakes</option>
+                            <option value="Battery">Battery / Electrical</option>
+                            <option value="General Service">General Service</option>
+                            <option value="Repair">General Repair</option>
+                            <option value="Inspection">Vehicle Inspection</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Service Date *
+                        <input type="date" id="maintenance-date" required>
+                    </label>
+
+                    <label>
+                        Mileage at Service (KM) *
+                        <input
+                            type="number"
+                            id="maintenance-mileage"
+                            min="0"
+                            max="10000000"
+                            step="1"
+                            required
+                            placeholder="Current vehicle mileage">
+                    </label>
+
+                    <label>
+                        Oil / Fluid Brand or Type
+                        <input
+                            type="text"
+                            id="maintenance-fluid-type"
+                            maxlength="100"
+                            placeholder="Example: 5W-30">
+                    </label>
+
+                    <label>
+                        Quantity (Litres)
+                        <input
+                            type="number"
+                            id="maintenance-quantity"
+                            min="0"
+                            max="10000"
+                            step="0.01"
+                            placeholder="Example: 5">
+                    </label>
+
+                    <label>
+                        Next Service Date
+                        <input type="date" id="maintenance-next-date">
+                    </label>
+
+                    <label>
+                        Next Service Mileage (KM)
+                        <input
+                            type="number"
+                            id="maintenance-next-mileage"
+                            min="0"
+                            max="10000000"
+                            step="1"
+                            placeholder="Next service odometer">
+                    </label>
+
+                </div>
+
+                <label class="fleet-full-label">
+                    Maintenance Description / Work Performed
+                    <textarea
+                        id="maintenance-description"
+                        rows="3"
+                        maxlength="1000"
+                        placeholder="Describe the maintenance or repair work..."></textarea>
+                </label>
+
+                <div class="fleet-form-actions">
+                    <button type="submit" id="save-maintenance-btn">
+                        Save Maintenance Record
+                    </button>
+                </div>
+
+            </form>
+
+            <!-- SERVICE REMINDERS -->
+            <div class="fleet-list-heading">
+                <h3>Service Reminders</h3>
+            </div>
+
+            <div id="service-reminders-container">
+                Service reminders will appear here.
+            </div>
+
+            <!-- MAINTENANCE HISTORY -->
+            <div class="fleet-list-heading">
+                <h3>Maintenance History</h3>
+                <small>Financial expenses are not displayed here.</small>
+            </div>
+
+            <div id="maintenance-container">
+                Loading maintenance records...
+            </div>
+
+        </section>
+
+        <div id="supervisor-message" role="status" aria-live="polite"></div>
+
+        <!-- Hidden containers for compatibility with existing JavaScript -->
+        <div hidden>
+            <div id="drivers-container"></div>
+            <div id="orders-container"></div>
+            <div id="vehicles-container"></div>
+            <div id="fuel-container"></div>
+        </div>
+
+    </main>
+
+    <script type="module" src="supervisor-dashboard.js"></script>
+
+</body>
+</html>
