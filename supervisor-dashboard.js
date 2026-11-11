@@ -1684,6 +1684,7 @@ async function loadDashboard() {
 
         await loadDrivers();
         await loadOrders();
+        await loadDeliveryHistory();
         await loadVehicles();
         await loadFuelRecords();
         await loadMaintenanceRecords();
