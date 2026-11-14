@@ -1,0 +1,245 @@
+
+/* =========================================
+   BARQ SUPERVISOR REPORTS
+   Professional Reports Dashboard
+========================================= */
+
+#reports-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    margin-top: 22px;
+}
+
+.report-card {
+    background: #ffffff;
+    border: 1px solid #e8edf3;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 4px 15px rgba(20, 35, 55, 0.05);
+    min-width: 0;
+}
+
+.report-card.full-width {
+    grid-column: 1 / -1;
+}
+
+.report-card h3 {
+    margin: 0 0 18px;
+    color: #172b4d;
+    font-size: 18px;
+}
+
+.report-card p {
+    color: #667085;
+}
+
+.report-subtitle {
+    font-size: 13px;
+    color: #8492a6;
+    margin: -10px 0 18px;
+}
+
+.report-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.report-stat {
+    background: #f7f9fc;
+    border: 1px solid #edf0f5;
+    border-radius: 11px;
+    padding: 17px;
+}
+
+.report-stat span {
+    display: block;
+    color: #667085;
+    font-size: 12px;
+    margin-bottom: 9px;
+}
+
+.report-stat strong {
+    display: block;
+    color: #172b4d;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.report-stat small {
+    display: block;
+    margin-top: 5px;
+    color: #8492a6;
+    font-size: 11px;
+}
+
+.report-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.report-bar-row {
+    display: grid;
+    grid-template-columns: 125px minmax(0, 1fr) 40px;
+    align-items: center;
+    gap: 12px;
+}
+
+.report-bar-label {
+    color: #475467;
+    font-size: 13px;
+}
+
+.report-bar-track {
+    height: 12px;
+    background: #edf1f6;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.report-bar-fill {
+    height: 100%;
+    border-radius: 20px;
+    background: #246bfd;
+    transition: width 0.3s ease;
+}
+
+.report-bar-value {
+    text-align: right;
+    color: #172b4d;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.report-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 500px;
+}
+
+.report-table th,
+.report-table td {
+    padding: 13px 12px;
+    text-align: left;
+    border-bottom: 1px solid #edf0f5;
+    font-size: 13px;
+}
+
+.report-table th {
+    color: #667085;
+    background: #f7f9fc;
+    font-weight: 600;
+}
+
+.report-table td {
+    color: #344054;
+}
+
+.report-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    background: #eef2f7;
+    color: #475467;
+}
+
+.report-status.good {
+    background: #e7f8ef;
+    color: #16834a;
+}
+
+.report-status.warning {
+    background: #fff4df;
+    color: #a86700;
+}
+
+.report-status.danger {
+    background: #ffebeb;
+    color: #c62828;
+}
+
+.report-empty {
+    padding: 20px;
+    text-align: center;
+    color: #8492a6;
+    background: #f8fafc;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.report-section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.report-section-heading h3 {
+    margin: 0;
+}
+
+.report-refresh-btn {
+    border: none;
+    background: #246bfd;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.report-refresh-btn:hover {
+    background: #1554d1;
+}
+
+.report-note {
+    font-size: 12px;
+    color: #8492a6;
+    margin-top: 14px;
+    line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+    .report-stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    #reports-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .report-card.full-width {
+        grid-column: auto;
+    }
+
+    .report-card {
+        padding: 16px;
+    }
+
+    .report-bar-row {
+        grid-template-columns: 95px minmax(0, 1fr) 30px;
+        gap: 8px;
+    }
+
+    .report-bar-label {
+        font-size: 11px;
+    }
+
+    .report-stat strong {
+        font-size: 21px;
+    }
+}
