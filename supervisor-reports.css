@@ -1,22 +1,37 @@
 
 /* =========================================
    BARQ SUPERVISOR REPORTS
-   Professional Reports Dashboard
+   Light Blue and White Design
 ========================================= */
+
+body {
+    background: #f3f7fc !important;
+    color: #26364a;
+}
+
+main,
+.dashboard-main,
+.dashboard-content,
+.supervisor-content {
+    background: #f3f7fc !important;
+    color: #26364a;
+}
 
 #reports-container {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 22px;
     margin-top: 22px;
+    background: transparent;
 }
 
 .report-card {
-    background: #ffffff;
-    border: 1px solid #e8edf3;
+    background: #ffffff !important;
+    color: #344054 !important;
+    border: 1px solid #e2eaf4;
     border-radius: 14px;
     padding: 22px;
-    box-shadow: 0 4px 15px rgba(20, 35, 55, 0.05);
+    box-shadow: 0 4px 16px rgba(30, 60, 100, 0.06);
     min-width: 0;
 }
 
@@ -26,17 +41,17 @@
 
 .report-card h3 {
     margin: 0 0 18px;
-    color: #172b4d;
+    color: #17365d !important;
     font-size: 18px;
 }
 
 .report-card p {
-    color: #667085;
+    color: #667085 !important;
 }
 
 .report-subtitle {
     font-size: 13px;
-    color: #8492a6;
+    color: #8492a6 !important;
     margin: -10px 0 18px;
 }
 
@@ -47,22 +62,22 @@
 }
 
 .report-stat {
-    background: #f7f9fc;
-    border: 1px solid #edf0f5;
+    background: #f5f9ff !important;
+    border: 1px solid #e3edf9;
     border-radius: 11px;
     padding: 17px;
 }
 
 .report-stat span {
     display: block;
-    color: #667085;
+    color: #64748b !important;
     font-size: 12px;
     margin-bottom: 9px;
 }
 
 .report-stat strong {
     display: block;
-    color: #172b4d;
+    color: #17365d !important;
     font-size: 25px;
     font-weight: 700;
 }
@@ -70,7 +85,7 @@
 .report-stat small {
     display: block;
     margin-top: 5px;
-    color: #8492a6;
+    color: #8492a6 !important;
     font-size: 11px;
 }
 
@@ -88,13 +103,13 @@
 }
 
 .report-bar-label {
-    color: #475467;
+    color: #475467 !important;
     font-size: 13px;
 }
 
 .report-bar-track {
     height: 12px;
-    background: #edf1f6;
+    background: #e8eef7;
     border-radius: 20px;
     overflow: hidden;
 }
@@ -102,13 +117,13 @@
 .report-bar-fill {
     height: 100%;
     border-radius: 20px;
-    background: #246bfd;
+    background: #2878e8;
     transition: width 0.3s ease;
 }
 
 .report-bar-value {
     text-align: right;
-    color: #172b4d;
+    color: #17365d !important;
     font-size: 13px;
     font-weight: 700;
 }
@@ -116,30 +131,33 @@
 .report-table-wrap {
     width: 100%;
     overflow-x: auto;
+    background: #ffffff;
 }
 
 .report-table {
     width: 100%;
     border-collapse: collapse;
     min-width: 500px;
+    background: #ffffff;
 }
 
 .report-table th,
 .report-table td {
     padding: 13px 12px;
     text-align: left;
-    border-bottom: 1px solid #edf0f5;
+    border-bottom: 1px solid #e8edf4;
     font-size: 13px;
 }
 
 .report-table th {
-    color: #667085;
-    background: #f7f9fc;
+    color: #475467 !important;
+    background: #f1f6fc !important;
     font-weight: 600;
 }
 
 .report-table td {
-    color: #344054;
+    color: #344054 !important;
+    background: #ffffff;
 }
 
 .report-status {
@@ -170,8 +188,8 @@
 .report-empty {
     padding: 20px;
     text-align: center;
-    color: #8492a6;
-    background: #f8fafc;
+    color: #8492a6 !important;
+    background: #f5f9ff !important;
     border-radius: 10px;
     font-size: 13px;
 }
@@ -191,8 +209,8 @@
 
 .report-refresh-btn {
     border: none;
-    background: #246bfd;
-    color: white;
+    background: #2878e8;
+    color: #ffffff;
     padding: 10px 16px;
     border-radius: 8px;
     cursor: pointer;
@@ -200,12 +218,12 @@
 }
 
 .report-refresh-btn:hover {
-    background: #1554d1;
+    background: #155fc5;
 }
 
 .report-note {
     font-size: 12px;
-    color: #8492a6;
+    color: #8492a6 !important;
     margin-top: 14px;
     line-height: 1.6;
 }
