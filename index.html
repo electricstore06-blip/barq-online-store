@@ -16,68 +16,64 @@
     🚚 Free Shipping | ❤️ Authentic Products | 🔒 Secure Payment
   </div>
 
-  
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-main">
 
-<!-- HEADER -->
-<header class="site-header">
+      <a class="logo" href="index.html">
+        <span class="barq-bolt">ϟ</span>
+        <span class="barq-name">BARQ</span>
+        <span class="barq-subtitle">ONLINE STORE</span>
+      </a>
 
-  <div class="header-main">
+      <div class="header-search">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Search products..."
+          aria-label="Search products"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false">
+      </div>
 
-    <a class="logo" href="index.html">
-      <span class="barq-bolt">ϟ</span>
-      <span class="barq-name">BARQ</span>
-      <span class="barq-subtitle">ONLINE STORE</span>
-    </a>
-<div class="header-search">
-  <span class="search-icon" aria-hidden="true">⌕</span>
-<input
-  id="searchInput"
-  type="search"
-  placeholder="Search products..."
-  aria-label="Search products"
-  autocomplete="off"
-  autocapitalize="off"
-  spellcheck="false"
->
-  
-</div>
+      <button
+        class="menu-toggle"
+        id="menuButton"
+        type="button"
+        aria-label="Toggle navigation"
+        aria-expanded="false">☰</button>
+    </div>
 
-    <button
-      class="menu-toggle"
-      id="menuButton"
-      type="button"
-      aria-label="Toggle navigation"
-      aria-expanded="false"
-    >☰</button>
+    <nav id="mainNav" class="main-nav">
+      <a href="index.html" data-i18n="home">Home</a>
+      <a href="#products" data-i18n="shop">Shop</a>
+      <a
+        href="#beauty-categories"
+        id="categoryMenuToggle"
+        aria-controls="beauty-categories"
+        aria-expanded="false"
+        data-i18n="categories">Categories</a>
+      <a href="#offers" data-i18n="offers">Offers</a>
+      <a href="orders.html" data-i18n="myOrders">My Orders</a>
 
-  </div>
+      <a href="#" onclick="openCart(); return false;">
+        🛒 <span data-i18n="cart">Cart</span>
+        <span id="cartCount">0</span>
+      </a>
 
-  <nav id="mainNav" class="main-nav">
-    <a href="index.html" data-i18n="home">Home</a>
-    <a href="#products" data-i18n="shop">Shop</a>
-    <a href="#beauty-categories" data-i18n="categories">Categories</a>
-    <a href="#offers" data-i18n="offers">Offers</a>
-    <a href="orders.html" data-i18n="myOrders">My Orders</a>
+      <a id="accountLink" href="#" onclick="openLogin(); return false;">
+        🔐 <span data-i18n="login">Account</span>
+      </a>
 
-    <a href="#" onclick="openCart(); return false;">
-      🛒 <span data-i18n="cart">Cart</span>
-      <span id="cartCount">0</span>
-    </a>
+      <a id="logoutLink" href="#" onclick="logout(); return false;" hidden>
+        <span data-i18n="logout">Logout</span>
+      </a>
 
-    <a id="accountLink" href="#" onclick="openLogin(); return false;">
-      🔐 <span data-i18n="login">Account</span>
-    </a>
-
-    <a id="logoutLink" href="#" onclick="logout(); return false;" hidden>
-      <span data-i18n="logout">Logout</span>
-    </a>
-
-    <div id="languageSelector"></div>
-  </nav>
-
-</header>
-
-
+      <div id="languageSelector"></div>
+    </nav>
+  </header>
 
   <!-- HERO BANNER -->
   <section class="barq-banner">
@@ -107,76 +103,117 @@
       alt="BARQ beauty and cosmetics collection">
   </section>
 
-  <!-- BEAUTY CATEGORIES -->
-  <section id="beauty-categories" class="beauty-categories">
+  <!-- CATEGORY MENU OVERLAY -->
+  <section
+    id="beauty-categories"
+    class="beauty-categories category-menu-overlay"
+    aria-hidden="true">
 
-    <div class="category-heading">
-      <span class="category-eyebrow" data-i18n="categoryEyebrow">
-        DISCOVER YOUR FAVORITES
-      </span>
-      <h2 data-i18n="shopByCategory">Shop by Category</h2>
-      <p data-i18n="categoryDescription">
-        Find the essentials that make every day feel special.
-      </p>
-    </div>
+    <div class="category-menu-panel">
 
-    <div class="beauty-category-grid">
-
-      <a href="#products" class="beauty-category-card" data-category="makeup">
-        <img
-          src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
-          alt="Makeup products"
-          loading="lazy">
-        <div class="beauty-category-info">
-          <h3 data-i18n="makeup">Makeup</h3>
-          <span data-i18n="shopNow">Shop Now →</span>
+      <div class="category-menu-header">
+        <div class="category-heading">
+          <span class="category-eyebrow" data-i18n="categoryEyebrow">
+            DISCOVER YOUR FAVORITES
+          </span>
+          <h2 data-i18n="shopByCategory">Shop by Category</h2>
+          <p data-i18n="categoryDescription">
+            Find the essentials that make every day feel special.
+          </p>
         </div>
-      </a>
 
-      <a href="#products" class="beauty-category-card" data-category="skincare">
-        <img
-          src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
-          alt="Skincare products"
-          loading="lazy">
-        <div class="beauty-category-info">
-          <h3 data-i18n="skincare">Skincare</h3>
-          <span data-i18n="shopNow">Shop Now →</span>
+        <button
+          type="button"
+          class="category-menu-close"
+          id="categoryMenuClose"
+          aria-label="Close categories">×</button>
+      </div>
+
+      <div class="category-menu-layout">
+
+        <!-- LEFT VERTICAL CATEGORY LIST -->
+        <aside class="category-menu-sidebar" aria-label="Category list">
+          <button type="button" class="category-menu-link active" data-menu-category="makeup">
+            Makeup
+          </button>
+
+          <button type="button" class="category-menu-link" data-menu-category="skincare">
+            Skincare
+          </button>
+
+          <button type="button" class="category-menu-link" data-menu-category="perfume">
+            Perfume
+          </button>
+
+          <button type="button" class="category-menu-link" data-menu-category="haircare">
+            Haircare
+          </button>
+
+          <button type="button" class="category-menu-link" data-menu-category="fashion">
+            Fashion &amp; Accessories
+          </button>
+        </aside>
+
+        <!-- RIGHT CIRCULAR CATEGORY IMAGES -->
+        <div class="beauty-category-grid">
+
+          <a href="#products" class="beauty-category-card" data-category="makeup">
+            <img
+              src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
+              alt="Makeup products"
+              loading="lazy">
+            <div class="beauty-category-info">
+              <h3 data-i18n="makeup">Makeup</h3>
+              <span data-i18n="shopNow">Shop Now →</span>
+            </div>
+          </a>
+
+          <a href="#products" class="beauty-category-card" data-category="skincare">
+            <img
+              src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
+              alt="Skincare products"
+              loading="lazy">
+            <div class="beauty-category-info">
+              <h3 data-i18n="skincare">Skincare</h3>
+              <span data-i18n="shopNow">Shop Now →</span>
+            </div>
+          </a>
+
+          <a href="#products" class="beauty-category-card" data-category="perfume">
+            <img
+              src="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
+              alt="Perfume bottles"
+              loading="lazy">
+            <div class="beauty-category-info">
+              <h3 data-i18n="perfume">Perfume</h3>
+              <span data-i18n="shopNow">Shop Now →</span>
+            </div>
+          </a>
+
+          <a href="#products" class="beauty-category-card" data-category="haircare">
+            <img
+              src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
+              alt="Haircare and beauty"
+              loading="lazy">
+            <div class="beauty-category-info">
+              <h3 data-i18n="haircare">Haircare</h3>
+              <span data-i18n="shopNow">Shop Now →</span>
+            </div>
+          </a>
+
+          <a href="#products" class="beauty-category-card" data-category="fashion">
+            <img
+              src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
+              alt="Fashion and accessories"
+              loading="lazy">
+            <div class="beauty-category-info">
+              <h3 data-i18n="fashion">Fashion &amp; Accessories</h3>
+              <span data-i18n="shopNow">Shop Now →</span>
+            </div>
+          </a>
+
         </div>
-      </a>
-
-      <a href="#products" class="beauty-category-card" data-category="perfume">
-        <img
-          src="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
-          alt="Perfume bottles"
-          loading="lazy">
-        <div class="beauty-category-info">
-          <h3 data-i18n="perfume">Perfume</h3>
-          <span data-i18n="shopNow">Shop Now →</span>
-        </div>
-      </a>
-
-      <a href="#products" class="beauty-category-card" data-category="haircare">
-        <img
-          src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
-          alt="Haircare and beauty"
-          loading="lazy">
-        <div class="beauty-category-info">
-          <h3 data-i18n="haircare">Haircare</h3>
-          <span data-i18n="shopNow">Shop Now →</span>
-        </div>
-      </a>
-
-      <a href="#products" class="beauty-category-card" data-category="fashion">
-        <img
-          src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
-          alt="Fashion and accessories"
-          loading="lazy">
-        <div class="beauty-category-info">
-          <h3 data-i18n="fashion">Fashion &amp; Accessories</h3>
-          <span data-i18n="shopNow">Shop Now →</span>
-        </div>
-      </a>
-
+      </div>
     </div>
   </section>
 
@@ -201,7 +238,6 @@
       Discover your next favorite product
     </p>
 
-    <!-- Firebase products are rendered here by script.js -->
     <div class="product-container"></div>
   </section>
 
@@ -272,6 +308,81 @@
       <p id="loginMessage" role="status" aria-live="polite"></p>
     </div>
   </div>
+
+  <!-- CATEGORY MENU CONTROLS -->
+  <script>
+    (function () {
+      const categoryMenu = document.getElementById("beauty-categories");
+      const categoryToggle = document.getElementById("categoryMenuToggle");
+      const categoryClose = document.getElementById("categoryMenuClose");
+      const categoryCards = document.querySelectorAll(".beauty-category-card");
+      const menuLinks = document.querySelectorAll(".category-menu-link");
+
+      if (!categoryMenu || !categoryToggle || !categoryClose) return;
+
+      function openCategoryMenu() {
+        categoryMenu.classList.add("is-open");
+        categoryMenu.setAttribute("aria-hidden", "false");
+        categoryToggle.setAttribute("aria-expanded", "true");
+        document.body.classList.add("category-menu-active");
+      }
+
+      function closeCategoryMenu() {
+        categoryMenu.classList.remove("is-open");
+        categoryMenu.setAttribute("aria-hidden", "true");
+        categoryToggle.setAttribute("aria-expanded", "false");
+        document.body.classList.remove("category-menu-active");
+      }
+
+      categoryToggle.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        if (categoryMenu.classList.contains("is-open")) {
+          closeCategoryMenu();
+        } else {
+          openCategoryMenu();
+        }
+      });
+
+      categoryClose.addEventListener("click", closeCategoryMenu);
+
+      categoryMenu.addEventListener("click", function (event) {
+        if (event.target === categoryMenu) {
+          closeCategoryMenu();
+        }
+      });
+
+      menuLinks.forEach(function (link) {
+        link.addEventListener("click", function () {
+          const selectedCategory = link.dataset.menuCategory;
+
+          menuLinks.forEach(function (item) {
+            item.classList.toggle("active", item === link);
+          });
+
+          const matchingCard = Array.from(categoryCards).find(function (card) {
+            return card.dataset.category === selectedCategory;
+          });
+
+          if (matchingCard) {
+            matchingCard.click();
+          }
+
+          closeCategoryMenu();
+        });
+      });
+
+      categoryCards.forEach(function (card) {
+        card.addEventListener("click", closeCategoryMenu);
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && categoryMenu.classList.contains("is-open")) {
+          closeCategoryMenu();
+        }
+      });
+    })();
+  </script>
 
   <!-- LANGUAGE SYSTEM -->
   <script src="i18n.js"></script>
