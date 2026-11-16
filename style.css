@@ -454,3 +454,308 @@ header.site-header .menu-toggle {
 }
 
 
+/* =========================================
+   BARQ CATEGORY MENU — TEMU-STYLE OVERLAY
+========================================= */
+
+/* Prevent background scrolling while menu is open */
+body.category-menu-active {
+  overflow: hidden;
+}
+
+/* Full-screen dark overlay */
+.category-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  padding: 35px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(25, 20, 18, 0.65);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+/* Show menu */
+.category-menu-overlay.is-open {
+  display: flex;
+}
+
+/* Main menu panel */
+.category-menu-panel {
+  position: relative;
+  width: min(1100px, 100%);
+  max-height: min(760px, 90vh);
+  max-height: min(760px, 90dvh);
+  padding: 28px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: #fffdfb;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
+  animation: categoryMenuAppear 0.22s ease-out;
+}
+
+@keyframes categoryMenuAppear {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Menu heading */
+.category-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.category-menu-header h2 {
+  margin: 0;
+  color: var(--black);
+  font: 500 clamp(24px, 3vw, 34px)/1.2 Georgia, "Times New Roman", serif;
+}
+
+.category-menu-header p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.category-menu-close {
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--cream);
+  color: var(--black);
+  font-size: 27px;
+  line-height: 1;
+  transition: all var(--transition);
+}
+
+.category-menu-close:hover {
+  border-color: var(--rose);
+  background: var(--rose-soft);
+  color: var(--accent);
+}
+
+/* Left sidebar + right category grid */
+.category-menu-layout {
+  display: grid;
+  grid-template-columns: 215px minmax(0, 1fr);
+  gap: 28px;
+  padding-top: 24px;
+}
+
+/* Vertical category sidebar */
+.category-menu-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding-right: 18px;
+  border-right: 1px solid var(--border);
+}
+
+.category-menu-link {
+  width: 100%;
+  min-height: 52px;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: #5e5149;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all var(--transition);
+}
+
+.category-menu-link:hover,
+.category-menu-link.active {
+  border-color: #f0dce2;
+  background: var(--rose-soft);
+  color: var(--accent-dark);
+}
+
+.category-menu-link.active {
+  box-shadow: inset 3px 0 0 var(--rose);
+}
+
+/* Category grid inside the menu */
+.category-menu-panel .beauty-category-grid {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-content: start;
+  gap: 18px;
+}
+
+.category-menu-panel .beauty-category-card {
+  min-width: 0;
+  padding: 14px 8px;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  background: transparent;
+}
+
+.category-menu-panel .beauty-category-card:hover {
+  border-color: #f0dce2;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-3px);
+}
+
+.category-menu-panel .beauty-category-card img {
+  width: clamp(90px, 10vw, 135px);
+  height: clamp(90px, 10vw, 135px);
+  margin: 0 auto 12px;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 5px 18px rgba(48, 41, 37, 0.10);
+}
+
+.category-menu-panel .beauty-category-info h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .category-menu-overlay {
+    padding: 20px;
+  }
+
+  .category-menu-layout {
+    grid-template-columns: 175px minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .category-menu-panel .beauty-category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .category-menu-panel .beauty-category-card img {
+    width: 105px;
+    height: 105px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .category-menu-overlay {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .category-menu-panel {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    padding: 18px 14px;
+    overflow-y: auto;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .category-menu-header {
+    padding-bottom: 15px;
+  }
+
+  .category-menu-header h2 {
+    font-size: 25px;
+  }
+
+  .category-menu-header p {
+    font-size: 11px;
+  }
+
+  .category-menu-close {
+    flex-basis: 38px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .category-menu-layout {
+    grid-template-columns: 105px minmax(0, 1fr);
+    gap: 10px;
+    padding-top: 16px;
+  }
+
+  .category-menu-sidebar {
+    gap: 6px;
+    padding-right: 8px;
+  }
+
+  .category-menu-link {
+    min-height: 48px;
+    padding: 9px 7px;
+    font-size: 11px;
+    line-height: 1.3;
+  }
+
+  .category-menu-panel .beauty-category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .category-menu-panel .beauty-category-card {
+    padding: 10px 3px;
+  }
+
+  .category-menu-panel .beauty-category-card img {
+    width: clamp(72px, 19vw, 100px);
+    height: clamp(72px, 19vw, 100px);
+    margin-bottom: 8px;
+  }
+
+  .category-menu-panel .beauty-category-info h3 {
+    font-size: 13px;
+  }
+
+  .category-menu-panel .beauty-category-info span {
+    font-size: 9px;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+  .category-menu-layout {
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 7px;
+  }
+
+  .category-menu-link {
+    padding: 8px 5px;
+    font-size: 10px;
+  }
+
+  .category-menu-panel {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+}
+
