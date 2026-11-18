@@ -830,3 +830,12 @@ header.site-header .header-search:focus-within {
     display: flex;
   }
 }
+/* BARQ — Warm Cream Page Background */
+
+html {
+  background: #fbf8f4;
+}
+
+body {
+  background: var(--cream);
+}
