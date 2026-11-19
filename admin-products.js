@@ -836,4 +836,380 @@ function formatReviewDate(timestamp) {
             return "Date unavailable";
         }
 
-       
+        return date.toLocaleString();
+    } catch {
+        return "Date unavailable";
+    }
+}
+
+// ==========================================
+// LOAD CUSTOMER REVIEWS
+// ==========================================
+
+async function loadCustomerReviews() {
+    if (!currentAdmin) {
+        setReviewsMessage("Admin access is required.", true);
+        return;
+    }
+
+    if (!reviewsContainer) {
+        console.error(
+            "Customer reviews container not found. Check admin-products.html for #customer-reviews-container."
+        );
+        return;
+    }
+
+    reviewsContainer.replaceChildren();
+    setReviewsMessage("Loading customer reviews...");
+
+    try {
+        const [reviewsSnapshot, productsSnapshot] = await Promise.all([
+            getDocs(collection(db, "productReviews")),
+            getDocs(collection(db, "products"))
+        ]);
+
+        const productNames = new Map();
+
+        productsSnapshot.forEach(productDoc => {
+            const product = productDoc.data();
+
+            productNames.set(
+                productDoc.id,
+                product.name || "Unknown product"
+            );
+        });
+
+        const selectedStatus = reviewStatusFilter
+            ? reviewStatusFilter.value
+            : "all";
+
+        const reviews = [];
+
+        reviewsSnapshot.forEach(reviewDoc => {
+            const review = reviewDoc.data();
+
+            const status = review.status || "pending";
+
+            if (
+                selectedStatus !== "all" &&
+                status !== selectedStatus
+            ) {
+                return;
+            }
+
+            reviews.push({
+                id: reviewDoc.id,
+                ...review,
+                status
+            });
+        });
+
+        reviews.sort((a, b) => {
+            const dateA = a.createdAt?.toMillis
+                ? a.createdAt.toMillis()
+                : 0;
+
+            const dateB = b.createdAt?.toMillis
+                ? b.createdAt.toMillis()
+                : 0;
+
+            return dateB - dateA;
+        });
+
+        reviewsContainer.replaceChildren();
+
+        if (reviews.length === 0) {
+            const empty = document.createElement("p");
+
+            empty.textContent =
+                selectedStatus === "all"
+                    ? "No customer reviews found."
+                    : `No ${selectedStatus} reviews found.`;
+
+            reviewsContainer.appendChild(empty);
+
+            setReviewsMessage("Reviews loaded successfully.");
+            return;
+        }
+
+        reviews.forEach(review => {
+            const card = document.createElement("article");
+            card.className = "customer-review-card";
+
+            const productName = document.createElement("h3");
+
+            productName.textContent =
+                productNames.get(review.productId) ||
+                review.productName ||
+                "Unknown product";
+
+            const statusText = document.createElement("p");
+            statusText.textContent =
+                "Status: " + review.status.toUpperCase();
+
+            const customerText = document.createElement("p");
+            customerText.textContent =
+                "Customer UID: " + (review.userId || "Not provided");
+
+            const ratingText = document.createElement("p");
+
+            const rating = Number(review.rating);
+
+            ratingText.textContent =
+                "Rating: " +
+                (
+                    Number.isInteger(rating) &&
+                    rating >= 1 &&
+                    rating <= 5
+                        ? "★".repeat(rating) + "☆".repeat(5 - rating)
+                        : "Not provided"
+                );
+
+            const commentText = document.createElement("p");
+            commentText.textContent =
+                "Review: " + (review.comment || "No comment");
+
+            const dateText = document.createElement("p");
+            dateText.textContent =
+                "Submitted: " + formatReviewDate(review.createdAt);
+
+            const orderText = document.createElement("p");
+            orderText.textContent =
+                "Order ID: " + (review.orderId || "Not provided");
+
+            const verifiedText = document.createElement("p");
+            verifiedText.textContent =
+                "Verified purchase: " +
+                (review.verifiedPurchase === true ? "Yes" : "No");
+
+            const actions = document.createElement("div");
+            actions.className = "review-actions";
+
+            if (review.status !== "approved") {
+                const approveButton = document.createElement("button");
+
+                approveButton.type = "button";
+                approveButton.textContent = "Approve";
+
+                approveButton.addEventListener("click", async () => {
+                    approveButton.disabled = true;
+                    setReviewsMessage("Approving review...");
+
+                    try {
+                        await updateDoc(
+                            doc(db, "productReviews", review.id),
+                            {
+                                status: "approved",
+                                approvedAt: serverTimestamp(),
+                                approvedBy: currentAdmin.uid
+                            }
+                        );
+
+                        setReviewsMessage("Review approved successfully.");
+
+                        await loadCustomerReviews();
+                    } catch (error) {
+                        console.error("APPROVE REVIEW ERROR:", error);
+
+                        setReviewsMessage(
+                            "Could not approve review. Check Firestore permissions.",
+                            true
+                        );
+
+                        approveButton.disabled = false;
+                    }
+                });
+
+                actions.appendChild(approveButton);
+            }
+
+            if (review.status !== "rejected") {
+                const rejectButton = document.createElement("button");
+
+                rejectButton.type = "button";
+                rejectButton.textContent = "Reject";
+
+                rejectButton.addEventListener("click", async () => {
+                    const confirmed = window.confirm(
+                        "Are you sure you want to reject this review?"
+                    );
+
+                    if (!confirmed) return;
+
+                    rejectButton.disabled = true;
+                    setReviewsMessage("Rejecting review...");
+
+                    try {
+                        await updateDoc(
+                            doc(db, "productReviews", review.id),
+                            {
+                                status: "rejected",
+                                rejectedAt: serverTimestamp(),
+                                rejectedBy: currentAdmin.uid
+                            }
+                        );
+
+                        setReviewsMessage("Review rejected successfully.");
+
+                        await loadCustomerReviews();
+                    } catch (error) {
+                        console.error("REJECT REVIEW ERROR:", error);
+
+                        setReviewsMessage(
+                            "Could not reject review. Check Firestore permissions.",
+                            true
+                        );
+
+                        rejectButton.disabled = false;
+                    }
+                });
+
+                actions.appendChild(rejectButton);
+            }
+
+            const deleteButton = document.createElement("button");
+
+            deleteButton.type = "button";
+            deleteButton.textContent = "Delete";
+            deleteButton.className = "delete-btn";
+
+            deleteButton.addEventListener("click", async () => {
+                const confirmed = window.confirm(
+                    "Permanently delete this customer review?"
+                );
+
+                if (!confirmed) return;
+
+                deleteButton.disabled = true;
+                setReviewsMessage("Deleting review...");
+
+                try {
+                    await deleteDoc(
+                        doc(db, "productReviews", review.id)
+                    );
+
+                    setReviewsMessage("Review deleted successfully.");
+
+                    await loadCustomerReviews();
+                } catch (error) {
+                    console.error("DELETE REVIEW ERROR:", error);
+
+                    setReviewsMessage(
+                        "Could not delete review. Check Firestore permissions.",
+                        true
+                    );
+
+                    deleteButton.disabled = false;
+                }
+            });
+
+            actions.appendChild(deleteButton);
+
+            card.append(
+                productName,
+                statusText,
+                customerText,
+                ratingText,
+                commentText,
+                dateText,
+                orderText,
+                verifiedText,
+                actions
+            );
+
+            reviewsContainer.appendChild(card);
+        });
+
+        setReviewsMessage(
+            `${reviews.length} review(s) loaded successfully.`
+        );
+    } catch (error) {
+        console.error("LOAD CUSTOMER REVIEWS ERROR:", error);
+
+        reviewsContainer.replaceChildren();
+
+        setReviewsMessage(
+            "Could not load customer reviews. Check Firestore security rules and collection names.",
+            true
+        );
+    }
+}
+
+// ==========================================
+// REVIEW FILTER
+// ==========================================
+
+if (reviewStatusFilter) {
+    reviewStatusFilter.addEventListener("change", () => {
+        loadCustomerReviews();
+    });
+}
+
+// ==========================================
+// REFRESH REVIEWS
+// ==========================================
+
+if (refreshReviewsButton) {
+    refreshReviewsButton.addEventListener("click", () => {
+        loadCustomerReviews();
+    });
+}
+
+// ==========================================
+// CHECK ADMIN ACCESS
+// ==========================================
+
+onAuthStateChanged(auth, async user => {
+    if (formSection) formSection.hidden = true;
+    if (listSection) listSection.hidden = true;
+    if (reviewsSection) reviewsSection.hidden = true;
+
+    if (!user) {
+        window.location.href = "index.html";
+        return;
+    }
+
+    showMessage("Checking admin access...");
+
+    try {
+        const adminSnapshot = await getDoc(
+            doc(db, "admins", user.uid)
+        );
+
+        if (
+            !adminSnapshot.exists() ||
+            adminSnapshot.data().role !== "admin"
+        ) {
+            showMessage("Access denied. Admin account required.");
+
+            await signOut(auth);
+
+            window.location.href = "index.html";
+            return;
+        }
+
+        currentAdmin = user;
+
+        if (formSection) formSection.hidden = false;
+        if (listSection) listSection.hidden = false;
+        if (reviewsSection) reviewsSection.hidden = false;
+
+        showMessage(
+            "Admin access verified. You can manage products and customer reviews."
+        );
+
+        await loadCustomerReviews();
+
+        if (!productsLoaded) {
+            productsLoaded = true;
+            await loadProducts();
+        }
+    } catch (error) {
+        console.error("ADMIN CHECK ERROR:", error);
+
+        showMessage(
+            "Could not verify admin access. Check your internet connection and Firestore security rules."
+        );
+    }
+});
+```
