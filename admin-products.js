@@ -1,4 +1,4 @@
-```javascript
+
 import { db, auth } from "./firebase-config.js";
 
 import {
@@ -1212,4 +1212,4 @@ onAuthStateChanged(auth, async user => {
         );
     }
 });
-```
+
