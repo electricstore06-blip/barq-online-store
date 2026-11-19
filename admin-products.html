@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -157,6 +158,38 @@
                         Example: 30ml:79, 50ml:129, 100ml:199.
                     </small>
 
+                    <!-- PRODUCT OFFER -->
+                    <div class="product-offer-section">
+                        <h4>Product Offer</h4>
+
+                        <label class="checkbox-label">
+                            <input
+                                id="product-offer-active"
+                                type="checkbox"
+                            >
+                            Enable offer for this product
+                        </label>
+
+                        <label for="product-discount-percent">
+                            Discount Percentage (%)
+                        </label>
+
+                        <input
+                            id="product-discount-percent"
+                            type="number"
+                            min="1"
+                            max="99"
+                            step="1"
+                            placeholder="Example: 20"
+                        >
+
+                        <small>
+                            Enter a discount between 1% and 99%.
+                            The discount will be calculated from the
+                            original price, including the selected size.
+                        </small>
+                    </div>
+
                     <label class="checkbox-label">
                         <input
                             id="product-active"
@@ -225,3 +258,4 @@
     <script type="module" src="admin-products.js"></script>
 </body>
 </html>
+```
