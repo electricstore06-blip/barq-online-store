@@ -39,6 +39,26 @@ function getAvailableStock() {
     return Number.isFinite(stock) ? Math.max(0, stock) : 0;
 }
 
+// Get valid offer discount percentage
+function getDiscountPercent() {
+    if (!product || product.offerActive !== true) {
+        return 0;
+    }
+
+    const discount = Number(product.discountPercent);
+
+    if (
+        !Number.isFinite(discount) ||
+        discount < 1 ||
+        discount > 99
+    ) {
+        return 0;
+    }
+
+    return discount;
+}
+
+// Get original product price based on selected size
 function getPrice(size = "") {
     if (!product) return 0;
 
@@ -73,12 +93,64 @@ function getPrice(size = "") {
     return Number(product.price) || 0;
 }
 
+// Calculate discounted price
+function getFinalPrice(size = "") {
+    const originalPrice = getPrice(size);
+    const discount = getDiscountPercent();
+
+    if (discount <= 0) {
+        return originalPrice;
+    }
+
+    return Number(
+        (originalPrice * (1 - discount / 100)).toFixed(2)
+    );
+}
+
+// Update the price display whenever size changes
 function updateDisplayedPrice() {
     const priceElement = document.getElementById("selectedPrice");
 
-    if (priceElement) {
-        priceElement.textContent =
-            `${getPrice(selectedSize).toFixed(2)} SAR`;
+    if (!priceElement || !product) return;
+
+    const originalPrice = getPrice(selectedSize);
+    const finalPrice = getFinalPrice(selectedSize);
+    const discount = getDiscountPercent();
+
+    if (discount > 0) {
+        priceElement.innerHTML = `
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                <span style="
+                    color:#888;
+                    text-decoration:line-through;
+                    font-size:16px;
+                ">
+                    ${originalPrice.toFixed(2)} SAR
+                </span>
+
+                <span style="
+                    background:#dc2626;
+                    color:white;
+                    padding:4px 9px;
+                    border-radius:6px;
+                    font-size:13px;
+                    font-weight:bold;
+                ">
+                    ${discount}% OFF
+                </span>
+            </div>
+
+            <div style="
+                color:#15803d;
+                font-size:25px;
+                font-weight:bold;
+                margin-top:5px;
+            ">
+                ${finalPrice.toFixed(2)} SAR
+            </div>
+        `;
+    } else {
+        priceElement.textContent = `${originalPrice.toFixed(2)} SAR`;
     }
 }
 
@@ -111,6 +183,7 @@ function updateStockDisplay() {
     }
 }
 
+// Live Firebase stock and offer listener
 function startStockListener() {
     if (!productId) return;
 
@@ -138,15 +211,22 @@ function startStockListener() {
             }
 
             updateStockDisplay();
+            updateDisplayedPrice();
 
             console.log(
-                "Live product stock updated:",
+                "Live product updated:",
                 product.name,
-                product.stock
+                "Stock:",
+                product.stock,
+                "Offer:",
+                product.offerActive,
+                "Discount:",
+                product.discountPercent
             );
         },
         error => {
             console.error("Stock listener error:", error);
+
             const stockElement =
                 document.getElementById("productStockStatus");
 
@@ -177,7 +257,7 @@ async function loadProduct() {
     try {
         const productRef = doc(db, "products", productId);
 
-        // Initial load. The live listener below keeps stock updated.
+        // Initial load. The live listener below keeps stock and offers updated.
         const { getDoc } = await import(
             "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"
         );
@@ -230,7 +310,6 @@ async function loadProduct() {
                     <h3>${escapeHTML(product.brand || "BARQ")}</h3>
 
                     <div class="price-box" id="selectedPrice">
-                        ${getPrice().toFixed(2)} SAR
                     </div>
 
                     <p id="productStockStatus"></p>
@@ -287,8 +366,11 @@ async function loadProduct() {
             </div>
         `;
 
+        // Display initial price and offer
+        updateDisplayedPrice();
         updateStockDisplay();
 
+        // Color selection
         container.querySelectorAll("[data-color]").forEach(button => {
             button.addEventListener("click", () => {
                 selectedColor = button.dataset.color;
@@ -303,6 +385,7 @@ async function loadProduct() {
             });
         });
 
+        // Size selection and discounted price update
         container.querySelectorAll("[data-size]").forEach(button => {
             button.addEventListener("click", () => {
                 selectedSize = button.dataset.size;
@@ -319,6 +402,7 @@ async function loadProduct() {
             });
         });
 
+        // Add product to cart using the discounted price
         document.getElementById("addProductToCart")
             .addEventListener("click", () => {
 
@@ -344,10 +428,11 @@ async function loadProduct() {
                     return;
                 }
 
+                // IMPORTANT: Send discounted price to the cart
                 window.addToCart(
                     product.id,
                     product.name,
-                    getPrice(selectedSize),
+                    getFinalPrice(selectedSize),
                     product.image || "",
                     product.brand || "BARQ",
                     selectedColor,
