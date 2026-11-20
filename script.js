@@ -1,8 +1,7 @@
-
 // ==========================================
 // BARQ STORE MAIN SCRIPT
 // Product display + Firebase + cart + language support
-// Real-time product and stock updates
+// Real-time product, stock and offers updates
 // ==========================================
 
 import { db } from "./firebase-config.js";
@@ -109,6 +108,217 @@ function getProductPrice(product, size = "") {
         : 0;
 }
 
+// ==========================================
+// OFFER HELPERS
+// ==========================================
+
+function getOfferDiscount(product) {
+    const discount = Number(product.discountPercent);
+
+    if (
+        product.offerActive !== true ||
+        !Number.isFinite(discount) ||
+        discount < 1 ||
+        discount > 99
+    ) {
+        return 0;
+    }
+
+    return discount;
+}
+
+function getLowestProductPrice(product) {
+    const basePrice = getProductPrice(product);
+    const sizePrices = product.sizePrices || {};
+
+    const availablePrices = Object.values(sizePrices)
+        .map(Number)
+        .filter(value => Number.isFinite(value) && value >= 0);
+
+    return availablePrices.length > 0
+        ? Math.min(basePrice, ...availablePrices)
+        : basePrice;
+}
+
+function renderOffers() {
+    const offersSection = document.getElementById("offers");
+
+    if (!offersSection) return;
+
+    let offersContainer =
+        offersSection.querySelector(".offers-products");
+
+    if (!offersContainer) {
+        offersContainer = document.createElement("div");
+        offersContainer.className =
+            "offers-products product-container";
+
+        offersSection.appendChild(offersContainer);
+    }
+
+    const description = offersSection.querySelector("p");
+
+    const activeOffers = productsData.filter(product => {
+        const hasValidOffer = getOfferDiscount(product) > 0;
+        const isAvailable = getStockStatus(product) !== "out";
+
+        return hasValidOffer && isAvailable;
+    });
+
+    offersContainer.replaceChildren();
+
+    if (activeOffers.length === 0) {
+        if (description) {
+            description.textContent =
+                "No active offers right now. Please check back soon.";
+        }
+
+        const emptyMessage = document.createElement("p");
+        emptyMessage.className = "no-products";
+        emptyMessage.textContent =
+            "There are no discounted products available right now.";
+
+        offersContainer.appendChild(emptyMessage);
+        return;
+    }
+
+    if (description) {
+        description.textContent =
+            "Enjoy these special prices on selected BARQ products.";
+    }
+
+    const fragment = document.createDocumentFragment();
+
+    activeOffers.forEach(product => {
+        const discount = getOfferDiscount(product);
+        const originalPrice = getLowestProductPrice(product);
+
+        const discountedPrice =
+            originalPrice * (1 - discount / 100);
+
+        const card = document.createElement("div");
+        card.className = "product offer-product";
+
+        const productArea = document.createElement("div");
+        productArea.className = "product-click";
+        productArea.tabIndex = 0;
+        productArea.setAttribute("role", "link");
+
+        productArea.setAttribute(
+            "aria-label",
+            `View ${product.name || "product"} offer details`
+        );
+
+        const badge = document.createElement("span");
+        badge.className = "offer-badge";
+        badge.textContent = `${discount}% OFF`;
+        badge.style.display = "inline-block";
+        badge.style.padding = "6px 10px";
+        badge.style.marginBottom = "8px";
+        badge.style.borderRadius = "6px";
+        badge.style.backgroundColor = "#9b2638";
+        badge.style.color = "#ffffff";
+        badge.style.fontWeight = "700";
+
+        const image = document.createElement("img");
+        image.className = "product-img";
+        image.src = product.image || "";
+        image.alt = product.name || "Product";
+        image.loading = "lazy";
+
+        image.onerror = function () {
+            this.style.display = "none";
+        };
+
+        const name = document.createElement("h3");
+        name.textContent = product.name || "Product";
+
+        const brand = document.createElement("p");
+        brand.className = "brand";
+        brand.textContent = product.brand || "BARQ";
+
+        const prices = document.createElement("div");
+        prices.className = "offer-prices";
+        prices.style.display = "flex";
+        prices.style.alignItems = "center";
+        prices.style.flexWrap = "wrap";
+        prices.style.gap = "10px";
+        prices.style.marginTop = "8px";
+
+        const oldPrice = document.createElement("span");
+        oldPrice.className = "offer-original-price";
+        oldPrice.textContent =
+            `${originalPrice.toFixed(2)} SAR`;
+
+        oldPrice.style.textDecoration = "line-through";
+        oldPrice.style.color = "#777777";
+
+        const newPrice = document.createElement("strong");
+        newPrice.className = "offer-discounted-price";
+        newPrice.textContent =
+            `${discountedPrice.toFixed(2)} SAR`;
+
+        newPrice.style.color = "#9b2638";
+        newPrice.style.fontWeight = "800";
+
+        prices.append(oldPrice, newPrice);
+
+        productArea.append(
+            badge,
+            image,
+            name,
+            brand,
+            prices
+        );
+
+        function openOfferProduct() {
+            window.location.href =
+                "./product-details.html?id=" +
+                encodeURIComponent(product.id);
+        }
+
+        productArea.addEventListener(
+            "click",
+            openOfferProduct
+        );
+
+        productArea.addEventListener("keydown", event => {
+            if (
+                event.key === "Enter" ||
+                event.key === " "
+            ) {
+                event.preventDefault();
+                openOfferProduct();
+            }
+        });
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "add-btn";
+        button.textContent =
+            tr("viewOptions", "View Options");
+
+        button.addEventListener("click", event => {
+            event.stopPropagation();
+            openOfferProduct();
+        });
+
+        card.append(productArea, button);
+        fragment.appendChild(card);
+    });
+
+    offersContainer.appendChild(fragment);
+
+    console.log(
+        "BARQ: Active offers displayed:",
+        activeOffers.length
+    );
+}
+
+// ==========================================
+// PRODUCT CATEGORY
+// ==========================================
+
 function getProductCategory(product) {
     return String(product.category || "")
         .trim()
@@ -209,12 +419,12 @@ function createProductCard(product) {
             `${tr("from", "From")} ${lowestPrice.toFixed(2)} SAR`;
 
     } else {
-        price.textContent = `${basePrice.toFixed(2)} SAR`;
+        price.textContent =
+            `${basePrice.toFixed(2)} SAR`;
     }
 
     productArea.append(image, name, brand, price);
 
-    // Show live stock status when stock is available in Firestore.
     const stockStatus = getStockStatus(product);
 
     if (stockStatus !== null) {
@@ -238,10 +448,16 @@ function createProductCard(product) {
             encodeURIComponent(product.id);
     }
 
-    productArea.addEventListener("click", openProductDetails);
+    productArea.addEventListener(
+        "click",
+        openProductDetails
+    );
 
     productArea.addEventListener("keydown", event => {
-        if (event.key === "Enter" || event.key === " ") {
+        if (
+            event.key === "Enter" ||
+            event.key === " "
+        ) {
             event.preventDefault();
             openProductDetails();
         }
@@ -250,7 +466,8 @@ function createProductCard(product) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "add-btn";
-    button.textContent = tr("viewOptions", "View Options");
+    button.textContent =
+        tr("viewOptions", "View Options");
 
     button.addEventListener("click", event => {
         event.stopPropagation();
@@ -271,14 +488,16 @@ function displayProducts(products) {
         "#products .product-container"
     );
 
-    // Other pages do not have the main product container.
     if (!container) {
         return;
     }
 
     container.replaceChildren();
 
-    if (!Array.isArray(products) || products.length === 0) {
+    if (
+        !Array.isArray(products) ||
+        products.length === 0
+    ) {
         const message = document.createElement("p");
         message.className = "no-products";
 
@@ -299,12 +518,17 @@ function displayProducts(products) {
     const fragment = document.createDocumentFragment();
 
     products.forEach(product => {
-        fragment.appendChild(createProductCard(product));
+        fragment.appendChild(
+            createProductCard(product)
+        );
     });
 
     container.appendChild(fragment);
 
-    console.log("BARQ: Products displayed:", products.length);
+    console.log(
+        "BARQ: Products displayed:",
+        products.length
+    );
 }
 
 // ==========================================
@@ -312,17 +536,19 @@ function displayProducts(products) {
 // ==========================================
 
 function startProductsListener() {
-    console.log("BARQ: Starting real-time product listener...");
+    console.log(
+        "BARQ: Starting real-time product listener..."
+    );
 
     const container = document.querySelector(
         "#products .product-container"
     );
 
     if (container) {
-        container.textContent = tr("loading", "Loading...");
+        container.textContent =
+            tr("loading", "Loading...");
     }
 
-    // Prevent duplicate Firebase listeners.
     if (unsubscribeProducts) {
         unsubscribeProducts();
         unsubscribeProducts = null;
@@ -340,7 +566,6 @@ function startProductsListener() {
                     id: documentSnapshot.id
                 };
 
-                // Do not display products hidden by the administrator.
                 if (product.active === false) return;
 
                 productsData.push(product);
@@ -351,6 +576,9 @@ function startProductsListener() {
                 productsData.length
             );
 
+            // Update customer-facing offers automatically.
+            renderOffers();
+
             if (
                 searchInput &&
                 isEmailLikeSearch(searchInput.value)
@@ -358,21 +586,24 @@ function startProductsListener() {
                 clearSearchField();
             }
 
-            // Keep the customer's current search.
-            if (searchInput && searchInput.value.trim()) {
+            if (
+                searchInput &&
+                searchInput.value.trim()
+            ) {
                 renderSearchResults(searchInput.value);
 
-            // Keep the customer's selected category.
             } else if (currentCategory) {
-                const aliases = getCategoryAliases(currentCategory);
+                const aliases =
+                    getCategoryAliases(currentCategory);
 
                 displayProducts(
                     productsData.filter(product =>
-                        aliases.includes(getProductCategory(product))
+                        aliases.includes(
+                            getProductCategory(product)
+                        )
                     )
                 );
 
-            // Otherwise display all active products.
             } else {
                 displayProducts(productsData);
             }
@@ -385,8 +616,11 @@ function startProductsListener() {
             );
 
             if (container) {
-                const message = document.createElement("p");
+                const message =
+                    document.createElement("p");
+
                 message.className = "no-products";
+
                 message.textContent =
                     "Unable to update products. Please refresh the page.";
 
@@ -397,12 +631,18 @@ function startProductsListener() {
                 searchResultsContainer &&
                 searchInput?.value.trim()
             ) {
-                const message = document.createElement("p");
-                message.className = "no-search-results";
+                const message =
+                    document.createElement("p");
+
+                message.className =
+                    "no-search-results";
+
                 message.textContent =
                     "Products could not be updated. Please try again.";
 
-                searchResultsContainer.replaceChildren(message);
+                searchResultsContainer.replaceChildren(
+                    message
+                );
             }
         }
     );
@@ -417,7 +657,6 @@ function renderSearchResults(searchTerm) {
         .trim()
         .toLowerCase();
 
-    // Never use an email address as a product search.
     if (isEmailLikeSearch(value)) {
         clearSearchField();
         renderSearchResults("");
@@ -441,13 +680,17 @@ function renderSearchResults(searchTerm) {
         }
 
         if (currentCategory) {
-            const aliases = getCategoryAliases(currentCategory);
+            const aliases =
+                getCategoryAliases(currentCategory);
 
             displayProducts(
                 productsData.filter(product =>
-                    aliases.includes(getProductCategory(product))
+                    aliases.includes(
+                        getProductCategory(product)
+                    )
                 )
             );
+
         } else {
             displayProducts(productsData);
         }
@@ -456,9 +699,14 @@ function renderSearchResults(searchTerm) {
     }
 
     const results = productsData.filter(product => {
-        const name = String(product.name || "").toLowerCase();
-        const brand = String(product.brand || "").toLowerCase();
-        const category = getProductCategory(product);
+        const name =
+            String(product.name || "").toLowerCase();
+
+        const brand =
+            String(product.brand || "").toLowerCase();
+
+        const category =
+            getProductCategory(product);
 
         const description = String(
             product.description || ""
@@ -472,26 +720,38 @@ function renderSearchResults(searchTerm) {
         );
     });
 
-    if (searchResultsSection && searchResultsContainer) {
+    if (
+        searchResultsSection &&
+        searchResultsContainer
+    ) {
         searchResultsSection.hidden = false;
         searchResultsContainer.replaceChildren();
 
         if (results.length === 0) {
-            const message = document.createElement("p");
-            message.className = "no-search-results";
+            const message =
+                document.createElement("p");
+
+            message.className =
+                "no-search-results";
+
             message.textContent =
                 "No products found. Try another product name or brand.";
 
             searchResultsContainer.appendChild(message);
 
         } else {
-            const fragment = document.createDocumentFragment();
+            const fragment =
+                document.createDocumentFragment();
 
             results.forEach(product => {
-                fragment.appendChild(createProductCard(product));
+                fragment.appendChild(
+                    createProductCard(product)
+                );
             });
 
-            searchResultsContainer.appendChild(fragment);
+            searchResultsContainer.appendChild(
+                fragment
+            );
         }
 
         return;
@@ -523,7 +783,6 @@ if (searchInput) {
         }, 100);
     });
 
-    // Clear browser-restored email values after page loading.
     window.addEventListener("load", () => {
         if (isEmailLikeSearch(searchInput.value)) {
             clearSearchField();
@@ -532,7 +791,6 @@ if (searchInput) {
         renderSearchResults(searchInput.value);
     });
 
-    // Also handle pages restored from browser history.
     window.addEventListener("pageshow", () => {
         if (isEmailLikeSearch(searchInput.value)) {
             clearSearchField();
@@ -545,11 +803,15 @@ if (searchInput) {
 // CATEGORY FILTERS
 // ==========================================
 
-document.querySelectorAll(".beauty-category-card").forEach(card => {
+document.querySelectorAll(
+    ".beauty-category-card"
+).forEach(card => {
     card.addEventListener("click", event => {
         event.preventDefault();
 
-        const category = String(card.dataset.category || "")
+        const category = String(
+            card.dataset.category || ""
+        )
             .trim()
             .toLowerCase();
 
@@ -575,19 +837,26 @@ document.querySelectorAll(".beauty-category-card").forEach(card => {
             document.getElementById("products");
 
         if (!productsSection) {
-            console.error("BARQ: Products section not found.");
+            console.error(
+                "BARQ: Products section not found."
+            );
             return;
         }
 
         productsSection.style.display = "";
 
-        const aliases = getCategoryAliases(category);
+        const aliases =
+            getCategoryAliases(category);
 
-        const filteredProducts = productsData.filter(product =>
-            aliases.includes(getProductCategory(product))
-        );
+        const filteredProducts =
+            productsData.filter(product =>
+                aliases.includes(
+                    getProductCategory(product)
+                )
+            );
 
-        const title = productsSection.querySelector("h2");
+        const title =
+            productsSection.querySelector("h2");
 
         if (title) {
             title.textContent =
@@ -617,7 +886,10 @@ function saveCart() {
         );
 
     } catch (error) {
-        console.error("BARQ: Could not save cart:", error);
+        console.error(
+            "BARQ: Could not save cart:",
+            error
+        );
 
         alert(
             "Unable to save your cart. Please check browser storage."
@@ -657,7 +929,10 @@ function addToCart(
 
     if (existing) {
         existing.quantity =
-            Math.max(1, Number(existing.quantity) || 1) + 1;
+            Math.max(
+                1,
+                Number(existing.quantity) || 1
+            ) + 1;
 
     } else {
         cart.push({
@@ -683,9 +958,14 @@ function addToCart(
 // ==========================================
 
 function updateCart() {
-    const itemsElement = document.getElementById("cartItems");
-    const totalElement = document.getElementById("cartTotal");
-    const countElement = document.getElementById("cartCount");
+    const itemsElement =
+        document.getElementById("cartItems");
+
+    const totalElement =
+        document.getElementById("cartTotal");
+
+    const countElement =
+        document.getElementById("cartCount");
 
     let total = 0;
     let quantityTotal = 0;
@@ -716,45 +996,70 @@ function updateCart() {
         const name = document.createElement("b");
         name.textContent = item.name || "Product";
 
-        const optionDetails = document.createElement("p");
+        const optionDetails =
+            document.createElement("p");
+
         const optionLabels = [];
 
         if (item.color) {
-            optionLabels.push(`Color: ${item.color}`);
+            optionLabels.push(
+                `Color: ${item.color}`
+            );
         }
 
         if (item.size) {
-            optionLabels.push(`Size: ${item.size}`);
+            optionLabels.push(
+                `Size: ${item.size}`
+            );
         }
 
-        optionDetails.textContent = optionLabels.join(" | ");
+        optionDetails.textContent =
+            optionLabels.join(" | ");
 
-        const priceElement = document.createElement("p");
+        const priceElement =
+            document.createElement("p");
+
         priceElement.textContent =
             `${price.toFixed(2)} SAR each`;
 
-        const decreaseButton = document.createElement("button");
+        const decreaseButton =
+            document.createElement("button");
+
         decreaseButton.type = "button";
         decreaseButton.textContent = "-";
-        decreaseButton.addEventListener("click", () =>
-            decreaseQuantity(index)
+
+        decreaseButton.addEventListener(
+            "click",
+            () => decreaseQuantity(index)
         );
 
-        const quantityElement = document.createElement("span");
-        quantityElement.textContent = ` ${quantity} `;
+        const quantityElement =
+            document.createElement("span");
 
-        const increaseButton = document.createElement("button");
+        quantityElement.textContent =
+            ` ${quantity} `;
+
+        const increaseButton =
+            document.createElement("button");
+
         increaseButton.type = "button";
         increaseButton.textContent = "+";
-        increaseButton.addEventListener("click", () =>
-            increaseQuantity(index)
+
+        increaseButton.addEventListener(
+            "click",
+            () => increaseQuantity(index)
         );
 
-        const removeButton = document.createElement("button");
+        const removeButton =
+            document.createElement("button");
+
         removeButton.type = "button";
-        removeButton.textContent = tr("remove", "Remove");
-        removeButton.addEventListener("click", () =>
-            removeCart(index)
+        removeButton.textContent =
+            tr("remove", "Remove");
+
+        removeButton.addEventListener(
+            "click",
+            () => removeCart(index)
         );
 
         row.append(name);
@@ -775,11 +1080,13 @@ function updateCart() {
     });
 
     if (totalElement) {
-        totalElement.textContent = total.toFixed(2);
+        totalElement.textContent =
+            total.toFixed(2);
     }
 
     if (countElement) {
-        countElement.textContent = String(quantityTotal);
+        countElement.textContent =
+            String(quantityTotal);
     }
 }
 
@@ -787,7 +1094,10 @@ function increaseQuantity(index) {
     if (!cart[index]) return;
 
     cart[index].quantity =
-        Math.max(1, Number(cart[index].quantity) || 1) + 1;
+        Math.max(
+            1,
+            Number(cart[index].quantity) || 1
+        ) + 1;
 
     saveCart();
     updateCart();
@@ -808,7 +1118,9 @@ function decreaseQuantity(index) {
 }
 
 function removeCart(index) {
-    if (!Number.isInteger(index) || !cart[index]) return;
+    if (!Number.isInteger(index) || !cart[index]) {
+        return;
+    }
 
     cart.splice(index, 1);
 
@@ -821,7 +1133,8 @@ function removeCart(index) {
 // ==========================================
 
 function openCart() {
-    const box = document.getElementById("cartBox");
+    const box =
+        document.getElementById("cartBox");
 
     if (box) {
         box.style.display = "block";
@@ -831,7 +1144,8 @@ function openCart() {
 }
 
 function closeCart() {
-    const box = document.getElementById("cartBox");
+    const box =
+        document.getElementById("cartBox");
 
     if (box) {
         box.style.display = "none";
@@ -856,58 +1170,84 @@ function checkout() {
 // ==========================================
 
 function toggleMenu() {
-    const menu = document.getElementById("mainNav");
+    const menu =
+        document.getElementById("mainNav");
 
     if (menu) {
         menu.classList.toggle("active");
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll("#mainNav a").forEach(link => {
-        link.addEventListener("click", () => {
-            const menu = document.getElementById("mainNav");
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+        document.querySelectorAll(
+            "#mainNav a"
+        ).forEach(link => {
+            link.addEventListener("click", () => {
+                const menu =
+                    document.getElementById("mainNav");
 
-            if (menu) {
-                menu.classList.remove("active");
-            }
+                if (menu) {
+                    menu.classList.remove("active");
+                }
+            });
         });
-    });
 
-    const menuButton = document.getElementById("menuButton");
+        const menuButton =
+            document.getElementById("menuButton");
 
-    if (menuButton) {
-        menuButton.addEventListener("click", toggleMenu);
+        if (menuButton) {
+            menuButton.addEventListener(
+                "click",
+                toggleMenu
+            );
+        }
     }
-});
+);
 
 // ==========================================
 // LANGUAGE CHANGE
 // ==========================================
 
-document.addEventListener("barq:languageChanged", () => {
-    if (searchInput && isEmailLikeSearch(searchInput.value)) {
-        clearSearchField();
+document.addEventListener(
+    "barq:languageChanged",
+    () => {
+        if (
+            searchInput &&
+            isEmailLikeSearch(searchInput.value)
+        ) {
+            clearSearchField();
+        }
+
+        if (
+            searchInput &&
+            searchInput.value.trim()
+        ) {
+            renderSearchResults(searchInput.value);
+
+        } else if (currentCategory) {
+            const aliases =
+                getCategoryAliases(currentCategory);
+
+            displayProducts(
+                productsData.filter(product =>
+                    aliases.includes(
+                        getProductCategory(product)
+                    )
+                )
+            );
+
+        } else {
+            displayProducts(productsData);
+        }
+
+        // Refresh offer labels and prices after language changes.
+        renderOffers();
+
+        updateCart();
     }
-
-    if (searchInput && searchInput.value.trim()) {
-        renderSearchResults(searchInput.value);
-
-    } else if (currentCategory) {
-        const aliases = getCategoryAliases(currentCategory);
-
-        displayProducts(
-            productsData.filter(product =>
-                aliases.includes(getProductCategory(product))
-            )
-        );
-
-    } else {
-        displayProducts(productsData);
-    }
-
-    updateCart();
-});
+);
 
 // ==========================================
 // EXPORT FUNCTIONS FOR HTML
