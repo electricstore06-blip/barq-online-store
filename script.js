@@ -1,3 +1,4 @@
+
 // ==========================================
 // BARQ STORE MAIN SCRIPT
 // Product display + Firebase + cart + language support
@@ -576,7 +577,6 @@ function startProductsListener() {
                 productsData.length
             );
 
-            // Update customer-facing offers automatically.
             renderOffers();
 
             if (
@@ -908,9 +908,13 @@ function addToCart(
     image,
     brand,
     color = "",
-    size = ""
+    size = "",
+    originalPrice = price,
+    discountPercent = 0
 ) {
     const selectedPrice = Number(price);
+    const regularPrice = Number(originalPrice);
+    const discount = Number(discountPercent);
 
     if (
         !Number.isFinite(selectedPrice) ||
@@ -919,6 +923,20 @@ function addToCart(
         alert("Invalid product price.");
         return;
     }
+
+    const safeOriginalPrice =
+        Number.isFinite(regularPrice) &&
+        regularPrice >= selectedPrice
+            ? regularPrice
+            : selectedPrice;
+
+    const safeDiscount =
+        Number.isFinite(discount) &&
+        discount >= 1 &&
+        discount <= 99 &&
+        safeOriginalPrice > selectedPrice
+            ? discount
+            : 0;
 
     const existing = cart.find(item =>
         item.productId === id &&
@@ -934,11 +952,17 @@ function addToCart(
                 Number(existing.quantity) || 1
             ) + 1;
 
+        // Refresh offer information when the same item is added again.
+        existing.originalPrice = safeOriginalPrice;
+        existing.discountPercent = safeDiscount;
+
     } else {
         cart.push({
             productId: id,
             name: name || "Product",
             price: selectedPrice,
+            originalPrice: safeOriginalPrice,
+            discountPercent: safeDiscount,
             image: image || "",
             brand: brand || "BARQ",
             color: color || "",
@@ -951,6 +975,22 @@ function addToCart(
     updateCart();
 
     alert("Added to cart ✅");
+}
+
+// ==========================================
+// CREATE CART BUTTON
+// ==========================================
+
+function createCartButton(text, className, callback) {
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className = className;
+    button.textContent = text;
+
+    button.addEventListener("click", callback);
+
+    return button;
 }
 
 // ==========================================
@@ -985,103 +1025,177 @@ function updateCart() {
             Number(item.price) || 0
         );
 
-        total += price * quantity;
+        const originalPriceValue = Number(item.originalPrice);
+
+        const originalPrice =
+            Number.isFinite(originalPriceValue) &&
+            originalPriceValue > price
+                ? originalPriceValue
+                : price;
+
+        const discount = Number(item.discountPercent);
+
+        const hasDiscount =
+            originalPrice > price &&
+            Number.isFinite(discount) &&
+            discount >= 1 &&
+            discount <= 99;
+
+        const lineTotal = price * quantity;
+        const savings = (originalPrice - price) * quantity;
+
+        total += lineTotal;
         quantityTotal += quantity;
 
         if (!itemsElement) return;
 
         const row = document.createElement("div");
-        row.className = "cart-item";
+        row.className = "cart-item cart-item-card";
 
-        const name = document.createElement("b");
+        // Product image
+        const image = document.createElement("img");
+        image.className = "cart-item-image";
+        image.src = item.image || "";
+        image.alt = item.name || "Product";
+
+        image.onerror = function () {
+            this.style.display = "none";
+        };
+
+        // Product information
+        const info = document.createElement("div");
+        info.className = "cart-item-info";
+
+        const name = document.createElement("h4");
+        name.className = "cart-item-name";
         name.textContent = item.name || "Product";
 
-        const optionDetails =
-            document.createElement("p");
+        const brand = document.createElement("p");
+        brand.className = "cart-item-brand";
+        brand.textContent = item.brand || "BARQ";
+
+        const optionDetails = document.createElement("p");
+        optionDetails.className = "cart-item-options";
 
         const optionLabels = [];
 
         if (item.color) {
-            optionLabels.push(
-                `Color: ${item.color}`
-            );
+            optionLabels.push(`Color: ${item.color}`);
         }
 
         if (item.size) {
-            optionLabels.push(
-                `Size: ${item.size}`
-            );
+            optionLabels.push(`Size: ${item.size}`);
         }
 
         optionDetails.textContent =
             optionLabels.join(" | ");
 
-        const priceElement =
-            document.createElement("p");
+        info.append(name, brand);
 
-        priceElement.textContent =
-            `${price.toFixed(2)} SAR each`;
+        if (optionLabels.length > 0) {
+            info.appendChild(optionDetails);
+        }
 
-        const decreaseButton =
-            document.createElement("button");
+        // Price information
+        const pricing = document.createElement("div");
+        pricing.className = "cart-item-pricing";
 
-        decreaseButton.type = "button";
-        decreaseButton.textContent = "-";
+        if (hasDiscount) {
+            const badge = document.createElement("span");
+            badge.className = "cart-discount-badge";
+            badge.textContent = `${discount}% OFF`;
 
-        decreaseButton.addEventListener(
-            "click",
+            const oldPrice = document.createElement("span");
+            oldPrice.className = "cart-original-price";
+            oldPrice.textContent =
+                `${originalPrice.toFixed(2)} SAR`;
+
+            const currentPrice = document.createElement("strong");
+            currentPrice.className = "cart-discounted-price";
+            currentPrice.textContent =
+                `${price.toFixed(2)} SAR each`;
+
+            const saved = document.createElement("span");
+            saved.className = "cart-savings";
+            saved.textContent =
+                `You save ${savings.toFixed(2)} SAR`;
+
+            pricing.append(
+                badge,
+                oldPrice,
+                currentPrice,
+                saved
+            );
+
+        } else {
+            const currentPrice = document.createElement("strong");
+            currentPrice.className = "cart-regular-price";
+            currentPrice.textContent =
+                `${price.toFixed(2)} SAR each`;
+
+            pricing.appendChild(currentPrice);
+        }
+
+        // Quantity controls
+        const controls = document.createElement("div");
+        controls.className = "cart-quantity-controls";
+
+        const decreaseButton = createCartButton(
+            "−",
+            "cart-quantity-btn",
             () => decreaseQuantity(index)
         );
 
-        const quantityElement =
-            document.createElement("span");
+        const quantityElement = document.createElement("span");
+        quantityElement.className = "cart-quantity";
+        quantityElement.textContent = String(quantity);
 
-        quantityElement.textContent =
-            ` ${quantity} `;
-
-        const increaseButton =
-            document.createElement("button");
-
-        increaseButton.type = "button";
-        increaseButton.textContent = "+";
-
-        increaseButton.addEventListener(
-            "click",
+        const increaseButton = createCartButton(
+            "+",
+            "cart-quantity-btn",
             () => increaseQuantity(index)
         );
 
-        const removeButton =
-            document.createElement("button");
+        controls.append(
+            decreaseButton,
+            quantityElement,
+            increaseButton
+        );
 
-        removeButton.type = "button";
-        removeButton.textContent =
-            tr("remove", "Remove");
+        // Item total
+        const itemTotal = document.createElement("strong");
+        itemTotal.className = "cart-item-total";
+        itemTotal.textContent =
+            `${lineTotal.toFixed(2)} SAR`;
 
-        removeButton.addEventListener(
-            "click",
+        // Remove button
+        const removeButton = createCartButton(
+            tr("remove", "Remove"),
+            "cart-remove-btn",
             () => removeCart(index)
         );
 
-        row.append(name);
+        const bottom = document.createElement("div");
+        bottom.className = "cart-item-bottom";
 
-        if (optionLabels.length > 0) {
-            row.append(optionDetails);
-        }
-
-        row.append(
-            priceElement,
-            decreaseButton,
-            quantityElement,
-            increaseButton,
+        bottom.append(
+            controls,
+            itemTotal,
             removeButton
         );
+
+        const details = document.createElement("div");
+        details.className = "cart-item-details";
+
+        details.append(info, pricing, bottom);
+
+        row.append(image, details);
 
         itemsElement.appendChild(row);
     });
 
     if (totalElement) {
-        totalElement.textContent =
-            total.toFixed(2);
+        totalElement.textContent = total.toFixed(2);
     }
 
     if (countElement) {
@@ -1089,6 +1203,10 @@ function updateCart() {
             String(quantityTotal);
     }
 }
+
+// ==========================================
+// CART QUANTITY FUNCTIONS
+// ==========================================
 
 function increaseQuantity(index) {
     if (!cart[index]) return;
@@ -1242,9 +1360,7 @@ document.addEventListener(
             displayProducts(productsData);
         }
 
-        // Refresh offer labels and prices after language changes.
         renderOffers();
-
         updateCart();
     }
 );
