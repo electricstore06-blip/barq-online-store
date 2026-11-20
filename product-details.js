@@ -1,4 +1,3 @@
-
 import { db } from "./firebase-config.js";
 
 import {
@@ -39,7 +38,6 @@ function getAvailableStock() {
     return Number.isFinite(stock) ? Math.max(0, stock) : 0;
 }
 
-// Get valid offer discount percentage
 function getDiscountPercent() {
     if (!product || product.offerActive !== true) {
         return 0;
@@ -58,7 +56,6 @@ function getDiscountPercent() {
     return discount;
 }
 
-// Get original product price based on selected size
 function getPrice(size = "") {
     if (!product) return 0;
 
@@ -93,7 +90,6 @@ function getPrice(size = "") {
     return Number(product.price) || 0;
 }
 
-// Calculate discounted price
 function getFinalPrice(size = "") {
     const originalPrice = getPrice(size);
     const discount = getDiscountPercent();
@@ -107,7 +103,6 @@ function getFinalPrice(size = "") {
     );
 }
 
-// Update the price display whenever size changes
 function updateDisplayedPrice() {
     const priceElement = document.getElementById("selectedPrice");
 
@@ -162,7 +157,6 @@ function updateStockDisplay() {
 
     const stock = getAvailableStock();
 
-    // Products without a stock field retain their previous behavior.
     if (stock === null) {
         stockElement.textContent = "";
         addButton.disabled = false;
@@ -183,7 +177,6 @@ function updateStockDisplay() {
     }
 }
 
-// Live Firebase stock and offer listener
 function startStockListener() {
     if (!productId) return;
 
@@ -257,7 +250,6 @@ async function loadProduct() {
     try {
         const productRef = doc(db, "products", productId);
 
-        // Initial load. The live listener below keeps stock and offers updated.
         const { getDoc } = await import(
             "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"
         );
@@ -366,11 +358,9 @@ async function loadProduct() {
             </div>
         `;
 
-        // Display initial price and offer
         updateDisplayedPrice();
         updateStockDisplay();
 
-        // Color selection
         container.querySelectorAll("[data-color]").forEach(button => {
             button.addEventListener("click", () => {
                 selectedColor = button.dataset.color;
@@ -385,7 +375,6 @@ async function loadProduct() {
             });
         });
 
-        // Size selection and discounted price update
         container.querySelectorAll("[data-size]").forEach(button => {
             button.addEventListener("click", () => {
                 selectedSize = button.dataset.size;
@@ -402,7 +391,6 @@ async function loadProduct() {
             });
         });
 
-        // Add product to cart using the discounted price
         document.getElementById("addProductToCart")
             .addEventListener("click", () => {
 
@@ -428,7 +416,7 @@ async function loadProduct() {
                     return;
                 }
 
-                // IMPORTANT: Send discounted price to the cart
+                // Send original price and discount information to the cart.
                 window.addToCart(
                     product.id,
                     product.name,
@@ -436,7 +424,9 @@ async function loadProduct() {
                     product.image || "",
                     product.brand || "BARQ",
                     selectedColor,
-                    selectedSize
+                    selectedSize,
+                    getPrice(selectedSize),
+                    getDiscountPercent()
                 );
             });
 
