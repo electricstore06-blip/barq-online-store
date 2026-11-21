@@ -1,7 +1,9 @@
 
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
+
 const { initializeApp } = require("firebase-admin/app");
 const { getAuth } = require("firebase-admin/auth");
+
 const {
   getFirestore,
   FieldValue
@@ -11,6 +13,12 @@ initializeApp();
 
 const db = getFirestore();
 const adminAuth = getAuth();
+
+
+// ==========================================
+// AUTHENTICATION & ADMIN HELPERS
+// ==========================================
+
 async function requireUser(request) {
   if (!request.auth) {
     throw new HttpsError(
@@ -23,7 +31,10 @@ async function requireUser(request) {
 }
 
 async function requireAdmin(uid) {
-  const adminSnapshot = await db.collection("admins").doc(uid).get();
+  const adminSnapshot = await db
+    .collection("admins")
+    .doc(uid)
+    .get();
 
   if (
     !adminSnapshot.exists ||
@@ -35,6 +46,11 @@ async function requireAdmin(uid) {
     );
   }
 }
+
+
+// ==========================================
+// REVIEW VALIDATION
+// ==========================================
 
 function validateRating(rating) {
   if (
@@ -62,6 +78,11 @@ function validateComment(comment) {
   }
 }
 
+
+// ==========================================
+// VERIFY DELIVERED PRODUCT
+// ==========================================
+
 async function verifyDeliveredProduct(uid, orderId, productId) {
   if (
     typeof orderId !== "string" ||
@@ -75,7 +96,10 @@ async function verifyDeliveredProduct(uid, orderId, productId) {
     );
   }
 
-  const orderSnapshot = await db.collection("orders").doc(orderId).get();
+  const orderSnapshot = await db
+    .collection("orders")
+    .doc(orderId)
+    .get();
 
   if (!orderSnapshot.exists) {
     throw new HttpsError(
@@ -100,10 +124,10 @@ async function verifyDeliveredProduct(uid, orderId, productId) {
     );
   }
 
-  const hasProduct = Array.isArray(order.items) &&
+  const hasProduct =
+    Array.isArray(order.items) &&
     order.items.some(item =>
-      item &&
-      item.productId === productId
+      item && item.productId === productId
     );
 
   if (!hasProduct) {
@@ -119,6 +143,11 @@ async function verifyDeliveredProduct(uid, orderId, productId) {
 function makeProductReviewId(uid, productId) {
   return `${uid}_${productId}`;
 }
+
+
+// ==========================================
+// SUBMIT PRODUCT REVIEW
+// ==========================================
 
 exports.submitProductReview = onCall(async request => {
   const uid = await requireUser(request);
@@ -136,9 +165,15 @@ exports.submitProductReview = onCall(async request => {
   await verifyDeliveredProduct(uid, orderId, productId);
 
   const reviewId = makeProductReviewId(uid, productId);
-  const reviewRef = db.collection("productReviews").doc(reviewId);
 
-  const userSnapshot = await db.collection("users").doc(uid).get();
+  const reviewRef = db
+    .collection("productReviews")
+    .doc(reviewId);
+
+  const userSnapshot = await db
+    .collection("users")
+    .doc(uid)
+    .get();
 
   const displayName =
     userSnapshot.exists &&
@@ -181,6 +216,11 @@ exports.submitProductReview = onCall(async request => {
   };
 });
 
+
+// ==========================================
+// UPDATE PRODUCT REVIEW
+// ==========================================
+
 exports.updateProductReview = onCall(async request => {
   const uid = await requireUser(request);
 
@@ -201,7 +241,10 @@ exports.updateProductReview = onCall(async request => {
   validateComment(comment);
 
   const reviewId = makeProductReviewId(uid, productId);
-  const reviewRef = db.collection("productReviews").doc(reviewId);
+
+  const reviewRef = db
+    .collection("productReviews")
+    .doc(reviewId);
 
   await db.runTransaction(async transaction => {
     const snapshot = await transaction.get(reviewRef);
@@ -230,8 +273,14 @@ exports.updateProductReview = onCall(async request => {
   };
 });
 
+
+// ==========================================
+// DELETE PRODUCT REVIEW
+// ==========================================
+
 exports.deleteProductReview = onCall(async request => {
   const uid = await requireUser(request);
+
   const { productId } = request.data || {};
 
   if (typeof productId !== "string" || !productId) {
@@ -242,7 +291,10 @@ exports.deleteProductReview = onCall(async request => {
   }
 
   const reviewId = makeProductReviewId(uid, productId);
-  const reviewRef = db.collection("productReviews").doc(reviewId);
+
+  const reviewRef = db
+    .collection("productReviews")
+    .doc(reviewId);
 
   await db.runTransaction(async transaction => {
     const snapshot = await transaction.get(reviewRef);
@@ -263,6 +315,11 @@ exports.deleteProductReview = onCall(async request => {
   };
 });
 
+
+// ==========================================
+// SUBMIT STORE REVIEW
+// ==========================================
+
 exports.submitStoreReview = onCall(async request => {
   const uid = await requireUser(request);
 
@@ -271,7 +328,8 @@ exports.submitStoreReview = onCall(async request => {
   validateRating(rating);
   validateComment(comment);
 
-  const ordersSnapshot = await db.collection("orders")
+  const ordersSnapshot = await db
+    .collection("orders")
     .where("customerUid", "==", uid)
     .where("status", "==", "Delivered")
     .limit(1)
@@ -284,7 +342,9 @@ exports.submitStoreReview = onCall(async request => {
     );
   }
 
-  const reviewRef = db.collection("storeReviews").doc(uid);
+  const reviewRef = db
+    .collection("storeReviews")
+    .doc(uid);
 
   await db.runTransaction(async transaction => {
     const snapshot = await transaction.get(reviewRef);
@@ -326,8 +386,14 @@ exports.submitStoreReview = onCall(async request => {
   };
 });
 
+
+// ==========================================
+// MODERATE REVIEW
+// ==========================================
+
 exports.moderateReview = onCall(async request => {
   const uid = await requireUser(request);
+
   await requireAdmin(uid);
 
   const {
@@ -352,7 +418,9 @@ exports.moderateReview = onCall(async request => {
     );
   }
 
-  const reviewRef = db.collection(collectionName).doc(reviewId);
+  const reviewRef = db
+    .collection(collectionName)
+    .doc(reviewId);
 
   await db.runTransaction(async transaction => {
     const snapshot = await transaction.get(reviewRef);
@@ -375,9 +443,10 @@ exports.moderateReview = onCall(async request => {
 
     transaction.update(reviewRef, {
       status: action === "approve" ? "approved" : "rejected",
-      approvedAt: action === "approve"
-        ? FieldValue.serverTimestamp()
-        : null,
+      approvedAt:
+        action === "approve"
+          ? FieldValue.serverTimestamp()
+          : null,
       moderatedBy: uid,
       moderatedAt: FieldValue.serverTimestamp()
     });
@@ -388,8 +457,15 @@ exports.moderateReview = onCall(async request => {
     status: action === "approve" ? "approved" : "rejected"
   };
 });
+
+
+// ==========================================
+// CREATE STAFF ACCOUNT
+// ==========================================
+
 exports.createStaffAccount = onCall(async request => {
   const adminUid = await requireUser(request);
+
   await requireAdmin(adminUid);
 
   const {
@@ -481,7 +557,10 @@ exports.createStaffAccount = onCall(async request => {
   } catch (error) {
     if (newUser) {
       await adminAuth.deleteUser(newUser.uid).catch(cleanupError => {
-        console.error("Could not remove incomplete staff login:", cleanupError);
+        console.error(
+          "Could not remove incomplete staff login:",
+          cleanupError
+        );
       });
     }
 
@@ -505,10 +584,11 @@ exports.createStaffAccount = onCall(async request => {
   }
 });
 
+
 // ==========================================
 // BARQ SECURE ORDER CREATION
-// Checks stock, verifies prices, creates order,
-// creates delivery code and deducts inventory.
+// Verifies prices, discounts and stock.
+// Creates order and delivery code atomically.
 // ==========================================
 
 exports.createOrder = onCall(async request => {
@@ -518,7 +598,12 @@ exports.createOrder = onCall(async request => {
   const items = data.items;
   const customer = data.customer;
 
-  if (!Array.isArray(items) || items.length === 0 || items.length > 50) {
+  // Validate cart.
+  if (
+    !Array.isArray(items) ||
+    items.length === 0 ||
+    items.length > 50
+  ) {
     throw new HttpsError(
       "invalid-argument",
       "Your cart is empty or contains too many items."
@@ -532,6 +617,7 @@ exports.createOrder = onCall(async request => {
     );
   }
 
+  // Validate customer.
   const fullName = String(customer.fullName || "").trim();
   const phone = String(customer.phone || "").trim();
   const email = String(customer.email || "").trim();
@@ -539,28 +625,74 @@ exports.createOrder = onCall(async request => {
   const paymentMethod = String(customer.paymentMethod || "").trim();
 
   if (fullName.length < 2 || fullName.length > 100) {
-    throw new HttpsError("invalid-argument", "Please enter your full name.");
+    throw new HttpsError(
+      "invalid-argument",
+      "Please enter your full name."
+    );
   }
 
   if (!/^05\d{8}$/.test(phone)) {
-    throw new HttpsError("invalid-argument", "Invalid Saudi phone number.");
+    throw new HttpsError(
+      "invalid-argument",
+      "Invalid Saudi phone number."
+    );
   }
 
   if (
     email.length > 254 ||
     !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   ) {
-    throw new HttpsError("invalid-argument", "Invalid email address.");
+    throw new HttpsError(
+      "invalid-argument",
+      "Invalid email address."
+    );
   }
 
   if (address.length < 5 || address.length > 1000) {
-    throw new HttpsError("invalid-argument", "Please enter your delivery address.");
+    throw new HttpsError(
+      "invalid-argument",
+      "Please enter your delivery address."
+    );
   }
 
   if (!paymentMethod || paymentMethod.length > 60) {
-    throw new HttpsError("invalid-argument", "Please select a payment method.");
+    throw new HttpsError(
+      "invalid-argument",
+      "Please select a payment method."
+    );
   }
 
+  // Validate optional GPS information.
+  const latitude =
+    data.latitude == null ? null : Number(data.latitude);
+
+  const longitude =
+    data.longitude == null ? null : Number(data.longitude);
+
+  const locationAccuracy =
+    data.locationAccuracy == null
+      ? 0
+      : Number(data.locationAccuracy);
+
+  if (
+    (latitude !== null &&
+      (!Number.isFinite(latitude) ||
+        latitude < -90 ||
+        latitude > 90)) ||
+    (longitude !== null &&
+      (!Number.isFinite(longitude) ||
+        longitude < -180 ||
+        longitude > 180)) ||
+    !Number.isFinite(locationAccuracy) ||
+    locationAccuracy < 0
+  ) {
+    throw new HttpsError(
+      "invalid-argument",
+      "Invalid delivery location."
+    );
+  }
+
+  // Get trusted price from Firestore.
   function getTrustedPrice(product, size) {
     const sizePrices = product.sizePrices || {};
 
@@ -595,12 +727,15 @@ exports.createOrder = onCall(async request => {
     return Number(product.price);
   }
 
-  // Validate cart and collect quantities by product.
+  // Validate cart items and collect quantities.
   const quantities = new Map();
 
   for (const item of items) {
     if (!item || typeof item !== "object") {
-      throw new HttpsError("invalid-argument", "Invalid cart item.");
+      throw new HttpsError(
+        "invalid-argument",
+        "Invalid cart item."
+      );
     }
 
     const productId = item.productId;
@@ -610,18 +745,31 @@ exports.createOrder = onCall(async request => {
 
     if (
       typeof productId !== "string" ||
-      !productId ||
+      !productId.trim() ||
       productId.length > 150
     ) {
-      throw new HttpsError("invalid-argument", "Invalid product.");
+      throw new HttpsError(
+        "invalid-argument",
+        "Invalid product."
+      );
     }
 
-    if (!Number.isSafeInteger(quantity) || quantity < 1 || quantity > 999) {
-      throw new HttpsError("invalid-argument", "Invalid product quantity.");
+    if (
+      !Number.isSafeInteger(quantity) ||
+      quantity < 1 ||
+      quantity > 999
+    ) {
+      throw new HttpsError(
+        "invalid-argument",
+        "Invalid product quantity."
+      );
     }
 
     if (size.length > 100 || color.length > 100) {
-      throw new HttpsError("invalid-argument", "Invalid product option.");
+      throw new HttpsError(
+        "invalid-argument",
+        "Invalid product option."
+      );
     }
 
     quantities.set(
@@ -632,10 +780,14 @@ exports.createOrder = onCall(async request => {
 
   for (const quantity of quantities.values()) {
     if (!Number.isSafeInteger(quantity)) {
-      throw new HttpsError("invalid-argument", "Invalid total quantity.");
+      throw new HttpsError(
+        "invalid-argument",
+        "Invalid total quantity."
+      );
     }
   }
 
+  // Prepare Firestore references.
   const productRefs = new Map();
 
   for (const productId of quantities.keys()) {
@@ -646,9 +798,12 @@ exports.createOrder = onCall(async request => {
   }
 
   const orderRef = db.collection("orders").doc();
-  const deliveryCodeRef = db.collection("deliveryCodes").doc(orderRef.id);
 
-  // Generate a private six-digit delivery code.
+  const deliveryCodeRef = db
+    .collection("deliveryCodes")
+    .doc(orderRef.id);
+
+  // Generate six-digit delivery code.
   const deliveryCode = String(
     require("crypto").randomInt(0, 1000000)
   ).padStart(6, "0");
@@ -656,10 +811,11 @@ exports.createOrder = onCall(async request => {
   let finalOrderData;
   let finalTotals;
 
+  // Create order transaction.
   await db.runTransaction(async transaction => {
     const products = new Map();
 
-    // Read every product before making any writes.
+    // Read every product before writing.
     for (const [productId, productRef] of productRefs) {
       const snapshot = await transaction.get(productRef);
 
@@ -685,10 +841,10 @@ exports.createOrder = onCall(async request => {
       });
     }
 
+    // Calculate trusted prices and discounts.
     let subtotalHalalas = 0;
     const trustedItems = [];
 
-    // Verify prices, options and stock using Firestore data.
     for (const item of items) {
       const product = products.get(item.productId).data;
 
@@ -702,7 +858,7 @@ exports.createOrder = onCall(async request => {
       ) {
         throw new HttpsError(
           "failed-precondition",
-          `${product.name || "A product"} has an invalid size selection.`
+          `${product.name || "A product"} has an invalid size.`
         );
       }
 
@@ -713,29 +869,60 @@ exports.createOrder = onCall(async request => {
       ) {
         throw new HttpsError(
           "failed-precondition",
-          `${product.name || "A product"} has an invalid color selection.`
+          `${product.name || "A product"} has an invalid color.`
         );
       }
 
-      const price = getTrustedPrice(product, size);
+      const originalPrice = getTrustedPrice(product, size);
 
-      if (!Number.isFinite(price) || price < 0) {
+      if (
+        !Number.isFinite(originalPrice) ||
+        originalPrice < 0
+      ) {
         throw new HttpsError(
           "failed-precondition",
           `${product.name || "A product"} has an invalid price.`
         );
       }
 
-      const priceHalalas = Math.round(price * 100);
+      const originalHalalas = Math.round(originalPrice * 100);
 
-      if (!Number.isSafeInteger(priceHalalas)) {
+      if (!Number.isSafeInteger(originalHalalas)) {
         throw new HttpsError(
           "failed-precondition",
           "A product price is invalid."
         );
       }
 
-      subtotalHalalas += priceHalalas * item.quantity;
+      // Apply server-verified offer.
+      let discountPercent = 0;
+
+      if (product.offerActive === true) {
+        const percentage = Number(product.discountPercent);
+
+        if (
+          !Number.isInteger(percentage) ||
+          percentage < 1 ||
+          percentage > 99
+        ) {
+          throw new HttpsError(
+            "failed-precondition",
+            `${product.name || "A product"} has an invalid offer.`
+          );
+        }
+
+        discountPercent = percentage;
+      }
+
+      const discountHalalas = Math.round(
+        originalHalalas * discountPercent / 100
+      );
+
+      const finalPriceHalalas =
+        originalHalalas - discountHalalas;
+
+      subtotalHalalas +=
+        finalPriceHalalas * item.quantity;
 
       if (!Number.isSafeInteger(subtotalHalalas)) {
         throw new HttpsError(
@@ -748,18 +935,19 @@ exports.createOrder = onCall(async request => {
         productId: item.productId,
         name: String(product.name || "Product"),
         brand: String(product.brand || "BARQ"),
-        price: priceHalalas / 100,
+        originalPrice: originalHalalas / 100,
+        discountPercent,
+        price: finalPriceHalalas / 100,
         quantity: item.quantity,
         color,
         size
       });
     }
 
-    // Check stock for every tracked product.
+    // Verify available stock.
     for (const [productId, quantity] of quantities) {
       const product = products.get(productId).data;
 
-      // Products without a stock field remain untracked.
       if (
         product.stock === undefined ||
         product.stock === null ||
@@ -780,11 +968,12 @@ exports.createOrder = onCall(async request => {
       if (stock < quantity) {
         throw new HttpsError(
           "failed-precondition",
-          `Only ${stock} unit(s) of ${product.name || "this product"} are available. Please update your cart.`
+          `Only ${stock} unit(s) of ${product.name || "this product"} are available.`
         );
       }
     }
 
+    // Calculate totals.
     const deliveryHalalas = subtotalHalalas > 0 ? 1500 : 0;
 
     finalTotals = {
@@ -793,6 +982,7 @@ exports.createOrder = onCall(async request => {
       total: (subtotalHalalas + deliveryHalalas) / 100
     };
 
+    // Prepare final order.
     finalOrderData = {
       customerUid: uid,
 
@@ -804,16 +994,9 @@ exports.createOrder = onCall(async request => {
       email,
       address,
 
-      latitude:
-        data.latitude == null ? null : Number(data.latitude),
-
-      longitude:
-        data.longitude == null ? null : Number(data.longitude),
-
-      locationAccuracy:
-        data.locationAccuracy == null
-          ? 0
-          : Number(data.locationAccuracy),
+      latitude,
+      longitude,
+      locationAccuracy,
 
       paymentMethod,
 
@@ -830,7 +1013,7 @@ exports.createOrder = onCall(async request => {
       createdAt: FieldValue.serverTimestamp()
     };
 
-    // Deduct stock inside the same transaction as order creation.
+    // Deduct tracked stock.
     for (const [productId, quantity] of quantities) {
       const product = products.get(productId).data;
 
@@ -847,7 +1030,7 @@ exports.createOrder = onCall(async request => {
       });
     }
 
-    // Save order and delivery code atomically.
+    // Save order and delivery code.
     transaction.set(orderRef, finalOrderData);
 
     transaction.set(deliveryCodeRef, {
@@ -858,21 +1041,16 @@ exports.createOrder = onCall(async request => {
     });
   });
 
+  // Return confirmed order.
   return {
     success: true,
     orderId: orderRef.id,
-    order: finalOrderData,
-    totals: finalTotals,
-    deliveryCode
-  };
-});
-  return {
-    success: true,
-    orderId: orderRef.id,
+
     order: {
       ...finalOrderData,
       createdAt: new Date().toISOString()
     },
+
     totals: finalTotals,
     deliveryCode
   };
