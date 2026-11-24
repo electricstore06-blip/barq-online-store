@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10251c">
+  <title>BARQ | Admin App</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f3f6f4;
+      color: #1d3027;
+    }
+
+    header {
+      background: #10251c;
+      color: white;
+      padding: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 25px;
+      letter-spacing: 2px;
+    }
+
+    header span {
+      color: #9ad5ae;
+      font-size: 12px;
+    }
+
+    .container {
+      padding: 24px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .welcome {
+      margin-bottom: 25px;
+    }
+
+    .welcome h2 {
+      font-size: 25px;
+      margin-bottom: 8px;
+    }
+
+    .welcome p {
+      color: #718078;
+    }
+
+    .section-title {
+      margin: 25px 0 15px;
+      font-size: 18px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    .card {
+      background: white;
+      padding: 22px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px #00000008;
+    }
+
+    .card p {
+      color: #78857e;
+      font-size: 14px;
+    }
+
+    .card h3 {
+      font-size: 25px;
+      margin-top: 12px;
+    }
+
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .menu button {
+      background: white;
+      border: 1px solid #e4ebe6;
+      padding: 23px;
+      border-radius: 14px;
+      text-align: left;
+      cursor: pointer;
+      color: #1d3027;
+      transition: 0.2s;
+    }
+
+    .menu button:hover {
+      border-color: #23834e;
+      transform: translateY(-2px);
+    }
+
+    .menu .emoji {
+      font-size: 27px;
+      display: block;
+      margin-bottom: 13px;
+    }
+
+    .menu strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .menu small {
+      color: #78857e;
+    }
+
+    .notice {
+      background: #e6f3e9;
+      padding: 18px;
+      border-radius: 12px;
+      margin-top: 25px;
+      color: #285d3c;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #849087;
+      font-size: 12px;
+    }
+
+    @media (max-width: 700px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .menu {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .container {
+        padding: 16px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .menu {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div>
+      <h1>BARQ</h1>
+      <span>ADMIN CONTROL CENTER</span>
+    </div>
+    <span>ADMIN APP</span>
+  </header>
+
+  <main class="container">
+
+    <section class="welcome">
+      <h2>Welcome, Admin 👋</h2>
+      <p>Manage your BARQ online store from one place.</p>
+    </section>
+
+    <h3 class="section-title">Business Overview</h3>
+
+    <section class="stats">
+      <div class="card">
+        <p>Total Orders</p>
+        <h3>--</h3>
+      </div>
+
+      <div class="card">
+        <p>Total Sales</p>
+        <h3>--</h3>
+      </div>
+
+      <div class="card">
+        <p>Products</p>
+        <h3>--</h3>
+      </div>
+
+      <div class="card">
+        <p>Customers</p>
+        <h3>--</h3>
+      </div>
+    </section>
+
+    <h3 class="section-title">Store Management</h3>
+
+    <section class="menu">
+
+      <button onclick="showMessage('Orders')">
+        <span class="emoji">📦</span>
+        <strong>Orders</strong>
+        <small>Manage customer orders</small>
+      </button>
+
+      <button onclick="showMessage('Products')">
+        <span class="emoji">🛍️</span>
+        <strong>Products</strong>
+        <small>Add and edit products</small>
+      </button>
+
+      <button onclick="showMessage('Inventory')">
+        <span class="emoji">🏬</span>
+        <strong>Inventory</strong>
+        <small>Manage product stock</small>
+      </button>
+
+      <button onclick="showMessage('Offers')">
+        <span class="emoji">🏷️</span>
+        <strong>Offers</strong>
+        <small>Manage discounts</small>
+      </button>
+
+      <button onclick="showMessage('Customers')">
+        <span class="emoji">👥</span>
+        <strong>Customers</strong>
+        <small>Customer management</small>
+      </button>
+
+      <button onclick="showMessage('Analytics')">
+        <span class="emoji">📊</span>
+        <strong>Analytics</strong>
+        <small>Business performance</small>
+      </button>
+
+    </section>
+
+    <div class="notice">
+      <strong>BARQ ADMIN</strong>
+      <p>Your new admin app is being built. More features coming soon!</p>
+    </div>
+
+  </main>
+
+  <footer>
+    © 2026 BARQ Online Store | Admin App
+  </footer>
+
+  <script>
+    function showMessage(section) {
+      alert(section + " management will be connected soon!");
+    }
+  </script>
+
+</body>
+</html>
