@@ -1,4 +1,5 @@
-const CACHE_NAME = "barq-driver-v5";
+const DRIVER_CACHE_NAME = "barq-driver-v6";
+const ADMIN_CACHE_NAME = "barq-admin-v1";
 
 const APP_FILES = [
     "./driver-login.html",
@@ -11,16 +12,25 @@ const APP_FILES = [
     "./barq-driver-icon-192.png",
     "./barq-driver-icon-512.png"
 ];
-
+const ADMIN_FILES = [
+    "./admin-dashboard.html",
+    "./admin-manifest.json",
+    "./firebase-config.js",
+    "./favicon.ico"
+];
 // INSTALL
 self.addEventListener("install", event => {
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(APP_FILES))
-            .then(() => self.skipWaiting())
+        Promise.all([
+            caches.open(DRIVER_CACHE_NAME)
+                .then(cache => cache.addAll(APP_FILES)),
+
+            caches.open(ADMIN_CACHE_NAME)
+                .then(cache => cache.addAll(ADMIN_FILES))
+        ])
+        .then(() => self.skipWaiting())
     );
 });
-
 // ACTIVATE
 self.addEventListener("activate", event => {
     event.waitUntil(
@@ -29,11 +39,18 @@ self.addEventListener("activate", event => {
                 Promise.all(
                     keys
                         .filter(key =>
-                            key.startsWith("barq-driver-") &&
-                            key !== CACHE_NAME
+                            (
+                                key.startsWith("barq-driver-") &&
+                                key !== DRIVER_CACHE_NAME
+                            ) ||
+                            (
+                                key.startsWith("barq-admin-") &&
+                                key !== ADMIN_CACHE_NAME
+                            )
                         )
                         .map(key => caches.delete(key))
-            ))
+                )
+            )
             .then(() => self.clients.claim())
     );
 });
@@ -44,10 +61,8 @@ self.addEventListener("fetch", event => {
 
     const url = new URL(event.request.url);
 
-    // Handle only requests from this origin.
     if (url.origin !== self.location.origin) return;
 
-    // Do not intercept customer-store pages or assets.
     const path = url.pathname;
 
     const isDriverFile =
@@ -61,15 +76,23 @@ self.addEventListener("fetch", event => {
         path.endsWith("/barq-driver-icon-192.png") ||
         path.endsWith("/barq-driver-icon-512.png");
 
-    if (!isDriverFile) return;
+    const isAdminFile =
+        path.endsWith("/admin-dashboard.html") ||
+        path.endsWith("/admin-manifest.json") ||
+        path.endsWith("/firebase-config.js") ||
+        path.endsWith("/favicon.ico");
+
+    if (!isDriverFile && !isAdminFile) return;
+
+    const cacheName = isDriverFile
+        ? DRIVER_CACHE_NAME
+        : ADMIN_CACHE_NAME;
 
     event.respondWith(
-        caches.open(CACHE_NAME).then(async cache => {
+        caches.open(cacheName).then(async cache => {
             const cachedResponse = await cache.match(event.request);
 
-            if (cachedResponse) {
-                return cachedResponse;
-            }
+            if (cachedResponse) return cachedResponse;
 
             const networkResponse = await fetch(event.request);
 
