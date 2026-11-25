@@ -1,5 +1,6 @@
+
 const DRIVER_CACHE_NAME = "barq-driver-v6";
-const ADMIN_CACHE_NAME = "barq-admin-v1";
+const ADMIN_CACHE_NAME = "barq-admin-v2";
 
 const APP_FILES = [
     "./driver-login.html",
@@ -12,12 +13,16 @@ const APP_FILES = [
     "./barq-driver-icon-192.png",
     "./barq-driver-icon-512.png"
 ];
+
 const ADMIN_FILES = [
     "./admin-dashboard.html",
     "./admin-manifest.json",
     "./firebase-config.js",
-    "./favicon.ico"
+    "./favicon.ico",
+    "./admin-icon-192.png",
+    "./admin-icon-512.png"
 ];
+
 // INSTALL
 self.addEventListener("install", event => {
     event.waitUntil(
@@ -31,6 +36,7 @@ self.addEventListener("install", event => {
         .then(() => self.skipWaiting())
     );
 });
+
 // ACTIVATE
 self.addEventListener("activate", event => {
     event.waitUntil(
@@ -80,7 +86,9 @@ self.addEventListener("fetch", event => {
         path.endsWith("/admin-dashboard.html") ||
         path.endsWith("/admin-manifest.json") ||
         path.endsWith("/firebase-config.js") ||
-        path.endsWith("/favicon.ico");
+        path.endsWith("/favicon.ico") ||
+        path.endsWith("/admin-icon-192.png") ||
+        path.endsWith("/admin-icon-512.png");
 
     if (!isDriverFile && !isAdminFile) return;
 
