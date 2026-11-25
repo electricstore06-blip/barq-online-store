@@ -2574,7 +2574,20 @@ function renderRecentOrders() {
     </tr>
   `).join("");
 }
-</script>
 
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker
+            .register("./driver-service-worker.js", { scope: "./" })
+            .then(registration => {
+                console.log("BARQ shared service worker registered:", registration.scope);
+            })
+            .catch(error => {
+                console.error("Service worker registration failed:", error);
+            });
+    });
+}
+</script>
 </body>
 </html> 
