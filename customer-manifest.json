@@ -1,0 +1,13 @@
+
+{
+  "name": "BARQ Beauty Store",
+  "short_name": "BARQ Beauty",
+  "description": "BARQ Online Cosmetics and Beauty Store",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#111111",
+  "orientation": "portrait",
+  "icons": []
+}
