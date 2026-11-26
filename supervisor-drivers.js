@@ -1,4 +1,4 @@
-
+```javascript
 import { db, auth } from "./firebase-config.js";
 
 import {
@@ -13,24 +13,39 @@ import {
     signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+// ================================
 // PAGE ELEMENTS
+// ================================
+
 const supervisorName = document.getElementById("supervisor-name");
+
 const driversContainer = document.getElementById("drivers-container");
 const refreshDriversButton = document.getElementById("refresh-drivers-btn");
 const logoutButton = document.getElementById("logout-btn");
-const supervisorMessage = document.getElementById("supervisor-message");
+
+const driversMessage = document.getElementById("drivers-message");
+
+const totalDriversElement = document.getElementById("total-drivers");
+const activeDriversElement = document.getElementById("active-drivers");
+const inactiveDriversElement = document.getElementById("inactive-drivers");
 
 let currentSupervisor = null;
 let availableDrivers = [];
 
+// ================================
 // SHOW MESSAGE
+// ================================
+
 function showMessage(message) {
-    if (supervisorMessage) {
-        supervisorMessage.textContent = message;
+    if (driversMessage) {
+        driversMessage.textContent = message;
     }
 }
 
-// VERIFY SUPERVISOR ACCOUNT
+// ================================
+// VERIFY SUPERVISOR
+// ================================
+
 async function verifySupervisor(user) {
     if (!user) return false;
 
@@ -61,7 +76,10 @@ async function verifySupervisor(user) {
     return true;
 }
 
+// ================================
 // ESCAPE HTML
+// ================================
+
 function escapeHTML(value) {
     return String(value ?? "").replace(/[&<>"']/g, character => ({
         "&": "&amp;",
@@ -72,11 +90,46 @@ function escapeHTML(value) {
     })[character]);
 }
 
-// LOAD DRIVERS FROM FIRESTORE
+// ================================
+// UPDATE DRIVER COUNTERS
+// ================================
+
+function updateDriverCounters() {
+    const total = availableDrivers.length;
+
+    const active = availableDrivers.filter(
+        driver => driver.active === true
+    ).length;
+
+    const inactive = total - active;
+
+    if (totalDriversElement) {
+        totalDriversElement.textContent = total;
+    }
+
+    if (activeDriversElement) {
+        activeDriversElement.textContent = active;
+    }
+
+    if (inactiveDriversElement) {
+        inactiveDriversElement.textContent = inactive;
+    }
+}
+
+// ================================
+// LOAD DRIVERS
+// ================================
+
 async function loadDrivers() {
     if (!driversContainer) return;
 
-    driversContainer.textContent = "Loading drivers...";
+    driversContainer.innerHTML = "Loading drivers...";
+
+    if (refreshDriversButton) {
+        refreshDriversButton.disabled = true;
+    }
+
+    showMessage("");
 
     try {
         const driversQuery = query(
@@ -91,15 +144,29 @@ async function loadDrivers() {
             ...driverDoc.data()
         }));
 
+        updateDriverCounters();
+
         renderDrivers();
 
     } catch (error) {
         console.error("Error loading drivers:", error);
-        driversContainer.textContent = "Unable to load drivers. Please try again.";
+
+        driversContainer.innerHTML =
+            `<div class="empty-state">Unable to load drivers.</div>`;
+
+        showMessage("Unable to load drivers. Please try again.");
+
+    } finally {
+        if (refreshDriversButton) {
+            refreshDriversButton.disabled = false;
+        }
     }
 }
 
+// ================================
 // DISPLAY DRIVERS
+// ================================
+
 function renderDrivers() {
     if (!driversContainer) return;
 
@@ -113,6 +180,7 @@ function renderDrivers() {
 
     availableDrivers.forEach(driver => {
         const card = document.createElement("div");
+
         card.className = "driver-card";
 
         const isActive = driver.active === true;
@@ -120,8 +188,11 @@ function renderDrivers() {
         card.innerHTML = `
             <div class="driver-info">
                 <h3>${escapeHTML(driver.name || "Unnamed Driver")}</h3>
+
                 <p>Email: ${escapeHTML(driver.email || "-")}</p>
+
                 <p>Phone: ${escapeHTML(driver.phone || "-")}</p>
+
                 <p>City: ${escapeHTML(driver.city || "-")}</p>
             </div>
 
@@ -134,28 +205,41 @@ function renderDrivers() {
     });
 }
 
+// ================================
 // REFRESH BUTTON
+// ================================
+
 if (refreshDriversButton) {
     refreshDriversButton.addEventListener("click", loadDrivers);
 }
 
-// LOGOUT BUTTON
+// ================================
+// LOGOUT
+// ================================
+
 if (logoutButton) {
     logoutButton.addEventListener("click", async () => {
         try {
             await signOut(auth);
+
             window.location.href = "login.html";
+
         } catch (error) {
             console.error("Logout error:", error);
+
             showMessage("Unable to log out. Please try again.");
         }
     });
 }
 
-// CHECK SUPERVISOR LOGIN
+// ================================
+// AUTHENTICATION CHECK
+// ================================
+
 onAuthStateChanged(auth, async user => {
     if (!user) {
         currentSupervisor = null;
+
         window.location.href = "login.html";
         return;
     }
@@ -165,13 +249,17 @@ onAuthStateChanged(auth, async user => {
 
         if (!verified) {
             await signOut(auth);
+
             window.location.href = "login.html";
             return;
         }
 
         if (supervisorName) {
             supervisorName.textContent =
-                currentSupervisor.name || user.displayName || user.email || "Supervisor";
+                currentSupervisor.name ||
+                user.displayName ||
+                user.email ||
+                "Supervisor";
         }
 
         showMessage("");
@@ -180,6 +268,10 @@ onAuthStateChanged(auth, async user => {
 
     } catch (error) {
         console.error("Supervisor authentication error:", error);
-        showMessage("Unable to verify supervisor account. Please try again.");
+
+        showMessage(
+            "Unable to verify supervisor account. Please try again."
+        );
     }
 });
+```
