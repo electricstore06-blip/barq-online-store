@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111111">
+  <title>BARQ | Login</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      padding: 35px 28px;
+      background: #1d1d1d;
+      border: 1px solid #333;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 38px;
+      font-weight: bold;
+      letter-spacing: 4px;
+      color: #f5c542;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: #aaa;
+      font-size: 12px;
+      letter-spacing: 3px;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 25px;
+      margin-bottom: 8px;
+    }
+
+    .description {
+      color: #aaa;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin: 13px 0;
+      border: 1px solid #444;
+      border-radius: 8px;
+      background: #292929;
+      color: white;
+      font-size: 15px;
+    }
+
+    input:focus {
+      outline: 2px solid #f5c542;
+      border-color: transparent;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #f5c542;
+      color: #111;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    #loginMessage {
+      min-height: 22px;
+      margin-top: 18px;
+      font-size: 14px;
+      color: #ff7777;
+      overflow-wrap: anywhere;
+    }
+
+    .footer {
+      color: #777;
+      font-size: 12px;
+      margin-top: 25px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="login-card">
+
+    <div class="logo">ϟ BARQ</div>
+    <div class="subtitle">ONE APP · ONE EXPERIENCE</div>
+
+    <h1>Welcome to BARQ</h1>
+
+    <p class="description">
+      Sign in to continue to your BARQ account.
+    </p>
+
+    <form id="loginForm">
+
+      <input
+        id="loginEmail"
+        type="email"
+        placeholder="Email address"
+        autocomplete="username"
+        required>
+
+      <input
+        id="loginPassword"
+        type="password"
+        placeholder="Password"
+        autocomplete="current-password"
+        required>
+
+      <button id="loginButton" type="submit">
+        Login
+      </button>
+
+    </form>
+
+    <p id="loginMessage" role="status" aria-live="polite"></p>
+
+    <div class="footer">
+      BARQ Online Store
+    </div>
+
+  </main>
+
+  <script type="module" src="login.js"></script>
+
+</body>
+</html>
