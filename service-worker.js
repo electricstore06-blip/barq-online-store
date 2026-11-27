@@ -1,5 +1,5 @@
 
-const CACHE_NAME = "barq-customer-v1";
+const CACHE_NAME = "barq-customer-v2";
 
 const APP_FILES = [
     "./",
