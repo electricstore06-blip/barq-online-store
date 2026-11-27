@@ -403,5 +403,25 @@
   <script type="module" src="script.js"></script>
   <script type="module" src="auth.js"></script>
 
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("./service-worker.js")
+        .then(function (registration) {
+          console.log(
+            "BARQ Customer App service worker registered:",
+            registration.scope
+          );
+        })
+        .catch(function (error) {
+          console.error(
+            "BARQ Customer App service worker registration failed:",
+            error
+          );
+        });
+    });
+  }
+</script>
+
 </body>
 </html>
