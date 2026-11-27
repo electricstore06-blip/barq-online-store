@@ -8,7 +8,11 @@ import {
 
 import {
   doc,
-  getDoc
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const loginForm = document.getElementById("loginForm");
@@ -24,7 +28,7 @@ function showMessage(message, isError = true) {
 
 async function identifyUser(user) {
 
-  // 1. Check whether this account is an Admin.
+  // Check Admin account.
   const adminRef = doc(db, "admins", user.uid);
   const adminSnapshot = await getDoc(adminRef);
 
@@ -38,36 +42,39 @@ async function identifyUser(user) {
     throw new Error("This Admin account does not have a valid role.");
   }
 
-  // 2. Check Supervisor and Driver accounts.
-  const userRef = doc(db, "users", user.uid);
-  const userSnapshot = await getDoc(userRef);
+  // Find a staff profile belonging to this Firebase user.
+  const usersQuery = query(
+    collection(db, "users"),
+    where("uid", "==", user.uid)
+  );
 
-  if (userSnapshot.exists()) {
-    const userData = userSnapshot.data();
-    const role = String(userData.role || "").toLowerCase();
+  const usersSnapshot = await getDocs(usersQuery);
 
-    if (userData.active !== true) {
-      throw new Error("Your account is inactive. Please contact Admin.");
-    }
-
-    if (role === "supervisor") {
-      return "supervisor";
-    }
-
-    if (role === "driver") {
-      return "driver";
-    }
-
-    if (role === "staff") {
-      throw new Error("This staff account does not have a dashboard yet.");
-    }
-
-    throw new Error("Your account has an unsupported role.");
+  if (usersSnapshot.empty) {
+    // Existing customer accounts do not require a staff profile.
+    return "customer";
   }
 
-  // 3. Existing customer accounts are authenticated
-  // through Firebase Authentication without a staff profile.
-  return "customer";
+  const userData = usersSnapshot.docs[0].data();
+  const role = String(userData.role || "").toLowerCase();
+
+  if (userData.active !== true) {
+    throw new Error("Your account is inactive. Please contact Admin.");
+  }
+
+  if (role === "supervisor") {
+    return "supervisor";
+  }
+
+  if (role === "driver") {
+    return "driver";
+  }
+
+  if (role === "staff") {
+    throw new Error("This staff account does not have a dashboard yet.");
+  }
+
+  throw new Error("Your account has an unsupported role.");
 }
 
 function redirectToDashboard(role) {
@@ -107,8 +114,6 @@ loginForm.addEventListener("submit", async function (event) {
   let signedInUser = null;
 
   try {
-
-    // Sign in using the existing BARQ Firebase project.
     const credential = await signInWithEmailAndPassword(
       auth,
       email,
@@ -117,7 +122,6 @@ loginForm.addEventListener("submit", async function (event) {
 
     signedInUser = credential.user;
 
-    // Identify the account's role.
     const role = await identifyUser(signedInUser);
 
     showMessage("Login successful. Opening your dashboard...", false);
@@ -128,7 +132,6 @@ loginForm.addEventListener("submit", async function (event) {
 
     console.error("BARQ login error:", error);
 
-    // Sign out accounts that authenticated but were not authorized.
     if (signedInUser) {
       try {
         await signOut(auth);
@@ -137,27 +140,24 @@ loginForm.addEventListener("submit", async function (event) {
       }
     }
 
-    if (error.code === "auth/invalid-credential" ||
-        error.code === "auth/user-not-found" ||
-        error.code === "auth/wrong-password") {
-
+    if (
+      error.code === "auth/invalid-credential" ||
+      error.code === "auth/user-not-found" ||
+      error.code === "auth/wrong-password"
+    ) {
       showMessage("Incorrect email or password.");
 
     } else if (error.code === "auth/too-many-requests") {
-
       showMessage("Too many attempts. Please try again later.");
 
     } else if (error.code === "auth/network-request-failed") {
-
       showMessage("Network error. Please check your internet connection.");
 
     } else {
-
       showMessage(error.message || "Login failed. Please try again.");
     }
 
     loginButton.disabled = false;
     loginButton.textContent = "Login";
   }
-
 });
