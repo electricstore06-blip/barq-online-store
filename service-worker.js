@@ -1,19 +1,37 @@
-const CACHE_NAME = "barq-driver-v4";
+
+const CACHE_NAME = "barq-customer-v1";
 
 const APP_FILES = [
     "./",
-    "./driver-login.html",
-    "./driver-login.js",
-    "./manifest.json",
-    "./barq-driver-icon-192.png",
-    "./barq-driver-icon-512.png"
+    "./index.html",
+    "./style.css",
+    "./script.js",
+    "./auth.js",
+    "./firebase-config.js",
+    "./i18n.js",
+    "./customer-manifest.json",
+    "./favicon.ico",
+    "./checkout.html",
+    "./checkout.css",
+    "./checkout.js",
+    "./orders.html",
+    "./product-details.html",
+    "./product-details.js",
+    "./product-reviews.js",
+    "./order-success.html",
+    "./order-success.css",
+    "./order-success.js"
 ];
 
 // INSTALL
 self.addEventListener("install", event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(APP_FILES))
+            .then(cache => {
+                return Promise.allSettled(
+                    APP_FILES.map(file => cache.add(file))
+                );
+            })
             .then(() => self.skipWaiting())
     );
 });
@@ -21,26 +39,73 @@ self.addEventListener("install", event => {
 // ACTIVATE
 self.addEventListener("activate", event => {
     event.waitUntil(
-        caches.keys().then(keys =>
-            Promise.all(
-                keys
-                    .filter(key => key !== CACHE_NAME)
-                    .map(key => caches.delete(key))
-            )
-        ).then(() => self.clients.claim())
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames
+                    .filter(name =>
+                        name.startsWith("barq-customer-") &&
+                        name !== CACHE_NAME
+                    )
+                    .map(name => caches.delete(name))
+            );
+        }).then(() => self.clients.claim())
     );
 });
 
 // FETCH
 self.addEventListener("fetch", event => {
+    const request = event.request;
+    const url = new URL(request.url);
+
+    // Only handle requests from this website
+    if (
+        request.method !== "GET" ||
+        url.origin !== self.location.origin
+    ) {
+        return;
+    }
+
+    // Pages: try the network first
+    if (request.mode === "navigate") {
+        event.respondWith(
+            fetch(request)
+                .then(response => {
+                    if (response.ok) {
+                        const copy = response.clone();
+                        caches.open(CACHE_NAME).then(cache => {
+                            cache.put(request, copy);
+                        });
+                    }
+                    return response;
+                })
+                .catch(async () => {
+                    return (
+                        await caches.match(request)
+                    ) || (
+                        await caches.match("./index.html")
+                    );
+                })
+        );
+        return;
+    }
+
+    // Other local files: use cache first
     event.respondWith(
-        caches.match(event.request)
-            .then(cachedResponse => {
-                if (cachedResponse) {
-                    return cachedResponse;
+        caches.match(request).then(cachedResponse => {
+            if (cachedResponse) {
+                return cachedResponse;
+            }
+
+            return fetch(request).then(response => {
+                if (response.ok && response.type === "basic") {
+                    const copy = response.clone();
+                    caches.open(CACHE_NAME).then(cache => {
+                        cache.put(request, copy);
+                    });
                 }
 
-                return fetch(event.request);
-            })
+                return response;
+            });
+        })
     );
 });
