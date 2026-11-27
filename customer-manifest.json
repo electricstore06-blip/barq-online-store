@@ -2,6 +2,7 @@
 {
   "name": "BARQ Beauty Store",
   "short_name": "BARQ Beauty",
+  "id": "/barq-online-store/customer-app",
   "description": "BARQ Online Cosmetics and Beauty Store",
   "start_url": "./index.html",
   "scope": "./",
