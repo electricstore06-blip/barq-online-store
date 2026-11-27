@@ -1,327 +1,49 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>BARQ Driver Login</title>
-
-
-    <!-- ==========================================
-         BARQ DRIVER PWA MANIFEST
-    =========================================== -->
-
-    <link
-        rel="manifest"
-        href="./manifest.json"
-    >
-
-    <meta
-        name="theme-color"
-        content="#111111"
-    >
-
-    <meta
-        name="mobile-web-app-capable"
-        content="yes"
-    >
-
-    <meta
-        name="apple-mobile-web-app-capable"
-        content="yes"
-    >
-
-    <meta
-        name="apple-mobile-web-app-status-bar-style"
-        content="black"
-    >
-
-    <meta
-        name="apple-mobile-web-app-title"
-        content="BARQ Driver"
-    >
-
-
-    <!-- ==========================================
-         STYLE
-    =========================================== -->
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-
-        body {
-
-            margin: 0;
-
-            min-height: 100vh;
-
-            display: flex;
-
-            justify-content: center;
-
-            align-items: center;
-
-            background: #f5f7fa;
-
-            font-family: Arial, sans-serif;
-
-        }
-
-
-        .driver-login-box {
-
-            width: 90%;
-
-            max-width: 380px;
-
-            background: white;
-
-            padding: 30px;
-
-            border-radius: 15px;
-
-            box-shadow:
-                0 5px 20px rgba(0,0,0,.1);
-
-        }
-
-
-        .logo {
-
-            text-align: center;
-
-            margin-bottom: 20px;
-
-        }
-
-
-        .logo img {
-
-            width: 120px;
-
-            height: 120px;
-
-            object-fit: contain;
-
-        }
-
-
-        h1 {
-
-            text-align: center;
-
-            margin-bottom: 25px;
-
-        }
-
-
-        input {
-
-            width: 100%;
-
-            padding: 14px;
-
-            margin-bottom: 15px;
-
-            border: 1px solid #ddd;
-
-            border-radius: 8px;
-
-            font-size: 16px;
-
-            outline: none;
-
-        }
-
-
-        input:focus {
-
-            border-color: #111827;
-
-        }
-
-
-        button {
-
-            width: 100%;
-
-            padding: 14px;
-
-            background: #111827;
-
-            color: white;
-
-            border: none;
-
-            border-radius: 8px;
-
-            font-size: 16px;
-
-            cursor: pointer;
-
-        }
-
-
-        button:hover {
-
-            background: #000;
-
-        }
-
-
-        button:disabled {
-
-            opacity: .6;
-
-            cursor: not-allowed;
-
-        }
-
-
-        #message {
-
-            text-align: center;
-
-            margin-top: 15px;
-
-            color: #666;
-
-        }
-
-    </style>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BARQ Driver</title>
+
+    <!-- Keep Driver PWA installation -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#111111">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="BARQ Driver">
 </head>
-
 
 <body>
 
+    <p>Opening BARQ Login...</p>
 
-    <!-- ==========================================
-         BARQ DRIVER LOGIN
-    =========================================== -->
-
-    <div class="driver-login-box">
-
-
-        <div class="logo">
-
-            <img
-                src="./barq-driver-icon-512.png"
-                alt="BARQ Driver"
-            >
-
-        </div>
-
-
-        <h1>
-            BARQ Driver
-        </h1>
-
-
-        <input
-            id="email"
-            type="email"
-            placeholder="Driver Email"
-            autocomplete="username"
-        >
-
-
-        <input
-            id="password"
-            type="password"
-            placeholder="Password"
-            autocomplete="current-password"
-        >
-
-
-        <button id="login-btn">
-
-            Login
-
-        </button>
-
-
-        <div id="message"></div>
-
-
-    </div>
-
-
-    <!-- ==========================================
-         DRIVER LOGIN JAVASCRIPT
-    =========================================== -->
-
-    <script
-        type="module"
-        src="./driver-login.js"
-    ></script>
-
-
-    <!-- ==========================================
-         BARQ DRIVER SERVICE WORKER
-         
-         IMPORTANT:
-         This uses the dedicated Driver
-         service worker and NOT the Store
-         service-worker.js.
-    =========================================== -->
-
+    <!-- Keep Driver service worker registration -->
     <script>
+        async function openBARQLogin() {
 
-        if ("serviceWorker" in navigator) {
+            if ("serviceWorker" in navigator) {
+                try {
+                    await navigator.serviceWorker.register(
+                        "./driver-service-worker.js",
+                        { scope: "./" }
+                    );
 
-            window.addEventListener(
-                "load",
-                () => {
+                    console.log("BARQ Driver Service Worker registered.");
 
-                    navigator.serviceWorker
-                        .register(
-                            "./driver-service-worker.js",
-                            {
-                                scope: "./"
-                            }
-                        )
-
-                        .then(
-                            (registration) => {
-
-                                console.log(
-                                    "BARQ Driver Service Worker Registered",
-                                    registration.scope
-                                );
-
-                            }
-                        )
-
-                        .catch(
-                            (error) => {
-
-                                console.error(
-                                    "BARQ Driver Service Worker Error:",
-                                    error
-                                );
-
-                            }
-                        );
-
+                } catch (error) {
+                    console.error("Driver Service Worker error:", error);
                 }
-            );
+            }
 
+            window.location.replace("./login.html");
         }
 
+        window.addEventListener("load", openBARQLogin);
     </script>
 
-
 </body>
-
 </html>
